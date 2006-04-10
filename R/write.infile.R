@@ -1,0 +1,54 @@
+    write.infile <- function(X, file, sep=";", append = FALSE) {
+        if (!append) cat("\n", file = file, append = FALSE)
+        if (inherits(X, "array")) affichetableau(X, file, sep)
+        else if (is.matrix(X)) affichmatrice(X, file, sep)
+        else if (is.data.frame(X)) affichtabldon(X, file, sep)
+        else if (is.list(X)) affichlist(X, file,sep)
+        else if (is.numeric(X)) cat(X, "\n", file = file, append = TRUE)
+        else if (is.character(X)) cat(X, "\n", file = file, append = TRUE)
+        else if (is.vector(X)) cat(X, "\n", file = file, append = TRUE)
+        else {
+            cat("format non affichable", "\n", file = file, append = TRUE)
+            cat(X, "\n", file = file, append = TRUE)
+        }
+    }
+    
+    affichetableau <- function(X, file, sep) {
+        X <- round(X, 4)
+        for (j in 1:(dim(X)[[3]])) {
+            cat("sous tableau", j, "\n", file = file, append = TRUE)
+            affichmatrice(X[, , j], file, sep=sep)
+        }
+        cat("\n", file = file, append = TRUE)
+    }
+    affichtabldon <- function(X, file, sep) {
+        nomligne <- labels(X)[[1]]
+        nomcol <- labels(X)[[2]]
+        cat("  ", nomcol, "\n", file = file, append = TRUE, sep = sep)
+        alpha <- dim(X)[[1]]
+        for (i in 1:alpha) {
+            deb <- nomligne[i]
+            for (j in 1:(dim(X)[[2]])) deb <- c(deb, sep, X[i, j])
+            cat(deb, "\n", file = file, append = TRUE)
+        }
+        cat("\n", file = file, append = TRUE)
+    }
+    affichmatrice <- function(X, file, sep) {
+        X <- round(X, 4)
+        nomligne <- rownames(X)
+        nomcol <- colnames(X)
+        cat(nomcol, "\n", file = file, append = TRUE, sep = sep)
+        alpha <- dim(X)[[1]]
+        for (i in 1:alpha) cat(nomligne[i], X[i, ], "\n", file = file, append = TRUE, sep=sep)
+        cat("\n", file = file, append = TRUE)
+    }
+    affichlist <- function(X, file,sep) {
+        taillelist <- length(X)
+        noms <- labels(X)
+        for (i in 1:taillelist) {
+            if (noms[i]!= "call"){
+              cat(noms[i], "\n", file = file, append = TRUE)
+              write.infile(X[[i]], file, sep=sep, append = TRUE)
+            }
+        }
+    }

@@ -1,0 +1,40 @@
+\name{HMFA}
+\alias{HMFA}
+\title{Hierarchical Multiple Factor Analysis}
+\description{
+Performs a hierarchical multiple factor analysis, using an object of class \code{list} of \code{data.frame}.
+}
+\usage{
+HMFA(X,H,type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE)
+}
+\arguments{
+  \item{X}{a \code{data.frame}}
+  \item{H}{a list with one vector for each hierarchical level; in each vector the number of variables or the number of group
+  constituting the group}
+  \item{type}{the type of variables in each group in the first partition; three possibilities: "c" or "s" for quantitative variables
+  (the difference is that for "s", the variables are scaled in the program), "n" for qualitative variables; by default, all the variables
+  are quantitative and the variables are scaled unit}
+  \item{ncp}{number of dimensions kept in the results (by default 5)}
+  \item{graph}{boolean, if TRUE a graph is displayed}
+}
+
+\value{
+  Returns a list including:
+  \item{eig}{a numeric vector with the all eigenvalues}
+  \item{group}{a list of matrices with all the results for the groups (Lg and RV coefficients, coordinates, square cosine, contributions, distance to the origin, the correlations between each group and each factor)}
+  \item{ind}{a list of matrices with all the results for the active individuals (coordinates, square cosine, contributions)}
+  \item{quanti.var}{a list of matrices with all the results for the quantitative variables (coordinates, correlation between variables and axes)}
+  \item{quali.var}{a list of matrices with all the results for the supplementary qualitative variables (coordinates of each categories of each variables, and v.test which is a criterion with a Normal distribution)}
+  \item{partial}{a list of arrays with the coordinates of the partial points for each partition}
+}
+\references{Le Dien, S. & Pagès, J. (2003) Hierarchical Multiple factor analysis: application to the comparison of sensory profiles, \emph{Food Quality and Preferences}, \bold{18 (6)}, 453-464.
+}
+\author{Sébastien Lê, François Husson}
+
+\examples{ 
+data(wine)
+hierar <- list(c(2,5,3,10,9,2), c(4,2))
+res.hmfa <- HMFA(wine, H = hierar, type=c("n",rep("s",5)))
+}
+
+\keyword{multivariate}

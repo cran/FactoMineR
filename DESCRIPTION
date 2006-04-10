@@ -1,0 +1,11 @@
+Package: FactoMineR
+Version: 1.00
+Date: 2006-07-04
+Title: Factor Analysis and Data Mining with R
+Author: François Husson, Sébastien Lê, Jérémy Mazet
+Maintainer: François Husson <francois.husson@agrocampus-rennes.fr>
+Depends:
+Description: an R package for exploratory data analysis
+License: 2.2.0
+URL: http://factominer.free.fr, http://www.agrocampus-rennes.fr/math/
+Packaged: Mon Apr 10 13:22:10 2006; Husson
