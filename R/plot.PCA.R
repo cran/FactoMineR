@@ -2,17 +2,18 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
     ellipse = NULL, xlim = NULL, ylim = NULL, habillage = "none", 
     col.hab = NULL, col.ind = "black", col.ind.sup = "blue", 
     col.quali = "magenta", col.quanti.sup = "blue", 
-    col.var = "black", invisible = NULL, lim.cos2.var = 0.1, 
+    col.var = "black", label="all", invisible = NULL, lim.cos2.var = 0.1,
     cex = 1, title = NULL, ...){
     
     res.pca <- x
     if (!inherits(res.pca, "PCA")) stop("non convenient data")
-    lab.ind <- lab.quali <- lab.var <- lab.quanti <- lab.ind.sup <- TRUE
-    if (col.ind == "none") lab.ind = FALSE
-    if (col.ind.sup == "none") lab.ind.sup = FALSE
-    if (col.quali == "none") lab.quali = FALSE
-    if (col.quanti.sup== "none") lab.quanti = FALSE
-    if (col.var == "none") lab.var = FALSE
+    lab.ind <- lab.quali <- lab.var <- lab.quanti <- lab.ind.sup <- FALSE
+    if(length(label)==1 && label=="all") lab.ind <- lab.quali <- lab.var <- lab.quanti <- lab.ind.sup <-TRUE
+    if("ind" %in% label) lab.ind<-TRUE
+    if("quali" %in% label) lab.quali<-TRUE
+    if("var" %in% label) lab.var<-TRUE
+    if("quanti.sup" %in% label) lab.quanti<-TRUE
+    if("ind.sup" %in% label) lab.ind.sup<-TRUE
     cp1 <- round((res.pca$eig[axes[1],2]), digit = 2)
     cp2 <- round((res.pca$eig[axes[2],2]), digit = 2)
     lab.x <- paste("Dimension ",axes[1]," (",cp1,"%)",sep="")
@@ -37,7 +38,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
             test.invisible[2] <- match("ind.sup", invisible)
             test.invisible[3] <- match("quali", invisible)
         }
-        else  test.invisible <- rep(NA, 2)
+        else  test.invisible <- rep(NA, 3)
         if (is.null(xlim)) {
           xmin <- xmax <- 0
           if(is.na(test.invisible[1])) xmin <- min(xmin, coord.actif[,1])
@@ -75,6 +76,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
             nb.prod <- nrow(coord.actif)
             if (length(col.hab) != nb.prod) color.ind <- c(1:nb.prod)
             else  color.ind <- col.hab
+            if (!is.null(coord.illu)) color.ind.sup <- c((nb.prod+1):(nb.prod+nrow(coord.illu)))
             color.mod <- "darkred"
         }
         if (habillage == "quali") {
@@ -89,13 +91,16 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
             n.mod <- res.pca$call$quali.sup$modalite[liste.quali == nom.quali]
             if (length(col.hab) != n.mod) {
                 color.mod <- c(1:n.mod)
-                color.ind <- as.numeric(as.factor(res.pca$call$quali.sup$quali.sup[, liste.quali == nom.quali]))
+                color.ind <- as.numeric(as.factor(res.pca$call$X[, nom.quali]))
+                col.ind.sup <- color.ind[res.pca$call$ind.sup]
+                if (!is.null(res.pca$call$ind.sup)) color.ind <- color.ind[-res.pca$call$ind.sup]
             }
             else {
                 color.mod <- col.hab
-                color.ind <- as.numeric(as.factor(res.pca$call$quali.sup$quali.sup[, liste.quali == nom.quali]))
-                color.ind <- factor(color.ind)
+                color.ind <- as.factor(res.pca$call$X[, nom.quali])
                 levels(color.ind) <- col.hab
+                col.ind.sup <- color.ind[res.pca$call$ind.sup]
+                if (!is.null(res.pca$call$ind.sup)) color.ind <- color.ind[-res.pca$call$ind.sup]
                 color.ind <- as.character(color.ind)
             }
         }
@@ -120,6 +125,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
         if (!is.null(coord.quali) & is.na(test.invisible[3])) {
             num.li <- 0
             modalite <- res.pca$call$quali.sup$modalite
+            col.quali<-rep(col.quali, length(modalite))
             for (q in 1:length(modalite)) {
                 if (habillage == "quali") {
                   if (q == match(nom.quali, liste.quali)) {
@@ -132,12 +138,12 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
                   }
                 }
                 else {
-                  points(coord.quali[(num.li + 1):(num.li + modalite[q]), ], pch = 22, col = "darkred")
+                  points(coord.quali[(num.li + 1):(num.li + modalite[q]), ], pch = 22, col = col.quali[q])
                   if (lab.quali) {
                     text(coord.quali[(num.li + 1):(num.li + modalite[q]), 1],
                       y = coord.quali[(num.li + 1):(num.li +
                       modalite[q]), 2], labels = rownames(coord.quali[(num.li +
-                      1):(num.li + modalite[q]), ]), pos = 3, col = "darkred", cex=cex)
+                      1):(num.li + modalite[q]), ]), pos = 3, col = col.quali[q], cex=cex)
                   }
                 }
                 num.li <- num.li + modalite[q]
@@ -187,26 +193,54 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
              abline(v=0,lty=2)
              abline(h=0,lty=2)
         }
+        col.var<-rep(col.var, length=nrow(coord.var))
         for (v in 1:nrow(coord.var)) {
             if (sum(res.pca$var$cos2[v, axes], na.rm = TRUE) >= lim.cos2.var && !is.na(sum(res.pca$var$cos2[v, axes], na.rm = TRUE))) {
-                arrows(0, 0, coord.var[v, 1], coord.var[v, 2], length = 0.1, angle = 15, code = 2, col = col.var)
+                arrows(0, 0, coord.var[v, 1], coord.var[v, 2], length = 0.1, angle = 15, code = 2, col = col.var[v])
                 if (lab.var) {
-                  if (coord.var[v, 1] >= 0) pos <- 4
-                  else pos <- 2
-                  text(coord.var[v, 1], y = coord.var[v, 2], labels = rownames(coord.var)[v], pos = pos, cex=cex, col = col.var)
+                if (abs(coord.var[v,1])>abs(coord.var[v,2])){
+                 if (coord.var[v,1]>=0) pos<-4
+                 else pos<-2
+                }
+                else {
+                 if (coord.var[v,2]>=0) pos<-3
+                 else pos<-1
+                }
+                  text(coord.var[v, 1], y = coord.var[v, 2], labels = rownames(coord.var)[v], pos = pos, cex=cex, col = col.var[v])
                 }
             }
         }
         if (!is.null(coord.quanti)) {
+            col.quanti.sup<-rep(col.quanti.sup, length=nrow(coord.quanti))
             for (q in 1:nrow(coord.quanti)) {
-                arrows(0, 0, coord.quanti[q, 1], coord.quanti[q, 2], length = 0.1, angle = 15, code = 2, lty = 2, col=col.quanti.sup)
+                arrows(0, 0, coord.quanti[q, 1], coord.quanti[q, 2], length = 0.1, angle = 15, code = 2, lty = 2, col=col.quanti.sup[q])
                 if (lab.quanti) {
-                  if (coord.quanti[q, 1] >= 0) pos <- 4
-                  else pos <- 2
-                  text(coord.quanti[q, 1], y = coord.quanti[q, 2], labels = rownames(coord.quanti)[q], pos = pos, col=col.quanti.sup)
+                if (abs(coord.quanti[q,1])>abs(coord.quanti[q,2])){
+                 if (coord.quanti[q,1]>=0) pos<-4
+                 else pos<-2
+                }
+                else {
+                 if (coord.quanti[q,2]>=0) pos<-3
+                 else pos<-1
+                }
+                  text(coord.quanti[q, 1], y = coord.quanti[q, 2], labels = rownames(coord.quanti)[q], pos = pos, col=col.quanti.sup[q])
                 }
             }
         }
         par(mar = c(5, 4, 4, 2) + 0.1)
     }
 }
+
+
+
+#! liste des corrections réalisées
+
+# ligne 81 du fichier d'origine nbprod remplacé par nb.prod
+
+# ajout du paramètre label, par défaut prend la valeur "all" et tous les labels
+# sont ajoutés. sinon on indique les éléments pour lesquels on veut les labels.
+# Il n'est plus possible de mettre "none" dans les paramètre col.... mais on peut
+# ainsi donner un vecteur de couleur ce qui permet par exemple d'assortir
+# facilement la couleur des individus supplémentaire à l'habillage.
+
+# modification pour pouvoir associer plusieurs couleurs aux variables active et sup.

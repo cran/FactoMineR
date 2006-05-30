@@ -12,7 +12,7 @@ Draw the Multiple Factor Analysis for Mixt Data graphs.
 \method{plot}{AFDM}(x, choix = "group", axes = c(1, 2), lab.grpe = TRUE,
     lab.var = TRUE, lab.ind = TRUE, habillage = "none", col.lab = FALSE,
     col.hab = NULL, invisible = NULL, lim.cos2.var = 0.1, xlim = NULL,
-    ylim = NULL, \dots)
+    ylim = NULL, cex = 1, title = NULL, \dots)
 }
 
 \arguments{
@@ -31,6 +31,8 @@ Draw the Multiple Factor Analysis for Mixt Data graphs.
   \item{lim.cos2.var}{value of the square cosinus under the variables are not drawn}
   \item{xlim}{range for the plotted 'x' values, defaulting to the range of the finite values of 'x'}
   \item{ylim}{range for the plotted 'y' values, defaulting to the range of the finite values of 'y'}
+  \item{cex}{cf. function \code{\link{par}} in the \pkg{graphics} package}
+  \item{title}{string corresponding to the title of the graph you draw (by default NULL and a title is chosen)}
   \item{\dots}{further arguments passed to or from other methods}
 }
 

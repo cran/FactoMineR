@@ -1,22 +1,19 @@
-#! plot.FDA
-
-
 plot.FDA<-function(x, choix="ind", axes=c(1,2), invisible=NULL, xlim=NULL, ylim=NULL, col.grpe=NULL, 
-lab.ind=FALSE, lab.var=TRUE, lab.cg=TRUE, lab.ind.sup=FALSE, conf.elli=0.95, ...){
+lab.ind=FALSE, lab.var=TRUE, lab.cg=TRUE, lab.ind.sup=FALSE, level.conf=0.95, ...){
 
     res.fda <- x
-    if(!inherits(res.fda, "FDA"))    stop("non convinient data")
+    if(!inherits(res.fda, "FDA"))    stop("non convenient data")
 
     # titre du graphique
     if (axes[2]!=axes[1])
     {
-        titre<-paste("Plan factoriel", axes[1], "-", axes[2])
+        titre<-paste("Factor map", axes[1], "-", axes[2])
     ylab<-""
     }
     else
     {
-        titre<-paste("Fonction discriminante", axes[1])
-        ylab<-"dispersion aleatoire"
+        titre<-paste("Discriminant function", axes[1])
+        ylab<-"random dispersion"
     }
 
     # graphique des individus
@@ -41,17 +38,17 @@ lab.ind=FALSE, lab.var=TRUE, lab.cg=TRUE, lab.ind.sup=FALSE, conf.elli=0.95, ...
         #récupérations de toutes les coordonnées
         if (axes[2]!=axes[1])
       {
-            coord.cg<-res.fda$res.cg$coord[, axes]
-            coord.ind<-res.fda$res.ind$coord[,axes]
+            coord.cg<-res.fda$cg$coord[, axes]
+            coord.ind<-res.fda$ind$coord[,axes]
       tab.elli<-data.frame(res.fda$call$fact, coord.ind)
-            coord.elli<-coord.ellipse(tab.elli, conf=conf.elli)$res
+            coord.elli<-coord.ellipse(tab.elli, level.conf=level.conf)$res
         coord.ind.sup<-res.fda$coord.ind.sup[,axes]
         }
 
         else
         {
-      coord.cg<-data.frame(res.fda$res.cg$coord.cg[, axes[1]], rnorm(nrow(res.fda$res.cg$coord.cg), mean=0, sd=1))
-            coord.ind<-data.frame(res.fda$res.ind$coord.ind[,axes[1]], rnorm(nrow(res.fda$res.ind$coord.ind), mean=0, sd=1))
+      coord.cg<-data.frame(res.fda$cg$coord.cg[, axes[1]], rnorm(nrow(res.fda$cg$coord.cg), mean=0, sd=1))
+            coord.ind<-data.frame(res.fda$ind$coord.ind[,axes[1]], rnorm(nrow(res.fda$ind$coord.ind), mean=0, sd=1))
       coord.elli<-NULL
       if (!is.null(res.fda$coord.ind.sup))
             {
@@ -137,11 +134,10 @@ lab.ind=FALSE, lab.var=TRUE, lab.cg=TRUE, lab.ind.sup=FALSE, conf.elli=0.95, ...
 
 
         # construction graphique
-        plot(0,0,main="Représentation des individus", sub=titre, cex.main=1, xaxt="n", xlab="", yaxt="n", ylab=ylab , xlim=xlim, ylim=ylim, col="white")
-        axis(1,at=axTicks(1)[axTicks(1)!=0], pos=0)
-        axis(2, at=axTicks(2)[axTicks(2)!=0], pos=0)
-        segments(xlim[1]*2, 0, xlim[2]*2, 0)
-        segments(0, ylim[1]*2, 0, ylim[2]*2)
+    titre = "Individuals representation"
+    plot(0, 0, main = titre, xlab = paste("Dim ",axes[1]," (",signif(res.fda$eig[axes[1],2],4),"%)",sep=""), ylab = paste("Dim ",axes[2]," (",signif(res.fda$eig[axes[2],2],4),"%)",sep=""), xlim = xlim, ylim = ylim, col = "white", asp=1)
+    abline(h=0,lty=2)
+    abline(v=0,lty=2)
 
         if(is.na(test.invisible[1]))
         {
@@ -187,30 +183,32 @@ lab.ind=FALSE, lab.var=TRUE, lab.cg=TRUE, lab.ind.sup=FALSE, conf.elli=0.95, ...
     if (choix=="var")
     {
         #récupérations des coordonnées
-        coord.var<-res.fda$res.var$coord[,axes]
+        coord.var<-res.fda$var$coord[,axes]
 
         #construction graphique
     get(getOption("device"))(8, 8)
-        par(mar=c(2,2,2,2))
-        plot(0,0,main=titre, xaxt="n", xlab="", yaxt="n", ylab="" , xlim=c(-1.3, 1.3), ylim=c(-1.3, 1.3), col="white", bty="n")
-        x.cercle<-seq(-1,1,by=0.01)
-        y.cercle<-sqrt(1-x.cercle^2)
-        lines(x.cercle, y=y.cercle)
-        lines(x.cercle, y=-y.cercle)
-        segments(-1, 0, 1, 0)
-        segments(0, -1, 0, 1)
+    plot(0, 0, main = titre, xlab = paste("Dim ",axes[1]," (",signif(res.fda$eig[axes[1],2],4),"%)",sep=""), ylab = paste("Dim ",axes[2]," (",signif(res.fda$eig[axes[2],2],4),"%)",sep=""), xlim = c(-1.1,1.1), ylim = c(-1.1,1.1), col = "white", asp=1)
+    abline(h=0,lty=2)
+    abline(v=0,lty=2)
+    x.cercle<-seq(-1,1,by=0.01)
+    y.cercle<-sqrt(1-x.cercle^2)
+    lines(x.cercle, y=y.cercle)
+    lines(x.cercle, y=-y.cercle)
 
         for ( v in 1: nrow(coord.var))
         {
             arrows(0,0,coord.var[v,1], coord.var[v,2], length=0.1, angle=15, code=2)
-            if(lab.var)
-            {
-                if (coord.var[v,2]>=0) pos<-3
-                else pos<-1
+            if(lab.var) {
+                if (abs(coord.var[v,1])>abs(coord.var[v,2])){
+                 if (coord.var[v,1]>=0) pos<-4
+                 else pos<-2
+                }
+                else {
+                 if (coord.var[v,2]>=0) pos<-3
+                 else pos<-1
+                }
                 text(coord.var[v,1], y=coord.var[v,2], labels=rownames(coord.var)[v],pos=pos)
             }
         }
-
-        par(mar=c(5, 4, 4, 2) +0.1)
     }
 }

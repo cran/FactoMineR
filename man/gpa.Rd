@@ -39,8 +39,10 @@ A list containing the following components:
 \item{RVs}{a matrix of standardized RV coefficients between partial configurations}
 \item{simi}{a matrix of Procrustes similarity indexes between partial configurations}
 \item{scaling}{a vector of isotropic scaling factors}
+\item{dep}{an array of initial partial configurations }
 \item{consensus}{a matrix of consensus configuration}
-\item{Xfin}{an array of partial configurations}
+\item{Xfin}{an array of partial configurations after transformations}
+\item{correlations}{correlation matrix between initial partial configurations and consensus dimensions}
 \item{PANOVA}{a list of "Procrustes Analysis of Variance" tables, per assesor (config), per product(objet), per dimension (dimension)}
 }
 

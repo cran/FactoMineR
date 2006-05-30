@@ -12,9 +12,9 @@ simule <- function (data, nb.simul = 500){
       table <- na.omit(table)
       tmp <- NULL
       for (j in 1:nb.simul) tmp <- rbind(tmp,apply(table[sample(1:nb.aux,nb.aux,replace=TRUE),-1], 2,mean))
-      res.moy[f, 1] <- res.moy.sim[f, 1] <- as.character(unique(data[, 1])[f])
+      res.moy[f, 1] <- res.moy.sim[f, 1] <- as.character(levels(data[, 1])[f])
       res.moy[f, -1] <- apply(table[,-1],2,mean)
-      res.sim[((f - 1) * nb.simul + 1):(f * nb.simul), 1] <- as.character(unique(data[, 1])[f])
+      res.sim[((f - 1) * nb.simul + 1):(f * nb.simul), 1] <- as.character(levels(data[, 1])[f])
       res.sim[((f - 1) * nb.simul + 1):(f * nb.simul), -1] <- tmp
       res.moy.sim[f, -1] <- apply(tmp, 2, mean)
     }
@@ -25,3 +25,10 @@ simule <- function (data, nb.simul = 500){
     class(resultats) <- c("sim", "list")
     return(resultats)
 }
+
+
+# ligne 17, unique() remplacé par la fonction levels(). Sinon, change l'ordre
+# des modalités dans le tableau de résultats et pose des problème lors de la
+# construction graphique avec plot.ACP
+
+# aussi en ligne 15

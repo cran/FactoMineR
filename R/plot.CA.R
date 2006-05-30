@@ -1,14 +1,16 @@
 plot.CA <- function (x, axes = c(1, 2),
     xlim = NULL, ylim = NULL, invisible = NULL, col.row = "blue",
     col.col = "red", col.row.sup = "darkblue", col.col.sup = "darkred",
-    cex = 1, title = NULL, ...) {
+    label = "all", cex = 1, title = NULL, ...) {
     res.ca <- x
     if (!inherits(res.ca, "CA")) stop("non convenient data")
-    lab.row <- lab.col <- lab.row.sup <- lab.col.sup <- TRUE
-    if (col.row == "none") lab.row = FALSE
-    if (col.col == "none") lab.col = FALSE
-    if (col.row.sup == "none") lab.row.sup = FALSE
-    if (col.col.sup == "none") lab.col.sup = FALSE
+    lab.row <- lab.col <- lab.row.sup <- lab.col.sup <- FALSE
+    if(length(label)==1 && label=="all") lab.row <- lab.col <- lab.row.sup <- lab.col.sup <- TRUE
+    if("row" %in% label) lab.row<-TRUE
+    if("col" %in% label) lab.col<-TRUE
+    if("row.sup" %in% label) lab.row.sup<-TRUE
+    if("col.sup" %in% label) lab.col.sup<-TRUE
+
     coord.col <- res.ca$col$coord[, axes]
     coord.row <- res.ca$row$coord[, axes]
     coord.row.sup <- coord.col.sup <- NULL
@@ -47,7 +49,10 @@ plot.CA <- function (x, axes = c(1, 2),
     }
     sub.titre <- NULL
     if (is.null(title)) titre <- "CA factor map"
-    else sub.titre <- "CA factor map"
+    else {
+      sub.titre <- "CA factor map"
+      titre <- title
+    }
     plot(0, 0, main = titre, xlab = paste("Dim ",axes[1]," (",signif(res.ca$eig[axes[1],2],4),"%)",sep=""), ylab = paste("Dim ",axes[2]," (",signif(res.ca$eig[axes[2],2],4),"%)",sep=""), xlim = xlim, ylim = ylim, col = "white", asp=1, cex=cex)
     if (!is.null(sub.titre)) title(sub = sub.titre, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)
     abline(h=0,lty=2)

@@ -12,7 +12,8 @@ Draw the Correspondance Analysis (CA) graphs.
 plot.CA(x, axes = c(1, 2),
     xlim = NULL, ylim = NULL, invisible = NULL, col.row = "blue",
     col.col = "red", col.row.sup = "darkblue", 
-    col.col.sup = "darkred", cex = 1, title = NULL, \dots)
+    col.col.sup = "darkred", label = "all", cex = 1, 
+    title = NULL, \dots)
 }
 
 \arguments{
@@ -21,10 +22,11 @@ plot.CA(x, axes = c(1, 2),
   \item{xlim}{range for the plotted 'x' values, defaulting to the range of the finite values of 'x'}
   \item{ylim}{range for the plotted 'y' values, defaulting to the range of the finite values of 'y'}
   \item{invisible}{string indicating if some points should be unlabelled ("row" or "col")}
-  \item{col.row}{a color for the rows points, if color ="none" the label is not written}
-  \item{col.col}{a color for columns points, if color ="none" the label is not written}
-  \item{col.row.sup}{a color for the supplementary rows points, if color ="none" the label is not written}
-  \item{col.col.sup}{a color for supplementary columns points, if color ="none" the label is not written}
+  \item{col.row}{a color for the rows points}
+  \item{col.col}{a color for columns points}
+  \item{col.row.sup}{a color for the supplementary rows points}
+  \item{col.col.sup}{a color for supplementary columns points}
+  \item{label}{a list of character for the elements which are labelled (by default, all the elements are labelled ("row", "row.sup", "col", "col.sup"}
   \item{cex}{cf. function \code{\link{par}} in the \pkg{graphics} package}
   \item{title}{string corresponding to the title of the graph you draw (by default NULL and a title is chosen)}
   \item{\dots}{further arguments passed to or from other methods}

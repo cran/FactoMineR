@@ -9,7 +9,7 @@
 \usage{
 plot.FDA(x, choix="ind", axes=c(1,2), invisible=NULL, 
     xlim=NULL, ylim=NULL, col.grpe=NULL, lab.ind=FALSE, 
-    lab.var=TRUE, lab.cg=TRUE, lab.ind.sup=FALSE, conf.elli=0.95, \dots)
+    lab.var=TRUE, lab.cg=TRUE, lab.ind.sup=FALSE, level.conf=0.95, \dots)
 }
 
 \arguments{
@@ -24,12 +24,19 @@ plot.FDA(x, choix="ind", axes=c(1,2), invisible=NULL,
   \item{lab.var    }{boolean, if TRUE, the label of the variables are drwan}
   \item{lab.cg     }{boolean, if TRUE, the label of the centers of gravity are drwan}
   \item{lab.ind.sup}{boolean, if TRUE, the label of the supplementary individuals are drwan}
-  \item{conf.elli  }{the confidence level of the ellipses}
+  \item{level.conf  }{the confidence level of the ellipses}
   \item{\dots}{further arguments passed to or from other methods}
 }
 
 \author{ Jeremy Mazet \email{jeremy.mazet@soredab.org} }
 
 \seealso{ \code{\link{FDA}}, \code{\link{print.FDA}}}
+
+\examples{
+data(wine)
+res.fda <- FDA(wine[,-(1:28)], fact=wine[,1], graph = FALSE)
+plot(res.fda, choix="ind")
+plot(res.fda, choix="var")
+}
 
 \keyword{ multivariate }

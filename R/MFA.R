@@ -26,6 +26,13 @@ MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp
     if (is.null(name.group)) name.group <- paste("group", c(1:nbre.group), sep = ".")
     names(res.separe) <- name.group
     ind.grpe <- 0
+    if (any(is.na(base))){
+      if (!("n"%in%type)) for (j in 1:ncol(base)) base[,j] <- replace(base[,j],is.na(base[,j]),mean(base[,j],na.rm=TRUE))
+      else{
+       for (g in 1:nbre.group){
+       for (j in 1:group[g]) base[,j] <- replace(base[,j],is.na(base[,j]),mean(base[,j],na.rm=TRUE))
+      }}
+    }
     for (g in 1:nbre.group) {
         aux.base <- as.data.frame(base[, (ind.grpe + 1):(ind.grpe + group[g])])
         dimnames(aux.base) <- list(rownames(base),colnames(base)[(ind.grpe + 1):(ind.grpe + group[g])])
@@ -111,7 +118,7 @@ MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp
     }
     aux.quali.sup.indice <- aux.quali.sup <- data.sup <- NULL
     if (!is.null(ind.quali)){
-      aux.quali.sup <- base[, ind.quali]
+      aux.quali.sup <- as.data.frame(base[, ind.quali])
       if (is.null(data.group.sup)) aux.quali.sup.indice <- (ncol(data)+1):(ncol(data)+ncol(aux.quali.sup))
       else aux.quali.sup.indice <- (ncol(data)+ncol(data.group.sup)+1):(ncol(data)+ncol(data.group.sup)+ncol(aux.quali.sup))
       data.pca <- cbind.data.frame(data.pca,aux.quali.sup)
@@ -466,7 +473,6 @@ MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp
           cg.plot.partial <- c(cg.plot.partial,rownames(resultats$quali.var.sup$coord)[max.inertia[1:length(max.inertia)]])
         }
         plot(resultats,choix="ind",invisible="ind",partial=cg.plot.partial)
-        plot(resultats,choix="ind",invisible=c("ind","ind.sup"),habillage="quali")
       }
       max.inertia <- order(apply(resultats$ind$within.inertia[,1:2],1,sum))
       plot(resultats,choix="ind",invisible="quali",partial=rownames(resultats$ind$coord)[max.inertia[c(1:2,nrow(resultats$ind$coord)-1,nrow(resultats$ind$coord))]])

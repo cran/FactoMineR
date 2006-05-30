@@ -14,7 +14,8 @@ print.GPA <- function (x, file = NULL, sep = ";", ...){
     res[6, ] <- c("$consensus", "coordinates of the consensus configuration")
     res[7, ] <- c("$Xfin", "coordinates of partial configurations")
     res[8, ] <- c("$PANOVA", "list of Procrustes Analysis of Variance tables")
-    print(res[1:indice,])
+    res[9, ] <- c("$correlation", "Correlations by sets")
+    print(res[1:9,])
     if (!is.null(file)) {
       write.infile(res.gpa,file = file, sep=sep)
       print(paste("All the results are in the file",file))

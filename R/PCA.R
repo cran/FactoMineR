@@ -32,7 +32,7 @@
     }
     else  ecart.type <- rep(1,length(centre))
     res.call <- list(row.w = (row.w/sum(row.w)), col.w = col.w,
-        scale.unit = scale.unit,ncp = ncp, centre = centre, ecart.type = ecart.type, X = data)
+        scale.unit = scale.unit,ncp = ncp, centre = centre, ecart.type = ecart.type, X = Xtot)
     tmp <- svd.triplet(X, Pl = Pl, Pc = Pc)
     eig <- tmp$vs^2
     vp <- as.data.frame(matrix(NA, length(eig), 3))
@@ -41,7 +41,7 @@
     vp[, "eigenvalue"] <- eig
     vp[, "inertia"] <- (eig/sum(eig)) * 100
     vp[1, "cumulative inertia"] <- vp[1, "inertia"]
-    if (length(eig)>2) for (i in 2:length(eig)) vp[i, "cumulative inertia"] <- vp[i, "inertia"] + vp[i - 1, "cumulative inertia"]
+    if (length(eig)>=2) for (i in 2:length(eig)) vp[i, "cumulative inertia"] <- vp[i, "inertia"] + vp[i - 1, "cumulative inertia"]
     V <- tmp$V
     U <- tmp$U
     coord.ind <- sweep(U, 2, sqrt(eig), FUN = "*")
@@ -115,6 +115,7 @@
     if (!is.null(quali.sup)){
       X.quali.sup <- as.data.frame(Xtot [ , quali.sup])
       if (!is.null(ind.sup)) X.quali.sup <- as.data.frame(X.quali.sup [-ind.sup , ])
+      colnames(X.quali.sup) <- colnames(Xtot)[quali.sup]
       N <- nrow(X)
       nombre <- modalite <- NULL
       for (i in 1:ncol(X.quali.sup)) {

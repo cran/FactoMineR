@@ -1,23 +1,25 @@
 plot.MCA <- function (x, axes = c(1, 2), 
     xlim = NULL, ylim = NULL, invisible = NULL,
     col.ind = "blue", col.var = "red", col.quali.sup = "darkred",
-    col.ind.sup = "darkblue", cex = 1, title = NULL, ...){
+    col.ind.sup = "darkblue", label="all", cex = 1, title = NULL, ...){
     
     res.mca <- x
     if (!inherits(res.mca, "MCA")) stop("non convenient data")
-    lab.ind <- lab.var <- lab.quali.sup <- lab.ind.sup <- TRUE
-    if (col.ind == "none") lab.ind = FALSE
-    if (col.var == "none") lab.var = FALSE
-    if (col.quali.sup == "none") lab.quali.sup = FALSE
-    if (col.ind.sup == "none") lab.ind.sup = FALSE
 
-    test.invisible <- vector(length = 2)
+    lab.ind <- lab.var <- lab.quali.sup <- lab.ind.sup <- FALSE
+    if(length(label)==1 && label=="all") lab.ind <- lab.var <- lab.quali.sup <- lab.ind.sup <-TRUE
+    if("ind" %in% label) lab.ind<-TRUE
+    if("var" %in% label) lab.var<-TRUE
+    if("quali.sup" %in% label) lab.quali.sup<-TRUE
+    if("ind.sup" %in% label) lab.ind.sup<-TRUE
+
+    test.invisible <- vector(length = 3)
     if (!is.null(invisible)) {
         test.invisible[1] <- match("ind", invisible)
-        test.invisible[2] <- match("quali", invisible)
-        test.invisible[3] <- match("var", invisible)
+        test.invisible[2] <- match("var", invisible)
+        test.invisible[3] <- match("quanti.sup", invisible)
     }
-    else  test.invisible <- rep(NA, 2)
+    else  test.invisible <- rep(NA, 3)
     coord.var <- res.mca$var$coord[, axes]
     coord.ind <- res.mca$ind$coord[, axes]
     coord.ind.sup <- coord.quali.sup <- NULL
@@ -81,8 +83,14 @@ plot.MCA <- function (x, axes = c(1, 2),
       lines(x.cercle, y = -y.cercle)
       for (v in 1:nrow(res.mca$quanti.sup$coord)) {
         arrows(0, 0, res.mca$quanti.sup$coord[v, 1], res.mca$quanti.sup$coord[v, 2], length = 0.1, angle = 15, code = 2)
-        if (res.mca$quanti.sup$coord[v, 1] >= 0) pos <- 4
-        else pos <- 2
+        if (abs(res.mca$quanti.sup$coord[v,1])>abs(res.mca$quanti.sup$coord[v,2])){
+          if (res.mca$quanti.sup$coord[v,1]>=0) pos<-4
+          else pos<-2
+        }
+        else {
+          if (res.mca$quanti.sup$coord[v,2]>=0) pos<-3
+          else pos<-1
+        }
         text(res.mca$quanti.sup$coord[v, 1], y = res.mca$quanti.sup$coord[v, 2], labels = rownames(res.mca$quanti.sup$coord)[v], pos = pos, cex=cex)
       }
     }

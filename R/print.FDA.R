@@ -10,9 +10,9 @@ print.FDA<-function(x, file = NULL, sep = ";", ...){
   res<-array("", c(12, 2), list(1:12, c("names", "description")))
   res[1, ] <- c("$eigen.values", "eigen values")
   res[2, ] <- c("$eigen.vectors", "eigen vectors")
-  res[3, ] <- c("$res.var", "results for the variables")
-  res[4, ] <- c("$res.cg", "results for the centers of gravity")
-  res[5, ] <- c("$res.ind", "results for the individuals")
+  res[3, ] <- c("$var", "results for the variables")
+  res[4, ] <- c("$cg", "results for the centers of gravity")
+  res[5, ] <- c("$ind", "results for the individuals")
   res[6, ] <- c("$call", "data frame and grouping factor")
   res[7, ] <- c("$df", "discriminant functions")
   res[8, ] <- c("$score", "individuals scores")
@@ -23,7 +23,7 @@ print.FDA<-function(x, file = NULL, sep = ";", ...){
 
   print(res)
     if (!is.null(file)) {
-      write.infile(res.pca,file = file, sep=sep)
+      write.infile(res.fda,file = file, sep=sep)
       print(paste("All the results are in the file",file))
     }
 
