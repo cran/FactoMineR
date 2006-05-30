@@ -36,20 +36,20 @@ plot.GPA <- function (x, axes = c(1, 2),
       }
     }
     if (is.null(xlim)) {
-      xmin <- min(coord.ind[,1])*1.1
-      xmax <- max(coord.ind[,1])*1.1
+      xmin <- min(coord.ind[,1], na.rm=TRUE)*1.1
+      xmax <- max(coord.ind[,1], na.rm=TRUE)*1.1
       if (!is.null(group.ind)){
-        xmin <- min(xmin, coord.ind.partiel[group.ind,1,])
-        xmax <- max(xmax, coord.ind.partiel[group.ind,1,])
+        xmin <- min(xmin, coord.ind.partiel[group.ind,1,], na.rm=TRUE)
+        xmax <- max(xmax, coord.ind.partiel[group.ind,1,], na.rm=TRUE)
       }
       xlim = c(xmin,xmax)
     }
     if (is.null(ylim)) {
-      ymin <- min(coord.ind[,2])*1.1
-      ymax <- max(coord.ind[,2])*1.1
+      ymin <- min(coord.ind[,2], na.rm=TRUE)*1.1
+      ymax <- max(coord.ind[,2], na.rm=TRUE)*1.1
       if (!is.null(group.ind)){
-        ymin <- min(ymin, coord.ind.partiel[group.ind,2,])
-        ymax <- max(ymax, coord.ind.partiel[group.ind,2,])
+        ymin <- min(ymin, coord.ind.partiel[group.ind,2,], na.rm=TRUE)
+        ymax <- max(ymax, coord.ind.partiel[group.ind,2,], na.rm=TRUE)
       }
       ylim = c(ymin, ymax)
     }
@@ -74,7 +74,7 @@ plot.GPA <- function (x, axes = c(1, 2),
     for (i in group.ind) {
       for (j in 1:nbre.grpe){
         points(coord.ind.partiel[i,1,j],coord.ind.partiel[i,2,j],cex=0.8*cex,col=col.ind[nb.ind+(i-1)*nbre.grpe+j],pch=20)
-        if (lab.par) text(coord.ind.partiel[i,1,j], y = coord.ind.partiel[i,2,j], labels = rownames(coord.ind.partiel)[i,,j], pos = 3, col = col.ind[nb.ind+(i-1)*nbre.grpe+j])
+        if (lab.par) text(coord.ind.partiel[i,1,j], y = coord.ind.partiel[i,2,j], labels =paste(rownames(coord.ind.partiel[,,j])[i], rownames(res.gpa$RV)[j], sep="-"), pos = 3, col = col.ind[nb.ind+(i-1)*nbre.grpe+j])
           if (chrono) { if(j>1) lines( c(coord.ind.partiel[i, 1,j-1], coord.ind.partiel[i, 1,j]), c(coord.ind.partiel[i, 2,j-1], coord.ind.partiel[i, 2,j]), col = col.ind[i]) }
           else lines(c(coord.ind[i,1],coord.ind.partiel[i,1,j]),c(coord.ind[i,2],coord.ind.partiel[i,2,j]),col=col.ind[nb.ind+(i-1)*nbre.grpe+j],lty=j)
       }

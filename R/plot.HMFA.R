@@ -320,8 +320,14 @@ plot.moy <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL, ce
           if (sum(res.hmfa$quanti.var$cos2[v, axes], na.rm = TRUE) >= lim.cos2.var & !is.na(sum(res.hmfa$quanti.var$cos2[v, axes], na.rm = TRUE))) {
             arrows(0, 0, coord.var[v, 1], coord.var[v, 2], length = 0.1, angle = 15, code = 2)
             if (lab.var) {
-              if (coord.var[v, 2] >= 0) pos <- 3
-              else pos <- 1
+                if (abs(coord.var[v,1])>abs(coord.var[v,2])){
+                 if (coord.var[v,1]>=0) pos<-4
+                 else pos<-2
+                }
+                else {
+                 if (coord.var[v,2]>=0) pos<-3
+                 else pos<-1
+                }
               text(coord.var[v, 1], y = coord.var[v, 2], labels = rownames(coord.var)[v], pos = pos)
             }
           }

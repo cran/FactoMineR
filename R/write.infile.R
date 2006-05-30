@@ -37,7 +37,7 @@
         X <- round(X, 4)
         nomligne <- rownames(X)
         nomcol <- colnames(X)
-        cat(nomcol, "\n", file = file, append = TRUE, sep = sep)
+        cat("   ",nomcol, "\n", file = file, append = TRUE, sep = sep)
         alpha <- dim(X)[[1]]
         for (i in 1:alpha) cat(nomligne[i], X[i, ], "\n", file = file, append = TRUE, sep=sep)
         cat("\n", file = file, append = TRUE)

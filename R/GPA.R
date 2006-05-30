@@ -1,7 +1,6 @@
- GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
+GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
     coord = c(1, 2), group, name.group = NULL, graph = TRUE)
 {
-
     ginv <- function(X, tol = sqrt(.Machine$double.eps)) {
         if (length(dim(X)) > 2 || !(is.numeric(X) || is.complex(X)))
             stop("'X' must be a numeric or complex matrix")
@@ -20,7 +19,7 @@
     }
     similarite <- function(X, Y) {
         if (dim(X)[[1]] != dim(Y)[[1]])
-            stop("Les matrices ne sont pas de m\352me dimensions" )
+            stop("no the same dimension for X and Y")
         Y <- scale(Y, scale = FALSE)
         X <- scale(X, scale = FALSE)
         y <- Y %*% procrustesbis(Y, X)$H
@@ -30,12 +29,21 @@
     }
     coeffRVs <- function(X, Y) {
         if (dim(X)[[1]] != dim(Y)[[1]])
-            stop("Les matrices ne sont pas de m\352me dimensions" )
+            stop("no the same dimension for X and Y")
         n <- dim(X)[[1]]
         Y <- scale(Y, scale = FALSE)
         X <- scale(X, scale = FALSE)
         rv <- coeffRV(X, Y)
         if (n < 4) {
+        if(n==1)
+        {
+      
+         rvstd=NA
+         esperance<-variance<-NA
+        }   
+        else{
+       
+        
             perm24 <- permute(n)
             listX <- array(0, c(dim(X)[[1]], dim(X)[[2]], dim(perm24)[[1]]))
             for (i in 1:dim(perm24)[[1]]) {
@@ -48,6 +56,7 @@
             }
             esperance <- mean(listRV)
             variance <- sum((listRV - esperance)^2)/dim(perm24)[[1]]
+            }
         }
         else {
             betax <- (sum(diag(X %*% t(X))))^2/sum(diag(X %*%
@@ -99,12 +108,20 @@
     coeffRV <- function(X, Y) {
         if (dim(X)[[1]] != dim(Y)[[1]])
             stop("no the same dimension for X and Y")
+        if(dim(X)[[1]]==1)
+				{
+				print("1 configuration RV is  NA" )
+				rv=NA
+				}
+				else
+				{
         Y <- scale(Y, scale = FALSE)
         X <- scale(X, scale = FALSE)
         W1 <- X %*% t(X)
         W2 <- Y %*% t(Y)
         rv <- sum(diag(W1 %*% W2))/(sum(diag(W1 %*% W1)) * sum(diag(W2 %*%
             W2)))^0.5
+        }
         return(rv)
     }
     crit.procGPAcvmqte <- function(x) {
@@ -308,7 +325,7 @@
         contribution$dimension <- contridim/nbj * 100
         return(contribution)
     }
-    "placevm" <- function(mat) {
+    placevm <- function(mat) {
         if (!is.matrix(mat))
             stop("A matrix please !!")
         vect <- NULL
@@ -330,89 +347,66 @@
         sol$vect <- vect
         return(sol)
     }
-    
- #-----------------------------------------------------------------------------
-procrustesbis<-function(X1,X2)
-{
-
-    #on retourne X1 sur X2
-if(!is.matrix(X1))  stop("On souhaite ici avoir un tableau de type matrice  ")
-if(!is.matrix(X2))  stop("On souhaite ici avoir un tableau de type matrice  ")
-if(dim(X2)[[2]]!=dim(X1)[[2]]) stop("On souhaite ici avoir un tableau de type matrice ayant le même nombre de colonnes  ")
-
-    # on commence par centrer les deux matrices
-    nbcolonne<-dim(X1)[[2]]
-    X1c<-scale(X1,scale=FALSE)
-    X2c<-scale(X2,scale=FALSE)
-    Aj<-t(X1c)%*%X2c
-    lola<-eigen(t(Aj)%*%Aj)
-    Qj<-as.matrix(eigen(t(Aj)%*%Aj)$vectors)
-    phij<-diag (lola$values,length(lola$values),length(lola$values))
-    opp1<-abs(lola$values)^0.5
-       H<-diag(1,nbcolonne)
-
-    rang<-sum((opp1/opp1[1])>10^-7)
-
-        if(is.na(rang))
-        {
-
-            H<-H
-        rho<-sum(diag(X1c%*%H%*%t(X2c)))/sum(diag(X1c%*%t(X1)))
+    procrustesbis <- function(X1, X2) {
+        if (!is.matrix(X1))
+            stop("On souhaite ici avoir un tableau de type matrice  ")
+        if (!is.matrix(X2))
+            stop("On souhaite ici avoir un tableau de type matrice  ")
+        if (dim(X2)[[2]] != dim(X1)[[2]])
+            stop("On souhaite ici avoir un tableau de type matrice ayant le même nombre de colonnes  ")
+        nbcolonne <- dim(X1)[[2]]
+        X1c <- scale(X1, scale = FALSE)
+        X2c <- scale(X2, scale = FALSE)
+        Aj <- t(X1c) %*% X2c
+        lola <- eigen(t(Aj) %*% Aj)
+        Qj <- as.matrix(eigen(t(Aj) %*% Aj)$vectors)
+        phij <- diag(lola$values, length(lola$values), length(lola$values))
+        opp1 <- abs(lola$values)^0.5
+        H <- diag(1, nbcolonne)
+        rang <- sum((opp1/opp1[1]) > 10^-7)
+        if (is.na(rang)) {
+            H <- H
+            rho <- sum(diag(X1c %*% H %*% t(X2c)))/sum(diag(X1c %*%
+                t(X1)))
         }
-        else
-        {
-
-        if (rang==length(lola$values))
-        {
-        Pj<-Aj%*%Qj%*%as.matrix(diag(diag(phij)^(-0.5),length(lola$values),length(lola$values)))
-        H<-Pj%*%t(Qj)
-
-        }
-        else
-        {
-
-        nbracinepos<-rang
-
-        Pjstar<-Aj%*%Qj[,1:nbracinepos]%*%as.matrix(diag((diag(phij)[1:nbracinepos])^(-0.5),length(lola$values[1:nbracinepos]),length(lola$values[1:nbracinepos])))
-
-        Pbar<-matrix(0,nbcolonne,(length(lola$values)-nbracinepos))
-        Pjstar1<-Pjstar
-            for (k in 1:(length(lola$values)-nbracinepos))
-            {
-            yinit<-rnorm(nbcolonne)
-            yinit.lm<-lm(yinit~0+Pjstar1)
-            vectorth<-yinit-fitted.values(yinit.lm)
-            Pbar[,k]<-vectorth/(t(vectorth)%*%vectorth)^0.5
-
-           if (sum (sign(Pbar[,k]/Qj[,(nbracinepos+k)]),na.rm=TRUE)<0)
-           {
-           Pjstar1<-cbind(Pjstar1,-Pbar[,k])
-           }
-            else
-           {
-            Pjstar1<-cbind(Pjstar1,Pbar[,k])
+        else {
+            if (rang == length(lola$values)) {
+                Pj <- Aj %*% Qj %*% as.matrix(diag(diag(phij)^(-0.5),
+                  length(lola$values), length(lola$values)))
+                H <- Pj %*% t(Qj)
             }
-
+            else {
+                nbracinepos <- rang
+                Pjstar <- Aj %*% Qj[, 1:nbracinepos] %*% as.matrix(diag((diag(phij)[1:nbracinepos])^(-0.5),
+                  length(lola$values[1:nbracinepos]), length(lola$values[1:nbracinepos])))
+                Pbar <- matrix(0, nbcolonne, (length(lola$values) -
+                  nbracinepos))
+                Pjstar1 <- Pjstar
+                for (k in 1:(length(lola$values) - nbracinepos)) {
+                  yinit <- rnorm(nbcolonne)
+                  yinit.lm <- lm(yinit ~ 0 + Pjstar1)
+                  vectorth <- yinit - fitted.values(yinit.lm)
+                  Pbar[, k] <- vectorth/(t(vectorth) %*% vectorth)^0.5
+                  if (sum(sign(Pbar[, k]/Qj[, (nbracinepos +
+                    k)]), na.rm = TRUE) < 0) {
+                    Pjstar1 <- cbind(Pjstar1, -Pbar[, k])
+                  }
+                  else {
+                    Pjstar1 <- cbind(Pjstar1, Pbar[, k])
+                  }
+                }
+                H <- Pjstar1 %*% t(as.matrix(lola$vectors))
             }
-
-
-        H<-Pjstar1%*%t(as.matrix(lola$vectors))
+            rho <- sum(diag(X1c %*% H %*% t(X2c)))/sum(diag(X1c %*%
+                t(X1)))
         }
-
-        # dans un second temps on calcul le poids
-    rho<-sum(diag(X1c%*%H%*%t(X2c)))/sum(diag(X1c%*%t(X1)))
+        result <- list()
+        result$H <- H
+        result$rho <- rho
+        return(result)
     }
-
-
-    result<-list()
-    result$H<-H
-    result$rho<-rho
-
-    return(result)
-}
- #------------------------------------------------------------------------------
     algogpa <- function(X, tolerance = 10^-5, nbiteration = 200,
-        scale = TRUE, df,name.group) {
+        scale = TRUE, df, name.group) {
         Xm <- NULL
         v <- NULL
         M <- NULL
@@ -650,7 +644,7 @@ if(dim(X2)[[2]]!=dim(X1)[[2]]) stop("On souhaite ici avoir un tableau de type ma
         result <- list()
         class(result) <- c("GPAc", "list")
         result$depart <- df
-        result$name.group<-name.group
+        result$name.group <- name.group
         result$M <- M
         result$Cj <- Cj
         result$consensus <- consensus[, 1:fin]
@@ -689,7 +683,8 @@ if(dim(X2)[[2]]!=dim(X1)[[2]]) stop("On souhaite ici avoir un tableau de type ma
                 dimlist <- c(dimlist, dim(mattravlist[[i]])[[2]])
             }
             else {
-                res.pca <- PCA(as.matrix(X[-(placevm(X[, , i])$vect), , i]), scale.unit = FALSE, graph = FALSE)
+                res.pca <- PCA(as.matrix(X[-(placevm(X[, , i])$vect),
+                  , i]), scale.unit = FALSE, graph = FALSE)
                 temp <- matrix(0, dim(X)[[1]], dim(as.matrix(res.pca$ind$coord))[[2]])
                 temp[-placevm(X[, , i])$vect, ] <- as.matrix(res.pca$ind$coord)
                 mattravlist[[i]] <- temp
@@ -700,7 +695,6 @@ if(dim(X2)[[2]]!=dim(X1)[[2]]) stop("On souhaite ici avoir un tableau de type ma
         for (i in 1:nbj) {
             mattrav[, 1:dimlist[[i]], i] <- mattravlist[[i]]
         }
-
         p <- dim(X)[[1]]
         M <- array(0, c(p, p, nbj))
         Cj <- array(0, c(p, p, nbj))
@@ -735,46 +729,49 @@ if(dim(X2)[[2]]!=dim(X1)[[2]]) stop("On souhaite ici avoir un tableau de type ma
             if (length(placevm(X[, , i])$vect) == 0) {
                 mattrav[, , i] <- mattrav[, , i]
             }
-            else {
+            else
+                                                 {
                 mattrav[placevm(X[, , i])$vect, , i] <- NA
             }
         }
         tabfin <- mattrav
         return(list(tabfin = tabfin, mat = mattrav))
     }
-    
-### Main program
-    if (is.null(name.group)) name.group <- paste("group", c(1:length(group)), sep = ".")
-    if (!is.data.frame(df)) stop("df is not a data.frame")
+    if (is.null(name.group))
+        name.group <- paste("group", c(1:length(group)), sep = ".")
+    if (!is.data.frame(df))
+        stop("df is not a data.frame")
     blo <- group
     nbjuge <- length(blo)
     X <- array(0, c(nrow(df), max(blo), nbjuge))
-    
-    dimnames(X)<-list(rownames(df),1:max(blo),name.group)
- 
+    dimnames(X) <- list(rownames(df), 1:max(blo), name.group)
     indice <- 0
     for (i in 1:nbjuge) {
-        X[, 1:blo[i], i] <- as.matrix(df[,(indice+1):(indice+blo[i])])
+        X[, 1:blo[i], i] <- as.matrix(df[, (indice + 1):(indice +
+            blo[i])])
         indice <- indice + blo[i]
     }
     Xdd <- X
     variante <- NULL
     X1 <- calibre(X)$tabfin
-    gpafin <- algogpa(X1, df = df,name.group=name.group)
-    for (i in 1:10)  variante <- rbind(variante, sample(dim(X)[[3]]))
+    gpafin <- algogpa(X1, df = df, name.group = name.group)
+    for (i in 1:10) variante <- rbind(variante, sample(dim(X)[[3]]))
     res <- NULL
     for (i in 1:10) {
-        gpafin <- algogpa(calibre(X1[, , as.matrix(variante)[i, ]])$tabfin, tolerance = 10^-4, df = df,name.group=name.group)
+        gpafin <- algogpa(calibre(X1[, , as.matrix(variante)[i,
+            ]])$tabfin, tolerance = 10^-4, df = df, name.group = name.group)
         if (gpafin$VMQTE) {
             tab <- crit.procGPAcvmqte(gpafin)$objet
-            s1 <- tab[dim(tab)[[1]], 2] * 100/tab[dim(tab)[[1]], 3]
+            s1 <- tab[dim(tab)[[1]], 2] * 100/tab[dim(tab)[[1]],
+                3]
         }
         else s1 <- crit(gpafin$consensus, gpafin$Xfin)
         res <- c(res, s1)
     }
     ord1 <- order(res)
     X <- X1[, , as.matrix(variante)[ord1[1], ]]
-    gpafin <- algogpa(calibre(X)$tabfin, tolerance, nbiteration, scale, df=df,name.group=name.group)
+    gpafin <- algogpa(calibre(X)$tabfin, tolerance, nbiteration,
+        scale, df = df, name.group = name.group)
     x <- gpafin
     odd <- order(as.matrix(variante)[ord1[1], ])
     gpafin$translation <- x$translation[, odd]
@@ -792,34 +789,50 @@ if(dim(X2)[[2]]!=dim(X1)[[2]]) stop("On souhaite ici avoir un tableau de type ma
     RV <- matrix(-1, nbjuge, nbjuge)
     sim <- matrix(-1, nbjuge, nbjuge)
     if (x$VMQTE) {
+   
         vmplacelist <- list()
         length(vmplacelist) <- nbjuge
-        for (theta in 1:nbjuge) {
-            if (length(placevm(X[, , theta])$vect) != 0) {
+        for (theta in 1:nbjuge)
+                                {
+            if (length(placevm(Xdd[, , theta])$vect) != 0)
+                                                {
                 vmplacelist[[theta]] <- placevm(Xdd[, , theta])$vect
             }
         }
-        for (i in 1:nbjuge) {
-            for (j in 1:nbjuge) {
-                if (length(c(vmplacelist[[i]], vmplacelist[[j]])) !=
-                  0) {
-                  Xi <- Xdd[, , i][-c(vmplacelist[[i]], vmplacelist[[j]]),
-                    ]
-                  Xj <- Xdd[, , j][-c(vmplacelist[[i]], vmplacelist[[j]]),
-                    ]
-                }
-                if (length(c(vmplacelist[[i]], vmplacelist[[j]])) ==
-                  0) {
+  for (i in 1:nbjuge)
+        {
+      for (j in 1:nbjuge)
+                        {
+      if (length(c(vmplacelist[[i]], vmplacelist[[j]])) !=0)
+        {
+            Xi <- Xdd[, , i][-c(vmplacelist[[i]], vmplacelist[[j]]),]
+            Xj <- Xdd[, , j][-c(vmplacelist[[i]], vmplacelist[[j]]),]
+             
+        if(is.null(dim(Xi)))
+        {
+         Xi <- t(as.matrix(Xdd[, , i][-c(vmplacelist[[i]], vmplacelist[[j]]),]))
+         Xj <- t(as.matrix(Xdd[, , j][-c(vmplacelist[[i]], vmplacelist[[j]]),] ))
+        }
+
+                                                }
+      
+     
+        if (length(c(vmplacelist[[i]], vmplacelist[[j]])) ==0)
+                                {
                   Xi <- Xdd[, , i]
                   Xj <- Xdd[, , j]
-                }
+        }
+        
+        
+        
                 RVs[i, j] <- coeffRVs(Xi, Xj)$rvstd
                 RV[i, j] <- coeffRVs(Xi, Xj)$rv
                 sim[i, j] <- similarite(Xi, Xj)
             }
         }
     }
-    else {
+    else
+                {
         X <- Xdd
         for (i in 1:nbjuge) {
             for (j in 1:nbjuge) {
@@ -831,24 +844,47 @@ if(dim(X2)[[2]]!=dim(X1)[[2]]) stop("On souhaite ici avoir un tableau de type ma
             }
         }
     }
-
-   row.names(RV)<-colnames(RV)<-name.group
-   row.names(RVs)<-colnames(RVs)<-name.group
-   row.names(sim)<-colnames(sim)<-name.group
-
+    row.names(RV) <- colnames(RV) <- name.group
+    row.names(RVs) <- colnames(RVs) <- name.group
+    row.names(sim) <- colnames(sim) <- name.group
+    listcor <- list()
+    namelist <- NULL
+    for (i in 1:dim(x$Xfin)[[3]]) {
+        namelist <- c(namelist, paste("cor", name.group[[i]]))
+        listcor[[i]] <- cor(scale(Xdd[, , i], scale = FALSE),
+            x$consensus, use = "pairwise.complete.obs")
+    }
+    averagecor <- 0 * listcor[[1]]
+    for (i in 1:dim(x$Xfin)[[3]]) {
+        averagecor <- averagecor + listcor[[i]]
+    }
+    averagecor <- averagecor/dim(x$Xfin)[[3]]
+    listcor[[(dim(x$Xfin)[[3]] + 1)]] <- averagecor
+    namelist <- c(namelist, "averagecor")
+    names(listcor) <- namelist
+    Xfin <- x$Xfin
+    if (x$VMQTE) {
+        for (i in 1:dim(x$Xfin)[[3]]) {
+            Xfin[vmplacelist[[i]], , i] <- NA
+        }
+    }
     resultat <- list()
     class(resultat) <- c("GPA", "list")
     resultat$RV <- RV
     resultat$RVs <- RVs
     resultat$simi <- sim
     resultat$scaling <- x$poids
-    resultat$dep <- Xdep
+    resultat$dep <- Xdd
     resultat$consensus <- x$consensus
-    resultat$Xfin <- x$Xfin
-
-    
-    if (x$VMQTE)resultat$PANOVA <- crit.procGPAcvmqte(x)
+    resultat$Xfin <- Xfin
+    resultat$correlations <- listcor
+    if (x$VMQTE)
+        resultat$PANOVA <- crit.procGPAcvmqte(x)
     else resultat$PANOVA <- crit.procGPAcsansvm(x)
-    if (graph) plot(resultat)
+    if (graph)
+        plot(resultat)
     return(resultat)
 }
+
+
+

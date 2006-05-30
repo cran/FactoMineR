@@ -16,12 +16,12 @@ CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE){
     tmp <- svd.triplet(Tc, Pl = Pl, Pc = Pc)
     eig <- tmp$vs^2
     vp <- as.data.frame(matrix(NA, length(eig), 3))
-    rownames(vp) <- paste("comp", 1:length(eig))
+    rownames(vp) <- paste("dim", 1:length(eig))
     colnames(vp) <- c("eigenvalue", "inertia", "cumulative inertia")
     vp[, "eigenvalue"] <- eig
     vp[, "inertia"] <- (eig/sum(eig))*100
     vp[1, "cumulative inertia"] <- vp[1, "inertia"]
-    for (i in 2:length(eig))  vp[i, "cumulative inertia"] <- vp[i, "inertia"] + vp[i - 1, "cumulative inertia"]
+    if (length(eig)>1) for (i in 2:length(eig))  vp[i, "cumulative inertia"] <- vp[i, "inertia"] + vp[i - 1, "cumulative inertia"]
     V <- tmp$V
     U <- tmp$U
     coord.col <- sweep(V,2,sqrt(eig),FUN="*")

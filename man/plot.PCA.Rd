@@ -14,7 +14,7 @@ plot.PCA(x, axes = c(1, 2), choix = "ind",
     ellipse = NULL, xlim = NULL, ylim = NULL, habillage = "none", 
     col.hab = NULL, col.ind = "black", col.ind.sup = "blue", 
     col.quali = "magenta", col.quanti.sup = "blue", 
-    col.var = "black", invisible = NULL, lim.cos2.var = 0.1,
+    col.var = "black", label="all", invisible = NULL, lim.cos2.var = 0.1,
     cex = 1, title = NULL, \dots)
 }
 
@@ -27,11 +27,12 @@ plot.PCA(x, axes = c(1, 2), choix = "ind",
   \item{ylim}{range for the plotted 'y' values, defaulting to the range of the finite values of 'y'}
   \item{habillage}{allows to colored the individuals among a qualitative variable}
   \item{col.hab}{a vector with the color to use for the individuals}
-  \item{col.ind}{a color for the individuals if there only is not habillage, if color ="none" the label is not written}
-  \item{col.ind.sup}{a color for the supplementary individuals only if there is not habillage, if color ="none" the label is not written}
-  \item{col.quali}{a color for the categories of qualitative variable sonly  if there is not habillage, if color ="none" the label is not written}
-  \item{col.quanti.sup}{a color for the quantitative supplementary variables, if color ="none" the label is not written}
-  \item{col.var}{a color for the variables, if color ="none" the label is not written}
+  \item{col.ind}{a color for the individuals if there only is not habillage}
+  \item{col.ind.sup}{a color for the supplementary individuals only if there is not habillage}
+  \item{col.quali}{a color for the categories of qualitative variable sonly  if there is not habillage}
+  \item{col.quanti.sup}{a color for the quantitative supplementary variables}
+  \item{col.var}{a color for the variables}
+  \item{label}{a list of character for the elements which are labelled (by default, all the elements are labelled ("ind", ind.sup", "quali", "quanti"}
   \item{invisible}{string indicating if some points should not be drawn ("ind" or "quali")}
   \item{lim.cos2.var}{value of the square cosinus under the variables are not drawn}
   \item{cex}{cf. function \code{\link{par}} in the \pkg{graphics} package}

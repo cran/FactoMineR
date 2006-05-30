@@ -8,7 +8,7 @@
 
 \usage{
 FDA(X, fact, new.data = NULL, new.fact = NULL, prior = NULL, 
-    cross.val = FALSE)
+    cross.val = FALSE, graph = TRUE)
 }
 
 \arguments{
@@ -18,6 +18,7 @@ FDA(X, fact, new.data = NULL, new.fact = NULL, prior = NULL,
   \item{new.fact  }{if \code{new.dat} is not null, a factor specifying the class for each observation of the test sample.   }
   \item{prior     }{a vector. The prior probabilities of class membership.  If unspecified, the class proportions for the training sample (\code{new.dat}) are used.  }
   \item{cross.val }{if TRUE, returns results for leave-one-out cross-validation. }
+  \item{graph}{boolean, if TRUE graphs are plotted}
 }
 
 \details{
@@ -27,11 +28,11 @@ FDA(X, fact, new.data = NULL, new.fact = NULL, prior = NULL,
 \value{
 Returns a list including :
 
-  \item{eigen.values }{ a numeric vector containing all the  eigenvalues }
+  \item{eig }{ a numeric vector containing all the  eigenvalues }
   \item{eigen.vectors }{ a list of matrices containing all the eigenvectors}
-  \item{res.var      }{ a list of matrices containing all the results for the active variables  }
-  \item{res.cg       }{ a list of matrices containing all the results for the centers of gravity }
-  \item{res.ind      }{ a list of matrices containing all the results for the individuals }
+  \item{var      }{ a list of matrices containing all the results for the active variables  }
+  \item{cg       }{ a list of matrices containing all the results for the centers of gravity }
+  \item{ind      }{ a list of matrices containing all the results for the individuals }
   \item{call         }{ a list with the data frame and grouping factor used}
   \item{df           }{ the discriminant functions}
   \item{score        }{ a vector whith the individuals scores.}
@@ -43,6 +44,11 @@ Returns a list including :
 \author{ Jeremy Mazet \email{jeremy.mazet@soredab.org} }
 
 \seealso{\code{\link{plot.FDA}}, \code{\link{print.FDA}}}
+
+\examples{
+data(wine)
+res.fda <- FDA(wine[,-(1:28)], fact=wine[,1])
+}
 
 
 \keyword{ multivariate }
