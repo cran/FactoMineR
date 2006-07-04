@@ -1,0 +1,60 @@
+\name{plot.MFApartial}
+
+\alias{plot.MFApartial}
+
+\title{Plot an interactive Multiple Factor Analysis (MFA) graph}
+
+\description{
+Draw an interactive Multiple Factor Analysis (MFA) graphs.
+}
+
+\usage{
+plot.MFApartial(x, axes = c(1, 2), 
+    lab.ind.moy = TRUE, lab.par = FALSE, habillage = "ind",
+    chrono = FALSE, col.hab = NULL, invisible = NULL, 
+    draw.partial = NULL, xlim = NULL, ylim = NULL, 
+    cex = 1, title = NULL, \dots)
+}
+
+\arguments{ 
+  \item{x}{an object of class MFA}
+  \item{axes}{a length 2 vector specifying the components to plot}
+  \item{lab.ind.moy}{boolean, if TRUE, the label of the mean points are drwan}
+  \item{lab.par}{boolean, if TRUE, the label of the partial points are drwan}
+  \item{habillage}{string corresponding to the color which are used. If "ind", one color is used for each individual;
+  if "quali" the individuals are colored according to one qualitative variable; if "group" the individuals are colored according to the group}
+  \item{chrono}{boolean, if TRUE, the partial points of a same point are linked (useful when groups correspond to different moment)}
+  \item{col.hab}{the colors to use. By default, colors are chosen}
+  \item{invisible}{list of string; for choix ="ind", the individuals can be omit (invisible = "ind"),
+  or supplementary individuals (invisible="ind.sup") or the centerg of gravity of the qualitative variables 
+  (invisible= "quali"); if invisible = c("ind","ind.sup"), just the centers of gravity are drawn}
+  \item{draw.partial}{data frame of a boolean variable for all the individuals and all the centers of gravity and with for which the partial points should be drawn (by
+  default, NULL and no partial points are drawn)}
+  \item{xlim}{range for the plotted 'x' values, defaulting to the range of the finite values of 'x'}
+  \item{ylim}{range for the plotted 'y' values, defaulting to the range of the finite values of 'y'}
+  \item{cex}{cf. function \code{\link{par}} in the \pkg{graphics} package}
+  \item{title}{string corresponding to the title of the graph you draw (by default NULL and a title is chosen)}
+  \item{\dots}{further arguments passed to or from other methods}
+}
+
+\value{
+Draw a graph with the individuals and the centers of gravity. The graph is interactive and clicking on a point will draw the partial points,
+if you click on a point for which the partial points are yet drawn, the partial points are deleted.
+To stop the interactive plot, click on the title (or in the top of the graph)
+}
+
+\author{Jérémy Mazet, François Husson \email{François.Husson@agrocampus-rennes.fr}}
+
+\seealso{ \code{\link{MFA}}, \code{\link{plot.MFA}}}
+
+\examples{
+\dontrun{
+data(wine)
+aa = MFA(wine,group=c(2,5,3,10,9,2),type=c("n",rep("s",5)),ncp=5,
+    name.group=c("orig","olf","vis","olfag","gust","ens"),
+    num.group.sup=c(1,6),graph=FALSE)
+liste = plot.MFApartial(aa)
+}
+}
+
+\keyword{dplot}
