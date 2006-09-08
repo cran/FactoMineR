@@ -19,98 +19,97 @@ lab.ind=FALSE, lab.var=TRUE, lab.cg=TRUE, lab.ind.sup=FALSE, level.conf=0.95, ..
     # graphique des individus
     if (choix=="ind")
     {
-    
       # detection des éléments à ne pas représenter
-        test.invisible<-vector(length=3)
-        if(!is.null(invisible))
-        {
-            test.invisible[1]<-match("cg", invisible)
-            test.invisible[2]<-match("ind", invisible)
-            test.invisible[3]<-match("elli", invisible)
-            test.invisible[4]<-match("ind.sup", invisible)
-        }
-        else
-        {
-            test.invisible<-rep(NA,4)
-        }
-
-    
-        #récupérations de toutes les coordonnées
-        if (axes[2]!=axes[1])
+      test.invisible<-vector(length=3)
+      if(!is.null(invisible))
       {
-            coord.cg<-res.fda$cg$coord[, axes]
-            coord.ind<-res.fda$ind$coord[,axes]
-      tab.elli<-data.frame(res.fda$call$fact, coord.ind)
-            coord.elli<-coord.ellipse(tab.elli, level.conf=level.conf)$res
-        coord.ind.sup<-res.fda$coord.ind.sup[,axes]
-        }
+          test.invisible[1]<-match("cg", invisible)
+          test.invisible[2]<-match("ind", invisible)
+          test.invisible[3]<-match("elli", invisible)
+          test.invisible[4]<-match("ind.sup", invisible)
+      }
+      else
+      {
+          test.invisible<-rep(NA,4)
+      }
 
+  
+      #récupérations de toutes les coordonnées
+      if (axes[2]!=axes[1])
+      {
+        coord.cg<-res.fda$cg$coord[, axes]
+        coord.ind<-res.fda$ind$coord[,axes]
+        tab.elli<-data.frame(res.fda$call$fact, coord.ind)
+        coord.elli<-coord.ellipse(tab.elli, level.conf=level.conf)$res
+        coord.ind.sup<-res.fda$coord.ind.sup[,axes]
+      }
+
+      else
+      {
+        coord.cg<-data.frame(res.fda$cg$coord.cg[, axes[1]], rnorm(nrow(res.fda$cg$coord.cg), mean=0, sd=1))
+        coord.ind<-data.frame(res.fda$ind$coord.ind[,axes[1]], rnorm(nrow(res.fda$ind$coord.ind), mean=0, sd=1))
+        coord.elli<-NULL
+        if (!is.null(res.fda$coord.ind.sup))
+        {
+          coord.ind.sup<-data.frame(res.fda$coord.ind.sup[,axes[1]], rnorm(nrow(res.fda$coord.ind.sup), mean=0, sd=1))
+        }
         else
         {
-      coord.cg<-data.frame(res.fda$cg$coord.cg[, axes[1]], rnorm(nrow(res.fda$cg$coord.cg), mean=0, sd=1))
-            coord.ind<-data.frame(res.fda$ind$coord.ind[,axes[1]], rnorm(nrow(res.fda$ind$coord.ind), mean=0, sd=1))
-      coord.elli<-NULL
-      if (!is.null(res.fda$coord.ind.sup))
-            {
-                coord.ind.sup<-data.frame(res.fda$coord.ind.sup[,axes[1]], rnorm(nrow(res.fda$coord.ind.sup), mean=0, sd=1))
-            }
-            else
-            {
-                coord.ind.sup<-NULL
-            }
-    }
+          coord.ind.sup<-NULL
+        }
+      }
 
         # determination des limites
         if(is.null(xlim))
         {
-      xmin<-xmax<-0
-      if(is.na(test.invisible[1]))
-      {
-        xmin<-min(xmin, coord.cg[,1])
-        xmax<-max(xmax, coord.cg[,1])
-      }
-      if(is.na(test.invisible[2]))
-      {
-        xmin<-min(xmin, coord.ind[,1])
-        xmax<-max(xmax, coord.ind[,1])
-      }
-      if(is.na(test.invisible[3]))
-      {
-        xmin<-min(xmin, coord.elli[,2])
-        xmax<-max(xmax, coord.elli[,2])
-      }
-      if(is.na(test.invisible[4]))
-      {
-        xmin<-min(xmin, coord.ind.sup[,1])
-        xmax<-max(xmax, coord.ind.sup[,1])
-      }
-        xlim<-c(xmin, xmax)*1.2
+          xmin<-xmax<-0
+          if(is.na(test.invisible[1]))
+          {
+            xmin<-min(xmin, coord.cg[,1])
+            xmax<-max(xmax, coord.cg[,1])
+          }
+          if(is.na(test.invisible[2]))
+          {
+            xmin<-min(xmin, coord.ind[,1])
+            xmax<-max(xmax, coord.ind[,1])
+          }
+          if(is.na(test.invisible[3]))
+          {
+            xmin<-min(xmin, coord.elli[,2])
+            xmax<-max(xmax, coord.elli[,2])
+          }
+          if(is.na(test.invisible[4]))
+          {
+            xmin<-min(xmin, coord.ind.sup[,1])
+            xmax<-max(xmax, coord.ind.sup[,1])
+          }
+            xlim<-c(xmin, xmax)*1.2
         }
         
         if(is.null(ylim))
         {
-      ymin<-ymax<-0
-      if(is.na(test.invisible[1]))
-      {
-        ymin<-min(ymin, coord.cg[,2])
-        ymax<-max(ymax, coord.cg[,2])
-      }
-      if(is.na(test.invisible[2]))
-      {
-        ymin<-min(ymin, coord.ind[,2])
-        ymax<-max(ymax, coord.ind[,2])
-      }
-      if(is.na(test.invisible[3]))
-      {
-        ymin<-min(ymin, coord.elli[,3])
-        ymax<-max(ymax, coord.elli[,3])
-      }
-      if(is.na(test.invisible[4]))
-      {
-        ymin<-min(ymin, coord.ind.sup[,2])
-        ymax<-max(ymax, coord.ind.sup[,2])
-      }
-        ylim<-c(ymin, ymax)*1.2
+          ymin<-ymax<-0
+          if(is.na(test.invisible[1]))
+          {
+            ymin<-min(ymin, coord.cg[,2])
+            ymax<-max(ymax, coord.cg[,2])
+          }
+          if(is.na(test.invisible[2]))
+          {
+            ymin<-min(ymin, coord.ind[,2])
+            ymax<-max(ymax, coord.ind[,2])
+          }
+          if(is.na(test.invisible[3]))
+          {
+            ymin<-min(ymin, coord.elli[,3])
+            ymax<-max(ymax, coord.elli[,3])
+          }
+          if(is.na(test.invisible[4]))
+          {
+            ymin<-min(ymin, coord.ind.sup[,2])
+            ymax<-max(ymax, coord.ind.sup[,2])
+          }
+            ylim<-c(ymin, ymax)*1.2
         }
 
         # determination de l'habillage des points
@@ -132,10 +131,10 @@ lab.ind=FALSE, lab.var=TRUE, lab.cg=TRUE, lab.ind.sup=FALSE, level.conf=0.95, ..
             }
         }
 
-
         # construction graphique
-    titre = "Individuals representation"
-    plot(0, 0, main = titre, xlab = paste("Dim ",axes[1]," (",signif(res.fda$eig[axes[1],2],4),"%)",sep=""), ylab = paste("Dim ",axes[2]," (",signif(res.fda$eig[axes[2],2],4),"%)",sep=""), xlim = xlim, ylim = ylim, col = "white", asp=1)
+        titre = "Individuals representation"
+        plot(0, 0, main = titre, xlab = paste("Dim ",axes[1]," (",signif(res.fda$eig[axes[1],2],4),"%)",sep=""), ylab = paste("Dim ",axes[2]," (",signif(res.fda$eig[axes[2],2],4),"%)",sep=""), xlim = xlim, ylim = ylim, col = "white")
+
     abline(h=0,lty=2)
     abline(v=0,lty=2)
 
@@ -186,7 +185,7 @@ lab.ind=FALSE, lab.var=TRUE, lab.cg=TRUE, lab.ind.sup=FALSE, level.conf=0.95, ..
         coord.var<-res.fda$var$coord[,axes]
 
         #construction graphique
-    get(getOption("device"))(8, 8)
+    get(getOption("device"))(width=8,height=8)
     plot(0, 0, main = titre, xlab = paste("Dim ",axes[1]," (",signif(res.fda$eig[axes[1],2],4),"%)",sep=""), ylab = paste("Dim ",axes[2]," (",signif(res.fda$eig[axes[2],2],4),"%)",sep=""), xlim = c(-1.1,1.1), ylim = c(-1.1,1.1), col = "white", asp=1)
     abline(h=0,lty=2)
     abline(v=0,lty=2)

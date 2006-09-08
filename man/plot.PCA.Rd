@@ -25,14 +25,14 @@ plot.PCA(x, axes = c(1, 2), choix = "ind",
   \item{ellipse}{boolean (NULL by default), if not null, draw ellipses around the individuals, and use the results of \code{coord.ellipse}}
   \item{xlim}{range for the plotted 'x' values, defaulting to the range of the finite values of 'x'}
   \item{ylim}{range for the plotted 'y' values, defaulting to the range of the finite values of 'y'}
-  \item{habillage}{allows to colored the individuals among a qualitative variable}
+  \item{habillage}{give no color for the individuals ("none"), a color for each individual ("ind"),  or color the individuals among a qualitative variable (give the number of the qualitative variable)}
   \item{col.hab}{a vector with the color to use for the individuals}
   \item{col.ind}{a color for the individuals if there only is not habillage}
   \item{col.ind.sup}{a color for the supplementary individuals only if there is not habillage}
   \item{col.quali}{a color for the categories of qualitative variable sonly  if there is not habillage}
   \item{col.quanti.sup}{a color for the quantitative supplementary variables}
   \item{col.var}{a color for the variables}
-  \item{label}{a list of character for the elements which are labelled (by default, all the elements are labelled ("ind", ind.sup", "quali", "quanti"}
+  \item{label}{a list of character for the elements which are labelled (by default, all the elements are labelled ("ind", ind.sup", "quali", "var", "quanti.sup"}
   \item{invisible}{string indicating if some points should not be drawn ("ind" or "quali")}
   \item{lim.cos2.var}{value of the square cosinus under the variables are not drawn}
   \item{cex}{cf. function \code{\link{par}} in the \pkg{graphics} package}
@@ -51,7 +51,7 @@ Returns the individuals factor map and the variables factor map.
 \examples{
 data(decathlon)
 res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup = 13)
-plot(res.pca, habillage = "quali", col.hab=c("green","blue"))
+plot(res.pca, habillage = 13, col.hab=c("green","blue"))
 }
 
 \keyword{dplot}

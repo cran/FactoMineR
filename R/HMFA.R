@@ -163,6 +163,12 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE)
         results$quanti.var$contrib <- res.afmh$var$contrib[-ind.quali, 
             ]
     }
+    if (is.null(ind.quali)) {
+        results$quanti.var$coord <- res.afmh$var$coord
+        results$quanti.var$cor <- res.afmh$var$cor
+        results$quanti.var$cos2 <- res.afmh$var$cos2
+        results$quanti.var$contrib <- res.afmh$var$contrib
+    }
     if (!is.null(ind.quali)) {
         aux <- matrix(0, nrow = length(ind.quali), ncol = ncol(res.afmh$ind$coord))
         for (k in 1:length(ind.quali)) 
@@ -180,9 +186,9 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE)
         results$call$Hq <- Xdes
     class(results) <- c("HMFA", "list")
     if (graph) {
-        plot(results, choix = "ind")
-        plot(results, choix = "var")
-        plot(results, choix = "group")
+        plot.HMFA(results, choix = "ind")
+        plot.HMFA(results, choix = "var")
+        plot.HMFA(results, choix = "group")
     }
     return(results)
 }

@@ -1,4 +1,21 @@
 FDA<-function(X, fact, new.data=NULL, new.fact=NULL, prior=NULL, cross.val=FALSE, graph = TRUE){
+    ginv <- function(X, tol = sqrt(.Machine$double.eps)) {
+        if (length(dim(X)) > 2 || !(is.numeric(X) || is.complex(X)))
+            stop("'X' must be a numeric or complex matrix")
+        if (!is.matrix(X))
+            X <- as.matrix(X)
+        Xsvd <- svd(X)
+        if (is.complex(X))
+            Xsvd$u <- Conj(Xsvd$u)
+        Positive <- Xsvd$d > max(tol * Xsvd$d[1], 0)
+        if (all(Positive))
+            Xsvd$v %*% (1/Xsvd$d * t(Xsvd$u))
+        else if (!any(Positive))
+            array(0, dim(X)[2:1])
+        else Xsvd$v[, Positive, drop = FALSE] %*% ((1/Xsvd$d[Positive]) *
+            t(Xsvd$u[, Positive, drop = FALSE]))
+    }
+
   fda<-function(X, fact, new.data=NULL, new.fact=NULL, prior=NULL)
   {
     X.dep<-X<-as.data.frame(X)
@@ -43,8 +60,8 @@ FDA<-function(X, fact, new.data=NULL, new.fact=NULL, prior=NULL, cross.val=FALSE
         {
             for(g in 1:nlevels(fact))
                 {
-                    fd[1,g]<- t(as.matrix(G[g,]))%*%solve(Sr)%*%as.matrix(G[g,]) *-1
-                fd[-1,g]<-2*t(as.matrix(G[g,]))%*%solve(Sr)
+                    fd[1,g]<- t(as.matrix(G[g,]))%*%ginv(Sr)%*%as.matrix(G[g,]) *-1
+                fd[-1,g]<-2*t(as.matrix(G[g,]))%*%ginv(Sr)
                 }
         }
 
@@ -52,8 +69,8 @@ FDA<-function(X, fact, new.data=NULL, new.fact=NULL, prior=NULL, cross.val=FALSE
         {
           for(g in 1:nlevels(fact))
               {
-                  fd[1,g]<- 2*log(prior[g])-t(as.matrix(G[g,]))%*%solve(Sr)%*%as.matrix(G[g,])
-            fd[-1,g]<-2*t(as.matrix(G[g,]))%*%solve(Sr)
+                  fd[1,g]<- 2*log(prior[g])-t(as.matrix(G[g,]))%*%ginv(Sr)%*%as.matrix(G[g,])
+            fd[-1,g]<-2*t(as.matrix(G[g,]))%*%ginv(Sr)
             }
         }
 
@@ -95,7 +112,7 @@ FDA<-function(X, fact, new.data=NULL, new.fact=NULL, prior=NULL, cross.val=FALSE
       else eval<-NULL
 
         # calcul des coordonnées pour représentation graphique
-      coord.ind.sup<-XX%*%solve(S)%*%V
+      coord.ind.sup<-XX%*%ginv(S)%*%V
 
       # mise en forme et édition des résultats
         res<-list(discri.f=fd, score=score, res.affecte=res.affecte, eval=eval, coord.ind.sup=coord.ind.sup)
@@ -113,7 +130,7 @@ FDA<-function(X, fact, new.data=NULL, new.fact=NULL, prior=NULL, cross.val=FALSE
     # calcul de la matrice des centres de gravité
       T<-tab.disjonctif(fact)
     Plg<-t(T)%*%diag(row.w/sum(row.w))%*%T
-      G<-solve(Plg)%*%t(T)%*%diag(row.w/sum(row.w))%*%X
+      G<-ginv(Plg)%*%t(T)%*%diag(row.w/sum(row.w))%*%X
     if ((levels(fact)[1]%in%(1:nlevels(fact)))|(levels(fact)[1]%in%c("y","Y","n","N"))) rownames(G)<- paste("class", levels(fact), sep=".")
     else rownames(G)<- levels(fact)
 
@@ -125,10 +142,10 @@ FDA<-function(X, fact, new.data=NULL, new.fact=NULL, prior=NULL, cross.val=FALSE
     S<-Se+Sr
 
       # diagonalisation
-    tmp<-eigen(Se%*%solve(S))
+    tmp<-eigen(Se%*%ginv(S))
       eig<-Re(tmp$values[1:ncp])
     V<-Re(tmp$vectors[,1:ncp])
-      U<-G%*%solve(S)%*%V%*%diag(eig^-0.5)
+      U<-G%*%ginv(S)%*%V%*%diag(eig^-0.5)
 
     #travail sur les variables
     coord.var <- sweep(V, 2, sqrt(eig), FUN = "*")
@@ -152,7 +169,7 @@ FDA<-function(X, fact, new.data=NULL, new.fact=NULL, prior=NULL, cross.val=FALSE
     res.cg<-list(coord=coord.cg[,1:ncp], cos2=cos2.cg[,1:ncp], contrib=contrib.cg[,1:ncp])
 
     #travail sur les individus
-    coord.ind<-X%*%solve(S)%*%V
+    coord.ind<-X%*%ginv(S)%*%V
     dist2 <- apply(coord.ind^2, 1, sum)
     cos2.ind <- sweep(coord.ind^2, 1, dist2, FUN = "/")
       colnames(coord.ind)<-colnames(cos2.ind)<-paste("Dim", c(1:ncol(V)))
@@ -220,8 +237,8 @@ FDA<-function(X, fact, new.data=NULL, new.fact=NULL, prior=NULL, cross.val=FALSE
   resultats<-c(res.fda, res.cv=list(res.cv))
   class(resultats)<-c("FDA", "list")
   if (graph){
-    plot(resultats)
-    plot(resultats, choix = "var")
+    plot.FDA(resultats)
+    plot.FDA(resultats, choix = "var")
   }
   return(resultats)
 }

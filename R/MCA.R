@@ -1,13 +1,12 @@
 MCA <- function (X, ncp = 5, ind.sup = NULL, quanti.sup = NULL, quali.sup = NULL, graph = TRUE) {
 
     Xtot <- X
-    ncol.Zqs <- 0
     col.sup <- NULL
     if (!is.null(quali.sup)) {
       Zqs <- tab.disjonctif(X[,quali.sup])
       Z <- tab.disjonctif(X[,-c(quanti.sup,quali.sup)])
       Ztot <- cbind.data.frame(Z,Zqs)
-      col.sup <- (ncol(Z)+1):(ncol(Z)+ncol.Zqs)
+      col.sup <- (ncol(Z)+1):(ncol(Z)+ncol(Zqs))
     }
     else {
      if (!is.null(quanti.sup)) Z <- Ztot <- tab.disjonctif(X[,-quanti.sup])
@@ -55,9 +54,9 @@ MCA <- function (X, ncp = 5, ind.sup = NULL, quanti.sup = NULL, quali.sup = NULL
     }
     class(res.mca) <- c("MCA", "list")
     if (graph) {
-      plot(res.mca)
-      plot(res.mca, invisible = c("ind","ind.sup"))
-      plot(res.mca, invisible = "quali")
+      plot.MCA(res.mca)
+      plot.MCA(res.mca, invisible = c("ind","ind.sup"))
+      plot.MCA(res.mca, invisible = "quali")
     }
     return(res.mca)
 }

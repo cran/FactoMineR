@@ -1,6 +1,9 @@
 GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
     coord = c(1, 2), group, name.group = NULL, graph = TRUE)
 {
+#-------------------------------------------------------------------------------
+# INVERSE GENERALISEE
+#-------------------------------------------------------------------------------
     ginv <- function(X, tol = sqrt(.Machine$double.eps)) {
         if (length(dim(X)) > 2 || !(is.numeric(X) || is.complex(X)))
             stop("'X' must be a numeric or complex matrix")
@@ -17,16 +20,21 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
         else Xsvd$v[, Positive, drop = FALSE] %*% ((1/Xsvd$d[Positive]) *
             t(Xsvd$u[, Positive, drop = FALSE]))
     }
+#-------------------------------------------------------------------------------
+# Coefficient de comparaison entre 2 matrices
+#-------------------------------------------------------------------------------
     similarite <- function(X, Y) {
         if (dim(X)[[1]] != dim(Y)[[1]])
             stop("no the same dimension for X and Y")
         Y <- scale(Y, scale = FALSE)
         X <- scale(X, scale = FALSE)
+
         y <- Y %*% procrustesbis(Y, X)$H
         similari <- sum(diag(t(X) %*% y))/(sum(diag(t(X) %*%
             X)) * sum(diag(t(y) %*% y)))^0.5
         return(similari)
     }
+
     coeffRVs <- function(X, Y) {
         if (dim(X)[[1]] != dim(Y)[[1]])
             stop("no the same dimension for X and Y")
@@ -35,27 +43,24 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
         X <- scale(X, scale = FALSE)
         rv <- coeffRV(X, Y)
         if (n < 4) {
-        if(n==1)
-        {
-      
-         rvstd=NA
-         esperance<-variance<-NA
-        }   
-        else{
-       
-        
-            perm24 <- permute(n)
-            listX <- array(0, c(dim(X)[[1]], dim(X)[[2]], dim(perm24)[[1]]))
-            for (i in 1:dim(perm24)[[1]]) {
-                listX[, , i] <- scale(X[perm24[i, ], ], scale = FALSE)
+            if (n == 1) {
+                rvstd = NA
+                esperance <- variance <- NA
             }
-            listRV <- NULL
-            listRVbis <- NULL
-            for (i in 1:dim(perm24)[[1]]) {
-                listRV <- c(listRV, coeffRV(listX[, , i], Y))
-            }
-            esperance <- mean(listRV)
-            variance <- sum((listRV - esperance)^2)/dim(perm24)[[1]]
+            else {
+                perm24 <- permute(n)
+                listX <- array(0, c(dim(X)[[1]], dim(X)[[2]],
+                  dim(perm24)[[1]]))
+                for (i in 1:dim(perm24)[[1]]) {
+                  listX[, , i] <- scale(X[perm24[i, ], ], scale = FALSE)
+                }
+                listRV <- NULL
+                listRVbis <- NULL
+                for (i in 1:dim(perm24)[[1]]) {
+                  listRV <- c(listRV, coeffRV(listX[, , i], Y))
+                }
+                esperance <- mean(listRV)
+                variance <- sum((listRV - esperance)^2)/dim(perm24)[[1]]
             }
         }
         else {
@@ -108,22 +113,23 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
     coeffRV <- function(X, Y) {
         if (dim(X)[[1]] != dim(Y)[[1]])
             stop("no the same dimension for X and Y")
-        if(dim(X)[[1]]==1)
-				{
-				print("1 configuration RV is  NA" )
-				rv=NA
-				}
-				else
-				{
-        Y <- scale(Y, scale = FALSE)
-        X <- scale(X, scale = FALSE)
-        W1 <- X %*% t(X)
-        W2 <- Y %*% t(Y)
-        rv <- sum(diag(W1 %*% W2))/(sum(diag(W1 %*% W1)) * sum(diag(W2 %*%
-            W2)))^0.5
+        if (dim(X)[[1]] == 1) {
+            print("1 configuration RV is  NA")
+            rv = NA
+        }
+        else {
+            Y <- scale(Y, scale = FALSE)
+            X <- scale(X, scale = FALSE)
+            W1 <- X %*% t(X)
+            W2 <- Y %*% t(Y)
+            rv <- sum(diag(W1 %*% W2))/(sum(diag(W1 %*% W1)) *
+                sum(diag(W2 %*% W2)))^0.5
         }
         return(rv)
     }
+#-------------------------------------------------------------------------------
+# Table de PANOVA
+#-------------------------------------------------------------------------------
     crit.procGPAcvmqte <- function(x) {
         if (!inherits(x, "GPAc"))
             stop("Object of type 'GPAc' expected")
@@ -325,6 +331,9 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
         contribution$dimension <- contridim/nbj * 100
         return(contribution)
     }
+#-------------------------------------------------------------------------------
+# Utilitaire emplacement de valeurs manquantes
+#-------------------------------------------------------------------------------
     placevm <- function(mat) {
         if (!is.matrix(mat))
             stop("A matrix please !!")
@@ -347,13 +356,16 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
         sol$vect <- vect
         return(sol)
     }
+#-------------------------------------------------------------------------------
+# Analyse Procrusteene (AP)
+#-------------------------------------------------------------------------------
     procrustesbis <- function(X1, X2) {
         if (!is.matrix(X1))
             stop("On souhaite ici avoir un tableau de type matrice  ")
         if (!is.matrix(X2))
             stop("On souhaite ici avoir un tableau de type matrice  ")
         if (dim(X2)[[2]] != dim(X1)[[2]])
-            stop("On souhaite ici avoir un tableau de type matrice ayant le même nombre de colonnes  ")
+            stop("On souhaite ici avoir un tableau de type matrice ayant le meme nombre de colonnes  ")
         nbcolonne <- dim(X1)[[2]]
         X1c <- scale(X1, scale = FALSE)
         X2c <- scale(X2, scale = FALSE)
@@ -405,7 +417,11 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
         result$rho <- rho
         return(result)
     }
-    algogpa <- function(X, tolerance = 10^-5, nbiteration = 200,
+    
+#-------------------------------------------------------------------------------
+# Algorithme de GPA
+#-------------------------------------------------------------------------------
+    algogpa <- function(X, tolerance = 10^-7, nbiteration = 200,
         scale = TRUE, df, name.group) {
         Xm <- NULL
         v <- NULL
@@ -660,6 +676,10 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
         result$VMQTE <- VMQTE
         return(result)
     }
+    
+#-------------------------------------------------------------------------------
+# Utilitaire de calcul
+#-------------------------------------------------------------------------------
     crit <- function(Ys, MATRICEFIN) {
         s1 <- 0
         nbj <- dim(MATRICEFIN)[[3]]
@@ -669,24 +689,210 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
         }
         return(s1)
     }
-    calibre <- function(X) {
-        if (!is.array(X))
+#-------------------------------------------------------------------------------
+f1ter<-function(tab,P=5,scal,df, name.group,vm,tol )
+{
+
+nbj<-dim(tab)[[3]]
+
+# permutation
+         permutation<-NULL
+         for (i in 1:P)
+         {
+         permutation<-rbind(permutation,sample(nbj))
+         }
+# pour les colonnnes et les signes on creer a chaque passage
+
+         listresult<-list()
+         length(listresult)<-3*P
+         critfin<-NULL
+        
+     for (i in 1:P)
+     {
+     # on fait une permutation des sous-tableau puis des colonnes puis des signes
+     
+     #colonne
+         permutcolonne<-NULL
+     for (colonne in 1:nbj)
+             {
+             permutcolonne<-rbind(permutcolonne,sample(dim(tab)[[2]]))
+             }
+    
+              
+    
+     #signe
+     listesigne<-list()
+   length( listesigne)<-nbj
+     compteur<-1
+     while (compteur<=nbj)
+    {
+     topn2<-sample(seq(0,dim(tab)[[2]],1),1)
+     #   topn2<-0
+         if (topn2==0) compteur<-compteur+1
+         if(topn2!=0)
+         {
+      listesigne[[compteur]]<-sample(dim(tab)[[2]],topn2)
+       compteur<-compteur+1
+       }
+    }
+     
+      organisation<-sample(1:3)
+          
+      if(organisation[[1]]==1)  
+        {
+        #premier chiffre1
+        tempo<-tab[,,permutation[i,]]
+        if (organisation[[2]]==2)
+        {
+        #deuxieme chiffre 2 troisieme chifre 3
+         tempo2<-permutcolonneX(tempo,permutcolonne)
+         tempo3<-changesignecolonneX(tempo2,listesigne)
+        }
+        # on a couvert 123
+        else
+        {
+        # deuxieme chiffre 3 troisieme chiffre 2
+          tempo2<-changesignecolonneX(tempo,listesigne)
+           tempo3<-permutcolonneX(tempo2,permutcolonne)
+        }
+        # on a couvert 132
+        }
+      else
+      {
+
+       if (organisation[[1]]==2) 
+         {
+          # premier chiffre 2
+         tempo<-permutcolonneX(tab,permutcolonne)
+         
+         if (organisation[[2]]==1) 
+         {
+         #    2eme chiffre 1 troisieme 3
+         tempo2<-tempo[,,permutation[i,]]
+         tempo3<-changesignecolonneX(tempo2,listesigne)
+         }
+         # couvert 2 1 3
+        else
+        {
+        # deuxieme chiffre 3 3eme 1
+          tempo2<-changesignecolonneX(tempo,listesigne)
+          tempo3<-tempo2[,,permutation[i,]]
+        }
+        }
+        # on a couvert 2 3 1
+        else
+        {
+        # 1er chiffre 3
+        tempo<-changesignecolonneX(tab,listesigne)
+        if (organisation[[2]]==1) 
+         {
+         # deuxieme chiffre 1 troisieme 2
+         tempo2<-tempo[,,permutation[i,]]
+         tempo3<-permutcolonneX(tempo2,permutcolonne)
+         }
+         #couvert 312
+         else
+         {
+         tempo2<-permutcolonneX(tempo,permutcolonne)
+          tempo3<-tempo2[,,permutation[i,]]
+         }
+        
+        }       
+        
+      }
+      
+
+       
+    listresult[[i]]<-algogpa(tempo3,scale=scal,df = df, name.group = name.group,tolerance=tol)  
+          
+    
+    if(vm)
+    { 
+     tableau <- crit.procGPAcvmqte(gpafin)$objet
+            crit1 <- tableau[dim(tableau)[[1]], 2] * 100/tableau[dim(tableau)[[1]],
+                3]
+  }
+  else
+  {
+  crit1<-crit(listresult[[i]]$consensus,listresult[[i]]$Xfin)
+  }
+    critfin<-c(critfin,crit1)
+     }
+     
+     ord1 <- order(critfin)
+      gpafin <- listresult[[ord1[1]]]
+        
+
+     return(list(gpafin=gpafin,permutab=permutation[ord1[[1]],]))
+}
+ 
+#------------------------------------------------------------------------------- 
+ permutcolonneX<-function(X,permutcolonne)
+{
+# X : tableau multiple
+# permutcolonne : permutation des colonnes pour chaque sous tableau
+
+Xfin<-X
+
+for (i in 1:dim(X)[[3]])
+{
+ 
+Xfin[,,i]<-as.matrix(X[,,i][,permutcolonne[i,]])
+
+}
+
+return(Xfin)
+}
+changesignecolonneX<-function(X,chgesigne)
+{
+# X : tableau multiple
+# changesigne : signe des colonnes pour chaque sous tableau
+
+Xfin<-X
+ for (i in 1:dim(X)[[3]])
+{
+if(is.null(chgesigne[[i]])) Xfin[,,i]<-X[,,i]
+else
+{
+
+        
+Xfin[,chgesigne[[i]],i]<--X[,chgesigne[[i]],i]
+}
+}
+return(Xfin)
+}
+
+
+
+#-------------------------------------------------------------------------------
+   
+  
+  
+#-------------------------------------------------------------------------------
+# Pour des raisons pratiques on travaille sur les composantes principales
+#
+#-------------------------------------------------------------------------------
+calibre <- function(X) {
+        if (!is.array(X)) 
             stop("On souhaite ici avoir un tableau de type array  ")
         nbj <- dim(X)[[3]]
+       
+    
         dimlist <- NULL
         mattravlist <- list()
         for (i in 1:nbj) {
             if (length(placevm(X[, , i])$vect) == 0) {
-                res.pca <- PCA(as.matrix(X[, , i]), scale.unit = FALSE,
-                  graph = FALSE)
+                res.pca <- PCA(as.matrix(X[, , i]), scale.unit = FALSE, 
+                  graph = FALSE,ncp=min(dim(X[, , i])[[1]],dim(X[, , i])[[2]]))
                 mattravlist[[i]] <- as.matrix(res.pca$ind$coord)
                 dimlist <- c(dimlist, dim(mattravlist[[i]])[[2]])
             }
             else {
-                res.pca <- PCA(as.matrix(X[-(placevm(X[, , i])$vect),
-                  , i]), scale.unit = FALSE, graph = FALSE)
+                res.pca <- PCA(as.matrix(X[-(placevm(X[, , i])$vect), 
+                  , i]), scale.unit = FALSE, graph = FALSE,ncp=min(dim(X[, , i])[[1]],dim(X[, , i])[[2]]))
                 temp <- matrix(0, dim(X)[[1]], dim(as.matrix(res.pca$ind$coord))[[2]])
                 temp[-placevm(X[, , i])$vect, ] <- as.matrix(res.pca$ind$coord)
+  
                 mattravlist[[i]] <- temp
                 dimlist <- c(dimlist, dim(mattravlist[[i]])[[2]])
             }
@@ -695,48 +901,28 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
         for (i in 1:nbj) {
             mattrav[, 1:dimlist[[i]], i] <- mattravlist[[i]]
         }
-        p <- dim(X)[[1]]
-        M <- array(0, c(p, p, nbj))
-        Cj <- array(0, c(p, p, nbj))
-        U <- matrix(1, p, 1)
-        Ip <- diag(rep(1, p), p, p)
-        mat1 <- U %*% t(U)
-        for (j in 1:nbj) {
-            vdiag <- rep(1, p)
+        
+      tabfin <- mattrav 
+        
+        for (i in 1:nbj) {
             if (length(placevm(X[, , i])$vect) == 0) {
-                M[, , j] <- Ip
+                mattrav[, , i] <- tabfin[, , i]
+                
             }
             else {
-                vdiag[placevm(X[, , j])$vect] <- 0
-                M[, , j] <- diag(vdiag, length(vdiag), length(vdiag))
+                tabfin[placevm(X[, , i])$vect, , i] <- NA
+                mattrav[, , i] <- tabfin[, , i]
+                
             }
         }
-        vdiag <- NULL
-        for (j in 1:nbj) {
-            Cj[, , j] <- M[, , j] %*% (Ip - mat1 %*% M[, , j]/as.numeric(t(U) %*%
-                M[, , j] %*% U))
-        }
-        tab <- as.matrix(as.data.frame(mattrav))
-        res.pca <- PCA(tab, scale.unit = FALSE, graph = FALSE)
-        Ymoy <- as.matrix(res.pca$ind$coord)
-        tabfin <- mattrav
-        for (i in 1:nbj) {
-            tabfin[, , i] <- Cj[, , i] %*% mattrav[, , i] %*%
-                procrustesbis(Cj[, , i] %*% mattrav[, , i], Ymoy[,
-                  1:dim(mattrav[, , i])[[2]]])$H
-        }
-        for (i in 1:nbj) {
-            if (length(placevm(X[, , i])$vect) == 0) {
-                mattrav[, , i] <- mattrav[, , i]
-            }
-            else
-                                                 {
-                mattrav[placevm(X[, , i])$vect, , i] <- NA
-            }
-        }
-        tabfin <- mattrav
-        return(list(tabfin = tabfin, mat = mattrav))
+    
+    
+              
+        return(mattrav)
     }
+
+
+#-------------------------------------------------------------------------------
     if (is.null(name.group))
         name.group <- paste("group", c(1:length(group)), sep = ".")
     if (!is.data.frame(df))
@@ -752,139 +938,148 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
         indice <- indice + blo[i]
     }
     Xdd <- X
-    variante <- NULL
-    X1 <- calibre(X)$tabfin
-    gpafin <- algogpa(X1, df = df, name.group = name.group)
-    for (i in 1:10) variante <- rbind(variante, sample(dim(X)[[3]]))
-    res <- NULL
-    for (i in 1:10) {
-        gpafin <- algogpa(calibre(X1[, , as.matrix(variante)[i,
-            ]])$tabfin, tolerance = 10^-4, df = df, name.group = name.group)
-        if (gpafin$VMQTE) {
-            tab <- crit.procGPAcvmqte(gpafin)$objet
-            s1 <- tab[dim(tab)[[1]], 2] * 100/tab[dim(tab)[[1]],
-                3]
-        }
-        else s1 <- crit(gpafin$consensus, gpafin$Xfin)
-        res <- c(res, s1)
-    }
-    ord1 <- order(res)
-    X <- X1[, , as.matrix(variante)[ord1[1], ]]
-    gpafin <- algogpa(calibre(X)$tabfin, tolerance, nbiteration,
-        scale, df = df, name.group = name.group)
-    x <- gpafin
-    odd <- order(as.matrix(variante)[ord1[1], ])
+    X1 <- calibre(X)
+
+  gpafin <- algogpa(X1, df = df, name.group = name.group)
+
+    gpares<-f1ter(X1,P=5,scal=scale,tol=tolerance,df=df, name.group=name.group,vm=gpafin$VMQTE)
+  
+  
+    odd<-order(gpares$permutab)
+   
+
+   x <- gpares$gpafin
+   gpafin<-x
+#x<-gpafin
+#odd<-c(1:nbjuge)
+
     gpafin$translation <- x$translation[, odd]
     gpafin$M <- (x$M)[, , odd]
     gpafin$Cj <- (x$Cj)[, , odd]
     gpafin$Xfin <- x$Xfin[, , odd]
     gpafin$Xdeb <- x$Xdeb[, , odd]
+      
     gpafin$Rj <- x$Rj[, , odd]
     gpafin$poids <- as.matrix(x$poids[odd])
-    Xdep <- calibre(X)$mat[, , odd]
+    Xdep <- calibre(X)
     row.names(Xdep) <- row.names(df)
     colnames(Xdep) <- c(paste("dim", 1:dim(Xdep)[[2]]))
     x <- gpafin
-    RVs <- matrix(-1, nbjuge, nbjuge)
+  
+   
+#-------------------------------------------------------------------------------
+# Calcul des coefficients RV et de similarite
+#-------------------------------------------------------------------------------
+ RVs <- matrix(-1, nbjuge, nbjuge)
     RV <- matrix(-1, nbjuge, nbjuge)
     sim <- matrix(-1, nbjuge, nbjuge)
     if (x$VMQTE) {
-   
         vmplacelist <- list()
         length(vmplacelist) <- nbjuge
-        for (theta in 1:nbjuge)
-                                {
-            if (length(placevm(Xdd[, , theta])$vect) != 0)
-                                                {
+        for (theta in 1:nbjuge) {
+            if (length(placevm(Xdd[, , theta])$vect) != 0) {
                 vmplacelist[[theta]] <- placevm(Xdd[, , theta])$vect
             }
         }
-  for (i in 1:nbjuge)
-        {
-      for (j in 1:nbjuge)
-                        {
-      if (length(c(vmplacelist[[i]], vmplacelist[[j]])) !=0)
-        {
-            Xi <- Xdd[, , i][-c(vmplacelist[[i]], vmplacelist[[j]]),]
-            Xj <- Xdd[, , j][-c(vmplacelist[[i]], vmplacelist[[j]]),]
-             
-        if(is.null(dim(Xi)))
-        {
-         Xi <- t(as.matrix(Xdd[, , i][-c(vmplacelist[[i]], vmplacelist[[j]]),]))
-         Xj <- t(as.matrix(Xdd[, , j][-c(vmplacelist[[i]], vmplacelist[[j]]),] ))
-        }
-
-                                                }
-      
-     
-        if (length(c(vmplacelist[[i]], vmplacelist[[j]])) ==0)
-                                {
+        for (i in 1:nbjuge) {
+            for (j in i:nbjuge) {
+                if (length(c(vmplacelist[[i]], vmplacelist[[j]])) !=
+                  0) {
+                  Xi <- Xdd[, , i][-c(vmplacelist[[i]], vmplacelist[[j]]),
+                    ]
+                  Xj <- Xdd[, , j][-c(vmplacelist[[i]], vmplacelist[[j]]),
+                    ]
+                  if (is.null(dim(Xi))) {
+                    Xi <- t(as.matrix(Xdd[, , i][-c(vmplacelist[[i]],
+                      vmplacelist[[j]]), ]))
+                    Xj <- t(as.matrix(Xdd[, , j][-c(vmplacelist[[i]],
+                      vmplacelist[[j]]), ]))
+                  }
+                }
+                if (length(c(vmplacelist[[i]], vmplacelist[[j]])) ==
+                  0) {
                   Xi <- Xdd[, , i]
                   Xj <- Xdd[, , j]
-        }
-        
-        
-        
-                RVs[i, j] <- coeffRVs(Xi, Xj)$rvstd
-                RV[i, j] <- coeffRVs(Xi, Xj)$rv
-                sim[i, j] <- similarite(Xi, Xj)
+                }
+                RVs[i, j] <-RVs[j, i] <- coeffRVs(Xi, Xj)$rvstd
+                RV[i, j] <- RV[j, i] <-coeffRVs(Xi, Xj)$rv
+                sim[i, j] <-sim[j, i] <-  similarite(Xi, Xj)
             }
         }
     }
-    else
-                {
-        X <- Xdd
+    else {
+     
         for (i in 1:nbjuge) {
-            for (j in 1:nbjuge) {
-                Xi <- X[, , i]
-                Xj <- X[, , j]
-                RVs[i, j] <- coeffRVs(Xi, Xj)$rvstd
-                RV[i, j] <- coeffRVs(Xi, Xj)$rv
-                sim[i, j] <- similarite(Xi, Xj)
+            for (j in i:nbjuge) {
+                Xi <- Xdd[, , i]
+                Xj <- Xdd[, , j]
+                RVs[i, j] <-RVs[j, i] <-coeffRVs(Xi, Xj)$rvstd
+                RV[i, j] <-RV[j, i] <-  coeffRVs(Xi, Xj)$rv
+                sim[i, j] <-sim[j, i] <- similarite(Xi, Xj)
             }
         }
     }
     row.names(RV) <- colnames(RV) <- name.group
     row.names(RVs) <- colnames(RVs) <- name.group
     row.names(sim) <- colnames(sim) <- name.group
-    listcor <- list()
+  
+#-------------------------------------------------------------------------------    
+
+#-------------------------------------------------------------------------------
+   
+     listcor <- list()
     namelist <- NULL
     for (i in 1:dim(x$Xfin)[[3]]) {
         namelist <- c(namelist, paste("cor", name.group[[i]]))
-        listcor[[i]] <- cor(scale(Xdd[, , i], scale = FALSE),
+        listcor[[i]] <- cor(scale(Xdd[,1:blo[[i]], i], scale = FALSE),
             x$consensus, use = "pairwise.complete.obs")
     }
-    averagecor <- 0 * listcor[[1]]
+# on verifie qu'il y ait bien les memes dimensions
+ listdimblo<-NULL
+for (i in 1:length(blo))
+{
+listdimblo<-c(listdimblo,(max(blo)-blo[[i]]))
+}
+  if(max(round(listdimblo,6))<=10^-5)
+    { 
+    averagecor <- 0 *listcor[[1]]
     for (i in 1:dim(x$Xfin)[[3]]) {
         averagecor <- averagecor + listcor[[i]]
     }
     averagecor <- averagecor/dim(x$Xfin)[[3]]
     listcor[[(dim(x$Xfin)[[3]] + 1)]] <- averagecor
+    
     namelist <- c(namelist, "averagecor")
+    names(listcor) <- namelist
+    
+    }
     names(listcor) <- namelist
     Xfin <- x$Xfin
     if (x$VMQTE) {
         for (i in 1:dim(x$Xfin)[[3]]) {
-            Xfin[vmplacelist[[i]], , i] <- NA
+           Xfin[vmplacelist[[i]], , i] <- NA
         }
     }
+    
+
+#-------------------------------------------------------------------------------
     resultat <- list()
     class(resultat) <- c("GPA", "list")
     resultat$RV <- RV
     resultat$RVs <- RVs
     resultat$simi <- sim
     resultat$scaling <- x$poids
-    resultat$dep <- Xdd
+    resultat$dep <- Xdep
     resultat$consensus <- x$consensus
     resultat$Xfin <- Xfin
     resultat$correlations <- listcor
+                
+            
     if (x$VMQTE)
         resultat$PANOVA <- crit.procGPAcvmqte(x)
     else resultat$PANOVA <- crit.procGPAcsansvm(x)
-    if (graph)
-        plot(resultat)
+    
+    
+    if (graph) plot.GPA(resultat)
     return(resultat)
 }
-
-
-

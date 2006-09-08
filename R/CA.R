@@ -76,6 +76,6 @@ CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE){
     res$col.sup <- res.col.sup
 }
     class(res) <- c("CA", "list")
-    if (graph) plot(res)
+    if (graph) plot.CA(res)
     return(res)
 }

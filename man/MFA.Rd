@@ -64,7 +64,7 @@ aa = MFA(wine, group=c(2,5,3,10,9,2), type=c("n",rep("s",5)),
 \dontrun{
 #### Interactive graph
 liste = plot.MFApartial(aa)
-plot(aa,choix="ind",habillage = "quali")
+plot(aa,choix="ind",habillage = "Terroir")
 }
 
 ###Example 2
