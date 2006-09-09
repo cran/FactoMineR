@@ -472,14 +472,14 @@ MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp
           max.inertia <- order(apply(resultats$quali.var.sup$within.inertia[,1:2],1,sum))
           cg.plot.partial <- c(cg.plot.partial,rownames(resultats$quali.var.sup$coord)[max.inertia[1:length(max.inertia)]])
         }
-        plot(resultats,choix="ind",invisible="ind",partial=cg.plot.partial)
+        plot.MFA(resultats,choix="ind",invisible="ind",partial=cg.plot.partial)
       }
       max.inertia <- order(apply(resultats$ind$within.inertia[,1:2],1,sum))
-      plot(resultats,choix="ind",invisible="quali",partial=rownames(resultats$ind$coord)[max.inertia[c(1:2,nrow(resultats$ind$coord)-1,nrow(resultats$ind$coord))]])
-      if (!is.null(c(res.quanti.var,res.quanti.var.sup))) plot(resultats,choix="var",habillage="group")
-      plot(resultats,choix="ind",invisible="quali")
-      plot(resultats,choix="axes")
-      plot(resultats,choix="group")
+      plot.MFA(resultats,choix="ind",invisible="quali",partial=rownames(resultats$ind$coord)[max.inertia[c(1:2,nrow(resultats$ind$coord)-1,nrow(resultats$ind$coord))]])
+      if (!is.null(c(res.quanti.var,res.quanti.var.sup))) plot.MFA(resultats,choix="var",habillage="group")
+      plot.MFA(resultats,choix="ind",invisible="quali")
+      plot.MFA(resultats,choix="axes")
+      plot.MFA(resultats,choix="group")
     }
     return(resultats)
 }

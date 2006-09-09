@@ -73,7 +73,7 @@ plot.MCA <- function (x, axes = c(1, 2),
         if (lab.ind.sup) text(coord.ind.sup[, 1], y = coord.ind.sup[, 2], labels = rownames(coord.ind.sup), pos = 3, col = col.ind.sup)
     }
     if (!is.null(res.mca$quanti.sup)&is.na(test.invisible[3])) {
-      get(getOption("device"))(8,8)
+      get(getOption("device"))(width=8,height=8)
       plot(0, 0, main = "Supplementary variables on the MCA factor map", xlab = paste("Dim ",axes[1]," (",signif(res.mca$eig[axes[1],2],4),"%)",sep=""), ylab = paste("Dim ",axes[2]," (",signif(res.mca$eig[axes[2],2],4),"%)",sep=""), xlim = c(-1.1,1.1), ylim = c(-1.1,1.1), col = "white", asp=1, cex=cex)
       abline(v=0,lty=2, cex=cex)
       abline(h=0,lty=2, cex=cex)

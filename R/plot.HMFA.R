@@ -288,7 +288,7 @@ plot.moy <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL, ce
 
 
     if (choix == "group") {
-      get(getOption("device"))(8,8)
+      get(getOption("device"))(width=8,height=8)
       if (is.null(title)) title <- "Groups representation"
       else sub.title <- "Groups representation"
       for (h in 1:length(res.hmfa$group)){
@@ -303,7 +303,7 @@ plot.moy <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL, ce
 
     if (choix == "var") {
       if (is.null(res.hmfa$quanti.var$coord)) stop("No quantitative variables to plot")
-      get(getOption("device"))(8,8)
+      get(getOption("device"))(width=8,height=8)
       if (is.null(title)) title <- "Correlation circle"
       else sub.title <- "Correlation circle"
       plot(0, 0, main = title, xlab = lab.x, ylab = lab.y, xlim = c(-1.1, 1.1), ylim = c(-1.1, 1.1), col = "white", asp=1, cex=cex)

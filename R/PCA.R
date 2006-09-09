@@ -156,8 +156,8 @@ res$call = res.call
     
 class(res) <- c("PCA", "list ")
 if (graph) {
-  plot(res, choix="ind")
-  plot(res, choix="var")
+  plot.PCA(res, choix="ind")
+  plot.PCA(res, choix="var")
 }
     return(res)
 }

@@ -45,7 +45,7 @@ Returns the individuals factor map and the variables factor map.
 \examples{
 data(decathlon)
 res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup=13)
-plot(res.pca,choix="ind",habillage="quali")
+plot(res.pca,choix="ind",habillage=13)
 }
 
 \keyword{multivariate}

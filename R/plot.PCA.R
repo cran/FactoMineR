@@ -71,7 +71,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
           ymin = ylim[1]
           ymax = ylim[2]
         }
-       get(getOption("device"))(min(14,8*(xmax-xmin)/(ymax-ymin)),8)
+       get(getOption("device"))(width=min(14,8*(xmax-xmin)/(ymax-ymin)),height=8)
         if (habillage == "ind") {
             nb.prod <- nrow(coord.actif)
             if (length(col.hab) != nb.prod) color.ind <- c(1:nb.prod)
@@ -79,15 +79,10 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
             if (!is.null(coord.illu)) color.ind.sup <- c((nb.prod+1):(nb.prod+nrow(coord.illu)))
             color.mod <- "darkred"
         }
-        if (habillage == "quali") {
+        if ((habillage != "none")&(habillage != "ind")) {
             liste.quali <- colnames(res.pca$call$quali.sup$quali.sup)
-            if (length(liste.quali) >= 2) {
-                texte <- liste.quali[1]
-                for (i in 2:length(liste.quali)) texte <- paste(texte, liste.quali[i], sep = ", ")
-                cat(paste("\n", texte, "\n\nIn the previous list, which variable \nwould you like to use to color your points?\n", sep = ""))
-                nom.quali <- readLines(n = 1)
-            }
-            else  nom.quali <- liste.quali
+            nom.quali <- colnames(res.pca$call$X)[habillage]
+            if (!(nom.quali %in% liste.quali)) stop("The variable", habillage, "is not qualitative")
             n.mod <- res.pca$call$quali.sup$modalite[liste.quali == nom.quali]
             if (length(col.hab) != n.mod) {
                 color.mod <- c(1:n.mod)
@@ -127,7 +122,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
             modalite <- res.pca$call$quali.sup$modalite
             col.quali<-rep(col.quali, length(modalite))
             for (q in 1:length(modalite)) {
-                if (habillage == "quali") {
+                if ((habillage != "none")&(habillage != "ind")) {
                   if (q == match(nom.quali, liste.quali)) {
                     points(coord.quali[(num.li + 1):(num.li + modalite[q]), ], pch = 22, col = color.mod, cex=cex)
                     if (lab.quali) {
@@ -156,6 +151,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
                 lines(data.elli[, 1], y = data.elli[, 2], col = color.ind[levels(factor(rownames(res.pca$ind$coord))) == levels(coord.ellipse[, 1])[e]])
             }
         }
+        if ((habillage != "none")&(habillage != "ind")) legend("topleft",legend= levels(res.pca$call$X[,habillage]),text.col= color.mod,cex=0.8,bg="white")
     }
     if (choix == "var") {
         if (is.null(title)) titre <- "Variables factor map (PCA)"
@@ -176,7 +172,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
             xlim <- c(xmin, xmax) * 1.2
             ylim <- c(ymin, ymax) * 1.2
         }
-        get(getOption("device"))(8,8)
+        get(getOption("device"))(width=8,height=8)
         if (scale.unit) {
             plot(0, 0, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp=1, cex=cex, main=titre)
             title(sub = sub.titre, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)
@@ -230,17 +226,3 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
         par(mar = c(5, 4, 4, 2) + 0.1)
     }
 }
-
-
-
-#! liste des corrections réalisées
-
-# ligne 81 du fichier d'origine nbprod remplacé par nb.prod
-
-# ajout du paramètre label, par défaut prend la valeur "all" et tous les labels
-# sont ajoutés. sinon on indique les éléments pour lesquels on veut les labels.
-# Il n'est plus possible de mettre "none" dans les paramètre col.... mais on peut
-# ainsi donner un vecteur de couleur ce qui permet par exemple d'assortir
-# facilement la couleur des individus supplémentaire à l'habillage.
-
-# modification pour pouvoir associer plusieurs couleurs aux variables active et sup.

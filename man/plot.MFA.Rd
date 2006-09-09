@@ -9,7 +9,7 @@ Draw the Multiple Factor Analysis (MFA) graphs.
 }
 
 \usage{
-plot.MFA(x, axes = c(1, 2), choix = "ind", ellipse = NULL, 
+plot.MFA(x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par = NULL,
     lab.grpe = TRUE, lab.var = TRUE, lab.ind.moy = TRUE, 
     lab.par = FALSE, habillage = "ind", col.hab = NULL, 
     invisible = NULL, partial = NULL, lim.cos2.var = 0.1, 
@@ -24,12 +24,14 @@ plot.MFA(x, axes = c(1, 2), choix = "ind", ellipse = NULL,
   variables graph, "var" for the quantitative variables graph, "axes" for the graph of the partial axes,
   "group" for the groups representation)}
   \item{ellipse}{boolean (NULL by default), if not null, draw ellipses around the individuals, and use the results of \code{coord.ellipse}}
+  \item{ellipse.par}{boolean (NULL by default), if not null, draw ellipses around the partial individuals, and use the results of \code{coord.ellipse}}
   \item{lab.grpe}{boolean, if TRUE, the label of the groups are drwan}
   \item{lab.var}{boolean, if TRUE, the label of the variables are drwan}
   \item{lab.ind.moy}{boolean, if TRUE, the label of the mean points are drwan}
   \item{lab.par}{boolean, if TRUE, the label of the partial points are drwan}
   \item{habillage}{string corresponding to the color which are used. If "ind", one color is used for each individual;
-  if "quali" the individuals are colored according to one qualitative variable; if "group" the individuals are colored according to the group}
+  if "group" the individuals are colored according to the group; else if it is the name or the position of a qualitative variable, it colors 
+  according to the different categories of this variable}
   \item{col.hab}{the colors to use. By default, colors are chosen}
   \item{invisible}{list of string; for choix ="ind", the individuals can be omit (invisible = "ind"),
   or supplementary individuals (invisible="ind.sup") or the centerg of gravity of the qualitative variables 
@@ -60,6 +62,7 @@ aa = MFA(wine,group=c(2,5,3,10,9,2),type=c("n",rep("s",5)),ncp=5,
     num.group.sup=c(1,6),graph=FALSE)
 plot(aa, choix = "ind")
 plot(aa, choix = "ind", partial="all")
+plot(aa, choix = "Terroir")
 plot(aa, choix = "var", habillage="group")
 plot(aa, choix = "axes")
 }
