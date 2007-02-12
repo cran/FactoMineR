@@ -1,6 +1,5 @@
 GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
-    coord = c(1, 2), group, name.group = NULL, graph = TRUE)
-{
+    group, name.group = NULL, graph = TRUE, axes=c(1,2)){
 #-------------------------------------------------------------------------------
 # INVERSE GENERALISEE
 #-------------------------------------------------------------------------------
@@ -36,8 +35,7 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
     }
 
     coeffRVs <- function(X, Y) {
-        if (dim(X)[[1]] != dim(Y)[[1]])
-            stop("no the same dimension for X and Y")
+        if (dim(X)[[1]] != dim(Y)[[1]]) stop("no the same dimension for X and Y")
         n <- dim(X)[[1]]
         Y <- scale(Y, scale = FALSE)
         X <- scale(X, scale = FALSE)
@@ -1079,7 +1077,6 @@ listdimblo<-c(listdimblo,(max(blo)-blo[[i]]))
         resultat$PANOVA <- crit.procGPAcvmqte(x)
     else resultat$PANOVA <- crit.procGPAcsansvm(x)
     
-    
-    if (graph) plot.GPA(resultat)
+    if (graph) plot.GPA(resultat,axes=axes)
     return(resultat)
 }

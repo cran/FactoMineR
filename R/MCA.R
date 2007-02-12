@@ -1,5 +1,9 @@
-MCA <- function (X, ncp = 5, ind.sup = NULL, quanti.sup = NULL, quali.sup = NULL, graph = TRUE) {
+MCA <- function (X, ncp = 5, ind.sup = NULL, quanti.sup = NULL, quali.sup = NULL, graph = TRUE, axes=c(1,2)) {
 
+    if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
+    if (is.null(colnames(X))) colnames(X) = paste("V",1:ncol(X),sep="")
+    for (j in 1:ncol(X)) if (colnames(X)[j]=="") colnames(X)[j] = paste("V",j,sep="")
+    for (j in 1:nrow(X)) if (is.null(rownames(X)[j])) rownames(X)[j] = paste("row",j,sep="")
     Xtot <- X
     col.sup <- NULL
     if (!is.null(quali.sup)) {
@@ -54,9 +58,9 @@ MCA <- function (X, ncp = 5, ind.sup = NULL, quanti.sup = NULL, quali.sup = NULL
     }
     class(res.mca) <- c("MCA", "list")
     if (graph) {
-      plot.MCA(res.mca)
-      plot.MCA(res.mca, invisible = c("ind","ind.sup"))
-      plot.MCA(res.mca, invisible = "quali")
+      plot.MCA(res.mca,axes=axes)
+      plot.MCA(res.mca, invisible = c("ind","ind.sup"),axes=axes)
+      plot.MCA(res.mca, invisible = "var",axes=axes)
     }
     return(res.mca)
 }

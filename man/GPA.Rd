@@ -9,7 +9,7 @@ Performs Generalised Procrustes Analysis (GPA) that takes into account missing v
 }
 \usage{
 GPA(df, tolerance=10^-10, nbiteration=200, scale=TRUE, 
-    coord=c(1,2), group, name.group = NULL, graph = TRUE)
+    group, name.group = NULL, graph = TRUE, axes = c(1,2))
 }
 
 \arguments{
@@ -18,11 +18,11 @@ GPA(df, tolerance=10^-10, nbiteration=200, scale=TRUE,
    the GPA loss function at step \emph{n} and \emph{n+1} is less than \code{tolerance}}
   \item{nbiteration}{the maximum number of iterations until the algorithm stops}
   \item{scale}{a boolean, if TRUE (which is the default value) scaling is required}
-  \item{coord}{a length 2 vector specifying the components to plot}
   \item{group}{a vector indicating the number of variables in each group}
   \item{name.group}{a vector indicating the name of the groups (the groups are successively named 
                     group.1, group.2 and so on, by default)}
   \item{graph}{boolean, if TRUE a graph is displayed}
+  \item{axes}{a length 2 vector specifying the components to plot}
 }
 
 \details{

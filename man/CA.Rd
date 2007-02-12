@@ -9,7 +9,8 @@ Performs Correspondence Analysis (CA) including supplementary row and/or column 
 }
 
 \usage{
-CA(X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE)}
+CA(X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE,
+    axes = c(1,2))}
 
 \arguments{
   \item{X}{a data frame with \emph{n} rows and \emph{p} columns, i.e. a contingency table}
@@ -17,6 +18,7 @@ CA(X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE)}
   \item{row.sup}{a vector indicating the indexes of the supplementary rows}
   \item{col.sup}{a vector indicating the indexes of the supplementary columns}
   \item{graph}{boolean, if TRUE a graph is displayed}
+  \item{axes}{a length 2 vector specifying the components to plot}
 }
 
 \value{
@@ -40,7 +42,7 @@ GREENACRE, M.J. (1993) \emph{Correspondence Analysis in Practice}, London : Acad
 
 \author{Jérémy Mazet, François Husson \email{François.Husson@agrocampus-rennes.fr}}
 
-\seealso{ \code{\link{print.CA}}, \code{\link{plot.CA}}}
+\seealso{ \code{\link{print.CA}}, \code{\link{plot.CA}}, \code{\link{dimdesc}}}
 
 \examples{
 data(children)

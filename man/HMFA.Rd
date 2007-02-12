@@ -5,7 +5,8 @@
 Performs a hierarchical multiple factor analysis, using an object of class \code{list} of \code{data.frame}.
 }
 \usage{
-HMFA(X,H,type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE)
+HMFA(X,H,type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE,
+    axes = c(1,2))
 }
 \arguments{
   \item{X}{a \code{data.frame}}
@@ -16,6 +17,7 @@ HMFA(X,H,type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE)
   are quantitative and the variables are scaled unit}
   \item{ncp}{number of dimensions kept in the results (by default 5)}
   \item{graph}{boolean, if TRUE a graph is displayed}
+  \item{axes}{a length 2 vector specifying the components to plot}
 }
 
 \value{
@@ -30,6 +32,7 @@ HMFA(X,H,type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE)
 \references{Le Dien, S. & Pagès, J. (2003) Hierarchical Multiple factor analysis: application to the comparison of sensory profiles, \emph{Food Quality and Preferences}, \bold{18 (6)}, 453-464.
 }
 \author{Sébastien Lê, François Husson}
+\seealso{ \code{\link{print.HMFA}}, \code{\link{plot.HMFA}}, \code{\link{dimdesc}}}
 
 \examples{ 
 data(wine)

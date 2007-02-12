@@ -10,7 +10,7 @@ Draw the General Procrustes Analysis (GPA) map.
 
 \usage{
 plot.GPA(x, axes = c(1, 2), 
-    lab.ind.moy = TRUE, lab.par = FALSE, habillage = "ind",
+    lab.ind.moy = TRUE, habillage = "ind",
     partial = "all", chrono = FALSE,
     xlim = NULL, ylim = NULL, cex = 1, title = NULL, \dots)
 }
@@ -19,7 +19,6 @@ plot.GPA(x, axes = c(1, 2),
   \item{x}{an object of class GPA}
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{lab.ind.moy}{boolean, if TRUE, the label of the mean points are drwan}
-  \item{lab.par}{boolean, if TRUE, the label of the partial points are drwan}
   \item{habillage}{string corresponding to the color which are used. If "ind", one color is used for each individual;
   if "group" the individuals are colored according to the group}
   \item{partial}{list of the individuals or of the center of gravity for which the partial points should be drawn (by

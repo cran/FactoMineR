@@ -9,12 +9,13 @@ print.HMFA <- function (x, file = NULL, sep = ";", ...){
     res[2, ] <- c("$group", "results for all the groups")
     res[3, ] <- c("$ind", "results for the individuals")
     res[4, ] <- c("$partial", "partial coordinates for the individuals")
-    indice <- 5
+    indice <- 4
     if (!is.null(res.hmfa["quanti.var"]$quanti.var)){
-      res[indice, ] <- c("$quanti.var", "results for the quantitative variables")
       indice <- indice + 1
+      res[indice, ] <- c("$quanti.var", "results for the quantitative variables")
     }
     if (!is.null(res.hmfa["quali.var"]$quali.var)){
+      indice <- indice + 1
       res[indice, ] <- c("$quali.var", "results for the qualitative variables")
     }
     print(res[1:indice,])

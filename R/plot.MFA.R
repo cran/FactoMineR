@@ -355,7 +355,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.
           col.quali.sup <- col.quali
         }
         
-        if (habillage == "none") col.ind <- col.ind.sup <- col.quali.sup <- col.quali <- col.ellipse<-col.ellipse.par <- rep("black",nb.ind)
+        if (habillage == "none") col.ind <- col.ind.sup <- col.quali.sup <- col.quali <- col.ellipse<-col.ellipse.par <- rep("black",nb.ind*(nb.grpe+1))
 
         get(getOption("device"))(width=8,height=8)
         if (is.null(title)) title <- "Individual factor map"

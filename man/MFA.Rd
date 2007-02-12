@@ -12,7 +12,7 @@ Groups of variables can be quantitative or qualitative.
 \usage{
 MFA (base, group, type = rep("s",length(group)), ind.sup = NULL, 
     ncp = 5, name.group = NULL, num.group.sup = NULL, 
-    graph = TRUE, weight.col.mfa = NULL)
+    graph = TRUE, weight.col.mfa = NULL, axes = c(1,2))
 }
 
 \arguments{
@@ -27,6 +27,7 @@ MFA (base, group, type = rep("s",length(group)), ind.sup = NULL,
   \item{num.group.sup}{the indexes of the illustrative groups (by default, NULL and no group are illustrative)}
   \item{graph}{boolean, if TRUE a graph is displayed}
   \item{weight.col.mfa}{vector of weights, useful for HMFA method (by default, NULL and an MFA is performed)}
+  \item{axes}{a length 2 vector specifying the components to plot}
 }
 
 \value{
@@ -53,7 +54,7 @@ Multiple Factor Analysis (AFMULT package), \emph{Computational Statistics and Da
 
 \author{Jérémy Mazet, François Husson \email{François.Husson@agrocampus-rennes.fr}}
 
-\seealso{ \code{\link{print.MFA}}, \code{\link{plot.MFA}}}
+\seealso{ \code{\link{print.MFA}}, \code{\link{plot.MFA}}, \code{\link{dimdesc}}}
 
 \examples{
 data(wine)

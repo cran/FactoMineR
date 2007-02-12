@@ -1,4 +1,4 @@
-MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp = 5, name.group = NULL, num.group.sup = NULL, graph = TRUE, weight.col.mfa = NULL){
+MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp = 5, name.group = NULL, num.group.sup = NULL, graph = TRUE, weight.col.mfa = NULL, axes=c(1,2)){
 
     moy.p <- function(V, poids){
       res <- sum(V*poids) / sum(poids)
@@ -11,6 +11,10 @@ MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp
       base <- rbind.data.frame(base[-ind.sup,],base[ind.sup,])
       ind.sup <- (nrow(base)-length(ind.sup)+1) : nrow(base)
     }
+    if (is.null(rownames(base))) rownames(base) = 1:nrow(base)
+    if (is.null(colnames(base))) colnames(base) = paste("V",1:ncol(base),sep="")
+    for (j in 1:ncol(base)) if (colnames(base)[j]=="") colnames(base)[j] = paste("V",j,sep="")
+    for (j in 1:nrow(base)) if (is.null(rownames(base)[j])) rownames(base)[j] = paste("row",j,sep="")
     nbre.var <- ncol(base)
     nbre.group <- length(group)
     group.actif <- NULL
@@ -472,14 +476,14 @@ MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp
           max.inertia <- order(apply(resultats$quali.var.sup$within.inertia[,1:2],1,sum))
           cg.plot.partial <- c(cg.plot.partial,rownames(resultats$quali.var.sup$coord)[max.inertia[1:length(max.inertia)]])
         }
-        plot.MFA(resultats,choix="ind",invisible="ind",partial=cg.plot.partial)
+        plot.MFA(resultats,choix="ind",invisible="ind",partial=cg.plot.partial,axes=axes)
       }
       max.inertia <- order(apply(resultats$ind$within.inertia[,1:2],1,sum))
-      plot.MFA(resultats,choix="ind",invisible="quali",partial=rownames(resultats$ind$coord)[max.inertia[c(1:2,nrow(resultats$ind$coord)-1,nrow(resultats$ind$coord))]])
-      if (!is.null(c(res.quanti.var,res.quanti.var.sup))) plot.MFA(resultats,choix="var",habillage="group")
-      plot.MFA(resultats,choix="ind",invisible="quali")
-      plot.MFA(resultats,choix="axes")
-      plot.MFA(resultats,choix="group")
+      plot.MFA(resultats,choix="ind",invisible="quali",partial=rownames(resultats$ind$coord)[max.inertia[c(1:2,nrow(resultats$ind$coord)-1,nrow(resultats$ind$coord))]],axes=axes)
+      if (!is.null(c(res.quanti.var,res.quanti.var.sup))) plot.MFA(resultats,choix="var",habillage="group",axes=axes)
+      plot.MFA(resultats,choix="ind",invisible="quali",axes=axes)
+      plot.MFA(resultats,choix="axes",axes=axes)
+      plot.MFA(resultats,choix="group",axes=axes)
     }
     return(resultats)
 }

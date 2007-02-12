@@ -1,5 +1,5 @@
 plot.GPApartial <- function (x, axes = c(1, 2), 
-    lab.ind.moy = TRUE, lab.par = FALSE, habillage = "ind", chrono = FALSE,
+    lab.ind.moy = TRUE, habillage = "ind", chrono = FALSE,
     draw.partial = NULL, xlim = NULL, ylim = NULL, cex = 1, title = NULL, ...){
     
     res.gpa <- x
@@ -21,7 +21,7 @@ if (length(partial)==0) partial <- NULL
 disto <- matrix(0,nrow(tab),1)
 rownames(disto) <- rownames(tab)
 
-plot.GPA(res.gpa, axes = axes, lab.ind.moy = lab.ind.moy, lab.par = lab.par, habillage = habillage,
+plot.GPA(res.gpa, axes = axes, lab.ind.moy = lab.ind.moy, habillage = habillage,
     xlim = xlim, ylim = ylim, chrono = chrono, cex = cex, title = title, partial = partial)
 point.haut <- max(tab[,2])*1.2
 if (!is.null(ylim)) point.haut <- ylim[2]
@@ -35,7 +35,7 @@ while (nbpoint < 1000){
     partial <- rownames(tab)[draw.partial]
     if (length(partial)==0) partial <- NULL
     dev.off()
-    plot.GPA(res.gpa, axes = axes, lab.ind.moy = lab.ind.moy, lab.par = lab.par, habillage = habillage,
+    plot.GPA(res.gpa, axes = axes, lab.ind.moy = lab.ind.moy, habillage = habillage,
       xlim = xlim, ylim = ylim, chrono = chrono, cex = cex, title = title, partial = partial)
     nbpoint = nbpoint+1
   }
