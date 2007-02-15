@@ -14,9 +14,9 @@ plot.PCA(x, axes = c(1, 2), choix = "ind",
     ellipse = NULL, xlim = NULL, ylim = NULL, habillage = "none", 
     col.hab = NULL, col.ind = "black", col.ind.sup = "blue", 
     col.quali = "magenta", col.quanti.sup = "blue", 
-    col.var = "black", label="all", invisible = NULL, lim.cos2.var = 0.1,
-    cex = 1, title = NULL, \dots)
-}
+    col.var = "black", label = "all", invisible = NULL, 
+    lim.cos2.var = 0.1, cex = 1, title = NULL, \dots)
+    }
 
 \arguments{
   \item{x}{an object of class PCA}
@@ -32,8 +32,9 @@ plot.PCA(x, axes = c(1, 2), choix = "ind",
   \item{col.quali}{a color for the categories of qualitative variable sonly  if there is not habillage}
   \item{col.quanti.sup}{a color for the quantitative supplementary variables}
   \item{col.var}{a color for the variables}
-  \item{label}{a list of character for the elements which are labelled (by default, all the elements are labelled ("ind", ind.sup", "quali", "var", "quanti.sup"}
-  \item{invisible}{string indicating if some points should not be drawn ("ind" or "quali")}
+  \item{label}{a list of character for the elements which are labelled (by default, all the elements are labelled ("ind", ind.sup", "quali", "var", "quanti.sup"))}
+  \item{invisible}{string indicating if some points should not be drawn ("ind", "ind.sup" or "quali" for the individual graph and "var" or "quanti.sup" for
+  the correlation circle graph)}
   \item{lim.cos2.var}{value of the square cosinus under the variables are not drawn}
   \item{cex}{cf. function \code{\link{par}} in the \pkg{graphics} package}
   \item{title}{string corresponding to the title of the graph you draw (by default NULL and a title is chosen)}

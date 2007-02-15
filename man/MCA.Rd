@@ -11,7 +11,7 @@ variables and supplementary qualitative variables.
 
 \usage{
 MCA(X, ncp = 5, ind.sup = NULL, quanti.sup = NULL, 
-    quali.sup = NULL, graph = TRUE)}
+    quali.sup = NULL, graph = TRUE, axes = c(1,2))}
 
 \arguments{
   \item{X}{a data frame with \emph{n} rows (individuals) and \emph{p} columns (categorical variables)}
@@ -20,6 +20,7 @@ MCA(X, ncp = 5, ind.sup = NULL, quanti.sup = NULL,
   \item{quanti.sup}{a vector indicating the indexes of the quantitative supplementary variables}
   \item{quali.sup}{a vector indicating the indexes of the qualitative supplementary variables}
   \item{graph}{boolean, if TRUE a graph is displayed}
+  \item{axes}{a length 2 vector specifying the components to plot}
 }
 
 \value{
@@ -37,7 +38,7 @@ Returns the individuals factor map and the variables factor map.
 
 \author{Jérémy Mazet, François Husson \email{François.Husson@agrocampus-rennes.fr}}
 
-\seealso{ \code{\link{print.MCA}}, \code{\link{plot.MCA}}}
+\seealso{ \code{\link{print.MCA}}, \code{\link{plot.MCA}}, \code{\link{dimdesc}}}
 
 \examples{
 data (poison)

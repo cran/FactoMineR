@@ -12,7 +12,7 @@ print.MFA <- function (x, file = NULL, sep = ";", ...){
     res[4, ] <- c("$partial.axes", "results for the partial axes")
     res[5, ] <- c("$inertia.ratio", "inertia ratio")
     res[6, ] <- c("$ind", "results for the individuals")
-    indice <- 6
+    indice <- 7
     if (!is.null(res.mfa["ind.sup"]$ind.sup)){
       res[indice, ] <- c("$ind.sup", "results for the supplementary individuals")
       indice <- indice + 1

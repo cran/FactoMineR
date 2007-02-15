@@ -12,7 +12,7 @@ To stop the interactive plot, click on the title (or in the top of the graph)
 
 \usage{
 plot.GPApartial(x, axes = c(1, 2), 
-    lab.ind.moy = TRUE, lab.par = FALSE, habillage = "ind",
+    lab.ind.moy = TRUE, habillage = "ind",
     chrono = FALSE, draw.partial = NULL, 
     xlim = NULL, ylim = NULL, cex = 1, title = NULL, \dots)
 }
@@ -21,7 +21,6 @@ plot.GPApartial(x, axes = c(1, 2),
   \item{x}{an object of class GPA}
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{lab.ind.moy}{boolean, if TRUE, the label of the mean points are drwan}
-  \item{lab.par}{boolean, if TRUE, the label of the partial points are drwan}
   \item{habillage}{string corresponding to the color which are used. If "ind", one color is used for each individual;
   if "group" the individuals are colored according to the group}
   \item{chrono}{boolean, if TRUE, the partial points of a same point are linked (useful when groups correspond to different moment)}

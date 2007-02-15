@@ -159,6 +159,12 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
           titre <- title
           sub.titre  <- "Variables factor map (PCA)"
         }
+        test.invisible <- vector(length = 2)
+        if (!is.null(invisible)) {
+            test.invisible[1] <- match("var", invisible)
+            test.invisible[2] <- match("quanti.sup", invisible)
+        }
+        else  test.invisible <- rep(NA, 2)
         scale.unit <- res.pca$call$scale.unit
         coord.var <- res.pca$var$coord[, axes]
         if (!is.null(res.pca$quanti.sup))  coord.quanti <- res.pca$quanti.sup$coord[, axes]
@@ -190,7 +196,8 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
              abline(h=0,lty=2)
         }
         col.var<-rep(col.var, length=nrow(coord.var))
-        for (v in 1:nrow(coord.var)) {
+        if (is.na(test.invisible[1])){
+          for (v in 1:nrow(coord.var)) {
             if (sum(res.pca$var$cos2[v, axes], na.rm = TRUE) >= lim.cos2.var && !is.na(sum(res.pca$var$cos2[v, axes], na.rm = TRUE))) {
                 arrows(0, 0, coord.var[v, 1], coord.var[v, 2], length = 0.1, angle = 15, code = 2, col = col.var[v])
                 if (lab.var) {
@@ -205,8 +212,9 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
                   text(coord.var[v, 1], y = coord.var[v, 2], labels = rownames(coord.var)[v], pos = pos, cex=cex, col = col.var[v])
                 }
             }
+          }
         }
-        if (!is.null(coord.quanti)) {
+        if (!is.null(coord.quanti)& is.na(test.invisible[2])) {
             col.quanti.sup<-rep(col.quanti.sup, length=nrow(coord.quanti))
             for (q in 1:nrow(coord.quanti)) {
                 arrows(0, 0, coord.quanti[q, 1], coord.quanti[q, 2], length = 0.1, angle = 15, code = 2, lty = 2, col=col.quanti.sup[q])

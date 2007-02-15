@@ -1,4 +1,4 @@
-FDA<-function(X, fact, new.data=NULL, new.fact=NULL, prior=NULL, cross.val=FALSE, graph = TRUE){
+FDA<-function(X, fact, new.data=NULL, new.fact=NULL, prior=NULL, cross.val=FALSE, graph = TRUE, axes=c(1,2)){
     ginv <- function(X, tol = sqrt(.Machine$double.eps)) {
         if (length(dim(X)) > 2 || !(is.numeric(X) || is.complex(X)))
             stop("'X' must be a numeric or complex matrix")
@@ -203,6 +203,8 @@ FDA<-function(X, fact, new.data=NULL, new.fact=NULL, prior=NULL, cross.val=FALSE
     return(res)
   }
 
+  if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
+  if (is.null(colnames(X))) colnames(X) = paste("V",1:ncol(X),sep="")
   res.fda<-fda(X=X, fact=fact, new.data=new.data, new.fact=new.fact, prior=prior)
 
   if(cross.val)
@@ -237,8 +239,8 @@ FDA<-function(X, fact, new.data=NULL, new.fact=NULL, prior=NULL, cross.val=FALSE
   resultats<-c(res.fda, res.cv=list(res.cv))
   class(resultats)<-c("FDA", "list")
   if (graph){
-    plot.FDA(resultats)
-    plot.FDA(resultats, choix = "var")
+    plot.FDA(resultats,axes=axes)
+    plot.FDA(resultats, choix = "var",axes=axes)
   }
   return(resultats)
 }

@@ -1,4 +1,4 @@
-coord.ellipse <- function (coord.simul, centre = NULL, axes = c(1, 2), level.conf = 0.95, npoint = 100){
+coord.ellipse <- function (coord.simul, centre = NULL, axes = c(1, 2), level.conf = 0.95, npoint = 100, bary = FALSE){
 
     ellipse <- function(x, scale = c(1, 1), centre = c(0, 0), level = 0.95, t = sqrt(qchisq(level, 2)), which = c(1, 2), npoints = 100) {
       names <- c("x", "y")
@@ -35,6 +35,7 @@ coord.ellipse <- function (coord.simul, centre = NULL, axes = c(1, 2), level.con
       }
       tab <- data.frame(x = x, y = y)
       mat.cov <- cov(tab)
+      if (bary) mat.cov = mat.cov/nrow(tab)
       elli.tmp <- ellipse(mat.cov, centre = center, level = level.conf, npoints = npoint)
       res <- rbind(res, elli.tmp)
       label <- c(label, rep(as.character(unique(coord.simul[, 1])[f]), npoint))

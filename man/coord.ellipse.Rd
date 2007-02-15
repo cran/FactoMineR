@@ -8,7 +8,7 @@
 }
 
 \usage{coord.ellipse (coord.simul, centre = NULL, axes = c(1, 2), 
-    level.conf = 0.95, npoint = 100)
+    level.conf = 0.95, npoint = 100, bary = FALSE)
 }
 
 \arguments{
@@ -23,6 +23,7 @@
   \item{axes}{a length 2 vector specifying the components of coord.simul that are taken into account}
   \item{level.conf}{confidence level used to construct the ellipses. By default, 0.95}
   \item{npoint}{number of points used to draw the ellipses}
+  \item{bary}{boolean, if bary = TRUE, the coordinates of the ellipse around the barycentre of individuals are calculated}
 }
 
 \value{

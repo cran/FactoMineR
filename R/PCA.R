@@ -1,4 +1,4 @@
- PCA <- function (X, scale.unit = TRUE, ncp = 5, ind.sup = NULL, quanti.sup = NULL, quali.sup = NULL, row.w = NULL, col.w = NULL, graph = TRUE){
+ PCA <- function (X, scale.unit = TRUE, ncp = 5, ind.sup = NULL, quanti.sup = NULL, quali.sup = NULL, row.w = NULL, col.w = NULL, graph = TRUE, axes=c(1,2)){
     moy.p <- function(V, poids){
       res <- sum(V*poids) / sum(poids)
     }
@@ -10,6 +10,10 @@
       if (is.null(quali.sup)) for (j in 1:ncol(X)) X[,j] <- replace(X[,j],is.na(X[,j]),mean(X[,j],na.rm=TRUE))
       else for (j in (1:ncol(X))[-quali.sup]) X[,j] <- replace(X[,j],is.na(X[,j]),mean(X[,j],na.rm=TRUE))
     }
+    if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
+    if (is.null(colnames(X))) colnames(X) = paste("V",1:ncol(X),sep="")
+    for (j in 1:ncol(X)) if (colnames(X)[j]=="") colnames(X)[j] = paste("V",j,sep="")
+    for (j in 1:nrow(X)) if (is.null(rownames(X)[j])) rownames(X)[j] = paste("row",j,sep="")
     Xtot <- X
     if (!is.null(quali.sup)) X <- X[,-c(quanti.sup,quali.sup)]
     else  if (!is.null(quanti.sup)) X <- X[,-quanti.sup]
@@ -106,7 +110,7 @@
       contrib.vcs <- as.data.frame(contrib.vcs)
       cor.vcs <- as.data.frame(cor.vcs)
       colnames(coord.vcs) <- colnames(cor.vcs) <- paste("Dim", c(1:ncol(cor.vcs)), sep = ".") -> colnames(contrib.vcs) 
-      rownames(coord.vcs) <- rownames(cor.vcs) <- colnames(X.quanti.sup)  -> rownames(contrib.vcs)
+      rownames(coord.vcs) <- rownames(cor.vcs) <- rownames(contrib.vcs) <- colnames(Xtot)[quanti.sup]
       res.quanti.sup <- list(coord = coord.vcs[, 1:ncp], cor = cor.vcs[, 1:ncp], cos2 = cos2.vcs[,1:ncp], contrib = contrib.vcs[, 1:ncp] * 100)
       res$quanti.sup = res.quanti.sup
     }
@@ -156,8 +160,8 @@ res$call = res.call
     
 class(res) <- c("PCA", "list ")
 if (graph) {
-  plot.PCA(res, choix="ind")
-  plot.PCA(res, choix="var")
+  plot.PCA(res, choix="ind",axes=axes)
+  plot.PCA(res, choix="var",axes=axes)
 }
     return(res)
 }

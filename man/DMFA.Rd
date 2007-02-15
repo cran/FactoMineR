@@ -1,28 +1,25 @@
-\name{PCA}
+\name{DMFA}
 
-\alias{PCA}
+\alias{DMFA}
 
-\title{Principal Component Analysis (PCA)}
+\title{Duale Multiple Factor Analysis (DMFA)}
 
 \description{
-Performs Principal Component Analysis (PCA) with supplementary individuals, supplementary quantitative 
+Performs Duale Multiple Factor Analysis (DMFA) with supplementary individuals, supplementary quantitative 
 variables and supplementary qualitative variables.
 }
 
 \usage{
-PCA(X, scale.unit = TRUE, ncp = 5, ind.sup = NULL, 
-    quanti.sup = NULL, quali.sup = NULL, row.w = NULL, 
-    col.w = NULL, graph = TRUE, axes = c(1,2))}
+DMFA(don, num.fact = ncol(data), scale.unit = TRUE, ncp = 5, 
+    quanti.sup = NULL, quali.sup = NULL, graph = TRUE, axes=c(1,2))}
 
 \arguments{
-  \item{X}{a data frame with \emph{n} rows (individuals) and \emph{p} columns (numeric variables)}
-  \item{ncp}{number of dimensions kept in the results (by default 5)}
+  \item{don}{a data frame with \emph{n} rows (individuals) and \emph{p} columns (numeric variables)}
+  \item{num.fact}{the number of the qualitative variable which allows to make the group of individuals}
   \item{scale.unit}{a boolean, if TRUE (value set by default) then data are scaled to unit variance}
-  \item{ind.sup}{a vector indicating the indexes of the supplementary individuals}
+  \item{ncp}{number of dimensions kept in the results (by default 5)}
   \item{quanti.sup}{a vector indicating the indexes of the quantitative supplementary variables}
   \item{quali.sup}{a vector indicating the indexes of the qualitative supplementary variables}
-  \item{row.w}{an optional row weights (by default, uniform row weights)}
-  \item{col.w}{an optional column weights (by default, uniform column weights)}
   \item{graph}{boolean, if TRUE a graph is displayed}
   \item{axes}{a length 2 vector specifying the components to plot}
 }
@@ -39,15 +36,13 @@ Returns a list including:
 Returns the individuals factor map and the variables factor map.
 }
 
-\author{Jérémy Mazet, François Husson \email{François.Husson@agrocampus-rennes.fr}}
+\author{Sébastien Lê, François Husson \email{François.Husson@agrocampus-rennes.fr}}
 
-\seealso{ \code{\link{print.PCA}}, \code{\link{plot.PCA}}, \code{\link{dimdesc}}}
+\seealso{ \code{\link{plot.DMFA}}, \code{\link{dimdesc}}}
 
 \examples{
-data(decathlon)
-res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup=13)
-plot(res.pca,choix="ind",habillage=13)
-dimdesc(res.pca, axes = 1:2)
+## Example with the famous Fisher's iris data
+res.dmfa = DMFA ( iris, num.fact = 5)
 }
 
 \keyword{multivariate}

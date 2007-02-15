@@ -1,4 +1,4 @@
-plot.GPA<-function (x, axes = c(1, 2), lab.ind.moy = TRUE, lab.par = FALSE, 
+plot.GPA<-function (x, axes = c(1, 2), lab.ind.moy = TRUE, 
     habillage = "ind", partial = "all", chrono = FALSE, xlim = NULL, 
     ylim = NULL, cex = 1, title = NULL, ...) 
 {
@@ -95,11 +95,6 @@ plot.GPA<-function (x, axes = c(1, 2), lab.ind.moy = TRUE, lab.par = FALSE,
                 2, j], cex = 0.8 * cex, col = col.ind[nb.ind + 
                 (i - 1) * nbre.grpe + j], pch = 20)
     
-            if (lab.par) 
-                text(coord.ind.partiel[i, 1, j], y = coord.ind.partiel[i, 
-                  2, j], labels = rownames(coord.ind.partiel)[i, 
-                  , j], pos = 3, col = col.ind[nb.ind + (i - 
-                  1) * nbre.grpe + j])
             if (chrono) {
                 if (j > 1) 
                   lines(c(coord.ind.partiel[i, 1, j - 1], coord.ind.partiel[i, 

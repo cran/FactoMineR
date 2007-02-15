@@ -2,21 +2,21 @@
 
 \alias{plot.MCA}
 
-\title{Draw the Multiple Correspondance Analysis (CA) graphs}
+\title{Draw the Multiple Correspondance Analysis (MCA) graphs}
 
 \description{
-Draw the Multiple Correspondance Analysis (CA) graphs.
+Draw the Multiple Correspondance Analysis (MCA) graphs.
 }
 
 \usage{
-\method{plot}{MCA}(x, axes = c(1, 2), 
+plot.MCA (x, axes = c(1, 2), 
     xlim = NULL, ylim = NULL, invisible = NULL,
     col.ind = "blue", col.var = "red", col.quali.sup = "darkred",
     col.ind.sup = "darkblue", label = "all", cex = 1, title = NULL, \dots)
 }
 
 \arguments{
-  \item{x}{an object of class CA}
+  \item{x}{an object of class MCA}
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{xlim}{range for the plotted 'x' values, defaulting to the range of the finite values of 'x'}
   \item{ylim}{range for the plotted 'y' values, defaulting to the range of the finite values of 'y'}

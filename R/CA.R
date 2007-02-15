@@ -1,5 +1,9 @@
-CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE){
+CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE, axes=c(1,2)){
     X <- as.data.frame(X)
+    if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
+    if (is.null(colnames(X))) colnames(X) = paste("V",1:ncol(X),sep="")
+    for (j in 1:ncol(X)) if (colnames(X)[j]=="") colnames(X)[j] = paste("V",j,sep="")
+    for (j in 1:nrow(X)) if (is.null(rownames(X)[j])) rownames(X)[j] = paste("row",j,sep="")
     Xtot <- X
     if (!inherits(X, "data.frame")) stop("X is not a data.frame")
     if (!is.null(row.sup)) X <- as.data.frame(X[-row.sup,])
@@ -76,6 +80,6 @@ CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE){
     res$col.sup <- res.col.sup
 }
     class(res) <- c("CA", "list")
-    if (graph) plot.CA(res)
+    if (graph) plot.CA(res,axes=axes)
     return(res)
 }

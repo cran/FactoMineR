@@ -50,6 +50,7 @@ plot.MCA <- function (x, axes = c(1, 2),
       ymax = ylim[2]
     }
     sub.titre <- NULL
+    titre = title
     if (is.null(title)) titre <- "MCA factor map"
     else sub.titre <- "MCA factor map"
     plot(0, 0, main = titre, xlab = paste("Dim ",axes[1]," (",signif(res.mca$eig[axes[1],2],4),"%)",sep=""), ylab = paste("Dim ",axes[2]," (",signif(res.mca$eig[axes[2],2],4),"%)",sep=""), xlim = xlim, ylim = ylim, col = "white", asp=1, cex=cex)

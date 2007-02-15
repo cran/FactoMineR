@@ -8,17 +8,18 @@
 
 \usage{
 FDA(X, fact, new.data = NULL, new.fact = NULL, prior = NULL, 
-    cross.val = FALSE, graph = TRUE)
+    cross.val = FALSE, graph = TRUE, axes = c(1,2))
 }
 
 \arguments{
-  \item{X         }{a data frame with n rows (individuals) and p columns (including one factor). }
+  \item{X         }{a data frame with n rows (individuals) and p columns (without the factor). }
   \item{fact      }{a factor specifying the class for each observation.}
   \item{new.data  }{a data frame of individuals to be classified or, if \code{new.fact} is not null, which formed the test sample.  }
-  \item{new.fact  }{if \code{new.dat} is not null, a factor specifying the class for each observation of the test sample.   }
+  \item{new.fact  }{if \code{new.data} is not null, a factor specifying the class for each observation of the test sample.   }
   \item{prior     }{a vector. The prior probabilities of class membership.  If unspecified, the class proportions for the training sample (\code{new.dat}) are used.  }
   \item{cross.val }{if TRUE, returns results for leave-one-out cross-validation. }
   \item{graph}{boolean, if TRUE graphs are plotted}
+  \item{axes}{a length 2 vector specifying the components to plot}
 }
 
 \details{
@@ -43,7 +44,7 @@ Returns a list including :
 
 \author{ Jeremy Mazet \email{jeremy.mazet@soredab.org} }
 
-\seealso{\code{\link{plot.FDA}}, \code{\link{print.FDA}}}
+\seealso{\code{\link{plot.FDA}}, \code{\link{print.FDA}}, \code{\link{dimdesc}}}
 
 \examples{
 data(wine)
