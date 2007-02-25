@@ -21,7 +21,7 @@ plot.CA(x, axes = c(1, 2),
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{xlim}{range for the plotted 'x' values, defaulting to the range of the finite values of 'x'}
   \item{ylim}{range for the plotted 'y' values, defaulting to the range of the finite values of 'y'}
-  \item{invisible}{string indicating if some points should be unlabelled ("row" or "col")}
+  \item{invisible}{string indicating if some points should be unlabelled ("row", "col", "row.sup", "col.sup")}
   \item{col.row}{a color for the rows points}
   \item{col.col}{a color for columns points}
   \item{col.row.sup}{a color for the supplementary rows points}

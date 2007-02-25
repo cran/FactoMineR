@@ -12,7 +12,8 @@ Draw the Multiple Correspondance Analysis (MCA) graphs.
 plot.MCA (x, axes = c(1, 2), 
     xlim = NULL, ylim = NULL, invisible = NULL,
     col.ind = "blue", col.var = "red", col.quali.sup = "darkred",
-    col.ind.sup = "darkblue", label = "all", cex = 1, title = NULL, \dots)
+    col.ind.sup = "darkblue", col.quanti.sup = "black",
+    label = "all", cex = 1, title = NULL, \dots)
 }
 
 \arguments{
@@ -20,11 +21,12 @@ plot.MCA (x, axes = c(1, 2),
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{xlim}{range for the plotted 'x' values, defaulting to the range of the finite values of 'x'}
   \item{ylim}{range for the plotted 'y' values, defaulting to the range of the finite values of 'y'}
-  \item{invisible}{string indicating if some points should not be drawn ("ind" or "var")}
+  \item{invisible}{string indicating if some points should not be drawn ("ind", "var", "ind.sup", "quali.sup", "quanti.sup")}
   \item{col.ind}{a color for the individuals, if color ="none" the label is not written}
   \item{col.var}{a color for the categories of qualitative variables, if color ="none" the label is not written}
   \item{col.quali.sup}{a color for the qualitative supplementary variables, if color ="none" the label is not written}
   \item{col.ind.sup}{a color for the supplementary individuals only if there is not habillage, if color ="none" the label is not written}
+  \item{col.quanti.sup}{a color for the supplementary quantitative variables, if color ="none" the label is not written}
   \item{label}{print the labels of the points}
   \item{cex}{cf. function \code{\link{par}} in the \pkg{graphics} package}
   \item{title}{string corresponding to the title of the graph you draw (by default NULL and a title is chosen)}

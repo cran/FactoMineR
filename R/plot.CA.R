@@ -17,18 +17,24 @@ plot.CA <- function (x, axes = c(1, 2),
     if (!is.null(res.ca$row.sup)) coord.row.sup <- res.ca$row.sup$coord[, axes]
     if (!is.null(res.ca$col.sup)) coord.col.sup <- res.ca$col.sup$coord[, axes]
 
-    test.invisible <- vector(length = 2)
+    test.invisible <- vector(length = 4)
     if (!is.null(invisible)) {
         test.invisible[1] <- match("row", invisible)
         test.invisible[2] <- match("col", invisible)
+        test.invisible[3] <- match("row.sup", invisible)
+        test.invisible[4] <- match("col.sup", invisible)
     }
-    else  test.invisible <- rep(NA, 2)
+    else  test.invisible <- rep(NA, 4)
     if (is.null(xlim)) {
       xmin <- xmax <- 0
-      if(is.na(test.invisible[1])) xmin <- min(xmin, coord.row[,1], coord.row.sup[, 1])
-      if(is.na(test.invisible[1])) xmax <- max(xmax, coord.row[,1], coord.row.sup[, 1])
-      if(is.na(test.invisible[2])) xmin <- min(xmin, coord.col[,1], coord.col.sup[, 1])
-      if(is.na(test.invisible[2])) xmax <- max(xmax, coord.col[,1], coord.col.sup[, 1])
+      if(is.na(test.invisible[1])) xmin <- min(xmin, coord.row[,1])
+      if(is.na(test.invisible[1])) xmax <- max(xmax, coord.row[,1])
+      if(is.na(test.invisible[3])) xmin <- min(xmin, coord.row.sup[, 1])
+      if(is.na(test.invisible[3])) xmax <- max(xmax, coord.row.sup[, 1])
+      if(is.na(test.invisible[2])) xmin <- min(xmin, coord.col[,1])
+      if(is.na(test.invisible[2])) xmax <- max(xmax, coord.col[,1])
+      if(is.na(test.invisible[4])) xmin <- min(xmin, coord.col.sup[, 1])
+      if(is.na(test.invisible[4])) xmax <- max(xmax, coord.col.sup[, 1])
         xlim <- c(xmin, xmax) * 1.2
     }
     else {
@@ -37,10 +43,14 @@ plot.CA <- function (x, axes = c(1, 2),
     }
     if (is.null(ylim)) {
       ymin <- ymax <- 0
-      if(is.na(test.invisible[1])) ymin <- min(ymin, coord.row[,2], coord.row.sup[, 2])
-      if(is.na(test.invisible[1])) ymax <- max(ymax, coord.row[,2], coord.row.sup[, 2])
-      if(is.na(test.invisible[2])) ymin <- min(ymin, coord.col[,2], coord.col.sup[, 2])
-      if(is.na(test.invisible[2])) ymax <- max(ymax, coord.col[,2], coord.col.sup[, 2])
+      if(is.na(test.invisible[1])) ymin <- min(ymin, coord.row[,2])
+      if(is.na(test.invisible[1])) ymax <- max(ymax, coord.row[,2])
+      if(is.na(test.invisible[3])) ymin <- min(ymin, coord.row.sup[,2])
+      if(is.na(test.invisible[3])) ymax <- max(ymax, coord.row.sup[,2])
+      if(is.na(test.invisible[2])) ymin <- min(ymin, coord.col[,2])
+      if(is.na(test.invisible[2])) ymax <- max(ymax, coord.col[,2])
+      if(is.na(test.invisible[4])) ymin <- min(ymin, coord.col.sup[,2])
+      if(is.na(test.invisible[4])) ymax <- max(ymax, coord.col.sup[,2])
         ylim <- c(ymin, ymax) * 1.2
     }
     else {
@@ -65,11 +75,11 @@ plot.CA <- function (x, axes = c(1, 2),
       points(coord.col[, 1], y = coord.col[, 2], pch = 17, col = col.col, cex = cex)
       if (lab.col) text(coord.col[, 1], y = coord.col[, 2], labels = rownames(coord.col), pos = 3, col = col.col, cex = cex)
     }
-    if (!is.null(res.ca$col.sup) & is.na(test.invisible[2])) {
+    if (!is.null(res.ca$col.sup) & is.na(test.invisible[4])) {
       points(coord.col.sup[, 1], y = coord.col.sup[, 2], pch = 17, col = col.col.sup, cex = cex)
       if (lab.col.sup) text(coord.col.sup[, 1], y = coord.col.sup[, 2], labels = rownames(coord.col.sup), pos = 3, col = col.col.sup, cex = cex)
     }
-    if (!is.null(res.ca$row.sup) & is.na(test.invisible[1])) {
+    if (!is.null(res.ca$row.sup) & is.na(test.invisible[3])) {
       points(coord.row.sup[, 1], y = coord.row.sup[, 2], pch = 20, col = col.row.sup, cex = cex)
       if (lab.row.sup) text(coord.row.sup[, 1], y = coord.row.sup[, 2], labels = rownames(coord.row.sup), pos = 3, col = col.row.sup, cex = cex)
     }

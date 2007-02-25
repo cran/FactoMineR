@@ -10,7 +10,7 @@ Calculates the number of occurence of each words and a contingence table
 
 \usage{
 textual(tab, num.text, contingence.by=1:ncol(tab), 
-    maj.in.min = TRUE, accent = TRUE, sep.word=NULL)
+    maj.in.min = TRUE, sep.word=NULL)
 }
 
 \arguments{
@@ -20,7 +20,6 @@ textual(tab, num.text, contingence.by=1:ncol(tab),
   table is calculated for all the variables (except the textual one). A contingence table can also be calculated for couple of variables.
   If \code{contingence.by} is equal to num.text, then the contingence table is calculated for each row of the data table}
   \item{maj.in.min}{boolean, if TRUE majuscule are transformed in minuscule}
-  \item{accent}{boolean, if TRUE the accentuated character are transformed in non accentuated one}
   \item{sep.word}{a string with all the characters which correspond to separator of words (by default \code{sep.word = "; (),?./:'!$§=+\n;{}<>[]@-"})}
 }
 
