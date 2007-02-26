@@ -1,4 +1,4 @@
-textual = function (tab, num.text, contingence.by=1:ncol(tab), maj.in.min = TRUE, accent = TRUE, sep.word=NULL) {
+textual = function (tab, num.text, contingence.by=1:ncol(tab), maj.in.min = TRUE, sep.word=NULL) {
 
 
 cont.textuel <- function(exp, maj.in.min = TRUE, accent = TRUE, sep.word=NULL){
@@ -10,7 +10,7 @@ cont.textuel <- function(exp, maj.in.min = TRUE, accent = TRUE, sep.word=NULL){
   sep1 = substr(new.sep.word,1,1)
   for (i in 1:length(exp)){
     expression[[i]] <- chartr(sep.word,new.sep.word,exp[[i]])
-    if (accent) expression[[i]] <- chartr("éèêâûòóôíîìàùç","eeeauoooiiiauc",expression[[i]])
+##    if (accent) expression[[i]] <- chartr("éèêâûòóôíîìàùç","eeeauoooiiiauc",expression[[i]])
     if (maj.in.min) expression[[i]] <- chartr("A-Z","a-z",expression[[i]])
     stopnow = FALSE
     aux.length = -1
@@ -40,7 +40,8 @@ cont.textuel <- function(exp, maj.in.min = TRUE, accent = TRUE, sep.word=NULL){
   if (is.null(rownames(tab))) rownames(tab)=1:nrow(tab)
   comp = as.list(tab[,num.text])
   names(comp) = rownames(tab)
-  res.cont = cont.textuel(comp, maj.in.min = maj.in.min, accent = accent, sep.word=sep.word)
+##  res.cont = cont.textuel(comp, maj.in.min = maj.in.min, accent = accent, sep.word=sep.word)
+  res.cont = cont.textuel(comp, maj.in.min = maj.in.min, sep.word=sep.word)
   aux = t(res.cont$contingence.table)
   don = cbind.data.frame(tab[,-num.text],aux)
   for (j in 1:length(contingence.by)){
