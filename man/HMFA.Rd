@@ -6,7 +6,7 @@ Performs a hierarchical multiple factor analysis, using an object of class \code
 }
 \usage{
 HMFA(X,H,type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE,
-    axes = c(1,2))
+    axes = c(1,2), name.group = NULL)
 }
 \arguments{
   \item{X}{a \code{data.frame}}
@@ -18,6 +18,8 @@ HMFA(X,H,type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE,
   \item{ncp}{number of dimensions kept in the results (by default 5)}
   \item{graph}{boolean, if TRUE a graph is displayed}
   \item{axes}{a length 2 vector specifying the components to plot}
+  \item{name.group}{a list of vector containing the name of the groups for each level of the hierarchy (by default, NULL and the 
+  group are named L1.G1, L1.G2 and so on)}
 }
 
 \value{

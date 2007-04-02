@@ -1,4 +1,4 @@
-HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE,axes=c(1,2)) {
+HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE, axes=c(1,2), name.group = NULL) {
     hdil <- function(H) {
         nbnivh <- length(H)
         dil <- H
@@ -94,7 +94,8 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE,axe
     nb.v.p <- ncol(res.afmh$ind$coord)
     coord.group <- list()
     for (h in 1:nbnivo) {
-        res <- diag(poids[[h]]) %*% as.matrix(res.afmh$var$cor^2)
+#        res <- diag(poids[[h]]) %*% as.matrix(res.afmh$var$cor^2)
+        res <- diag(poids[[h]]) %*% as.matrix(res.afmh$var$coord^2)
         nbgroup <- length(H[[h]])
         ind.col <- 1
         group.mod <- Xdes[[h]]
@@ -104,8 +105,13 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE,axe
             ind.col <- ind.col + group.mod[g]
         }
         colnames(aux.mat) <- colnames(res.afmh$var$cor)
-        name.aux <- paste("L", h, ".", sep = "")
-        rownames(aux.mat) <- paste(name.aux, "G", 1:nbgroup, sep = "")
+        if (is.null(name.group)){
+          name.aux <- paste("L", h, ".", sep = "")
+          rownames(aux.mat) <- paste(name.aux, "G", 1:nbgroup, sep = "")
+        }
+        else{
+          rownames(aux.mat) <- name.group[[h]]
+        }
         coord.group[[h]] <- aux.mat
     }
     part1 <- list()

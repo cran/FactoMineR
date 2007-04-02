@@ -13,7 +13,7 @@ plot.MCA (x, axes = c(1, 2),
     xlim = NULL, ylim = NULL, invisible = NULL,
     col.ind = "blue", col.var = "red", col.quali.sup = "darkred",
     col.ind.sup = "darkblue", col.quanti.sup = "black",
-    label = "all", cex = 1, title = NULL, \dots)
+    label = "all", cex = 1, title = NULL, habillage = "none", \dots)
 }
 
 \arguments{
@@ -30,6 +30,9 @@ plot.MCA (x, axes = c(1, 2),
   \item{label}{print the labels of the points}
   \item{cex}{cf. function \code{\link{par}} in the \pkg{graphics} package}
   \item{title}{string corresponding to the title of the graph you draw (by default NULL and a title is chosen)}
+  \item{habillage}{string corresponding to the color which are used. If "none", one color is used for the individual, another one for the qualitative variables;
+  if "quali", one color is used for each qualitative variables; else if it is the position of a qualitative variable, it colors 
+  according to the different categories of this variable}
   \item{\dots}{further arguments passed to or from other methods}
 }
 

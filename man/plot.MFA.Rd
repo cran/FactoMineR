@@ -19,10 +19,10 @@ plot.MFA(x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par = NULL,
 
 \arguments{
   \item{x}{an object of class MFA}
-  \item{axes}{a length 2 vector specifying the components to plot}
   \item{choix}{a string corresponding to the graph that you want to do ("ind" for the individual or qualitative
   variables graph, "var" for the quantitative variables graph, "axes" for the graph of the partial axes,
   "group" for the groups representation)}
+  \item{axes}{a length 2 vector specifying the components to plot}
   \item{ellipse}{boolean (NULL by default), if not null, draw ellipses around the individuals, and use the results of \code{coord.ellipse}}
   \item{ellipse.par}{boolean (NULL by default), if not null, draw ellipses around the partial individuals, and use the results of \code{coord.ellipse}}
   \item{lab.grpe}{boolean, if TRUE, the label of the groups are drwan}

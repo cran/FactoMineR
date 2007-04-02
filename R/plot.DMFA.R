@@ -2,14 +2,14 @@ plot.DMFA = function(x, axes=c(1,2), choix="ind", label="all", invisible=NULL, .
 
 res.dmfa = x
 class(res.dmfa) <- c("PCA", "list ")
-if (choix == "ind") plot.PCA(res.dmfa,habillage=1,axes=axes,label=label,invisible=invisible)
-if (choix=="quali"){
-  if (length(res.dmfa$call$quali.sup$modalite)==1) stop("There is no supplementary qualitative variable")
-  color = c("black","red","green3","blue",
+color = c("black","red","green3","blue",
     "cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey",
     "lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange",
     "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey",
     "darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon")
+if (choix == "ind") plot.PCA(res.dmfa,habillage=1,axes=axes,label=label,invisible=invisible)
+if (choix=="quali"){
+  if (length(res.dmfa$call$quali.sup$modalite)==1) stop("There is no supplementary qualitative variable")
   lev = levels(res.dmfa$call$X[,1])
   ng = length(lev)
   nb.quali = (length(res.dmfa$call$quali.sup$modalite)-1)/2
@@ -33,16 +33,16 @@ if (choix=="quali"){
   legend("topleft",legend= rownames(res.dmfa$group$coord),text.col= color[2:(1+ng)],cex=0.8,bg="white")
 }
 if (choix=="var") {
-  plot.PCA(res.dmfa,choix="var",axes=axes)
-## Ajout des variables partielles
   lev = levels(res.dmfa$call$X[,1])
   ng = length(lev)
+  plot.PCA(res.dmfa,choix="var",axes=axes, col.var = color[ng+1])
+## Ajout des variables partielles
   for (j in 1:ng){
     cor.partiel = res.dmfa$var.partiel[[j]][,axes]
     cor.cos2 = res.dmfa$cor.dim.gr[[j]][axes[1],axes[2]]
     for (v in 1:nrow(cor.partiel)) {
       qualite = (cor.partiel[v, 2]^2+cor.partiel[v, 2]^2)/sqrt(cor.partiel[v, 1]^2+cor.partiel[v, 2]^2+2*cos(cor.cos2)*(cor.partiel[v, 1]*cor.partiel[v, 2]))
-      arrows(0, 0, cor.partiel[v, 1], cor.partiel[v, 2], length = 0.1*qualite, angle = 15, code = 2,col=j+1)
+      arrows(0, 0, cor.partiel[v, 1], cor.partiel[v, 2], length = 0.1*qualite, angle = 15, code = 2,col=j)
       if (abs(cor.partiel[v, 1]) > abs(cor.partiel[v, 2])) {
         if (cor.partiel[v, 1] >= 0) pos <- 4
         else pos <- 2
@@ -51,10 +51,10 @@ if (choix=="var") {
         if (cor.partiel[v, 2] >= 0) pos <- 3
         else pos <- 1
       }
-      text(cor.partiel[v, 1], y = cor.partiel[v, 2], labels = rownames(cor.partiel)[v], pos = pos,col=j+1)
+      if (label=="all") text(cor.partiel[v, 1], y = cor.partiel[v, 2], labels = rownames(cor.partiel)[v], pos = pos,col=j)
     }
   }
-  legend("bottomleft", legend = c("var",paste("Gr",1:ng, sep = "")), text.col = 1:(ng+1), cex = 0.8, bg = "white")
+  legend("bottomleft", legend = c(lev,"var"), text.col = 1:(ng+1), cex = 0.8, bg = "white")
   Xc = res.dmfa$Xc
   for (j in 1:ng) {
     auxil = res.dmfa$ind$coord[res.dmfa$call$X[,1]==lev[j],axes]
@@ -71,7 +71,7 @@ if (choix=="group"){
   plot(0, 0, xlab = paste("Dim",axes[1]), ylab = paste("Dim",axes[2]), xlim = xlim, ylim = ylim, col = "white", asp = 1, main = "Projection of the groups")
   for (j in 1:ng){
     points(coord.gr[j,axes[1]],coord.gr[j,axes[2]],col=j,pch=15)
-    text(coord.gr[j,axes[1]],coord.gr[j,axes[2]], labels = lev[j], pos = 3)
+    if (label=="all") text(coord.gr[j,axes[1]],coord.gr[j,axes[2]], labels = lev[j], pos = 3)
   }
   abline(v = 0, lty = 2)
   abline(h = 0, lty = 2)

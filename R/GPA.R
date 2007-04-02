@@ -34,97 +34,97 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
         return(similari)
     }
 
-    coeffRVs <- function(X, Y) {
-        if (dim(X)[[1]] != dim(Y)[[1]]) stop("no the same dimension for X and Y")
-        n <- dim(X)[[1]]
-        Y <- scale(Y, scale = FALSE)
-        X <- scale(X, scale = FALSE)
-        rv <- coeffRV(X, Y)
-        if (n < 4) {
-            if (n == 1) {
-                rvstd = NA
-                esperance <- variance <- NA
-            }
-            else {
-                perm24 <- permute(n)
-                listX <- array(0, c(dim(X)[[1]], dim(X)[[2]],
-                  dim(perm24)[[1]]))
-                for (i in 1:dim(perm24)[[1]]) {
-                  listX[, , i] <- scale(X[perm24[i, ], ], scale = FALSE)
-                }
-                listRV <- NULL
-                listRVbis <- NULL
-                for (i in 1:dim(perm24)[[1]]) {
-                  listRV <- c(listRV, coeffRV(listX[, , i], Y))
-                }
-                esperance <- mean(listRV)
-                variance <- sum((listRV - esperance)^2)/dim(perm24)[[1]]
-            }
-        }
-        else {
-            betax <- (sum(diag(X %*% t(X))))^2/sum(diag(X %*%
-                t(X) %*% X %*% t(X)))
-            betay <- (sum(diag(Y %*% t(Y))))^2/sum(diag(Y %*%
-                t(Y) %*% Y %*% t(Y)))
-            alphax <- n - 1 - betax
-            alphay <- n - 1 - betay
-            deltax <- sum(diag(X %*% t(X))^2)/sum(diag(X %*%
-                t(X) %*% X %*% t(X)))
-            gammax <- (n - 1) * (n * (n + 1) * deltax - (n -
-                1) * (betax + 2))/((n - 3) * (n - 1 - betax))
-            deltay <- sum(diag(Y %*% t(Y))^2)/sum(diag(Y %*%
-                t(Y) %*% Y %*% t(Y)))
-            gammay <- (n - 1)/((n - 3) * (n - 1 - betay)) * (n *
-                (n + 1) * deltay - (n - 1) * (betay + 2))
-            esperance <- (betax^0.5) * betay^0.5/(n - 1)
-            variance <- 2 * alphay * alphax/((n + 1) * (n - 1)^2 *
-                (n - 2)) * (1 + (n - 3) * gammax * gammay/(2 *
-                n * (n - 1)))
-        }
-        rvstd <- (rv - esperance)/variance^0.5
-        return(list(rvstd = rvstd, rv = rv, moyenne = esperance,
-            variance = variance))
-    }
-    multiply.vec <- function(vec) {
-        k <- length(vec)
-        rep(vec, rep(factorial(k - 1), k))
-    }
-    permute <- function(nbp) {
-        if (nbp == 2) {
-            perm <- rbind(c(1, 2), c(2, 1))
-        }
-        else {
-            perm <- matrix(nrow = factorial(nbp), ncol = nbp)
-            perm[, 1] <- multiply.vec(1:nbp)
-            for (j in 2:(nbp - 1)) {
-                restants <- apply(matrix(perm[seq(1, factorial(nbp),
-                  factorial(nbp - j + 1)), 1:(j - 1)], ncol = j -
-                  1, nrow = length(seq(1, factorial(nbp), factorial(nbp -
-                  j + 1)))), 1, setdiff, x = 1:nbp)
-                perm[, j] <- as.vector(apply(restants, 2, multiply.vec))
-            }
-            perm[, nbp] <- apply(perm[, 1:nbp - 1], 1, setdiff,
-                x = 1:nbp)
-        }
-        perm
-    }
-    coeffRV <- function(X, Y) {
-        if (dim(X)[[1]] != dim(Y)[[1]])
-            stop("no the same dimension for X and Y")
-        if (dim(X)[[1]] == 1) {
-            print("1 configuration RV is  NA")
-            rv = NA
-        }
-        else {
-            Y <- scale(Y, scale = FALSE)
-            X <- scale(X, scale = FALSE)
-            W1 <- X %*% t(X)
-            W2 <- Y %*% t(Y)
-            rv <- sum(diag(W1 %*% W2))/(sum(diag(W1 %*% W1)) *
-                sum(diag(W2 %*% W2)))^0.5
-        }
-        return(rv)
-    }
+##    coeffRVs <- function(X, Y) {
+##        if (dim(X)[[1]] != dim(Y)[[1]]) stop("no the same dimension for X and Y")
+##        n <- dim(X)[[1]]
+##        Y <- scale(Y, scale = FALSE)
+##        X <- scale(X, scale = FALSE)
+##        rv <- coeffRV(X, Y)
+##        if (n < 4) {
+##            if (n == 1) {
+##                rvstd = NA
+##                esperance <- variance <- NA
+##            }
+##            else {
+##                perm24 <- permute(n)
+##                listX <- array(0, c(dim(X)[[1]], dim(X)[[2]],
+##                  dim(perm24)[[1]]))
+##                for (i in 1:dim(perm24)[[1]]) {
+##                  listX[, , i] <- scale(X[perm24[i, ], ], scale = FALSE)
+##                }
+##                listRV <- NULL
+##                listRVbis <- NULL
+##                for (i in 1:dim(perm24)[[1]]) {
+##                  listRV <- c(listRV, coeffRV(listX[, , i], Y))
+##                }
+##                esperance <- mean(listRV)
+##                variance <- sum((listRV - esperance)^2)/dim(perm24)[[1]]
+##            }
+##        }
+##        else {
+##            betax <- (sum(diag(X %*% t(X))))^2/sum(diag(X %*%
+##                t(X) %*% X %*% t(X)))
+##            betay <- (sum(diag(Y %*% t(Y))))^2/sum(diag(Y %*%
+##                t(Y) %*% Y %*% t(Y)))
+##            alphax <- n - 1 - betax
+##            alphay <- n - 1 - betay
+##            deltax <- sum(diag(X %*% t(X))^2)/sum(diag(X %*%
+##                t(X) %*% X %*% t(X)))
+##            gammax <- (n - 1) * (n * (n + 1) * deltax - (n -
+##                1) * (betax + 2))/((n - 3) * (n - 1 - betax))
+##            deltay <- sum(diag(Y %*% t(Y))^2)/sum(diag(Y %*%
+##                t(Y) %*% Y %*% t(Y)))
+##            gammay <- (n - 1)/((n - 3) * (n - 1 - betay)) * (n *
+##                (n + 1) * deltay - (n - 1) * (betay + 2))
+##            esperance <- (betax^0.5) * betay^0.5/(n - 1)
+##            variance <- 2 * alphay * alphax/((n + 1) * (n - 1)^2 *
+##                (n - 2)) * (1 + (n - 3) * gammax * gammay/(2 *
+##                n * (n - 1)))
+##        }
+##        rvstd <- (rv - esperance)/variance^0.5
+##        return(list(rvstd = rvstd, rv = rv, moyenne = esperance,
+##            variance = variance))
+##    }
+##    multiply.vec <- function(vec) {
+##        k <- length(vec)
+##        rep(vec, rep(factorial(k - 1), k))
+##    }
+##    permute <- function(nbp) {
+##        if (nbp == 2) {
+##            perm <- rbind(c(1, 2), c(2, 1))
+##        }
+##        else {
+##            perm <- matrix(nrow = factorial(nbp), ncol = nbp)
+##            perm[, 1] <- multiply.vec(1:nbp)
+##            for (j in 2:(nbp - 1)) {
+##                restants <- apply(matrix(perm[seq(1, factorial(nbp),
+##                  factorial(nbp - j + 1)), 1:(j - 1)], ncol = j -
+##                  1, nrow = length(seq(1, factorial(nbp), factorial(nbp -
+##                  j + 1)))), 1, setdiff, x = 1:nbp)
+##                perm[, j] <- as.vector(apply(restants, 2, multiply.vec))
+##            }
+##            perm[, nbp] <- apply(perm[, 1:nbp - 1], 1, setdiff,
+##                x = 1:nbp)
+##        }
+##        perm
+##    }
+##    coeffRV <- function(X, Y) {
+##        if (dim(X)[[1]] != dim(Y)[[1]])
+##            stop("no the same dimension for X and Y")
+##        if (dim(X)[[1]] == 1) {
+##            print("1 configuration RV is  NA")
+##            rv = NA
+##        }
+##        else {
+##            Y <- scale(Y, scale = FALSE)
+##            X <- scale(X, scale = FALSE)
+##            W1 <- X %*% t(X)
+##            W2 <- Y %*% t(Y)
+##            rv <- sum(diag(W1 %*% W2))/(sum(diag(W1 %*% W1)) *
+##                sum(diag(W2 %*% W2)))^0.5
+##        }
+##        return(rv)
+##    }
 #-------------------------------------------------------------------------------
 # Table de PANOVA
 #-------------------------------------------------------------------------------
@@ -999,8 +999,8 @@ calibre <- function(X) {
                   Xi <- Xdd[, , i]
                   Xj <- Xdd[, , j]
                 }
-                RVs[i, j] <-RVs[j, i] <- coeffRVs(Xi, Xj)$rvstd
-                RV[i, j] <- RV[j, i] <-coeffRVs(Xi, Xj)$rv
+                RVs[i, j] <-RVs[j, i] <- coeffRV(Xi, Xj)$rvstd
+                RV[i, j] <- RV[j, i] <-coeffRV(Xi, Xj)$rv
                 sim[i, j] <-sim[j, i] <-  similarite(Xi, Xj)
             }
         }
@@ -1011,8 +1011,8 @@ calibre <- function(X) {
             for (j in i:nbjuge) {
                 Xi <- Xdd[, , i]
                 Xj <- Xdd[, , j]
-                RVs[i, j] <-RVs[j, i] <-coeffRVs(Xi, Xj)$rvstd
-                RV[i, j] <-RV[j, i] <-  coeffRVs(Xi, Xj)$rv
+                RVs[i, j] <-RVs[j, i] <-coeffRV(Xi, Xj)$rvstd
+                RV[i, j] <-RV[j, i] <-  coeffRV(Xi, Xj)$rv
                 sim[i, j] <-sim[j, i] <- similarite(Xi, Xj)
             }
         }

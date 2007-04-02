@@ -1,4 +1,4 @@
-CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE, axes=c(1,2)){
+CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE, axes=c(1,2), row.w=NULL){
     X <- as.data.frame(X)
     if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
     if (is.null(colnames(X))) colnames(X) = paste("V",1:ncol(X),sep="")
@@ -9,7 +9,13 @@ CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE, axes=c
     if (!is.null(row.sup)) X <- as.data.frame(X[-row.sup,])
     if (!is.null(col.sup)) X <- as.data.frame(X[,-col.sup])
     total <- sum(X)
-    F <- as.matrix(X/total)
+### 3 lignes rajoutées
+    if (is.null(row.w)) row.w = rep(1,nrow(X))
+    if (length(row.w)!=nrow(X)) stop("length of vector row.w should be the number of active rows")
+    row.w = row.w/sum(row.w)*nrow(X)
+### 1 lignes modifiées
+##    F <- as.matrix(X/total)*row.w
+    F <- as.matrix(X/total)*row.w
     marge.col <- apply(F, 2, sum)
     marge.row <- apply(F, 1, sum)
     Pc <- diag(marge.col)
@@ -66,6 +72,8 @@ CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE, axes=c
  if (!is.null(col.sup)){
     X.col.sup <- as.data.frame(Xtot[,col.sup])
     if (!is.null(row.sup)) X.col.sup <- as.data.frame(X.col.sup[-row.sup,])
+## 1 ligne rajoutée
+    X.col.sup = X.col.sup*row.w
     colnames(X.col.sup) <- colnames(Xtot)[col.sup]
     somme.col <- apply(X.col.sup, 2, sum)
     X.col.sup <- sweep(X.col.sup, 2, somme.col, "/")

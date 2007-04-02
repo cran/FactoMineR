@@ -1,6 +1,6 @@
 dimdesc <- function (res, axes=1:3, proba=0.05){
 
-  if (!inherits(res, "PCA")&!inherits(res, "CA")&!inherits(res, "MCA")&!inherits(res, "MFA")&!inherits(res, "HMFA")&!inherits(res, "FDA")&!inherits(res, "DMFA")) stop("non convenient data")
+  if (!inherits(res, "PCA")&!inherits(res, "CA")&!inherits(res, "MCA")&!inherits(res, "MFA")&!inherits(res, "HMFA")&!inherits(res, "FDA")&!inherits(res, "DMFA")&!inherits(res, "AFMD")) stop("non convenient data")
 
   resultat=list()
   quanti = quanti.sup = quali = quali.sup = NULL
@@ -10,6 +10,12 @@ dimdesc <- function (res, axes=1:3, proba=0.05){
     if (!is.null(res$quali.sup$vtest)) quali.sup = res$quali.sup$vtest
   }
   if (inherits(res, "MFA")){
+    if (!is.null(res$quanti.var$coord)) quanti = res$quanti.var$coord
+    if (!is.null(res$quanti.var.sup$coord)) quanti.sup = res$quanti.var.sup$coord
+    if (!is.null(res$quali.var$v.test)) quali = res$quali.var$v.test
+    if (!is.null(res$quali.var.sup$v.test)) quali.sup = res$quali.var.sup$v.test
+  }
+  if (inherits(res, "HMFA")){
     if (!is.null(res$quanti.var$coord)) quanti = res$quanti.var$coord
     if (!is.null(res$quanti.var.sup$coord)) quanti.sup = res$quanti.var.sup$coord
     if (!is.null(res$quali.var$v.test)) quali = res$quali.var$v.test
@@ -25,6 +31,18 @@ dimdesc <- function (res, axes=1:3, proba=0.05){
     if (!is.null(res$row.sup$coord)) quanti.sup = res$row.sup$coord
     if (!is.null(res$col.sup$coord)) quanti.sup = rbind(quanti.sup,res$col.sup$coord)
   }
+  if (inherits(res, "AFDM")){
+    if (!is.null(res$quanti.var$coord)) quanti = res$quanti.var$coord
+    if (!is.null(res$quanti.var.sup$coord)) quanti.sup = res$quanti.var.sup$coord
+    if (!is.null(res$quali.var$v.test)) quali = res$quali.var$v.test
+    if (!is.null(res$quali.var.sup$v.test)) quali.sup = res$quali.var.sup$v.test
+  }
+  if (inherits(res, "DMFA")){
+    if (!is.null(res$var$coord)) quanti = res$var$coord
+    if (!is.null(res$quanti.var.sup$coord)) quanti.sup = res$quanti.var.sup$coord
+    if (!is.null(res$quali.sup$v.test)) quali.sup = res$quali.sup$v.test
+  }
+
   if (!is.null(quanti)) axes = axes[axes%in%(1:ncol(quanti))]
   else axes = axes[axes%in%(1:ncol(quali))]
   tab.quanti = rbind(quanti,quanti.sup)

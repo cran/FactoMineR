@@ -10,7 +10,7 @@ Performs Correspondence Analysis (CA) including supplementary row and/or column 
 
 \usage{
 CA(X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE,
-    axes = c(1,2))}
+    axes = c(1,2), row.w = NULL)}
 
 \arguments{
   \item{X}{a data frame with \emph{n} rows and \emph{p} columns, i.e. a contingency table}
@@ -19,6 +19,7 @@ CA(X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE,
   \item{col.sup}{a vector indicating the indexes of the supplementary columns}
   \item{graph}{boolean, if TRUE a graph is displayed}
   \item{axes}{a length 2 vector specifying the components to plot}
+  \item{row.w}{an optional row weights (by default, uniform row weights)}
 }
 
 \value{

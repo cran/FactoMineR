@@ -72,10 +72,7 @@ partial.tab.pour.plot <- function(res.hmfa,coord=c(1,2)) {
 ##          }
 ##          for (k in 1:(nbnivo-1)) {
 ##            jj <- 1
-##            name1 <- paste("L",k,sep="")
-##            name2 <- NULL
 ##            for (j in 1:length(H[[k]])) {
-##              name2 <- c(name2,paste("G",j,sep=""))
 ##              index.col <- index.col +1
 ##              if (j == sum(H[[k+1]][1:jj])+1 ) jj=jj+1
 ##              if(length(H[[k]])>1) {
@@ -83,18 +80,15 @@ partial.tab.pour.plot <- function(res.hmfa,coord=c(1,2)) {
 ##                lines(c(coord.partial[[k+1]][indd,coord[1],jj],coord.partial[[k]][indd,coord[1],j]),c(coord.partial[[k+1]][indd,coord[2],jj],coord.partial[[k]][indd,coord[2],j]))
 ##              }
 ##            }
-##            name <- c(name,paste(name1,name2,sep="."))
+##            name <- c(name,rownames(res.hmfa$group[[k]]))
 ##          }
-##          name2 <- NULL
 ##          for (j in 1:length(H[[nbnivo]])) {
-##            name2 <- c(name2,paste("G",j,sep=""))
 ##            index.col <- index.col+1
 ##            points(coord.partial[[nbnivo]][indd,coord[1],j],coord.partial[[nbnivo]][indd,coord[2],j],col=color[index.col],pch=16,cex=cex*0.8)
 ##            if (!quali) lines(c(res.hmfa$ind$coord[indd,coord[1]],coord.partial[[nbnivo]][indd,coord[1],j]),c(res.hmfa$ind$coord[indd,coord[2]],coord.partial[[nbnivo]][indd,coord[2],j]))
 ##            else lines(c(res.hmfa$quali.var$coord[indd,coord[1]],coord.partial[[nbnivo]][indd,coord[1],j]),c(res.hmfa$quali.var$coord[indd,coord[2]],coord.partial[[nbnivo]][indd,coord[2],j]))
 ##          }
-##          name1 <- paste("L",nbnivo)
-##          name <- c(name,paste(name1,name2,sep="."))
+##          name <- c(name,rownames(res.hmfa$group[[nbnivo]]))
 ##          legend("topleft",legend= name,text.col= color[1:index.col],cex=0.7*cex,bg="white")
 ##        }
 ##      }
@@ -137,10 +131,7 @@ plot.partial <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL
       if (nbnivo>nivo){
       for (k in nivo:(nbnivo-1)) {
         jj <- 1
-        name1 <- paste("L",k,sep="")
-        name2 <- NULL
         for (j in 1:length(H[[k]])) {
-          name2 <- c(name2,paste("G",j,sep=""))
           index.col <- index.col +1
           if (j == sum(H[[k+1]][1:jj])+1 ) jj=jj+1
           if(length(H[[k]])>1) {
@@ -148,18 +139,15 @@ plot.partial <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL
             for (i in 1:nrow(coord.partial[[k]])) lines(c(coord.partial[[k+1]][i,coord[1],jj],coord.partial[[k]][i,coord[1],j]),c(coord.partial[[k+1]][i,coord[2],jj],coord.partial[[k]][i,coord[2],j]))
           }
         }
-        name <- c(name,paste(name1,name2,sep="."))
+        name <- c(name,rownames(res.hmfa$group[[k]]))
       }
       }
-      name2 <- NULL
       for (j in 1:length(H[[nbnivo]])) {
-        name2 <- c(name2,paste("G",j,sep=""))
         index.col <- index.col+1
         points(coord.partial[[nbnivo]][,coord,j],col=color[index.col],pch=20,cex=cex*0.8)
         for (i in 1:nrow(coord.partial[[nbnivo]])) lines(c(res.hmfa$ind$coord[i,coord[1]],coord.partial[[nbnivo]][i,coord[1],j]),c(res.hmfa$ind$coord[i,coord[2]],coord.partial[[nbnivo]][i,coord[2],j]))
       }
-      name1 <- paste("L",nbnivo)
-      name <- c(name,paste(name1,name2,sep="."))
+      name <- c(name,rownames(res.hmfa$group[[nbnivo]]))
     }
 
    if (!is.null(res.hmfa$quali.var)){
@@ -188,10 +176,7 @@ plot.partial <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL
       if (nbnivo > nivo){
       for (k in nivo:(nbnivo-1)) {
         jj <- 1
-        name1 <- paste("L",k,sep="")
-        name2 <- NULL
         for (j in 1:length(H[[k]])) {
-          name2 <- c(name2,paste("G",j,sep=""))
           index.col <- index.col +1
           if (j == sum(H[[k+1]][1:jj])+1 ) jj=jj+1
           if(length(H[[k]])>1) {
@@ -199,18 +184,15 @@ plot.partial <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL
             for (i in 1:nrow(coord.partial[[k]])) lines(c(coord.partial[[k+1]][i,coord[1],jj],coord.partial[[k]][i,coord[1],j]),c(coord.partial[[k+1]][i,coord[2],jj],coord.partial[[k]][i,coord[2],j]))
           }
         }
-        name <- c(name,paste(name1,name2,sep="."))
+        name <- c(name,rownames(res.hmfa$group[[k]]))
       }
       }
-      name2 <- NULL
       for (j in 1:length(H[[nbnivo]])) {
-        name2 <- c(name2,paste("G",j,sep=""))
         index.col <- index.col+1
         points(coord.partial[[nbnivo]][,coord,j],col=color[index.col],pch=15,cex=cex*0.8)
         for (i in 1:nrow(coord.partial[[nbnivo]])) lines(c(res.hmfa$quali.var$coord[i,coord[1]],coord.partial[[nbnivo]][i,coord[1],j]),c(res.hmfa$quali.var$coord[i,coord[2]],coord.partial[[nbnivo]][i,coord[2],j]))
       }
-      name1 <- paste("L",nbnivo)
-      name <- c(name,paste(name1,name2,sep="."))
+      name <- c(name,rownames(res.hmfa$group[[nbnivo]]))
     }
 }
     legend("topleft",legend= name,text.col= color[1:index.col],cex=0.8,bg="white")

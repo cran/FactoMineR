@@ -18,6 +18,17 @@ MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp
     nbre.var <- ncol(base)
     nbre.group <- length(group)
     group.actif <- NULL
+    if ("n"%in%type){
+      niveau = NULL
+      for (j in 1:ncol(base)){
+        if (!is.numeric(base[,j])) niveau = c(niveau,levels(base[,j]))
+      }
+      for (j in 1:ncol(base)) {
+        if (!is.numeric(base[,j])){
+          if (sum(niveau%in%levels(base[,j]))!=nlevels(base[,j])) levels(base[,j]) = paste(colnames(base)[j],levels(base[,j]),sep="_")
+        }
+      }
+    }
     for (i in 1:nbre.group) if (!(i%in%num.group.sup)) group.actif <- c(group.actif,i)
     group.mod <- group
     nbre.ind <- nrow(base)
@@ -27,14 +38,15 @@ MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp
     base <- as.data.frame(base)
     if (!inherits(base, "data.frame")) stop("base should be a data.frame")
     res.separe <- vector(mode = "list", length = nbre.group)
-    if (is.null(name.group)) name.group <- paste("group", c(1:nbre.group), sep = ".")
+    if (is.null(name.group)) name.group <- paste("group", 1:nbre.group, sep = ".")
     names(res.separe) <- name.group
     ind.grpe <- 0
     if (any(is.na(base))){
       if (!("n"%in%type)) for (j in 1:ncol(base)) base[,j] <- replace(base[,j],is.na(base[,j]),mean(base[,j],na.rm=TRUE))
       else{
-       for (g in 1:nbre.group){
-       for (j in 1:group[g]) base[,j] <- replace(base[,j],is.na(base[,j]),mean(base[,j],na.rm=TRUE))
+        if (type[1]!="n") for (j in 1:group[1]) base[,j] <- replace(base[,j],is.na(base[,j]),mean(base[,j],na.rm=TRUE))
+        for (g in 2:nbre.group){
+         if (type[g]!="n") for (j in (sum(group[1:(g-1)])+1):sum(group[1:g])) base[,j] <- replace(base[,j],is.na(base[,j]),mean(base[,j],na.rm=TRUE))
       }}
     }
     for (g in 1:nbre.group) {
