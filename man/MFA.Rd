@@ -66,13 +66,13 @@ aa = MFA(wine, group=c(2,5,3,10,9,2), type=c("n",rep("s",5)),
 #### Interactive graph
 liste = plot.MFApartial(aa)
 plot(aa,choix="ind",habillage = "Terroir")
-}
 
 ###Example 2
 data (poison)
 MFA(poison, group=c(2,2,5,6), type=c("s","n","n","n"),
     name.group=c("desc","desc2","symptom","eat"),
     num.group.sup=1:2)
+}
 }
 
 \keyword{multivariate}

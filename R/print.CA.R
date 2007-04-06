@@ -1,7 +1,7 @@
 print.CA <- function (x, file = NULL, sep = ";", ...){
     res.ca <- x
     if (!inherits(res.ca, "CA")) stop("non convenient data")
-    cat("**Results of the Correspondance Analysis (CA)**\n\n")
+    cat("**Results of the Correspondence Analysis (CA)**\n\n")
     cat("The variable in rows have", nrow(res.ca$call$X),
         "categories, the variable in column", ncol(res.ca$call$X), "categories\n\n")
     IT <- res.ca$eig[length(res.ca$eig), 3] * sum(res.ca$call$X)

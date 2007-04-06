@@ -23,8 +23,6 @@ DMFA = function(don, num.fact = ncol(data), scale.unit=TRUE, ncp=5,quanti.sup=NU
   Cov <- Xc <- FS <- ni <- structure(vector(mode = "list", length = ng), names = lev)
 
   for(i in 1:ng) {
-##    group.means[i,  ] <- colMeans(don[don[,num.fact]==lev[i] , -num.fact])
-##    Xi <- scale(don[don[,num.fact]==lev[i] , -num.fact], group.means[i,  ], scale=scale.unit)
     Xc[[i]] <- scale(don[don[,num.fact]==lev[i] , -c(num.fact,quali.sup)], scale=scale.unit)
     if (!scale.unit) Cov[[i]] <- cov(Xc[[i]])
     if (scale.unit) Cov[[i]] <- cor(Xc[[i]])

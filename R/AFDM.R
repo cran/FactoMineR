@@ -15,6 +15,7 @@ AFDM <- function (base, type, ncp = 5, graph = TRUE,sup.var=NULL, ind.sup = NULL
     if (!is.null(resultats["quanti.var"]$quanti.var)) res$quanti.var <- resultats$quanti.var
     if (!is.null(resultats$quali.var.sup)) res$quali.var.sup <- list(coord = resultats$quali.var.sup$coord, contrib = resultats$quali.var.sup$contrib, cos2 = resultats$quali.var.sup$cos2, v.test = resultats$quali.var.sup$v.test)
     if (!is.null(resultats$quanti.var.sup)) res$quanti.var.sup <- resultats$quanti.var.sup
+    res$separate.analyses = resultats$separate.analyses
     res$call <- resultats$call
     class(res) <- c("MFA", "list")
     return(res)

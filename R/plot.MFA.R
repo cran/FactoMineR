@@ -41,48 +41,50 @@ plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.
       abline(h=0,lty=2, cex=cex)
 
       if (habillage == "group") {
-        if (is.null(col.hab) | length(col.hab) < length(group[type != "n"])) {
-          col.hab <- color[2:(length(group[type != "n"])+1)]
+        if (is.null(col.hab) | length(col.hab) < length(group)) {
+          col.hab <- color[2:(length(group)+1)]
         }
         couleur.axes<-NULL
-        for (i in 1:length(group[type != "n"])) {
-          couleur.axes <- c(couleur.axes,rep(col.hab[i], ncol(res.mfa$partial.axes$coord)))
-        }
-      } else {
+        for (i in 1:length(group))  couleur.axes <- c(couleur.axes,rep(col.hab[i], ncol(res.mfa$partial.axes$coord)))
+      } 
+      else {
         couleur.axes<-NULL
-        for (i in 1:length(group[type != "n"])) {
-          couleur.axes <- c(couleur.axes,rep("black", ncol(res.mfa$partial.axes$coord)))
-        }
+        for (i in 1:length(group))  couleur.axes <- c(couleur.axes,rep("black", ncol(res.mfa$partial.axes$coord)))
       }
 
       for (v in 1:nrow(coord.axes)) {
         arrows(0, 0, coord.axes[v, 1], coord.axes[v, 2], length = 0.1, angle = 15, code = 2, col=couleur.axes[v])
         if (abs(coord.axes[v,1])>abs(coord.axes[v,2])) {
           if (coord.axes[v,1]>=0) pos<-4 else pos<-2
-        } else {
+        } 
+        else {
           if (coord.axes[v,2]>=0) pos<-3 else pos<-1
         }
         text(coord.axes[v, 1], y = coord.axes[v, 2], labels = rownames(coord.axes)[v], pos = pos, col = couleur.axes[v])
       }
         
       if (habillage == "group") {
-        legend("topleft",legend = rownames(res.mfa$group$Lg[type!="n",])[-length(rownames(res.mfa$group$Lg[type!="n",]))], text.col= unique(couleur.axes),cex=0.8,bty="n",bg="white")
+        legend("topleft",legend = rownames(res.mfa$group$Lg)[-length(rownames(res.mfa$group$Lg))], text.col= unique(couleur.axes),cex=0.8,bg="white")
       }
     }
-
 
     if (choix == "group") {
       get(getOption("device"))(width=8,height=8)
       if (is.null(title)) title <- "Groups representation"
       else sub.title <- "Groups representation"
       coord.actif <- res.mfa$group$coord[, axes]
-      plot(coord.actif, xlab = lab.x, ylab = lab.y, xlim = c(0, 1), ylim = c(0, 1), pch = 17, col = "darkred", cex = cex, main = title, cex.main = cex*1.2, asp = 1)
+      if (!is.null(res.mfa$group$coord.sup)) coord.illu <- res.mfa$group$coord.sup[,axes]
+      if (is.null(col.hab)){
+        col.hab = rep("darkred",nrow(coord.actif))
+        if (!is.null(res.mfa$group$coord.sup)) col.hab = c(col.hab,rep("darkolivegreen",nrow(coord.illu)))
+      }
+      if (habillage=="group") col.hab <- (2:(length(group)+1))
+      plot(coord.actif, xlab = lab.x, ylab = lab.y, xlim = c(0, 1), ylim = c(0, 1), pch = 17, col = col.hab[1:nrow(coord.actif)], cex = cex, main = title, cex.main = cex*1.2, asp = 1)
       title(sub = sub.title, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)
-      if (lab.grpe) text(coord.actif[, 1], y = coord.actif[, 2], labels = rownames(coord.actif), pos = 3, col = "darkred")
+      if (lab.grpe) text(coord.actif[, 1], y = coord.actif[, 2], labels = rownames(coord.actif), pos = 3, col = col.hab[1:nrow(coord.actif)])
       if (!is.null(res.mfa$group$coord.sup)){
-        coord.illu <- res.mfa$group$coord.sup[,axes]
-        points(coord.illu, pch = 17, col = "darkolivegreen")
-        if (lab.grpe) text(coord.illu[, 1], y = coord.illu[, 2], labels = rownames(coord.illu), pos = 3, col = "darkolivegreen")
+        points(coord.illu, pch = 17, col = col.hab[(nrow(coord.actif)+1):(nrow(coord.actif)+nrow(coord.illu))])
+        if (lab.grpe) text(coord.illu[, 1], y = coord.illu[, 2], labels = rownames(coord.illu), pos = 3, col = col.hab[(nrow(coord.actif)+1):(nrow(coord.actif)+nrow(coord.illu))])
       }
     }
 
@@ -96,7 +98,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.
         else test.invisible <- rep(NA, 2)
       col <- NULL
       if (habillage == "group") {
-          if (is.null(col.hab) | length(col.hab) < length(group[type != "n"]))  col.hab <- 1:length(group[type != "n"])
+          if (is.null(col.hab) | length(col.hab) < length(group[type != "n"]))  col.hab <- 2:(length(group[type != "n"])+1)
           for (i in 1:length(group[type != "n"])) col <- c(col, rep(col.hab[i], group[type != "n"][i]))
       }
       else col <- rep(1,sum(group[type != "n"]))
@@ -315,15 +317,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.
               }
             } 
           }
-##          nom.quali <- liste.quali[1]
-##            if (length(liste.quali)>1){
-##              texte <- liste.quali[1]
-##              for (i in 2:length(liste.quali)) texte <- paste(texte, liste.quali[i], sep = ", ")
-##              cat(paste("\n", texte, "\n\nFrom the previous list, which qualitative variable \nwould you like to use to color your points? ", sep = ""))
-##              nom.quali <- readLines(n = 1)
-##            }
 
-##            nom.quali <- colnames(res.mfa$call$X)[habillage]
             if (is.double(habillage)) nom.quali <- colnames(res.mfa$call$X)[habillage]
             else nom.quali=habillage
             if (!(nom.quali %in% liste.quali)) stop("The variable ", habillage, " is not qualitative")
@@ -355,7 +349,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.
           col.quali.sup <- col.quali
         }
         
-        if (habillage == "none") col.ind <- col.ind.sup <- col.quali.sup <- col.quali <- col.ellipse<-col.ellipse.par <- rep("black",nb.ind*(nb.grpe+1))
+        if (habillage == "none") col.ind <- col.ind.sup <- col.quali.sup <- col.quali <- col.ellipse<-col.ellipse.par <- rep("black",nb.ind*(nbre.grpe+1))
 
         get(getOption("device"))(width=8,height=8)
         if (is.null(title)) title <- "Individual factor map"
