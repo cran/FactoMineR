@@ -5,6 +5,10 @@
   for (i in 1:length(lab)){
     lab[i]=gsub(" ",".",lab[i])
     if (is.factor(donnee[,i])) {
+         if(any(is.na(donnee[,i]))){
+             levels(donnee[,i]) <- c(levels(donnee[,i]), "NA")
+             donnee[,i][is.na(donnee[,i])] <- "NA"
+         }
       if (levels(donnee[,i])[1]=="") levels(donnee[,i])[1]="NA"
       if (i!=num.var) quali = c(quali,i)
     }
@@ -88,10 +92,12 @@
       et = sd(donnee[,quanti[i]],na.rm=TRUE)*sqrt(1-1/sum(n.mod))
       for (j in 1:nb.modalite){
         v.test = (moy.mod[j]-moy)/et*sqrt(n.mod[j])/sqrt((sum(n.mod)-n.mod[j])/(sum(n.mod)-1))
-        if (abs(v.test)>-qnorm(proba/2)) {
+        if(!is.na(v.test)){
+         if (abs(v.test)>-qnorm(proba/2)) {
           result[[j]] = rbind(result[[j]],c(v.test,moy.mod[j],moy,sd.mod[j],et))
           nom[[j]] = c(nom[[j]],colnames(donnee)[quanti[i]])
         }
+       }
       }
     }
     for (j in 1:nb.modalite){

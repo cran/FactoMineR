@@ -9,13 +9,13 @@ Compute the singular-value decomposition of a rectangular matrix with weights fo
 }
 
 \usage{
-svd.triplet(X, Pl=NULL, Pc=NULL)
+svd.triplet(X, row.w=NULL, col.w=NULL)
 }
 
 \arguments{
   \item{X}{a data matrix}
-  \item{Pl}{vector with the weights of each row (NULL by default and the weights are uniform)}
-  \item{Pc}{vector with the weights of each column (NULL by default and the weights are uniform)}
+  \item{row.w}{vector with the weights of each row (NULL by default and the weights are uniform)}
+  \item{col.w}{vector with the weights of each column (NULL by default and the weights are uniform)}
 }
 
 \value{

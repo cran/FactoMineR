@@ -46,6 +46,8 @@ Returns the individuals factor map and the variables factor map.
 \examples{
 data(decathlon)
 res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup=13)
+## plot of the eigenvalues
+## barplot(res.pca$eig[,1],main="Eigenvalues",names.arg=1:nrow(res.pca$eig))
 plot(res.pca,choix="ind",habillage=13)
 dimdesc(res.pca, axes = 1:2)
 }

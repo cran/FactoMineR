@@ -7,6 +7,7 @@ MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp
         res <- sqrt(sum(V^2 * poids)/sum(poids))
     }
 
+    base <- as.data.frame(base)
     if (!is.null(ind.sup)) {
       base <- rbind.data.frame(base[-ind.sup,],base[ind.sup,])
       ind.sup <- (nrow(base)-length(ind.sup)+1) : nrow(base)
@@ -225,7 +226,10 @@ MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp
     for (g in group.actif){
       Xis <- as.matrix(sweep(data.partiel[[g]], 2, res.globale$call$centre, FUN = "-"))
       Xis <- as.matrix(sweep(Xis, 2, res.globale$call$ecart.type, FUN = "/"))
-      coord.ind.sup <- length(group.actif) * as.matrix(Xis)%*%diag((res.globale$call$col.w))%*%res.globale$svd$V
+##      coord.ind.sup <- length(group.actif) * as.matrix(Xis)%*%diag((res.globale$call$col.w))%*%res.globale$svd$V
+      coord.ind.sup <- length(group.actif) * as.matrix(Xis)
+      coord.ind.sup <- sweep(coord.ind.sup,2,res.globale$call$col.w,FUN="*")
+      coord.ind.sup <- coord.ind.sup %*%res.globale$svd$V
       res.ind.partiel[[g]]$coord.sup <- coord.ind.sup
     }
     cor.grpe.fact <- as.data.frame(matrix(NA, length(group.actif), ncp.tmp))
@@ -276,7 +280,9 @@ MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp
     ecart.type <- apply(tab.partial.axes, 2, ec, res.globale$call$row.w)
     ecart.type[ecart.type <= 1e-08] <- 1
     tab.partial.axes <- as.matrix(sweep(tab.partial.axes, 2, ecart.type, FUN = "/"))
-    coord.res.partial.axes <- t(tab.partial.axes) %*% diag(res.globale$call$row.w) %*% res.globale$svd$U
+##    coord.res.partial.axes <- t(tab.partial.axes) %*% diag(res.globale$call$row.w) %*% res.globale$svd$U
+    coord.res.partial.axes <- sweep( t(tab.partial.axes) ,2, res.globale$call$row.w,FUN="*")
+    coord.res.partial.axes <- coord.res.partial.axes %*% res.globale$svd$U
     contrib.res.partial.axes <- sweep(coord.res.partial.axes^2,2,res.globale$eig[,1],FUN="/") *100
     sigma <- apply(tab.partial.axes, 2, ec, res.globale$call$row.w)
     cor.res.partial.axes <- sweep(coord.res.partial.axes,1,sigma,FUN="/")
@@ -366,7 +372,10 @@ MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp
         ind.col <- ind.col + group.mod[group.actif[g]]
         Xis <- as.matrix(sweep(cg.partiel, 2, res.globale$call$centre, FUN = "-"))
         Xis <- as.matrix(sweep(Xis, 2, res.globale$call$ecart.type, FUN = "/"))
-        coord.quali.sup <- length(group.actif) * as.matrix(Xis)%*%diag((res.globale$call$col.w))%*%res.globale$svd$V
+##        coord.quali.sup <- length(group.actif) * as.matrix(Xis)%*%diag((res.globale$call$col.w))%*%res.globale$svd$V
+        coord.quali.sup <- length(group.actif) * as.matrix(Xis)
+        coord.quali.sup <- sweep(coord.quali.sup ,2,res.globale$call$col.w,FUN="*")
+        coord.quali.sup <- coord.quali.sup %*%res.globale$svd$V
         coord.quali.partiel[liste.ligne + g - 1, ] <- coord.quali.sup[,1:ncp]
         tmp[,,g] <- (coord.quali.sup - res.globale$quali.sup$coord)^2 / length(group.actif) 
       }
@@ -488,13 +497,13 @@ MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp
           max.inertia <- order(apply(resultats$quali.var.sup$within.inertia[,1:2],1,sum))
           cg.plot.partial <- c(cg.plot.partial,rownames(resultats$quali.var.sup$coord)[max.inertia[1:length(max.inertia)]])
         }
-        plot.MFA(resultats,choix="ind",invisible="ind",partial=cg.plot.partial,axes=axes)
+        plot.MFA(resultats,choix="ind",invisible="ind",partial=cg.plot.partial,habillage="group",axes=axes)
       }
       max.inertia <- order(apply(resultats$ind$within.inertia[,1:2],1,sum))
-      plot.MFA(resultats,choix="ind",invisible="quali",partial=rownames(resultats$ind$coord)[max.inertia[c(1:2,nrow(resultats$ind$coord)-1,nrow(resultats$ind$coord))]],axes=axes)
+      plot.MFA(resultats,choix="ind",invisible="quali",partial=rownames(resultats$ind$coord)[max.inertia[c(1:2,nrow(resultats$ind$coord)-1,nrow(resultats$ind$coord))]],habillage="group",axes=axes)
       if (!is.null(c(res.quanti.var,res.quanti.var.sup))) plot.MFA(resultats,choix="var",habillage="group",axes=axes)
-      plot.MFA(resultats,choix="ind",invisible="quali",axes=axes)
-      plot.MFA(resultats,choix="axes",axes=axes)
+      plot.MFA(resultats,choix="ind",invisible="quali",habillage = "none",axes=axes)
+      plot.MFA(resultats,choix="axes",habillage="group",axes=axes)
       plot.MFA(resultats,choix="group",axes=axes)
     }
     return(resultats)

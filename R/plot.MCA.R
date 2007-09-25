@@ -117,7 +117,7 @@ plot.MCA <- function (x, axes = c(1, 2),
           points(coord.ind.sup[, 1], y = coord.ind.sup[, 2], pch = 16, col = col.ind.sup)
           if (lab.ind.sup) text(coord.ind.sup[, 1], y = coord.ind.sup[, 2], labels = rownames(coord.ind.sup), pos = 3, col = col.ind.sup)
       }
-      if ((habillage != "none")&(habillage != "quali")&(is.na(test.invisible[1])|is.na(test.invisible[2])))  legend("topleft",legend= levels(res.mca$call$X[,habillage]),text.col= color[1:n.mod],cex=0.8,bg="white")
+      if ((habillage != "none")&(habillage != "quali")&(is.na(test.invisible[1])|is.na(test.invisible[2])))  legend("topleft",legend= levels(res.mca$call$X[,habillage]),text.col= color[1:n.mod],cex=0.8)
     }
     if (!is.null(res.mca$quanti.sup)&is.na(test.invisible[3])) {
       get(getOption("device"))(width=8,height=8)
