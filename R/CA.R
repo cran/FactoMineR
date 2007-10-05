@@ -18,12 +18,11 @@ CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE, axes=c
     F <- as.matrix(X/total)*row.w
     marge.col <- apply(F, 2, sum)
     marge.row <- apply(F, 1, sum)
-    Pc <- diag(marge.col)
-    Pl <- diag(marge.row)
     ncp <- min(ncp, (nrow(X) - 1), (ncol(X) - 1))
-    T <- diag(1/marge.row) %*% F %*% diag(1/marge.col)
+    T <- sweep(F,1,marge.row,FUN="/")
+    T <- sweep(T,2,marge.col,FUN="/")
     Tc <- T - 1
-    tmp <- svd.triplet(Tc, Pl = Pl, Pc = Pc)
+    tmp <- svd.triplet(Tc, row.w = marge.row, col.w = marge.col)
     eig <- tmp$vs^2
     vp <- as.data.frame(matrix(NA, length(eig), 3))
     rownames(vp) <- paste("dim", 1:length(eig))

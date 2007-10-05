@@ -2,7 +2,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
     ellipse = NULL, xlim = NULL, ylim = NULL, habillage = "none", 
     col.hab = NULL, col.ind = "black", col.ind.sup = "blue", 
     col.quali = "magenta", col.quanti.sup = "blue", 
-    col.var = "black", label="all", invisible = NULL, lim.cos2.var = 0.1,
+    col.var = "black", label="all", invisible = NULL, lim.cos2.var = 0.,
     cex = 1, title = NULL, ...){
     
     res.pca <- x
@@ -151,7 +151,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
                 lines(data.elli[, 1], y = data.elli[, 2], col = color.ind[levels(factor(rownames(res.pca$ind$coord))) == levels(coord.ellipse[, 1])[e]])
             }
         }
-        if ((habillage != "none")&(habillage != "ind")) legend("topleft",legend= levels(res.pca$call$X[,habillage]),text.col= color.mod,cex=0.8,bg="white")
+        if ((habillage != "none")&(habillage != "ind")) legend("topleft",legend= levels(res.pca$call$X[,habillage]),text.col= color.mod,cex=0.8)
     }
     if (choix == "var") {
         if (is.null(title)) titre <- "Variables factor map (PCA)"

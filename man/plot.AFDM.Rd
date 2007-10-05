@@ -11,7 +11,7 @@ Draw the Multiple Factor Analysis for Mixt Data graphs.
 \usage{
 \method{plot}{AFDM}(x, choix = "group", axes = c(1, 2), lab.grpe = TRUE,
     lab.var = TRUE, lab.ind = TRUE, habillage = "none", col.lab = FALSE,
-    col.hab = NULL, invisible = NULL, lim.cos2.var = 0.1, xlim = NULL,
+    col.hab = NULL, invisible = NULL, lim.cos2.var = 0., xlim = NULL,
     ylim = NULL, cex = 1, title = NULL, \dots)
 }
 
@@ -43,7 +43,7 @@ Draw the Multiple Factor Analysis for Mixt Data graphs.
 Returns the individuals factor map and the variables factor map.
 }
 
-\author{Jérémy Mazet, François Husson \email{François.Husson@agrocampus-rennes.fr}}
+\author{Jï¿½rï¿½my Mazet, Franï¿½ois Husson \email{Franï¿½ois.Husson@agrocampus-rennes.fr}}
 
 \seealso{ \code{\link{AFDM}}}
 

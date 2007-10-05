@@ -112,7 +112,7 @@
           }
           
 ######### Begin program###
-        if (dim(X)[[1]] != dim(Y)[[1]]) stop("no the same dimension for X and Y")
+        if (dim(X)[[1]] != dim(Y)[[1]]) stop("not the same dimension for X and Y")
         n <- dim(X)[[1]]
         Y <- scale(Y, scale = FALSE)
         X <- scale(X, scale = FALSE)

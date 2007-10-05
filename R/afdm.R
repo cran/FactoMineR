@@ -1,4 +1,5 @@
 AFDM <- function (base, type, ncp = 5, graph = TRUE,sup.var=NULL, ind.sup = NULL, axes=c(1,2)){
+    base <- as.data.frame(base)
     resultats <- MFA(base=base, group = rep(1,ncol(base)), type=type, name.group = colnames(base), num.group.sup = sup.var, ind.sup = ind.sup, graph=FALSE, ncp = ncp)
     
     class(resultats) <- c("MFA", "list")

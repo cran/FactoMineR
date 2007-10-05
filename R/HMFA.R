@@ -54,6 +54,7 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE, ax
         }
         return(cw.partiel)
     }
+
     if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
     if (is.null(colnames(X))) colnames(X) = paste("V",1:ncol(X),sep="")
     for (j in 1:ncol(X)) if (colnames(X)[j]=="") colnames(X)[j] = paste("V",j,sep="")
@@ -94,8 +95,7 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE, ax
     nb.v.p <- ncol(res.afmh$ind$coord)
     coord.group <- list()
     for (h in 1:nbnivo) {
-#        res <- diag(poids[[h]]) %*% as.matrix(res.afmh$var$cor^2)
-        res <- diag(poids[[h]]) %*% as.matrix(res.afmh$var$coord^2)
+        res <- sweep(as.matrix(res.afmh$var$coord^2),1,poids[[h]],FUN="*")
         nbgroup <- length(H[[h]])
         ind.col <- 1
         group.mod <- Xdes[[h]]
@@ -124,8 +124,11 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE, ax
 
         for (g in 1:nbgroup) {
             formule <- matrix(0, dim(X)[1], nb.v.p)
-            formule <- (as.matrix(res1[[h]][[g]])) %*% diag(poids[[nbnivo]]) %*% t(X) %*% diag(rep((1/nbind), nbind))
-            formule <- formule %*% as.matrix(res.afmh$ind$coord) %*% diag(1/res.afmh$eig[1:nb.v.p, 1]) * dilat[[h]][g]
+            formule <- sweep(as.matrix(res1[[h]][[g]]),2, poids[[nbnivo]],FUN="*")
+	    formule <- formule %*%t(X)
+	    formule <- sweep(formule,2,rep(nbind, nbind),FUN="/")
+            formule <- formule %*% as.matrix(res.afmh$ind$coord)
+	    formule <- sweep(formule,2,res.afmh$eig[1:nb.v.p, 1]/ dilat[[h]][g],FUN="/")
             namecol <- paste("Dim", 1:nb.v.p, sep = "")
             formule <- matrix(formule, dim(formule)[1], dim(formule)[2])
             colnames(part2) <- namecol

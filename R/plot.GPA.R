@@ -109,5 +109,5 @@ plot.GPA<-function (x, axes = c(1, 2), lab.ind.moy = TRUE,
     }
     if (habillage == "group") 
         legend("topleft", legend = rownames(res.gpa$RV), text.col = col.hab, 
-            cex = 0.8, bg = "white")
+            cex = 0.8)
 }

@@ -61,6 +61,7 @@ data(wine)
 aa = MFA(wine, group=c(2,5,3,10,9,2), type=c("n",rep("s",5)),
     ncp=5, name.group=c("orig","olf","vis","olfag","gust","ens"),
     num.group.sup=c(1,6))
+barplot(aa$eig[,1],main="Eigenvalues",names.arg=1:nrow(aa$eig))
 
 \dontrun{
 #### Interactive graph

@@ -1,6 +1,6 @@
 plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par = NULL, lab.grpe = TRUE, lab.var = TRUE,
     lab.ind.moy = TRUE, lab.par = FALSE, habillage = "ind",
-    col.hab = NULL, invisible = NULL, partial = NULL, lim.cos2.var = 0.1, chrono = FALSE,
+    col.hab = NULL, invisible = NULL, partial = NULL, lim.cos2.var = 0., chrono = FALSE,
     xlim = NULL, ylim = NULL, cex = 1, title = NULL, ...){
     
     res.mfa <- x
@@ -64,7 +64,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.
       }
         
       if (habillage == "group") {
-        legend("topleft",legend = rownames(res.mfa$group$Lg)[-length(rownames(res.mfa$group$Lg))], text.col= unique(couleur.axes),cex=0.8,bg="white")
+        legend("topleft",legend = rownames(res.mfa$group$Lg)[-length(rownames(res.mfa$group$Lg))], text.col= unique(couleur.axes),cex=0.8)
       }
     }
 
@@ -112,9 +112,9 @@ plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.
       lines(x.cercle, y = -y.cercle)
       abline(v=0,lty=2, cex=cex)
       abline(h=0,lty=2, cex=cex)
-      if (habillage == "group" & is.na(test.invisible[1]) & is.na(test.invisible[2])) legend("topleft",legend= rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg),])[type!="n"],text.col= color[col.hab],cex=0.8,bg="white")
-      if (habillage == "group" & is.na(test.invisible[1]) & !is.na(test.invisible[2])) legend("topleft",legend= rownames(res.mfa$group$Lg[-c(num.group.sup, nrow(res.mfa$group$Lg)),])[type.act!="n"],text.col= color[col.hab],cex=0.8,bg="white")
-      if (habillage == "group" & !is.na(test.invisible[1]) & is.na(test.invisible[2])) legend("topleft",legend= rownames(res.mfa$group$Lg[num.group.sup,])[type.sup!="n"],text.col= color[col.hab],cex=0.8,bg="white")
+      if (habillage == "group" & is.na(test.invisible[1]) & is.na(test.invisible[2])) legend("topleft",legend= rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg),])[type!="n"],text.col= color[col.hab],cex=0.8)
+      if (habillage == "group" & is.na(test.invisible[1]) & !is.na(test.invisible[2])) legend("topleft",legend= rownames(res.mfa$group$Lg[-c(num.group.sup, nrow(res.mfa$group$Lg)),])[type.act!="n"],text.col= color[col.hab],cex=0.8)
+      if (habillage == "group" & !is.na(test.invisible[1]) & is.na(test.invisible[2])) legend("topleft",legend= rownames(res.mfa$group$Lg[num.group.sup,])[type.sup!="n"],text.col= color[col.hab],cex=0.8)
       nrow.coord.var <- 0
       if (!is.null(res.mfa["quanti.var"]$quanti.var$coord)& is.na(test.invisible[1]) ) {
         coord.var <- res.mfa$quanti.var$cor[, axes]
@@ -408,9 +408,9 @@ plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.
             }
           }
         }
-        if ((!is.null(partial))&(habillage == "group")) legend("topleft",legend= rownames(res.mfa$group$Lg)[-c(num.group.sup,length(rownames(res.mfa$group$Lg)))],lty=1:length(rownames(res.mfa$group$Lg)[-c(num.group.sup,length(rownames(res.mfa$group$Lg)))]),text.col= col.hab, col= col.hab,cex=0.8,bg="white")
-        if ((!is.null(partial))&(habillage != "group")) legend("topleft",legend= rownames(res.mfa$group$Lg)[-c(num.group.sup,length(rownames(res.mfa$group$Lg)))],lty=1:length(rownames(res.mfa$group$Lg)[-c(num.group.sup,length(rownames(res.mfa$group$Lg)))]),cex=0.8,bg="white")
-        if ((habillage != "none")&(habillage != "ind")&(habillage != "group")) legend("topleft",legend= levels(res.mfa$call$X[,habillage]),text.col= col.hab,cex=0.8,bg="white")
+        if ((!is.null(partial))&(habillage == "group")) legend("topleft",legend= rownames(res.mfa$group$Lg)[-c(num.group.sup,length(rownames(res.mfa$group$Lg)))],lty=1:length(rownames(res.mfa$group$Lg)[-c(num.group.sup,length(rownames(res.mfa$group$Lg)))]),text.col= col.hab, col= col.hab,cex=0.8)
+        if ((!is.null(partial))&(habillage != "group")) legend("topleft",legend= rownames(res.mfa$group$Lg)[-c(num.group.sup,length(rownames(res.mfa$group$Lg)))],lty=1:length(rownames(res.mfa$group$Lg)[-c(num.group.sup,length(rownames(res.mfa$group$Lg)))]),cex=0.8)
+        if ((habillage != "none")&(habillage != "ind")&(habillage != "group")) legend("topleft",legend= levels(res.mfa$call$X[,habillage]),text.col= col.hab,cex=0.8)
 
         if (!is.null(coord.ellipse) & is.na(test.invisible[2])) {
             for (e in 1:nb.ind.actif) {

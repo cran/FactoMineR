@@ -12,7 +12,7 @@ Draw the Multiple Factor Analysis (MFA) graphs.
 plot.MFA(x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par = NULL,
     lab.grpe = TRUE, lab.var = TRUE, lab.ind.moy = TRUE, 
     lab.par = FALSE, habillage = "ind", col.hab = NULL, 
-    invisible = NULL, partial = NULL, lim.cos2.var = 0.1, 
+    invisible = NULL, partial = NULL, lim.cos2.var = 0., 
     chrono = FALSE, xlim = NULL, ylim = NULL, 
     cex = 1, title = NULL, \dots)
 }
@@ -51,7 +51,7 @@ plot.MFA(x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par = NULL,
 Returns the individuals factor map and the variables factor map.
 }
 
-\author{Jérémy Mazet, François Husson \email{François.Husson@agrocampus-rennes.fr}}
+\author{Jï¿½rï¿½my Mazet, Franï¿½ois Husson \email{Franï¿½ois.Husson@agrocampus-rennes.fr}}
 
 \seealso{ \code{\link{MFA}}}
 

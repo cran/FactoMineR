@@ -9,7 +9,7 @@
 \usage{
 plot.HMFA(x, axes = c(1,2),num=6, choix = "ind", 
     lab.grpe = TRUE, lab.var = TRUE, lab.ind.moy = TRUE, 
-    invisible = NULL, lim.cos2.var = 0.1, 
+    invisible = NULL, lim.cos2.var = 0., 
     xlim = NULL, ylim = NULL, cex = 1, title = NULL, \dots)
 }
 
@@ -38,7 +38,7 @@ plot.HMFA(x, axes = c(1,2),num=6, choix = "ind",
 Returns the individuals factor map and the variables factor map.
 }
 
-\author{Jérémy Mazet, François Husson \email{François.Husson@agrocampus-rennes.fr}}
+\author{Jï¿½rï¿½my Mazet, Franï¿½ois Husson \email{Franï¿½ois.Husson@agrocampus-rennes.fr}}
 
 \seealso{ \code{\link{HMFA}}}
 

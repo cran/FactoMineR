@@ -4,7 +4,7 @@ textual = function (tab, num.text, contingence.by=1:ncol(tab), maj.in.min = TRUE
 cont.textuel <- function(exp, maj.in.min = TRUE, accent = TRUE, sep.word=NULL){
   mots <- list()
   expression <- list()
-  if (is.null(sep.word)) sep.word = "; (),?./:'!$§=+\n;{}<>[]@-"
+  if (is.null(sep.word)) sep.word = "; (),?./:'!=+\n;{}-"
   new.sep.word = substr(sep.word,1,1)
   for (j in 1:(nchar(sep.word)-1)) new.sep.word = paste(new.sep.word,substr(sep.word,1,1),sep="")
   sep1 = substr(new.sep.word,1,1)
