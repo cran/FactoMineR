@@ -14,7 +14,7 @@ plot.MFA(x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par = NULL,
     lab.par = FALSE, habillage = "ind", col.hab = NULL, 
     invisible = NULL, partial = NULL, lim.cos2.var = 0., 
     chrono = FALSE, xlim = NULL, ylim = NULL, 
-    cex = 1, title = NULL, \dots)
+    cex = 1, title = NULL, palette = NULL, new.plot = TRUE, \dots)
 }
 
 \arguments{
@@ -44,6 +44,8 @@ plot.MFA(x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par = NULL,
   \item{ylim}{range for the plotted 'y' values, defaulting to the range of the finite values of 'y'}
   \item{cex}{cf. function \code{\link{par}} in the \pkg{graphics} package}
   \item{title}{string corresponding to the title of the graph you draw (by default NULL and a title is chosen)}
+  \item{palette}{the color palette used to draw the points. By default colors are chosen. If you want to define the colors : palette=palette(c("black","red","blue")); or you can use: palette=palette(rainbow(30)), or in black and white for example: palette=palette(gray(seq(0,.9,len=25)))}
+  \item{new.plot}{boolean, if TRUE, a new graphical device is created}
   \item{\dots}{further arguments passed to or from other methods}
 }
 

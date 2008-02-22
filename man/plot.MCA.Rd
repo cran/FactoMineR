@@ -13,7 +13,8 @@ plot.MCA (x, axes = c(1, 2),
     xlim = NULL, ylim = NULL, invisible = NULL,
     col.ind = "blue", col.var = "red", col.quali.sup = "darkred",
     col.ind.sup = "darkblue", col.quanti.sup = "black",
-    label = "all", cex = 1, title = NULL, habillage = "none", \dots)
+    label = "all", cex = 1, title = NULL, habillage = "none", 
+    palette = NULL, new.plot = TRUE, \dots)
 }
 
 \arguments{
@@ -33,6 +34,8 @@ plot.MCA (x, axes = c(1, 2),
   \item{habillage}{string corresponding to the color which are used. If "none", one color is used for the individual, another one for the qualitative variables;
   if "quali", one color is used for each qualitative variables; else if it is the position of a qualitative variable, it colors 
   according to the different categories of this variable}
+  \item{palette}{the color palette used to draw the points. By default colors are chosen. If you want to define the colors : palette=palette(c("black","red","blue")); or you can use: palette=palette(rainbow(30)), or in black and white for example: palette=palette(gray(seq(0,.9,len=25)))}
+  \item{new.plot}{boolean, if TRUE, a new graphical device is created}
   \item{\dots}{further arguments passed to or from other methods}
 }
 

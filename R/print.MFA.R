@@ -5,7 +5,7 @@ print.MFA <- function (x, file = NULL, sep = ";", ...){
     cat("There are", nrow(res.mfa$call$X), "individuals, characterized by",
         ncol(res.mfa$call$X), "variables\n\n")
     cat("*Results are available in the following objects :\n\n")
-    res <- array("", c(22, 2), list(1:22, c("nom", "description")))
+    res <- array("", c(22, 2), list(1:22, c("name", "description")))
     res[1, ] <- c("$eig", "eigenvalues")
     res[2, ] <- c("$separate.analyses", "separate analyses for each group of variables")
     res[3, ] <- c("$group", "results for all the groups")

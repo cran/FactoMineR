@@ -13,7 +13,7 @@ plot.CA(x, axes = c(1, 2),
     xlim = NULL, ylim = NULL, invisible = NULL, col.row = "blue",
     col.col = "red", col.row.sup = "darkblue", 
     col.col.sup = "darkred", label = "all", cex = 1, 
-    title = NULL, \dots)
+    title = NULL, palette = NULL, \dots)
 }
 
 \arguments{
@@ -29,7 +29,8 @@ plot.CA(x, axes = c(1, 2),
   \item{label}{a list of character for the elements which are labelled (by default, all the elements are labelled ("row", "row.sup", "col", "col.sup"}
   \item{cex}{cf. function \code{\link{par}} in the \pkg{graphics} package}
   \item{title}{string corresponding to the title of the graph you draw (by default NULL and a title is chosen)}
-  \item{\dots}{further arguments passed to or from other methods}
+  \item{palette}{the color palette used to draw the points. By default colors are chosen. If you want to define the colors : palette=palette(c("black","red","blue")); or you can use: palette=palette(rainbow(30)), or in black and white for example: palette=palette(gray(seq(0,.9,len=25)))}
+\item{\dots}{further arguments passed to or from other methods}
 }
 
 \value{

@@ -5,6 +5,11 @@ CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE, axes=c
     for (j in 1:ncol(X)) if (colnames(X)[j]=="") colnames(X)[j] = paste("V",j,sep="")
     for (j in 1:nrow(X)) if (is.null(rownames(X)[j])) rownames(X)[j] = paste("row",j,sep="")
     Xtot <- X
+    if (!any(apply(X,2,is.numeric))){
+      auxi = NULL
+      for (j in 1:ncol(X)) if (!is.numeric(X[,j])) auxi = c(auxi,colnames(X)[j])
+      stop(paste("\nThe following variables are not quantitative: ", auxi))
+    }
     if (!inherits(X, "data.frame")) stop("X is not a data.frame")
     if (!is.null(row.sup)) X <- as.data.frame(X[-row.sup,])
     if (!is.null(col.sup)) X <- as.data.frame(X[,-col.sup])
@@ -13,8 +18,6 @@ CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE, axes=c
     if (is.null(row.w)) row.w = rep(1,nrow(X))
     if (length(row.w)!=nrow(X)) stop("length of vector row.w should be the number of active rows")
     row.w = row.w/sum(row.w)*nrow(X)
-### 1 lignes modifiées
-##    F <- as.matrix(X/total)*row.w
     F <- as.matrix(X/total)*row.w
     marge.col <- apply(F, 2, sum)
     marge.row <- apply(F, 1, sum)
@@ -26,11 +29,11 @@ CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE, axes=c
     eig <- tmp$vs^2
     vp <- as.data.frame(matrix(NA, length(eig), 3))
     rownames(vp) <- paste("dim", 1:length(eig))
-    colnames(vp) <- c("eigenvalue", "inertia", "cumulative inertia")
+    colnames(vp) <- c("eigenvalue", "percentage of variance", "cumulative percentage of variance")
     vp[, "eigenvalue"] <- eig
-    vp[, "inertia"] <- (eig/sum(eig))*100
-    vp[1, "cumulative inertia"] <- vp[1, "inertia"]
-    if (length(eig)>1) for (i in 2:length(eig))  vp[i, "cumulative inertia"] <- vp[i, "inertia"] + vp[i - 1, "cumulative inertia"]
+    vp[, "percentage of variance"] <- (eig/sum(eig))*100
+    vp[1, "cumulative percentage of variance"] <- vp[1, "percentage of variance"]
+    if (length(eig)>1) for (i in 2:length(eig))  vp[i, "cumulative percentage of variance"] <- vp[i, "percentage of variance"] + vp[i - 1, "cumulative percentage of variance"]
     V <- tmp$V
     U <- tmp$U
     coord.col <- sweep(V,2,sqrt(eig),FUN="*")

@@ -1,12 +1,8 @@
-plot.DMFA = function(x, axes=c(1,2), choix="ind", label="all", invisible=NULL, ...){
+plot.DMFA = function(x, axes=c(1,2), choix="ind", label="all", invisible=NULL, palette=NULL, new.plot=TRUE, ...){
 
 res.dmfa = x
 class(res.dmfa) <- c("PCA", "list ")
-color = c("black","red","green3","blue",
-    "cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey",
-    "lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange",
-    "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey",
-    "darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon")
+    if (is.null(palette)) palette(c("black","red","green3","blue",      "cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
 if (choix == "ind") plot.PCA(res.dmfa,habillage=1,axes=axes,label=label,invisible=invisible)
 if (choix=="quali"){
   if (length(res.dmfa$call$quali.sup$modalite)==1) stop("There is no supplementary qualitative variable")
@@ -18,7 +14,7 @@ if (choix=="quali"){
   lab.x <- paste("Dim ", axes[1], " (",signif(res.dmfa$eig[axes[1],2],4)," %)",sep="")
   lab.y <- paste("Dim ", axes[2], " (",signif(res.dmfa$eig[axes[2],2],4)," %)",sep="")
   titre = "Qualitative representation"
-  get(getOption("device"))(8,8)
+  if (new.plot) get(getOption("device"))(8,8)
   plot(0, 0, main = titre, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp = 1, cex = 1)
   abline(v = 0, lty = 2)
   abline(h = 0, lty = 2)
@@ -26,16 +22,16 @@ if (choix=="quali"){
     points(res.dmfa$quali.sup$coord[i,axes[1]],res.dmfa$quali.sup$coord[i,axes[2]],pch=15)
     text(res.dmfa$quali.sup$coord[i,axes[1]],res.dmfa$quali.sup$coord[i,axes[2]],rownames(res.dmfa$quali.sup$coord)[i],pos=3)
     for (j in 1:ng){
-      points(res.dmfa$quali.sup$coord[sum(res.dmfa$call$quali.sup$modalite[2:(1+nb.quali)])+ng*(i-1)+j,axes[1]],res.dmfa$quali.sup$coord[sum(res.dmfa$call$quali.sup$modalite[2:(1+nb.quali)])+ng*(i-1)+j,axes[2]],col=color[j+1],pch=20)
-      lines(c(res.dmfa$quali.sup$coord[i,axes[1]],res.dmfa$quali.sup$coord[sum(res.dmfa$call$quali.sup$modalite[2:(1+nb.quali)])+ng*(i-1)+j,axes[1]]),c(res.dmfa$quali.sup$coord[i,axes[2]],res.dmfa$quali.sup$coord[sum(res.dmfa$call$quali.sup$modalite[2:(1+nb.quali)])+ng*(i-1)+j,axes[2]]),col=color[j+1])
+      points(res.dmfa$quali.sup$coord[sum(res.dmfa$call$quali.sup$modalite[2:(1+nb.quali)])+ng*(i-1)+j,axes[1]],res.dmfa$quali.sup$coord[sum(res.dmfa$call$quali.sup$modalite[2:(1+nb.quali)])+ng*(i-1)+j,axes[2]],col=j+1,pch=20)
+      lines(c(res.dmfa$quali.sup$coord[i,axes[1]],res.dmfa$quali.sup$coord[sum(res.dmfa$call$quali.sup$modalite[2:(1+nb.quali)])+ng*(i-1)+j,axes[1]]),c(res.dmfa$quali.sup$coord[i,axes[2]],res.dmfa$quali.sup$coord[sum(res.dmfa$call$quali.sup$modalite[2:(1+nb.quali)])+ng*(i-1)+j,axes[2]]),col=j+1)
     }
   }
-  legend("topleft",legend= rownames(res.dmfa$group$coord),text.col= color[2:(1+ng)],cex=0.8,bg="white")
+  legend("topleft",legend= rownames(res.dmfa$group$coord),text.col= 2:(1+ng),cex=0.8,bg="white")
 }
 if (choix=="var") {
   lev = levels(res.dmfa$call$X[,1])
   ng = length(lev)
-  plot.PCA(res.dmfa,choix="var",axes=axes, col.var = color[ng+1])
+  plot.PCA(res.dmfa,choix="var",axes=axes, col.var = ng+1)
 ## Ajout des variables partielles
   for (j in 1:ng){
     cor.partiel = res.dmfa$var.partiel[[j]][,axes]
@@ -62,7 +58,7 @@ if (choix=="var") {
   }
 } 
 if (choix=="group"){
-  get(getOption("device"))()
+  if (new.plot) get(getOption("device"))()
   coord.gr = res.dmfa$group$coord.n
   lev = levels(res.dmfa$call$X[,1])
   ng = length(lev)

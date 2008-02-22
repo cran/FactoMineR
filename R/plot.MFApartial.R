@@ -1,15 +1,11 @@
 plot.MFApartial <- function (x, axes = c(1, 2), 
     lab.ind.moy = TRUE, lab.par = FALSE, habillage = "ind", chrono = FALSE,
     col.hab = NULL, invisible = NULL, draw.partial = NULL,
-    xlim = NULL, ylim = NULL, cex = 1, title = NULL, ...){
+    xlim = NULL, ylim = NULL, cex = 1, title = NULL, palette=NULL, ...){
     
     res.mfa <- x
     if (!inherits(res.mfa, "MFA")) stop("non convenient data")
-    color = c("black","red","green3","blue",
-      "cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey",
-      "lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange",
-      "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey",
-      "darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon")
+    if (is.null(palette)) palette(c("black","red","green3","blue",      "cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
   
 if (is.null(title)) title <- "Partial points graph"
 tab <- res.mfa$ind$coord[,axes]
@@ -27,7 +23,7 @@ disto <- matrix(0,nrow(tab),1)
 rownames(disto) <- rownames(tab)
 
 plot.MFA(res.mfa, axes = axes, lab.ind.moy = lab.ind.moy, lab.par = lab.par, habillage = habillage,
-    col.hab = col.hab, invisible = invisible, xlim = xlim, ylim = ylim, chrono = chrono, cex = cex, title = title, partial = partial)
+    col.hab = col.hab, invisible = invisible, xlim = xlim, ylim = ylim, chrono = chrono, cex = cex, title = title, partial = partial, palette=palette)
 point.haut <- max(tab[,2])*1.2
 if (!is.null(ylim)) point.haut <- ylim[2]
 nbpoint <-0
@@ -41,7 +37,7 @@ while (nbpoint < 1000){
     if (length(partial)==0) partial <- NULL
     dev.off()
     plot.MFA(res.mfa, axes = axes, lab.ind.moy = lab.ind.moy, lab.par = lab.par, habillage = habillage,
-      col.hab = col.hab, invisible = invisible, xlim = xlim, ylim = ylim, chrono = chrono, cex = cex, title = title, partial = partial)
+      col.hab = col.hab, invisible = invisible, xlim = xlim, ylim = ylim, chrono = chrono, cex = cex, title = title, partial = partial, palette=palette)
     nbpoint = nbpoint+1
   }
 }

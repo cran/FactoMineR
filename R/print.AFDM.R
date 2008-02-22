@@ -2,7 +2,7 @@ print.AFDM <- function (x, file = NULL, sep = ";", ...){
     res.afdm <- x
     if (!inherits(res.afdm, "AFDM")) stop("non convenient data")
     cat("*The results are available in the following objects:\n\n")
-    res <- array("", c(6, 2), list(1:6, c("nom", "description")))
+    res <- array("", c(6, 2), list(1:6, c("name", "description")))
     res[1, ] <- c("$eig", "eigenvalues and inertia")
     res[2, ] <- c("$link.grpe", "Lg coefficients measuring the links between groups of variables")
     res[3, ] <- c("$grpe", "Results for the groups of variables")

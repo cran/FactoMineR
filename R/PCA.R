@@ -1,10 +1,10 @@
-  PCA <- function (X, scale.unit = TRUE, ncp = 5, ind.sup = NULL, quanti.sup = NULL, quali.sup = NULL, row.w = NULL, col.w = NULL, graph = TRUE, axes=c(1,2)){
+ PCA <- function (X, scale.unit = TRUE, ncp = 5, ind.sup = NULL, quanti.sup = NULL, quali.sup = NULL, row.w = NULL, col.w = NULL, graph = TRUE, axes=c(1,2)){
 
     moy.p <- function(V, poids){
       res <- sum(V*poids) / sum(poids)
     }
     ec <- function(V, poids) {
-        res <- sqrt(sum(V^2 * poids)/sum(poids))
+      res <- sqrt(sum(V^2 * poids)/sum(poids))
     }
     
 X <- as.data.frame(X)
@@ -17,8 +17,13 @@ X <- as.data.frame(X)
     for (j in 1:ncol(X)) if (colnames(X)[j]=="") colnames(X)[j] = paste("V",j,sep="")
     for (j in 1:nrow(X)) if (is.null(rownames(X)[j])) rownames(X)[j] = paste("row",j,sep="")
     Xtot <- X
-    if (!is.null(quali.sup)) X <- X[,-c(quanti.sup,quali.sup)]
-    else  if (!is.null(quanti.sup)) X <- X[,-quanti.sup]
+    if (!is.null(quali.sup)) X <- X[,-quali.sup]
+    if (!any(apply(X,2,is.numeric))){
+      auxi = NULL
+      for (j in 1:ncol(X)) if (!is.numeric(X[,j])) auxi = c(auxi,colnames(X)[j])
+      stop(paste("\nThe following variables are not quantitative: ", auxi))
+    }
+    if (!is.null(quanti.sup)) X <- X[,-quanti.sup]
     if (!is.null(ind.sup)){
       X.ind.sup <- X[ind.sup,]
       X <- X[-ind.sup,]
@@ -42,11 +47,11 @@ X <- as.data.frame(X)
     eig <- tmp$vs^2
     vp <- as.data.frame(matrix(NA, length(eig), 3))
     rownames(vp) <- paste("comp", 1:length(eig))
-    colnames(vp) <- c("eigenvalue", "inertia", "cumulative inertia")
+    colnames(vp) <- c("eigenvalue", "percentage of variance", "cumulative percentage of variance")
     vp[, "eigenvalue"] <- eig
-    vp[, "inertia"] <- (eig/sum(eig)) * 100
-    vp[1, "cumulative inertia"] <- vp[1, "inertia"]
-    if (length(eig)>=2) for (i in 2:length(eig)) vp[i, "cumulative inertia"] <- vp[i, "inertia"] + vp[i - 1, "cumulative inertia"]
+    vp[, "percentage of variance"] <- (eig/sum(eig)) * 100
+    vp[1, "cumulative percentage of variance"] <- vp[1, "percentage of variance"]
+    if (length(eig)>=2) for (i in 2:length(eig)) vp[i, "cumulative percentage of variance"] <- vp[i, "percentage of variance"] + vp[i - 1, "cumulative percentage of variance"]
     V <- tmp$V
     U <- tmp$U
     coord.ind <- sweep(as.matrix(U), 2, sqrt(eig), FUN = "*")
@@ -102,19 +107,23 @@ X <- as.data.frame(X)
       coord.vcs <- sweep(as.matrix(t(X.quanti.sup)), 2, row.w, FUN = "*")
       coord.vcs <- coord.vcs %*% tmp$U
       col.w.vcs <- rep (1,ncol(coord.vcs))
-      contrib.vcs <- sweep (as.matrix(coord.vcs^2),2,eig, FUN ="/")
-      contrib.vcs <- sweep (as.matrix(contrib.vcs),1,col.w.vcs, FUN ="*")
+# Attention, la contribution sert dans l'AFM
+#      contrib.vcs <- sweep (as.matrix(coord.vcs^2),2,eig, FUN ="/")
+#      contrib.vcs <- sweep (as.matrix(contrib.vcs),1,col.w.vcs, FUN ="*")
       cor.vcs <- matrix(NA, ncol(X.quanti.sup), ncol(tmp$U))
       sigma <- apply(X.quanti.sup, 2, ec, row.w)
       cor.vcs <- sweep(as.matrix(coord.vcs),1,sigma,FUN = "/")
       cos2.vcs <- as.data.frame(cor.vcs^2)
 
       coord.vcs <- as.data.frame(coord.vcs)
-      contrib.vcs <- as.data.frame(contrib.vcs)
+#      contrib.vcs <- as.data.frame(contrib.vcs)
       cor.vcs <- as.data.frame(cor.vcs)
-      colnames(coord.vcs) <- colnames(cor.vcs) <- paste("Dim", c(1:ncol(cor.vcs)), sep = ".") -> colnames(contrib.vcs) 
-      rownames(coord.vcs) <- rownames(cor.vcs) <- rownames(contrib.vcs) <- colnames(Xtot)[quanti.sup]
-      res.quanti.sup <- list(coord = coord.vcs[, 1:ncp], cor = cor.vcs[, 1:ncp], cos2 = cos2.vcs[,1:ncp], contrib = contrib.vcs[, 1:ncp] * 100)
+#      colnames(coord.vcs) <- colnames(cor.vcs)  <- colnames(cos2.vcs) <- colnames(contrib.vcs) <-paste("Dim", c(1:ncol(cor.vcs)), sep = ".") 
+#      rownames(coord.vcs) <- rownames(cor.vcs)  <- rownames(cos2.vcs) <- rownames(contrib.vcs) <- colnames(Xtot)[quanti.sup]
+#     res.quanti.sup <- list(coord = coord.vcs[, 1:ncp], cor = cor.vcs[, 1:ncp], cos2 = cos2.vcs[,1:ncp], contrib = contrib.vcs[, 1:ncp] * 100)
+      colnames(coord.vcs) <- colnames(cor.vcs) <- colnames(cos2.vcs) <- paste("Dim", c(1:ncol(cor.vcs)), sep = ".") 
+      rownames(coord.vcs) <- rownames(cor.vcs) <- rownames(cos2.vcs) <- colnames(Xtot)[quanti.sup]
+      res.quanti.sup <- list(coord = coord.vcs[, 1:ncp], cor = cor.vcs[, 1:ncp], cos2 = cos2.vcs[,1:ncp])
       res$quanti.sup = res.quanti.sup
     }
 

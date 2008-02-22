@@ -3,10 +3,11 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
     col.hab = NULL, col.ind = "black", col.ind.sup = "blue", 
     col.quali = "magenta", col.quanti.sup = "blue", 
     col.var = "black", label="all", invisible = NULL, lim.cos2.var = 0.,
-    cex = 1, title = NULL, ...){
+    cex = 1, title = NULL, palette=NULL, new.plot=TRUE, ...){
     
     res.pca <- x
     if (!inherits(res.pca, "PCA")) stop("non convenient data")
+    if (is.null(palette)) palette(c("black","red","green3","blue",      "cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
     lab.ind <- lab.quali <- lab.var <- lab.quanti <- lab.ind.sup <- FALSE
     if(length(label)==1 && label=="all") lab.ind <- lab.quali <- lab.var <- lab.quanti <- lab.ind.sup <-TRUE
     if("ind" %in% label) lab.ind<-TRUE
@@ -71,7 +72,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
           ymin = ylim[1]
           ymax = ylim[2]
         }
-       get(getOption("device"))(width=min(14,8*(xmax-xmin)/(ymax-ymin)),height=8)
+       if (new.plot) get(getOption("device"))(width=min(14,8*(xmax-xmin)/(ymax-ymin)),height=8)
         if (habillage == "ind") {
             nb.prod <- nrow(coord.actif)
             if (length(col.hab) != nb.prod) color.ind <- c(1:nb.prod)
@@ -145,11 +146,12 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
             }
         }
         if (!is.null(ellipse)) {
-            nbre.ellipse <- nlevels(coord.ellipse[, 1])
-            for (e in 1:nbre.ellipse) {
-                data.elli <- coord.ellipse[ellipse$res[, 1] == levels(coord.ellipse[, 1])[e], -1]
-                lines(data.elli[, 1], y = data.elli[, 2], col = color.ind[levels(factor(rownames(res.pca$ind$coord))) == levels(coord.ellipse[, 1])[e]])
-            }
+          nbre.ellipse <- nlevels(coord.ellipse[, 1])
+          for (e in 1:nbre.ellipse) {
+            data.elli <- coord.ellipse[ellipse$res[, 1] == levels(coord.ellipse[, 1])[e], -1]
+            if ((habillage != "none")&(habillage != "ind")) lines(x=data.elli[, 1], y = data.elli[, 2], col = color.mod[e])
+	    else lines(x=data.elli[, 1], y = data.elli[, 2], col = col.quali)
+          }
         }
         if ((habillage != "none")&(habillage != "ind")) legend("topleft",legend= levels(res.pca$call$X[,habillage]),text.col= color.mod,cex=0.8)
     }
@@ -178,7 +180,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
             xlim <- c(xmin, xmax) * 1.2
             ylim <- c(ymin, ymax) * 1.2
         }
-        get(getOption("device"))(width=8,height=8)
+        if (new.plot) get(getOption("device"))(width=8,height=8)
         if (scale.unit) {
             plot(0, 0, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp=1, cex=cex, main=titre)
             title(sub = sub.titre, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)

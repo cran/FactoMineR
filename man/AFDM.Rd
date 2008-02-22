@@ -26,7 +26,7 @@ AFDM (base, type, ncp = 5, graph = TRUE, sup.var = NULL,
 
 \value{
 Returns a list including:
-  \item{eig}{a numeric vector containing all the eigenvalues}
+  \item{eig}{a matrix containing all the eigenvalues, the percentage of variance and the cumulative percentage of variance}
   \item{link.group}{}
   \item{group}{}
   \item{ind}{a list of matrices with all the results for the individuals (coordinates, square cosine, contributions)}
