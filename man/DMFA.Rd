@@ -2,10 +2,10 @@
 
 \alias{DMFA}
 
-\title{Duale Multiple Factor Analysis (DMFA)}
+\title{Dual Multiple Factor Analysis (DMFA)}
 
 \description{
-Performs Duale Multiple Factor Analysis (DMFA) with supplementary individuals, supplementary quantitative 
+Performs Dual Multiple Factor Analysis (DMFA) with supplementary individuals, supplementary quantitative 
 variables and supplementary qualitative variables.
 }
 
@@ -26,7 +26,7 @@ DMFA(don, num.fact = ncol(data), scale.unit = TRUE, ncp = 5,
 
 \value{
 Returns a list including:
-  \item{eig}{a numeric vector containing all the eigenvalues}
+  \item{eig}{a matrix containing all the eigenvalues, the percentage of variance and the cumulative percentage of variance}
   \item{var}{a list of matrices containing all the results for the active variables (coordinates, correlation between variables and axes, square cosine, contributions)}
   \item{ind}{a list of matrices containing all the results for the active individuals (coordinates, square cosine, contributions)}
   \item{ind.sup}{a list of matrices containing all the results for the supplementary individuals (coordinates, square cosine)}

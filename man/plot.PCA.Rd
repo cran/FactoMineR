@@ -15,7 +15,8 @@ plot.PCA(x, axes = c(1, 2), choix = "ind",
     col.hab = NULL, col.ind = "black", col.ind.sup = "blue", 
     col.quali = "magenta", col.quanti.sup = "blue", 
     col.var = "black", label = "all", invisible = NULL, 
-    lim.cos2.var = 0., cex = 1, title = NULL, \dots)
+    lim.cos2.var = 0., cex = 1, title = NULL, palette=NULL,
+    new.plot = TRUE, \dots)
     }
 
 \arguments{
@@ -38,6 +39,8 @@ plot.PCA(x, axes = c(1, 2), choix = "ind",
   \item{lim.cos2.var}{value of the square cosinus under the variables are not drawn}
   \item{cex}{cf. function \code{\link{par}} in the \pkg{graphics} package}
   \item{title}{string corresponding to the title of the graph you draw (by default NULL and a title is chosen)}
+  \item{palette}{the color palette used to draw the points. By default colors are chosen. If you want to define the colors : palette=palette(c("black","red","blue")); or you can use: palette=palette(rainbow(30)), or in black and white for example: palette=palette(gray(seq(0,.9,len=25)))}
+  \item{new.plot}{boolean, if TRUE, a new graphical device is created}
   \item{\dots}{further arguments passed to or from other methods}
 }
 
@@ -53,6 +56,10 @@ Returns the individuals factor map and the variables factor map.
 data(decathlon)
 res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup = 13)
 plot(res.pca, habillage = 13, col.hab=c("green","blue"))
+## To draw ellipses around the barycentres
+aa=cbind.data.frame(decathlon[,13],res.pca$ind$coord)
+bb=coord.ellipse(aa,bary=TRUE)
+plot.PCA(res.pca,habillage=13,ellipse=bb)
 }
 
 \keyword{dplot}

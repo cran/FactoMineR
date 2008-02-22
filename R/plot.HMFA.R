@@ -1,6 +1,6 @@
 plot.HMFA <- function(x, axes = c(1,2),num=6, choix = "ind", 
     lab.grpe = TRUE, lab.var = TRUE, lab.ind.moy = TRUE, invisible = NULL, 
-    lim.cos2.var = 0., xlim = NULL, ylim = NULL, cex = 1, title = NULL, ...) {
+    lim.cos2.var = 0., xlim = NULL, ylim = NULL, cex = 1, title = NULL, new.plot=TRUE, ...) {
 
 partial.tab.pour.plot <- function(res.hmfa,coord=c(1,2)) {
     H <- res.hmfa$call$H
@@ -270,7 +270,7 @@ plot.moy <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL, ce
 
 
     if (choix == "group") {
-      get(getOption("device"))(width=8,height=8)
+      if (new.plot) get(getOption("device"))(width=8,height=8)
       if (is.null(title)) title <- "Groups representation"
       else sub.title <- "Groups representation"
       for (h in 1:length(res.hmfa$group)){
@@ -285,7 +285,7 @@ plot.moy <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL, ce
 
     if (choix == "var") {
       if (is.null(res.hmfa$quanti.var$coord)) stop("No quantitative variables to plot")
-      get(getOption("device"))(width=8,height=8)
+      if (new.plot) get(getOption("device"))(width=8,height=8)
       if (is.null(title)) title <- "Correlation circle"
       else sub.title <- "Correlation circle"
       plot(0, 0, main = title, xlab = lab.x, ylab = lab.y, xlim = c(-1.1, 1.1), ylim = c(-1.1, 1.1), col = "white", asp=1, cex=cex)
@@ -320,13 +320,13 @@ plot.moy <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL, ce
       if (length(res.hmfa$call$H)>1){
         tab.coord.partial <- partial.tab.pour.plot(res.hmfa, coord = axes)
         for (nivo in 1:length(res.hmfa$call$H)){
-          get(getOption("device"))()
+          if (new.plot) get(getOption("device"))()
           plot.partial(res.hmfa, coord=axes, invisible = invisible, cex = cex, title = title, nivo = nivo)
         }
 ##        get(getOption("device"))()
 ##        plot.partial.ind(res.hmfa, num = num, coord=axes, cex = cex)
       }
-      get(getOption("device"))()
+      if (new.plot) get(getOption("device"))()
       plot.moy(res.hmfa, coord=axes, invisible = invisible, cex = cex, title = title)
     }
 }

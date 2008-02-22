@@ -5,7 +5,7 @@ print.MCA <- function (x, file = NULL, sep = ";", ...){
     cat("There are", nrow(res.mca$call$X), "individuals, characterized by",
         ncol(res.mca$call$X), "variables\n\n")
     cat("*Les resultats de votre analyse sont disponibles dans les objets suivants :\n\n")
-    res <- array("", c(22, 2), list(1:22, c("nom", "description")))
+    res <- array("", c(22, 2), list(1:22, c("name", "description")))
     res[1, ] <- c("$eig", "eigenvalues")
     res[2, ] <- c("$var", "results for the variables")
     res[3, ] <- c("$var$coord", "coord. of the categories")

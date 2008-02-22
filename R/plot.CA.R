@@ -1,8 +1,9 @@
 plot.CA <- function (x, axes = c(1, 2),
     xlim = NULL, ylim = NULL, invisible = NULL, col.row = "blue",
     col.col = "red", col.row.sup = "darkblue", col.col.sup = "darkred",
-    label = "all", cex = 1, title = NULL, ...) {
+    label = "all", cex = 1, title = NULL, palette=NULL, ...) {
     res.ca <- x
+    if (is.null(palette)) palette(c("black","red","green3","blue",      "cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
     if (!inherits(res.ca, "CA")) stop("non convenient data")
     lab.row <- lab.col <- lab.row.sup <- lab.col.sup <- FALSE
     if(length(label)==1 && label=="all") lab.row <- lab.col <- lab.row.sup <- lab.col.sup <- TRUE

@@ -5,8 +5,10 @@
 \title{Multiple Factor Analysis (MFA)}
 
 \description{
-Performs Multiple Factor Analysis (MFA) with supplementary individuals and supplementary groups of variables.
-Groups of variables can be quantitative or qualitative.
+Performs Multiple Factor Analysis in the sense of Escofier-Pages with supplementary individuals and supplementary groups of variables.
+Groups of variables can be quantitative or qualitative.\cr
+Missing values in numeric variables are replaced by the column mean.
+Missing values in categorical variables are treated as an additional level,
 }
 
 \usage{
@@ -34,7 +36,7 @@ MFA (base, group, type = rep("s",length(group)), ind.sup = NULL,
   \item{summary.quali}{a summary of the results for the qualitative variables}
   \item{summary.quanti}{a summary of the results for the quantitative variables}
   \item{separate.analyses}{the results for the separate analyses}
-  \item{eig}{a numeric vector containing all the eigenvalues}
+  \item{eig}{a matrix containing all the eigenvalues, the percentage of variance and the cumulative percentage of variance}
   \item{group}{a list of matrices containing all the results for the groups (Lg and RV coefficients, coordinates, square cosine, contributions, distance to the origin, the correlations between each group and each factor)}
   \item{rapport.inertie}{inertia ratio}
   \item{ind}{a list of matrices containing all the results for the active individuals (coordinates, square cosine, contributions)}

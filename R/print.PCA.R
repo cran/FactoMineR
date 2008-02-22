@@ -1,15 +1,15 @@
 print.PCA <- function (x, file = NULL, sep = ";", ...){
     res.pca <- x
     if (!inherits(res.pca, "PCA")) stop("non convenient data")
-    cat("**Results for the Principal Component Analysis (PCA))**\n\n")
+    cat("**Results for the Principal Components Analysis (PCA))**\n\n")
     cat("The analysis was done on ", nrow(res.pca$call$X),
         "individuals, described by", ncol(res.pca$call$X), "variables\n\n")
     cat("*The results are available in the following objects:\n\n")
-    res <- array("", c(24, 2), list(1:24, c("nom", "description")))
+    res <- array("", c(24, 2), list(1:24, c("name", "description")))
     res[1, ] <- c("$eig", "eigenvalues")
     res[2, ] <- c("$var", "results for the variables")
     res[3, ] <- c("$var$coord", "coordinates of the variables")
-    res[4, ] <- c("$var$cor", "corelations variables - dimensions")
+    res[4, ] <- c("$var$cor", "correlations variables - dimensions")
     res[5, ] <- c("$var$cos2", "cos2 for the variables")
     res[6, ] <- c("$var$contrib", "contributions of the variables")
     res[7, ] <- c("$ind", "results for the individuals")

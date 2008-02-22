@@ -58,8 +58,9 @@ DMFA = function(don, num.fact = ncol(data), scale.unit=TRUE, ncp=5,quanti.sup=NU
   }
   for (j in 1:ng){
     if (is.null(quanti.sup)){
-      coord.gr2[j,] = coord.gr[j,] / eigen(Cov[[j]])$values[1]
-      cos2.gr[j,] = coord.gr[j,]^2 / sum(eigen(Cov[[j]])$values^2) *100
+      eigaux = eigen(Cov[[j]])
+      coord.gr2[j,] = coord.gr[j,] / eigaux$values[1]
+      cos2.gr[j,] = coord.gr[j,]^2 / sum(eigaux$values^2) *100
     }
     else {
       coord.gr2[j,] = coord.gr[j,] / eigen(Cov[[j]][1:(nrow(Cov[[j]])-length(quanti.sup)),1:(nrow(Cov[[j]])-length(quanti.sup))])$values[1]

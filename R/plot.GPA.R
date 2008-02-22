@@ -1,18 +1,11 @@
 plot.GPA<-function (x, axes = c(1, 2), lab.ind.moy = TRUE, 
     habillage = "ind", partial = "all", chrono = FALSE, xlim = NULL, 
-    ylim = NULL, cex = 1, title = NULL, ...) 
+    ylim = NULL, cex = 1, title = NULL, palette=NULL, ...) 
 {
     res.gpa <- x
     if (!inherits(res.gpa, "GPA")) 
         stop("non convenient data")
-    color = c("black", "red", "green3", "blue", "cyan", "magenta", 
-        "darkgray", "darkgoldenrod", "darkgreen", "violet", "turquoise", 
-        "orange", "lightpink", "lavender", "yellow", "lightgreen", 
-        "lightgrey", "lightblue", "darkkhaki", "darkmagenta", 
-        "darkolivegreen", "lightcyan", "darkorange", "darkorchid", 
-        "darkred", "darksalmon", "darkseagreen", "darkslateblue", 
-        "darkslategray", "darkslategrey", "darkturquoise", "darkviolet", 
-        "lightgray", "lightsalmon", "lightyellow", "maroon")
+    if (is.null(palette)) palette(c("black","red","green3","blue",      "cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
     sub.title <- NULL
     lab.x <- paste("Dim ", axes[1], sep = "")
     lab.y <- paste("Dim ", axes[2], sep = "")
@@ -66,11 +59,11 @@ plot.GPA<-function (x, axes = c(1, 2), lab.ind.moy = TRUE,
     }
 
     if (habillage == "group") {
-        col.hab <- color[2:(nbre.grpe + 1)]
+        col.hab <- 2:(nbre.grpe + 1)
         col.ind <- c(rep("black", nb.ind), rep(col.hab, nb.ind))
     }
     if (habillage == "ind") {
-        col.hab <- color[1:nb.ind]
+        col.hab <- 1:nb.ind
         col.ind <- c(col.hab, rep(col.hab, each = nbre.grpe))
     }
 #    get(getOption("device"))(8, 8)

@@ -6,7 +6,8 @@
 
 \description{
 Performs Multiple Correspondence Analysis (MCA) with supplementary individuals, supplementary quantitative 
-variables and supplementary qualitative variables.
+variables and supplementary qualitative variables.\cr
+Missing values are treated as an additional level,
 }
 
 \usage{
@@ -27,7 +28,7 @@ MCA(X, ncp = 5, ind.sup = NULL, quanti.sup = NULL,
 
 \value{
 Returns a list including:
-  \item{eig}{a numeric vector containing all the eigenvalues}
+  \item{eig}{a matrix containing all the eigenvalues, the percentage of variance and the cumulative percentage of variance}
   \item{var}{a list of matrices containing all the results for the active variables (coordinates, square cosine, contributions, v.test)}
   \item{ind}{a list of matrices containing all the results for the active individuals (coordinates, square cosine, contributions)}
   \item{ind.sup}{a list of matrices containing all the results for the supplementary individuals (coordinates, square cosine)}

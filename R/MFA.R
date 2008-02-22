@@ -456,10 +456,11 @@ MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp
       if (!is.null(indice.quanti)){
         coord.quanti.var.sup <- res.globale$quanti.sup$coord[indice.quanti,1:ncp]
         cos2.quanti.var.sup <- res.globale$quanti.sup$cos2[indice.quanti, 1:ncp]
-        contrib.quanti.var.sup <- res.globale$quanti.sup$contrib[indice.quanti, 1:ncp]
-        contrib.quanti.var.sup <- sweep(as.data.frame(contrib.quanti.var.sup)[,1:ncp], 2, eig.aux, "/")
+#        contrib.quanti.var.sup <- res.globale$quanti.sup$contrib[indice.quanti, 1:ncp]
+#        contrib.quanti.var.sup <- sweep(as.data.frame(contrib.quanti.var.sup)[,1:ncp], 2, eig.aux, "/")
         cor.quanti.var.sup <- res.globale$quanti.sup$cor[indice.quanti, 1:ncp]
-        res.quanti.var.sup <- list(coord = coord.quanti.var.sup, contrib = contrib.quanti.var.sup, cos2 = cos2.quanti.var.sup, cor = cor.quanti.var.sup)
+#        res.quanti.var.sup <- list(coord = coord.quanti.var.sup, contrib = contrib.quanti.var.sup, cos2 = cos2.quanti.var.sup, cor = cor.quanti.var.sup)
+        res.quanti.var.sup <- list(coord = coord.quanti.var.sup, cos2 = cos2.quanti.var.sup, cor = cor.quanti.var.sup)
       }
     }
 

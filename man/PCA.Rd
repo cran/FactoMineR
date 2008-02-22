@@ -6,7 +6,8 @@
 
 \description{
 Performs Principal Component Analysis (PCA) with supplementary individuals, supplementary quantitative 
-variables and supplementary qualitative variables.
+variables and supplementary qualitative variables.\cr
+Missing values are replaced by the column mean.
 }
 
 \usage{
@@ -29,7 +30,7 @@ PCA(X, scale.unit = TRUE, ncp = 5, ind.sup = NULL,
 
 \value{
 Returns a list including:
-  \item{eig}{a numeric vector containing all the eigenvalues}
+  \item{eig}{a matrix containing all the eigenvalues, the percentage of variance and the cumulative percentage of variance}
   \item{var}{a list of matrices containing all the results for the active variables (coordinates, correlation between variables and axes, square cosine, contributions)}
   \item{ind}{a list of matrices containing all the results for the active individuals (coordinates, square cosine, contributions)}
   \item{ind.sup}{a list of matrices containing all the results for the supplementary individuals (coordinates, square cosine)}
@@ -50,6 +51,10 @@ res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup=13)
 ## barplot(res.pca$eig[,1],main="Eigenvalues",names.arg=1:nrow(res.pca$eig))
 plot(res.pca,choix="ind",habillage=13)
 dimdesc(res.pca, axes = 1:2)
+## To draw ellipses around the categories of the 13th variable (which is categorical)
+aa=cbind.data.frame(decathlon[,13],res.pca$ind$coord)
+bb=coord.ellipse(aa,bary=TRUE)
+plot.PCA(res.pca,habillage=13,ellipse=bb)
 }
 
 \keyword{multivariate}

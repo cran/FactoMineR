@@ -24,7 +24,7 @@ CA(X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE,
 
 \value{
 Returns a list including:
-  \item{eig}{a numeric vector containing all the eigenvalues}
+  \item{eig}{a matrix containing all the eigenvalues, the percentage of variance and the cumulative percentage of variance}
   \item{col}{a list of matrices with all the results for the column variable (coordinates, square cosine, contributions)}
   \item{row}{a list of matrices with all the results for the row variable (coordinates, square cosine, contributions)}
   \item{col.sup}{a list of matrices containing all the results for the supplementary column points (coordinates, square cosine)}

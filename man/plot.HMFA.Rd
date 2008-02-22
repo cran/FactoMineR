@@ -10,7 +10,7 @@
 plot.HMFA(x, axes = c(1,2),num=6, choix = "ind", 
     lab.grpe = TRUE, lab.var = TRUE, lab.ind.moy = TRUE, 
     invisible = NULL, lim.cos2.var = 0., 
-    xlim = NULL, ylim = NULL, cex = 1, title = NULL, \dots)
+    xlim = NULL, ylim = NULL, cex = 1, title = NULL, new.plot = TRUE, \dots)
 }
 
 \arguments{
@@ -31,6 +31,7 @@ plot.HMFA(x, axes = c(1,2),num=6, choix = "ind",
   \item{ylim}{range for the plotted 'y' values, defaulting to the range of the finite values of 'y'}
   \item{cex}{cf. function \code{\link{par}} in the \pkg{graphics} package}
   \item{title}{string corresponding to the title of the graph you draw (by default NULL and a title is chosen)}
+  \item{new.plot}{boolean, if TRUE, a new graphical device is created}
   \item{\dots}{further arguments passed to or from other methods}
 }
 

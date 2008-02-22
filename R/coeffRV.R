@@ -160,7 +160,9 @@
         }
         rvstd <- (rv - esperance)/variance^0.5
         a <- asym(X,Y)
-        prob <- pgamma(rvstd-(-2/a),shape=(4/a^2),scale=(a/2),lower.tail=FALSE)
+        if (a>=0) prob <- pgamma(rvstd-(-2/a),shape=(4/a^2),scale=(a/2),lower.tail=FALSE)
+        if (a<0) prob = pgamma(a/abs(a)*rvstd+2/abs(a),shape=(4/a^2),scale=(abs(a)/2))
+
         return(list(rv = rv, rvstd = rvstd, mean = esperance,
             variance = variance, asym = a, p.value = prob))
     }
