@@ -54,7 +54,7 @@ Escofier, B. and Pagès, J. (1994)
 Multiple Factor Analysis (AFMULT package), \emph{Computational Statistics and Data Analysis}, \bold{18}, 121-140.
 }
 
-\author{Jérémy Mazet, François Husson \email{François.Husson@agrocampus-rennes.fr}}
+\author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{print.MFA}}, \code{\link{plot.MFA}}, \code{\link{dimdesc}}}
 

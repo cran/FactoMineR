@@ -41,7 +41,7 @@ GREENACRE, M.J. (1993) \emph{Correspondence Analysis in Practice}, London : Acad
 
 }
 
-\author{Jérémy Mazet, François Husson \email{François.Husson@agrocampus-rennes.fr}}
+\author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{print.CA}}, \code{\link{plot.CA}}, \code{\link{dimdesc}}}
 

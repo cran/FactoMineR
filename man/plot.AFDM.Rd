@@ -12,7 +12,7 @@ Draw the Multiple Factor Analysis for Mixt Data graphs.
 \method{plot}{AFDM}(x, choix = "group", axes = c(1, 2), lab.grpe = TRUE,
     lab.var = TRUE, lab.ind = TRUE, habillage = "none", col.lab = FALSE,
     col.hab = NULL, invisible = NULL, lim.cos2.var = 0., xlim = NULL,
-    ylim = NULL, cex = 1, title = NULL, palette=NULL, \dots)
+    ylim = NULL, cex = 1, title = NULL, palette=NULL, new.plot = TRUE, \dots)
 }
 
 \arguments{
@@ -37,6 +37,7 @@ Draw the Multiple Factor Analysis for Mixt Data graphs.
   \item{cex}{cf. function \code{\link{par}} in the \pkg{graphics} package}
   \item{title}{string corresponding to the title of the graph you draw (by default NULL and a title is chosen)}
   \item{palette}{the color palette used to draw the points. By default colors are chosen. If you want to define the colors : palette=palette(c("black","red","blue")); or you can use: palette=palette(rainbow(30)), or in black and white for example: palette=palette(gray(seq(0,.9,len=25)))}
+  \item{new.plot}{boolean, if TRUE, a new graphical device is created}
   \item{\dots}{further arguments passed to or from other methods}
 }
 
@@ -44,7 +45,7 @@ Draw the Multiple Factor Analysis for Mixt Data graphs.
 Returns the individuals factor map and the variables factor map.
 }
 
-\author{J�r�my Mazet, Fran�ois Husson \email{Fran�ois.Husson@agrocampus-rennes.fr}}
+\author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{AFDM}}}
 

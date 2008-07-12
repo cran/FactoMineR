@@ -69,6 +69,7 @@ CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE, axes=c
     rownames(coord.row.sup) <- rownames(cos2.row.sup) <- rownames(X.row.sup)
     res.row.sup <- list(coord = coord.row.sup, cos2 = cos2.row.sup)
     res$row.sup <- res.row.sup
+    res$call$row.sup <- row.sup
 }
 
  if (!is.null(col.sup)){
@@ -88,6 +89,7 @@ CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE, axes=c
     rownames(coord.col.sup) <- rownames(cos2.col.sup) <- colnames(X.col.sup)
     res.col.sup <- list(coord = coord.col.sup, cos2 = cos2.col.sup)
     res$col.sup <- res.col.sup
+    res$call$col.sup <- col.sup
 }
     class(res) <- c("CA", "list")
     if (graph) plot.CA(res,axes=axes)

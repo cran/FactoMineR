@@ -30,7 +30,7 @@ Returns a list including:
   \item{nb.words}{a data.frame with all the words and for each word, the number of lists in which it is present, and the number of occurence}
 }
 
-\author{François Husson \email{François.Husson@agrocampus-rennes.fr}}
+\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{CA}}}
 

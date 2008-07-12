@@ -12,7 +12,7 @@ Plot the graphs of the variables after  a Factor Analysis.
 graph.var(x, axes = c(1, 2), 
     xlim = NULL, ylim = NULL, col.sup = "blue", 
     col.var = "black", draw="all", label=draw, lim.cos2.var = 0.1,
-    cex = 1, title = NULL, \dots)
+    cex = 1, title = NULL, new.plot = TRUE, \dots)
     }
 
 \arguments{
@@ -29,6 +29,7 @@ graph.var(x, axes = c(1, 2),
   \item{lim.cos2.var}{value of the square cosinus under the variables are not drawn}
   \item{cex}{cf. function \code{\link{par}} in the \pkg{graphics} package}
   \item{title}{string corresponding to the title of the graph you draw (by default NULL and a title is chosen)}
+  \item{new.plot}{boolean, if TRUE, a new graphical device is created}
   \item{\dots}{further arguments passed to or from other methods}
 }
 
@@ -36,7 +37,7 @@ graph.var(x, axes = c(1, 2),
 Returns the variables factor map.
 }
 
-\author{François Husson \email{François.Husson@agrocampus-rennes.fr}}
+\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{PCA}}, \code{\link{MFA}}, \code{\link{MCA}}, \code{\link{DMFA}}, \code{\link{HMFA}}}
 

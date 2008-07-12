@@ -36,7 +36,7 @@ plot.GPA(x, axes = c(1, 2),
 Returns the General Procrustes Analysis map.
 }
 
-\author{Elisabeth Morand, François Husson \email{François.Husson@agrocampus-rennes.fr}}
+\author{Elisabeth Morand, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{GPA}}}
 

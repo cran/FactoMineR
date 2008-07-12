@@ -39,7 +39,7 @@ plot.HMFA(x, axes = c(1,2),num=6, choix = "ind",
 Returns the individuals factor map and the variables factor map.
 }
 
-\author{Jï¿½rï¿½my Mazet, Franï¿½ois Husson \email{Franï¿½ois.Husson@agrocampus-rennes.fr}}
+\author{Jere½my Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{HMFA}}}
 

@@ -19,7 +19,7 @@ Print the Multiple Factor Analysis of mixt Data (AFDM) results.
   \item{\dots}{further arguments passed to or from other methods}
 }
 
-\author{Jérémy Mazet, François Husson \email{François.Husson@agrocampus-rennes.fr}}
+\author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{AFDM}}}
 

@@ -29,6 +29,6 @@ The simulation is independently done for each level of the factor. The number of
 \item{simul.mean}{Data.frame with all the levels of the factor variable, and for each variable, the mean of the simulated data.}
 }
 
-\author{Jérémy Mazet}
+\author{Jeremy Mazet}
 
 \keyword{dplot}

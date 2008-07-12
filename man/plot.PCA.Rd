@@ -48,7 +48,7 @@ plot.PCA(x, axes = c(1, 2), choix = "ind",
 Returns the individuals factor map and the variables factor map.
 }
 
-\author{J�r�my Mazet, Fran�ois Husson \email{Fran�ois.Husson@agrocampus-rennes.fr}}
+\author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{PCA}}}
 
