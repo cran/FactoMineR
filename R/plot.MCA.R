@@ -92,7 +92,7 @@ plot.MCA <- function (x, axes = c(1, 2),
     if (is.null(title)) titre <- "MCA factor map"
     else sub.titre <- "MCA factor map"
     if (is.na(test.invisible[1])|is.na(test.invisible[2])|is.na(test.invisible[4])|is.na(test.invisible[5])) {
-      if (new.plot) get(getOption("device"))(width=8,height=8)
+      if (new.plot) dev.new()
       plot(0, 0, main = titre, xlab = paste("Dim ",axes[1]," (",signif(res.mca$eig[axes[1],2],4),"%)",sep=""), ylab = paste("Dim ",axes[2]," (",signif(res.mca$eig[axes[2],2],4),"%)",sep=""), xlim = xlim, ylim = ylim, col = "white", asp=1, cex=cex)
       if (!is.null(sub.titre)) title(sub = sub.titre, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)
       abline(v=0,lty=2, cex=cex)
@@ -116,7 +116,7 @@ plot.MCA <- function (x, axes = c(1, 2),
       if ((habillage != "none")&(habillage != "quali")&(is.na(test.invisible[1])|is.na(test.invisible[2])))  legend("topleft",legend= levels(res.mca$call$X[,habillage]),text.col= 1:n.mod,cex=0.8)
     }
     if (!is.null(res.mca$quanti.sup)&is.na(test.invisible[3])) {
-      if (new.plot) get(getOption("device"))(width=8,height=8)
+      if (new.plot) dev.new()
       plot(0, 0, main = "Supplementary variables on the MCA factor map", xlab = paste("Dim ",axes[1]," (",signif(res.mca$eig[axes[1],2],4),"%)",sep=""), ylab = paste("Dim ",axes[2]," (",signif(res.mca$eig[axes[2],2],4),"%)",sep=""), xlim = c(-1.1,1.1), ylim = c(-1.1,1.1), col = "white", asp=1, cex=cex)
       abline(v=0,lty=2, cex=cex)
       abline(h=0,lty=2, cex=cex)

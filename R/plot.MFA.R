@@ -23,7 +23,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.
     }
 
     if (choix == "axes") {
-      if (new.plot) get(getOption("device"))(width=8,height=8)
+      if (new.plot) dev.new()
       if (is.null(title)) title <- "Partial axes"
       else sub.title <- "Partial axes"
       coord.axes <- res.mfa$partial.axes$coord[, axes]
@@ -77,7 +77,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.
     }
 
     if (choix == "group") {
-      if (new.plot) get(getOption("device"))(width=8,height=8)
+      if (new.plot) dev.new()
       if (is.null(title)) title <- "Groups representation"
       else sub.title <- "Groups representation"
       coord.actif <- res.mfa$group$coord[, axes]
@@ -97,7 +97,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.
     }
 
     if (choix == "var") {
-      if (new.plot) get(getOption("device"))(width=8,height=8)
+      if (new.plot) dev.new()
         test.invisible <- vector(length = 2)
         if (!is.null(invisible)) {
           test.invisible[1] <- match("actif", invisible)
@@ -359,7 +359,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.
         
         if (habillage == "none") col.ind <- col.ind.sup <- col.quali.sup <- col.quali <- col.ellipse<-col.ellipse.par <- rep("black",nb.ind*(nbre.grpe+1))
 
-        if (new.plot) get(getOption("device"))(width=8,height=8)
+        if (new.plot) dev.new()
         if (is.null(title)) title <- "Individual factor map"
         else sub.title <- "Individual factor map"
         plot(0, 0, main = title, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp=1, cex=cex)
