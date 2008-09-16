@@ -14,7 +14,7 @@ if (choix=="quali"){
   lab.x <- paste("Dim ", axes[1], " (",signif(res.dmfa$eig[axes[1],2],4)," %)",sep="")
   lab.y <- paste("Dim ", axes[2], " (",signif(res.dmfa$eig[axes[2],2],4)," %)",sep="")
   titre = "Qualitative representation"
-  if (new.plot) get(getOption("device"))(8,8)
+  if (new.plot) dev.new()
   plot(0, 0, main = titre, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp = 1, cex = 1)
   abline(v = 0, lty = 2)
   abline(h = 0, lty = 2)
@@ -58,7 +58,7 @@ if (choix=="var") {
   }
 } 
 if (choix=="group"){
-  if (new.plot) get(getOption("device"))()
+  if (new.plot) dev.new()
   coord.gr = res.dmfa$group$coord.n
   lev = levels(res.dmfa$call$X[,1])
   ng = length(lev)

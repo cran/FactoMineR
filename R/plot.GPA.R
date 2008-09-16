@@ -66,7 +66,6 @@ plot.GPA<-function (x, axes = c(1, 2), lab.ind.moy = TRUE,
         col.hab <- 1:nb.ind
         col.ind <- c(col.hab, rep(col.hab, each = nbre.grpe))
     }
-#    get(getOption("device"))(8, 8)
     if (is.null(title)) 
         title <- "General Procrustes Analysis map"
     else sub.title <- "General Procrustes Analysis map"

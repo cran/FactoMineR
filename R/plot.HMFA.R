@@ -92,7 +92,7 @@ partial.tab.pour.plot <- function(res.hmfa,coord=c(1,2)) {
 ##          legend("topleft",legend= name,text.col= color[1:index.col],cex=0.7*cex,bg="white")
 ##        }
 ##      }
-##      if (m < mult) get(getOption("device"))()
+##      if (m < mult) dev.new()
 ##    }
 ##}
 
@@ -270,7 +270,7 @@ plot.moy <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL, ce
 
 
     if (choix == "group") {
-      if (new.plot) get(getOption("device"))(width=8,height=8)
+      if (new.plot) dev.new()
       if (is.null(title)) title <- "Groups representation"
       else sub.title <- "Groups representation"
       for (h in 1:length(res.hmfa$group)){
@@ -285,7 +285,7 @@ plot.moy <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL, ce
 
     if (choix == "var") {
       if (is.null(res.hmfa$quanti.var$coord)) stop("No quantitative variables to plot")
-      if (new.plot) get(getOption("device"))(width=8,height=8)
+      if (new.plot) dev.new()
       if (is.null(title)) title <- "Correlation circle"
       else sub.title <- "Correlation circle"
       plot(0, 0, main = title, xlab = lab.x, ylab = lab.y, xlim = c(-1.1, 1.1), ylim = c(-1.1, 1.1), col = "white", asp=1, cex=cex)
@@ -320,13 +320,13 @@ plot.moy <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL, ce
       if (length(res.hmfa$call$H)>1){
         tab.coord.partial <- partial.tab.pour.plot(res.hmfa, coord = axes)
         for (nivo in 1:length(res.hmfa$call$H)){
-          if (new.plot) get(getOption("device"))()
+          if (new.plot) dev.new()
           plot.partial(res.hmfa, coord=axes, invisible = invisible, cex = cex, title = title, nivo = nivo)
         }
-##        get(getOption("device"))()
+##        dev.new()
 ##        plot.partial.ind(res.hmfa, num = num, coord=axes, cex = cex)
       }
-      if (new.plot) get(getOption("device"))()
+      if (new.plot) dev.new()
       plot.moy(res.hmfa, coord=axes, invisible = invisible, cex = cex, title = title)
     }
 }
