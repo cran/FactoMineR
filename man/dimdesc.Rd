@@ -24,7 +24,7 @@ Returns a list including:
   \item{quali}{the description of the dimensions by the qualitative variables}
 }
 
-\author{François Husson \email{François.Husson@agrocampus-rennes.fr}}
+\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{PCA}}, \code{\link{CA}}, \code{\link{MCA}}, \code{\link{MFA}}, \code{\link{HMFA}}}
 

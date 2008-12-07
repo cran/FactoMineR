@@ -39,14 +39,14 @@ Returns a list including:
 Returns the individuals factor map and the variables factor map.
 }
 
-\author{Jérémy Mazet, François Husson \email{François.Husson@agrocampus-rennes.fr}}
+\author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{print.MCA}}, \code{\link{plot.MCA}}, \code{\link{dimdesc}}}
 
 \examples{
 \dontrun{
 data (poison)
-MCA (poison, quali.sup = 3:4, quanti.sup = 1:2)
+res.mca = MCA (poison, quali.sup = 3:4, quanti.sup = 1:2)
 }
 }
 \keyword{multivariate}

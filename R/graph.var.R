@@ -1,7 +1,7 @@
 graph.var <- function (x, axes = c(1, 2), 
     xlim = NULL, ylim = NULL, col.sup = "blue", 
     col.var = "black", draw="all", label=draw, lim.cos2.var = 0.1,
-    cex = 1, title = NULL, ...){
+    cex = 1, title = NULL, new.plot = TRUE, ...){
     
     if ((!inherits(x, "MFA"))&(!inherits(x, "HMFA"))&(!inherits(x, "MCA"))&(!inherits(x, "PCA"))) stop("non convenient data")
     lab.var <- lab.quanti <- FALSE
@@ -79,7 +79,7 @@ graph.var <- function (x, axes = c(1, 2),
       xlim <- c(xmin, xmax) * 1.2
       ylim <- c(ymin, ymax) * 1.2
     }
-    get(getOption("device"))(width=8,height=8)
+    if (new.plot) get(getOption("device"))(width=8,height=8)
     if (scale.unit) {
       plot(0, 0, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp=1, cex=cex, main=titre)
       title(sub = sub.titre, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)

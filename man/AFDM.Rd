@@ -39,16 +39,18 @@ Returns the individuals factor map.
 
 
 \references{
-Pagès J. (2004). Analyse factorielle de données mixtes. Revue Statistique Appliquée.  LII (4). pp. 93-111.
+Pages J. (2004). Analyse factorielle de donnees mixtes. Revue Statistique Appliquee.  LII (4). pp. 93-111.
 }
 
-\author{Jérémy Mazet, François Husson \email{François.Husson@agrocampus-rennes.fr}}
+\author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{print.AFDM}}, \code{\link{plot.AFDM}}}
 
 \examples{
+\dontrun{
 data(wine)
 res.afdm = AFDM(wine[,c(1,2,30,31)],type=c("n","n","s","s"))
+}
 }
 
 \keyword{multivariate}

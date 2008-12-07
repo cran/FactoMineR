@@ -32,7 +32,7 @@ is the factor of coord.simul, the two others columns  give the coordinates of th
 \item{call}{the parameters of the function chosen}
 }
 
-\author{Jérémy Mazet}
+\author{Jeremy Mazet}
 
 \seealso{ \code{\link{simule}}}
 

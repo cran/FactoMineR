@@ -29,7 +29,7 @@ plot.DMFA(x, axes = c(1, 2), choix = "ind", label="all",
 Returns the individuals factor map and the variables factor map, the partial variables representation and the groups factor map.
 }
 
-\author{Sébastien Lê, François Husson \email{François.Husson@agrocampus-rennes.fr}}
+\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{DMFA}}}
 

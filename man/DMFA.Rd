@@ -36,7 +36,7 @@ Returns a list including:
 Returns the individuals factor map and the variables factor map.
 }
 
-\author{Sébastien Lê, François Husson \email{François.Husson@agrocampus-rennes.fr}}
+\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{plot.DMFA}}, \code{\link{dimdesc}}}
 

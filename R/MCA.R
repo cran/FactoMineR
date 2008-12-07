@@ -70,8 +70,9 @@ MCA <- function (X, ncp = 5, ind.sup = NULL, quanti.sup = NULL, quali.sup = NULL
     }
     
     if (!is.null(quanti.sup)){
-      X.quanti.sup <- Xtot[,quanti.sup]
+      X.quanti.sup <- as.matrix(Xtot[,quanti.sup])
       if (!is.null(ind.sup)) X.quanti.sup <- X.quanti.sup [-ind.sup,]
+      colnames(X.quanti.sup) = colnames(Xtot)[quanti.sup]
       U <- res.mca$svd$U
       coord.quanti.sup <- matrix(NA, ncol(X.quanti.sup), ncp)
       for (i in 1:ncp) {

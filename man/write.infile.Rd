@@ -21,7 +21,7 @@ write.infile(X, file, sep=";", append = FALSE)
           of file.}
 }
 
-\author{François Husson \email{François.Husson@agrocampus-rennes.fr}}
+\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
 \examples{
 \dontrun{

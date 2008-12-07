@@ -1,4 +1,4 @@
-"catdes" <- function(donnee,num.var,proba = 0.05){
+catdes <- function(donnee,num.var,proba = 0.05){
 
   lab.sauv <- lab <- colnames(donnee)
   quali=NULL
@@ -38,7 +38,7 @@
         aux3 = marge.col[k]/sum(marge.col)
         if (aux2 > aux3) aux4 = phyper(Table[j,k]-1,marge.li[j],sum(marge.li)-marge.li[j],marge.col[k],lower.tail=FALSE)
         else aux4 = phyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k])
-        if (aux4<proba/2) {
+        if (aux4<proba) {
           aux5 = (1-2*as.integer(aux2>aux3))*qnorm(aux4)
           aux1 = Table[j,k]/marge.col[k]
           tri[[j]] = rbind(tri[[j]],c(aux1,aux2,aux3,aux4,aux5))

@@ -25,8 +25,8 @@ X <- as.data.frame(X)
     }
     if (!is.null(quanti.sup)) X <- X[,-quanti.sup]
     if (!is.null(ind.sup)){
-      X.ind.sup <- X[ind.sup,]
-      X <- X[-ind.sup,]
+      X.ind.sup <- X[ind.sup,,drop=F]
+      X <- X[-ind.sup,,drop=F]
     }
     ncp <- min(ncp, nrow(X)-1, ncol(X))
     if (is.null(row.w)) row.w <- rep(1, nrow(X))
@@ -83,8 +83,8 @@ X <- as.data.frame(X)
       coord.ind.sup <- coord.ind.sup %*% tmp$V
       dist2 <- apply(coord.ind.sup^2,1,sum)
       cos2.ind.sup <- sweep(as.matrix(coord.ind.sup^2), 1, dist2, FUN = "/")
-      coord.ind.sup <- as.data.frame(coord.ind.sup)[,1:ncp]
-      cos2.ind.sup <- as.data.frame(cos2.ind.sup)[,1:ncp]
+      coord.ind.sup <- as.data.frame(coord.ind.sup[,1:ncp])
+      cos2.ind.sup <- as.data.frame(cos2.ind.sup[,1:ncp])
       colnames(coord.ind.sup) <- colnames(cos2.ind.sup) <- paste("Dim", c(1:ncp), sep = ".")
       rownames(coord.ind.sup) <- rownames(cos2.ind.sup) <- rownames(X.ind.sup)
       res.ind.sup <- list(coord = coord.ind.sup, cos2 = cos2.ind.sup)

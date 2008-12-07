@@ -41,7 +41,7 @@ Kazi-Aoual, F., Hitier, S., Sabatier, R., Lebreton, J.-D., (1995) Refined approx
 for multivariate inference. Computational Statistics and Data Analysis, \bold{20}, 643--656 \cr
 }
 
-\author{Josse, J, Husson, F.}
+\author{Julie Josse, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
 \examples{
 data(wine)
