@@ -26,7 +26,7 @@ Returns a list including:
 
 \author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
-\seealso{ }
+\seealso{ \code{\link{catdes}}}
 
 \examples{
 data(decathlon)

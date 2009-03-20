@@ -9,19 +9,18 @@ Performs Multiple Factor Analysis with both quantitative and qualitative data.
 }
 
 \usage{
-AFDM (base, type, ncp = 5, graph = TRUE, sup.var = NULL, 
-    ind.sup = NULL, axes = c(1,2))
+AFDM (base, ncp = 5, graph = TRUE, sup.var = NULL, 
+    ind.sup = NULL, axes = c(1,2), row.w = NULL)
 }
 
 \arguments{
   \item{base}{a data frame with \emph{n} rows (individuals) and \emph{p} columns}
-  \item{type}{a vector indicating the type of each variable (the length of \code{type} must be equal 
-              to the number of columns of X}
   \item{ncp}{number of dimensions kept in the results (by default 5)}
   \item{graph}{boolean, if TRUE a graph is displayed}
   \item{ind.sup}{a vector indicating the indexes of the supplementary individuals}
   \item{sup.var}{a vector indicating the indexes of the supplementary variables}
   \item{axes}{a length 2 vector specifying the components to plot}
+  \item{row.w}{an optional row weights (by default, uniform row weights)}
 }
 
 \value{
@@ -42,14 +41,14 @@ Returns the individuals factor map.
 Pages J. (2004). Analyse factorielle de donnees mixtes. Revue Statistique Appliquee.  LII (4). pp. 93-111.
 }
 
-\author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}, Jeremy Mazet}
 
 \seealso{ \code{\link{print.AFDM}}, \code{\link{plot.AFDM}}}
 
 \examples{
 \dontrun{
 data(wine)
-res.afdm = AFDM(wine[,c(1,2,30,31)],type=c("n","n","s","s"))
+res.afdm = AFDM(wine[,c(1,2,30,31)])
 }
 }
 

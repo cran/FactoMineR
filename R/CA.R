@@ -48,12 +48,16 @@ CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE, axes=c
     contrib.row <- sweep(coord.row^2,1,marge.row,FUN="*")
     contrib.row <- sweep(contrib.row,2,eig,FUN="/")
     cos2.row <- sweep(coord.row^2,1,dist2.row,FUN="/")
-
     colnames(coord.row) <- colnames(contrib.row) <- colnames(cos2.row) <- paste("Dim", 1:length(eig))
     rownames(coord.row) <- rownames(contrib.row) <- rownames(cos2.row) <- rownames(X)
+    inertia.row = marge.row*dist2.row
+    inertia.col = marge.col*dist2.col
+    names(inertia.col) <- rownames(coord.col)
+    names(inertia.row) <- rownames(coord.row)
+    
     res.call <- list(X = X, marge.col = marge.col, marge.row = marge.row, ncp = ncp)
-    res.col <- list(coord = as.matrix(coord.col[, 1:ncp]), contrib = as.matrix(contrib.col[, 1:ncp] * 100), cos2 = as.matrix(cos2.col[, 1:ncp]))
-    res.row <- list(coord = coord.row[, 1:ncp], contrib = contrib.row[, 1:ncp] * 100, cos2 = cos2.row[, 1:ncp])
+    res.col <- list(coord = as.matrix(coord.col[, 1:ncp]), contrib = as.matrix(contrib.col[, 1:ncp] * 100), cos2 = as.matrix(cos2.col[, 1:ncp]), inertia=inertia.col)
+    res.row <- list(coord = coord.row[, 1:ncp], contrib = contrib.row[, 1:ncp] * 100, cos2 = cos2.row[, 1:ncp], inertia=inertia.row)
     res <- list(eig = vp, call = res.call, row = res.row, col = res.col, svd = tmp)
   if (!is.null(row.sup)){
     X.row.sup <- as.data.frame(Xtot[row.sup,])

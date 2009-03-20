@@ -32,16 +32,16 @@ catdes <- function(donnee,num.var,proba = 0.05){
       Test <- chisq.test(Table, correct=FALSE)
       Test.chi[i,1] <- Test$p.value
       Test.chi[i,2] <- Test$parameter
-      for (j in 1:nlevels(donnee[,num.var])) {  
+      for (j in 1:nlevels(donnee[,num.var])) {
        for (k in 1:nlevels(donnee[,quali[i]])) {
         aux2 = Table[j,k]/marge.li[j]
         aux3 = marge.col[k]/sum(marge.col)
-        if (aux2 > aux3) aux4 = phyper(Table[j,k]-1,marge.li[j],sum(marge.li)-marge.li[j],marge.col[k],lower.tail=FALSE)
-        else aux4 = phyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k])
+        if (aux2 > aux3) aux4 = phyper(Table[j,k]-1,marge.li[j],sum(marge.li)-marge.li[j],marge.col[k],lower.tail=FALSE)*2
+        else aux4 = phyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k])*2
         if (aux4<proba) {
-          aux5 = (1-2*as.integer(aux2>aux3))*qnorm(aux4)
+          aux5 = (1-2*as.integer(aux2>aux3))*qnorm(aux4/2)
           aux1 = Table[j,k]/marge.col[k]
-          tri[[j]] = rbind(tri[[j]],c(aux1,aux2,aux3,aux4,aux5))
+          tri[[j]] = rbind(tri[[j]],c(aux1*100,aux2*100,aux3*100,aux4,aux5))
           nom[[j]] = rbind(nom[[j]],c(levels(donnee[,quali[i]])[k],colnames(donnee)[quali[i]]))
         }
        }
@@ -62,7 +62,7 @@ catdes <- function(donnee,num.var,proba = 0.05){
        oo = order(Test.chi[,1])
        Test.chi = Test.chi[oo,]
      }  
-     colnames(Test.chi) = c("P.value","df")
+     colnames(Test.chi) = c("p.value","df")
    }
    for (j in 1:nb.modalite){
      if (!is.null(tri[[j]])){
@@ -74,10 +74,10 @@ catdes <- function(donnee,num.var,proba = 0.05){
          tri[[j]] = matrix(tri[[j]],ncol=5)
          rownames(tri[[j]]) = paste(nom[[j]][2],nom[[j]][1],sep="=")
        }
-       colnames(tri[[j]]) =  c("Cla/Mod","Mod/Cla","Global","p.value","V-test")
+       colnames(tri[[j]]) =  c("Cla/Mod","Mod/Cla","Global","p.value","v.test")
      }
    }
-   res$test.chi = Test.chi
+   res$test.chi2 = Test.chi
    res$category = tri
   }
 
@@ -92,9 +92,10 @@ catdes <- function(donnee,num.var,proba = 0.05){
       et = sd(donnee[,quanti[i]],na.rm=TRUE)*sqrt(1-1/sum(n.mod))
       for (j in 1:nb.modalite){
         v.test = (moy.mod[j]-moy)/et*sqrt(n.mod[j])/sqrt((sum(n.mod)-n.mod[j])/(sum(n.mod)-1))
+        p.value = pnorm(abs(v.test),lower.tail = FALSE)*2
         if(!is.na(v.test)){
-         if (abs(v.test)>-qnorm(proba/2)) {
-          result[[j]] = rbind(result[[j]],c(v.test,moy.mod[j],moy,sd.mod[j],et))
+         if (abs(v.test)> -qnorm(proba/2)) {
+          result[[j]] = rbind(result[[j]],c(v.test,moy.mod[j],moy,sd.mod[j],et,p.value))
           nom[[j]] = c(nom[[j]],colnames(donnee)[quanti[i]])
         }
        }
@@ -105,19 +106,20 @@ catdes <- function(donnee,num.var,proba = 0.05){
         oo = rev(order(result[[j]][,1]))
         result[[j]] = result[[j]][oo,]
         nom[[j]] = nom[[j]][oo]
-        if (nrow(matrix(result[[j]],ncol=5))>1){
+        if (nrow(matrix(result[[j]],ncol=6))>1){
           rownames(result[[j]]) = nom[[j]]
-          colnames(result[[j]])=c("v.test","Mean in category","Overall mean","sd in category","Overall sd")
+          colnames(result[[j]])=c("v.test","Mean in category","Overall mean","sd in category","Overall sd","p.value")
         }
         else {
-          result[[j]] = matrix(result[[j]],ncol=5)
+          result[[j]] = matrix(result[[j]],ncol=6)
           rownames(result[[j]]) = nom[[j]]
-          colnames(result[[j]])=c("v.test","Mean in category","Overall mean","sd in category","Overall sd")
+          colnames(result[[j]])=c("v.test","Mean in category","Overall mean","sd in category","Overall sd","p.value")
         }
       }
     }
     res$quanti = result
   }
   options(old.warn)
+class(res) <- c("catdes", "list ")
   return(res)
 }

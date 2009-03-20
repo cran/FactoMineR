@@ -58,6 +58,7 @@ Returns the individuals factor map and the variables factor map.
 \seealso{ \code{\link{MFA}}}
 
 \examples{
+\dontrun{
 data(wine)
 aa = MFA(wine,group=c(2,5,3,10,9,2),type=c("n",rep("s",5)),ncp=5,
     name.group=c("orig","olf","vis","olfag","gust","ens"),
@@ -68,5 +69,5 @@ plot(aa, choix = "Terroir")
 plot(aa, choix = "var", habillage="group")
 plot(aa, choix = "axes")
 }
-
+}
 \keyword{dplot}

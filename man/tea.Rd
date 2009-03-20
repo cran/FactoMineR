@@ -20,9 +20,6 @@ the 19th is a supplementary quantitative variable (the age) and the last variabl
 are supplementary qualitative variables.
 }
 
-\source{
-}
-
 \examples{
 data(tea)
 res.mca=MCA(tea,quanti.sup=19,quali.sup=20:36)
@@ -30,6 +27,7 @@ plot(res.mca,invisible=c("var","quali.sup","quanti.sup"),cex=0.7)
 plot(res.mca,invisible=c("ind","quali.sup","quanti.sup"),cex=0.8)
 plot(res.mca,invisible=c("quali.sup","quanti.sup"),cex=0.8)
 dimdesc(res.mca)
+plotellipses(res.mca,keepvar=1:4)
 
 ## make a hierarchical clustering
 res.mca=MCA(tea,quanti.sup=19,quali.sup=20:36,ncp=20,graph=FALSE)

@@ -164,5 +164,5 @@
         if (a<0) prob = pgamma(a/abs(a)*rvstd+2/abs(a),shape=(4/a^2),scale=(abs(a)/2))
 
         return(list(rv = rv, rvstd = rvstd, mean = esperance,
-            variance = variance, asym = a, p.value = prob))
+            variance = variance, skewness = a, p.value = prob))
     }

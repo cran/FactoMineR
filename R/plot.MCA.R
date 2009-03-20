@@ -1,14 +1,18 @@
-plot.MCA <- function (x, axes = c(1, 2), 
+plot.MCA <- function (x, axes = c(1, 2), choix="ind",
     xlim = NULL, ylim = NULL, invisible = NULL, 
-    col.ind = "blue", col.var = "red", col.quali.sup = "darkred",
+    col.ind = "blue", col.var = "red", col.quali.sup = "darkgreen",
     col.ind.sup = "darkblue", col.quanti.sup = "black",
     label="all", cex = 1, title = NULL, habillage = "none", palette=NULL, new.plot=TRUE, ...){
     
     res.mca <- x
     if (!inherits(res.mca, "MCA")) stop("non convenient data")
 
-    if (is.null(palette)) palette(c("black","red","green3","blue",      "cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
+    if (is.null(palette)) palette(c("black","red","green3","blue","cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
 
+   lab.x = paste("Dim ",axes[1]," (",signif(res.mca$eig[axes[1],2],4),"%)",sep="")
+   lab.y = paste("Dim ",axes[2]," (",signif(res.mca$eig[axes[2],2],4),"%)",sep="")
+
+   if (choix =="ind"){
     lab.ind <- lab.var <- lab.quali.sup <- lab.ind.sup <- FALSE
     if(length(label)==1 && label=="all") lab.ind <- lab.var <- lab.quali.sup <- lab.ind.sup <-TRUE
     if("ind" %in% label) lab.ind<-TRUE
@@ -87,18 +91,15 @@ plot.MCA <- function (x, axes = c(1, 2),
         }
 
     
-    sub.titre <- NULL
     titre = title
     if (is.null(title)) titre <- "MCA factor map"
-    else sub.titre <- "MCA factor map"
     if (is.na(test.invisible[1])|is.na(test.invisible[2])|is.na(test.invisible[4])|is.na(test.invisible[5])) {
-      if (new.plot) dev.new()
-      plot(0, 0, main = titre, xlab = paste("Dim ",axes[1]," (",signif(res.mca$eig[axes[1],2],4),"%)",sep=""), ylab = paste("Dim ",axes[2]," (",signif(res.mca$eig[axes[2],2],4),"%)",sep=""), xlim = xlim, ylim = ylim, col = "white", asp=1, cex=cex)
-      if (!is.null(sub.titre)) title(sub = sub.titre, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)
+      if (new.plot) dev.new(width=min(14,max(8,8*(xmax-xmin)/(ymax-ymin))),height=8)
+      plot(0, 0, main = titre, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp=1, cex=cex)
       abline(v=0,lty=2, cex=cex)
       abline(h=0,lty=2, cex=cex)
       if (is.na(test.invisible[1])) {
-          points(coord.ind, pch = 16, col = col.ind)
+          points(coord.ind, pch = 16, col = col.ind, cex=cex)
           if (lab.ind) text(coord.ind[, 1], y = coord.ind[, 2], labels = rownames(coord.ind), pos = 3, col = col.ind, cex=cex)
       }
       if (is.na(test.invisible[2])) {
@@ -115,7 +116,10 @@ plot.MCA <- function (x, axes = c(1, 2),
       }
       if ((habillage != "none")&(habillage != "quali")&(is.na(test.invisible[1])|is.na(test.invisible[2])))  legend("topleft",legend= levels(res.mca$call$X[,habillage]),text.col= 1:n.mod,cex=0.8)
     }
-    if (!is.null(res.mca$quanti.sup)&is.na(test.invisible[3])) {
+   }
+    
+    if (choix == "quanti.sup") {
+     if (!is.null(res.mca$quanti.sup)) {
       if (new.plot) dev.new()
       plot(0, 0, main = "Supplementary variables on the MCA factor map", xlab = paste("Dim ",axes[1]," (",signif(res.mca$eig[axes[1],2],4),"%)",sep=""), ylab = paste("Dim ",axes[2]," (",signif(res.mca$eig[axes[2],2],4),"%)",sep=""), xlim = c(-1.1,1.1), ylim = c(-1.1,1.1), col = "white", asp=1, cex=cex)
       abline(v=0,lty=2, cex=cex)
@@ -137,4 +141,34 @@ plot.MCA <- function (x, axes = c(1, 2),
         text(res.mca$quanti.sup$coord[v, 1], y = res.mca$quanti.sup$coord[v, 2], labels = rownames(res.mca$quanti.sup$coord)[v], pos = pos, cex=cex, col = col.quanti.sup)
       }
     }
+    }
+    
+    if (choix == "var") {
+      lab.var <- lab.quali.sup <- FALSE
+      if(length(label)==1 && label=="all") lab.var <- lab.quali.sup <-TRUE
+      if("var" %in% label) lab.var<-TRUE
+      if("quali.sup" %in% label) lab.quali.sup<-TRUE
+
+      test.invisible <- vector(length = 2)
+      if (!is.null(invisible)) {
+          test.invisible[1] <- match("var", invisible)
+          test.invisible[2] <- match("quali.sup", invisible)
+      }
+      else  test.invisible <- rep(NA, 2)
+
+      if (new.plot) dev.new()
+      if (is.null(title)) title <- "Variables representation"
+      coord.actif <- res.mca$var$eta2[, axes]
+      if (!is.null(res.mca$quali.sup$eta2)) coord.illu <- res.mca$quali.sup$eta2[,axes,drop=FALSE]
+      if (is.na(test.invisible[1])){
+        plot(coord.actif, xlab = lab.x, ylab = lab.y, xlim = c(0, 1), ylim = c(0, 1), pch = 20, col = col.var, cex = cex, main = title, cex.main = cex*1.2, asp = 1)
+        if (lab.var) text(coord.actif[, 1], y = coord.actif[, 2], labels = rownames(coord.actif), pos = 3, col = col.var)
+      }
+      if ((!is.null(res.mca$quali.sup$eta2))&&(is.na(test.invisible[2]))){
+        if (!is.na(test.invisible[1])) plot(coord.illu, xlab = lab.x, ylab = lab.y, xlim = c(0, 1), ylim = c(0, 1), pch = 20, col = col.quali.sup, cex = cex, main = title, cex.main = cex*1.2, asp = 1)
+        else points(coord.illu, pch = 20, col = col.quali.sup)
+        if (lab.quali.sup) text(coord.illu[, 1], y = coord.illu[, 2], labels = rownames(coord.illu), pos = 3, col = col.quali.sup)
+      }
+    }
+    
 }

@@ -7,13 +7,13 @@
 \description{
 Performs Multiple Correspondence Analysis (MCA) with supplementary individuals, supplementary quantitative 
 variables and supplementary qualitative variables.\cr
-Missing values are treated as an additional level,
+Missing values are treated as an additional level, categories which are rare can be ventilated
 }
 
 \usage{
 MCA(X, ncp = 5, ind.sup = NULL, quanti.sup = NULL, 
-    quali.sup = NULL, graph = TRUE, axes = c(1,2),
-    row.w = NULL)}
+    quali.sup = NULL, graph = TRUE, level.ventil = 0, 
+    axes = c(1,2), row.w = NULL)}
 
 \arguments{
   \item{X}{a data frame with \emph{n} rows (individuals) and \emph{p} columns (categorical variables)}
@@ -22,6 +22,7 @@ MCA(X, ncp = 5, ind.sup = NULL, quanti.sup = NULL,
   \item{quanti.sup}{a vector indicating the indexes of the quantitative supplementary variables}
   \item{quali.sup}{a vector indicating the indexes of the qualitative supplementary variables}
   \item{graph}{boolean, if TRUE a graph is displayed}
+  \item{level.ventil}{level under which the category is ventilated; by default, 0 and no nventilation is done}
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{row.w}{an optional row weights (by default, uniform row weights)}
 }
@@ -41,12 +42,13 @@ Returns the individuals factor map and the variables factor map.
 
 \author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
-\seealso{ \code{\link{print.MCA}}, \code{\link{plot.MCA}}, \code{\link{dimdesc}}}
+\seealso{ \code{\link{plotellipses}},\code{\link{print.MCA}}, \code{\link{plot.MCA}}, \code{\link{dimdesc}}}
 
 \examples{
 \dontrun{
-data (poison)
-res.mca = MCA (poison, quali.sup = 3:4, quanti.sup = 1:2)
+data(poison)
+res.mca = MCA(poison, quali.sup = 3:4, quanti.sup = 1:2)
+plotellipses(res.mca)
 }
 }
 \keyword{multivariate}

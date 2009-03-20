@@ -58,14 +58,9 @@ plot.CA <- function (x, axes = c(1, 2),
       ymin = ylim[1]
       ymax = ylim[2]
     }
-    sub.titre <- NULL
     if (is.null(title)) titre <- "CA factor map"
-    else {
-      sub.titre <- "CA factor map"
-      titre <- title
-    }
+    else titre <- title
     plot(0, 0, main = titre, xlab = paste("Dim ",axes[1]," (",signif(res.ca$eig[axes[1],2],4),"%)",sep=""), ylab = paste("Dim ",axes[2]," (",signif(res.ca$eig[axes[2],2],4),"%)",sep=""), xlim = xlim, ylim = ylim, col = "white", asp=1, cex=cex)
-    if (!is.null(sub.titre)) title(sub = sub.titre, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)
     abline(h=0,lty=2)
     abline(v=0,lty=2)
     if (is.na(test.invisible[1])) {
