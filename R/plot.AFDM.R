@@ -6,6 +6,6 @@ plot.AFDM <- function (x, choix = "group", axes = c(1, 2), lab.grpe = TRUE,
 plot.MFA (x, axes = axes, choix = choix, ellipse = NULL, lab.grpe = lab.grpe, lab.var = lab.var,
     lab.ind = lab.ind, lab.par = FALSE, habillage = habillage,
     col.hab = col.hab, invisible = invisible, partial = NULL, lim.cos2.var = lim.cos2.var, chrono = FALSE,
-    xlim = NULL, ylim = NULL, cex = cex, title = title, palette=palette, new.plot=TRUE...)
+    xlim = NULL, ylim = NULL, cex = cex, title = title, palette=palette, new.plot=TRUE,...)
 
 }

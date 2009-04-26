@@ -17,16 +17,13 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
     if("ind.sup" %in% label) lab.ind.sup<-TRUE
     cp1 <- round((res.pca$eig[axes[1],2]), digit = 2)
     cp2 <- round((res.pca$eig[axes[2],2]), digit = 2)
-    lab.x <- paste("Dimension ",axes[1]," (",cp1,"%)",sep="")
-    lab.y <- paste("Dimension ",axes[2]," (",cp2,"%)",sep="")
+    lab.x <- paste("Dim ",axes[1]," (",cp1,"%)",sep="")
+    lab.y <- paste("Dim ",axes[2]," (",cp2,"%)",sep="")
     plan <- cp1 + cp2
-    sub.titre <- NULL
+#    sub.titre <- NULL
     if (choix == "ind") {
         if (is.null(title)) titre <- "Individuals factor map (PCA)"
-        else {
-          titre <- title
-          sub.titre  <- "Individuals factor map (PCA)"
-        }
+        else titre <- title
         coord.actif <- res.pca$ind$coord[, axes]
         coord.illu <- coord.quali <- coord.ellipse <- NULL
         if (!is.null(res.pca$ind.sup)) coord.illu <- res.pca$ind.sup$coord[, axes]
@@ -72,7 +69,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
           ymin = ylim[1]
           ymax = ylim[2]
         }
-       if (new.plot) dev.new()
+       if (new.plot) dev.new(width=min(14,8*(xmax-xmin)/(ymax-ymin)),height=8)
         if (habillage == "ind") {
             nb.prod <- nrow(coord.actif)
             if (length(col.hab) != nb.prod) color.ind <- c(1:nb.prod)
@@ -107,7 +104,6 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
         color.sup <- col.ind.sup
 
         plot(0, 0, main = titre, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp=1, cex=cex)
-        title(sub = sub.titre, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)
         abline(v=0,lty=2, cex=cex)
         abline(h=0,lty=2, cex=cex)
         if (is.na(test.invisible[1])) {
@@ -150,17 +146,14 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
           for (e in 1:nbre.ellipse) {
             data.elli <- coord.ellipse[ellipse$res[, 1] == levels(coord.ellipse[, 1])[e], -1]
             if ((habillage != "none")&(habillage != "ind")) lines(x=data.elli[, 1], y = data.elli[, 2], col = color.mod[e])
-	    else lines(x=data.elli[, 1], y = data.elli[, 2], col = col.quali)
+        else lines(x=data.elli[, 1], y = data.elli[, 2], col = col.quali)
           }
         }
         if ((habillage != "none")&(habillage != "ind")) legend("topleft",legend= levels(res.pca$call$X[,habillage]),text.col= color.mod,cex=0.8)
     }
     if (choix == "var") {
         if (is.null(title)) titre <- "Variables factor map (PCA)"
-        else {
-          titre <- title
-          sub.titre  <- "Variables factor map (PCA)"
-        }
+        else titre <- title
         test.invisible <- vector(length = 2)
         if (!is.null(invisible)) {
             test.invisible[1] <- match("var", invisible)
@@ -173,17 +166,16 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
         else coord.quanti <- NULL
         if (scale.unit)  xlim <- ylim <- c(-1, 1)
         else {
-            xmin <- min(coord.var[, 1], coord.quanti[, 1])
-            xmax <- max(coord.var[, 1], coord.quanti[, 1])
-            ymin <- min(coord.var[, 2], coord.quanti[, 2])
-            ymax <- max(coord.var[, 2], coord.quanti[, 2])
+            xmin <- min(0,coord.var[, 1], coord.quanti[, 1])
+            xmax <- max(0,coord.var[, 1], coord.quanti[, 1])
+            ymin <- min(0,coord.var[, 2], coord.quanti[, 2])
+            ymax <- max(0,coord.var[, 2], coord.quanti[, 2])
             xlim <- c(xmin, xmax) * 1.2
             ylim <- c(ymin, ymax) * 1.2
         }
         if (new.plot) dev.new()
         if (scale.unit) {
             plot(0, 0, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp=1, cex=cex, main=titre)
-            title(sub = sub.titre, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)
             x.cercle <- seq(-1, 1, by = 0.01)
             y.cercle <- sqrt(1 - x.cercle^2)
             lines(x.cercle, y = y.cercle)
@@ -193,7 +185,6 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
         }
         else {
             plot(0, 0, main = titre, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp=1, cex=cex)
-            title(sub = sub.titre, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)
              abline(v=0,lty=2)
              abline(h=0,lty=2)
         }
@@ -229,7 +220,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
                  if (coord.quanti[q,2]>=0) pos<-3
                  else pos<-1
                 }
-                  text(coord.quanti[q, 1], y = coord.quanti[q, 2], labels = rownames(coord.quanti)[q], pos = pos, col=col.quanti.sup[q])
+                  text(coord.quanti[q, 1], y = coord.quanti[q, 2], labels = rownames(coord.quanti)[q], pos = pos, cex=cex,col=col.quanti.sup[q])
                 }
             }
         }

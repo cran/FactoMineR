@@ -6,7 +6,6 @@ plot.GPA<-function (x, axes = c(1, 2), lab.ind.moy = TRUE,
     if (!inherits(res.gpa, "GPA")) 
         stop("non convenient data")
     if (is.null(palette)) palette(c("black","red","green3","blue",      "cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
-    sub.title <- NULL
     lab.x <- paste("Dim ", axes[1], sep = "")
     lab.y <- paste("Dim ", axes[2], sep = "")
     nb.ind <- nrow(res.gpa$consensus)
@@ -66,14 +65,10 @@ plot.GPA<-function (x, axes = c(1, 2), lab.ind.moy = TRUE,
         col.hab <- 1:nb.ind
         col.ind <- c(col.hab, rep(col.hab, each = nbre.grpe))
     }
-    if (is.null(title)) 
-        title <- "General Procrustes Analysis map"
-    else sub.title <- "General Procrustes Analysis map"
+    if (is.null(title)) title <- "General Procrustes Analysis map"
 
     plot(0, 0, main = title, xlab = lab.x, ylab = lab.y, xlim = xlim, 
         ylim = ylim, col = "white", asp = 1, cex = cex)
-    title(sub = sub.title, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", 
-        adj = 0, line = 3.8)
     abline(v = 0, lty = 2, cex = cex)
     abline(h = 0, lty = 2, cex = cex)
     points(coord.ind, pch = 20, col = col.ind[1:nb.ind], cex = cex)

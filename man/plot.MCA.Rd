@@ -9,9 +9,9 @@ Draw the Multiple Correspondance Analysis (MCA) graphs.
 }
 
 \usage{
-plot.MCA (x, axes = c(1, 2), 
+plot.MCA (x, axes = c(1, 2),  choix="ind",
     xlim = NULL, ylim = NULL, invisible = NULL,
-    col.ind = "blue", col.var = "red", col.quali.sup = "darkred",
+    col.ind = "blue", col.var = "red", col.quali.sup = "darkgreen",
     col.ind.sup = "darkblue", col.quanti.sup = "black",
     label = "all", cex = 1, title = NULL, habillage = "none", 
     palette = NULL, new.plot = TRUE, \dots)
@@ -20,6 +20,7 @@ plot.MCA (x, axes = c(1, 2),
 \arguments{
   \item{x}{an object of class MCA}
   \item{axes}{a length 2 vector specifying the components to plot}
+  \item{choix}{the graph to plot ("ind" for the individuals and the categories, "var" for the variables, "quanti.sup" for the supplementary quantitative variables)}
   \item{xlim}{range for the plotted 'x' values, defaulting to the range of the finite values of 'x'}
   \item{ylim}{range for the plotted 'y' values, defaulting to the range of the finite values of 'y'}
   \item{invisible}{string indicating if some points should not be drawn ("ind", "var", "ind.sup", "quali.sup", "quanti.sup")}
@@ -46,5 +47,13 @@ Returns the individuals factor map and the variables factor map.
 \author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{MCA}}}
+
+\examples{
+data (poison)
+res.mca = MCA (poison, quali.sup = 3:4, quanti.sup = 1:2, graph=FALSE)
+plot.MCA(res.mca,invisible=c("var","quali.sup"))
+plot.MCA(res.mca,invisible="ind")
+plot.MCA(res.mca,choix="var")
+}
 
 \keyword{dplot}

@@ -1,6 +1,13 @@
-AFDM <- function (base, type, ncp = 5, graph = TRUE,sup.var=NULL, ind.sup = NULL, axes=c(1,2)){
+AFDM <- function (base, ncp = 5, graph = TRUE,sup.var=NULL, ind.sup = NULL, axes=c(1,2),row.w=NULL){
     base <- as.data.frame(base)
-    resultats <- MFA(base=base, group = rep(1,ncol(base)), type=type, name.group = colnames(base), num.group.sup = sup.var, ind.sup = ind.sup, graph=FALSE, ncp = ncp)
+    type=NULL
+    for (v in 1:ncol(base)) {
+      if (!is.numeric(base[,v])) type=c(type,"n")
+      else type=c(type,"s")
+    }
+    if (!any("n"%in%type)) warning("All your variables are quantitative: you should make PCA")
+    if (!any("s"%in%type)) warning("All your variables are qualitative: you should make MCA")
+    resultats <- MFA(base=base, group = rep(1,ncol(base)), type=type, name.group = colnames(base), num.group.sup = sup.var, ind.sup = ind.sup, graph=FALSE, ncp = ncp,row.w=row.w)
     
     class(resultats) <- c("MFA", "list")
     if (graph){

@@ -25,8 +25,8 @@ CA(X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE,
 \value{
 Returns a list including:
   \item{eig}{a matrix containing all the eigenvalues, the percentage of variance and the cumulative percentage of variance}
-  \item{col}{a list of matrices with all the results for the column variable (coordinates, square cosine, contributions)}
-  \item{row}{a list of matrices with all the results for the row variable (coordinates, square cosine, contributions)}
+  \item{col}{a list of matrices with all the results for the column variable (coordinates, square cosine, contributions, inertia)}
+  \item{row}{a list of matrices with all the results for the row variable (coordinates, square cosine, contributions, inertia)}
   \item{col.sup}{a list of matrices containing all the results for the supplementary column points (coordinates, square cosine)}
   \item{row.sup}{a list of matrices containing all the results for the supplementary row points (coordinates, square cosine)}
   \item{call}{a list with some statistics}
@@ -35,9 +35,9 @@ Returns the row and column points factor map.
 }
 
 \references{
-BENZECRI, J.-P. (1992) \emph{Correspondence Analysis Handbook}, New-York : Dekker \cr
-BENZECRI, J.-P. (1980) \emph{L'analyse des données tome 2 : l'analyse des correspondances}, Paris : Bordas \cr
-GREENACRE, M.J. (1993) \emph{Correspondence Analysis in Practice}, London : Academic Press
+Benzecri, J.-P. (1992) \emph{Correspondence Analysis Handbook}, New-York : Dekker \cr
+Benzecri, J.-P. (1980) \emph{L'analyse des données tome 2 : l'analyse des correspondances}, Paris : Bordas \cr
+Greenacre, M.J. (1993) \emph{Correspondence Analysis in Practice}, London : Academic Press
 
 }
 

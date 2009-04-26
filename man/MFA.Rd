@@ -14,7 +14,8 @@ Missing values in categorical variables are treated as an additional level,
 \usage{
 MFA (base, group, type = rep("s",length(group)), ind.sup = NULL, 
     ncp = 5, name.group = NULL, num.group.sup = NULL, 
-    graph = TRUE, weight.col.mfa = NULL, axes = c(1,2))
+    graph = TRUE, weight.col.mfa = NULL, row.w = NULL,
+    axes = c(1,2))
 }
 
 \arguments{
@@ -29,6 +30,7 @@ MFA (base, group, type = rep("s",length(group)), ind.sup = NULL,
   \item{num.group.sup}{the indexes of the illustrative groups (by default, NULL and no group are illustrative)}
   \item{graph}{boolean, if TRUE a graph is displayed}
   \item{weight.col.mfa}{vector of weights, useful for HMFA method (by default, NULL and an MFA is performed)}
+  \item{row.w}{an optional row weights (by default, uniform row weights)}
   \item{axes}{a length 2 vector specifying the components to plot}
 }
 

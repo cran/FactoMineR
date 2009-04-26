@@ -16,6 +16,6 @@ tab.disjonctif(tab)
   \item{tab}{a data frame with factors}
 }
 
-\value{The dijonctif table}
+\value{The disjonctif table}
 
 \keyword{algebra}

@@ -1,8 +1,6 @@
 GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
-    group, name.group = NULL, graph = TRUE, axes=c(1,2)){
-#-------------------------------------------------------------------------------
-# INVERSE GENERALISEE
-#-------------------------------------------------------------------------------
+    group, name.group = NULL, graph = TRUE, axes = c(1, 2))
+{
     ginv <- function(X, tol = sqrt(.Machine$double.eps)) {
         if (length(dim(X)) > 2 || !(is.numeric(X) || is.complex(X)))
             stop("'X' must be a numeric or complex matrix")
@@ -19,115 +17,16 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
         else Xsvd$v[, Positive, drop = FALSE] %*% ((1/Xsvd$d[Positive]) *
             t(Xsvd$u[, Positive, drop = FALSE]))
     }
-#-------------------------------------------------------------------------------
-# Coefficient de comparaison entre 2 matrices
-#-------------------------------------------------------------------------------
     similarite <- function(X, Y) {
         if (dim(X)[[1]] != dim(Y)[[1]])
-            stop("no the same dimension for X and Y")
+            stop("not the same dimension for X and Y")
         Y <- scale(Y, scale = FALSE)
         X <- scale(X, scale = FALSE)
-
         y <- Y %*% procrustesbis(Y, X)$H
         similari <- sum(diag(t(X) %*% y))/(sum(diag(t(X) %*%
             X)) * sum(diag(t(y) %*% y)))^0.5
         return(similari)
     }
-
-##    coeffRVs <- function(X, Y) {
-##        if (dim(X)[[1]] != dim(Y)[[1]]) stop("no the same dimension for X and Y")
-##        n <- dim(X)[[1]]
-##        Y <- scale(Y, scale = FALSE)
-##        X <- scale(X, scale = FALSE)
-##        rv <- coeffRV(X, Y)
-##        if (n < 4) {
-##            if (n == 1) {
-##                rvstd = NA
-##                esperance <- variance <- NA
-##            }
-##            else {
-##                perm24 <- permute(n)
-##                listX <- array(0, c(dim(X)[[1]], dim(X)[[2]],
-##                  dim(perm24)[[1]]))
-##                for (i in 1:dim(perm24)[[1]]) {
-##                  listX[, , i] <- scale(X[perm24[i, ], ], scale = FALSE)
-##                }
-##                listRV <- NULL
-##                listRVbis <- NULL
-##                for (i in 1:dim(perm24)[[1]]) {
-##                  listRV <- c(listRV, coeffRV(listX[, , i], Y))
-##                }
-##                esperance <- mean(listRV)
-##                variance <- sum((listRV - esperance)^2)/dim(perm24)[[1]]
-##            }
-##        }
-##        else {
-##            betax <- (sum(diag(X %*% t(X))))^2/sum(diag(X %*%
-##                t(X) %*% X %*% t(X)))
-##            betay <- (sum(diag(Y %*% t(Y))))^2/sum(diag(Y %*%
-##                t(Y) %*% Y %*% t(Y)))
-##            alphax <- n - 1 - betax
-##            alphay <- n - 1 - betay
-##            deltax <- sum(diag(X %*% t(X))^2)/sum(diag(X %*%
-##                t(X) %*% X %*% t(X)))
-##            gammax <- (n - 1) * (n * (n + 1) * deltax - (n -
-##                1) * (betax + 2))/((n - 3) * (n - 1 - betax))
-##            deltay <- sum(diag(Y %*% t(Y))^2)/sum(diag(Y %*%
-##                t(Y) %*% Y %*% t(Y)))
-##            gammay <- (n - 1)/((n - 3) * (n - 1 - betay)) * (n *
-##                (n + 1) * deltay - (n - 1) * (betay + 2))
-##            esperance <- (betax^0.5) * betay^0.5/(n - 1)
-##            variance <- 2 * alphay * alphax/((n + 1) * (n - 1)^2 *
-##                (n - 2)) * (1 + (n - 3) * gammax * gammay/(2 *
-##                n * (n - 1)))
-##        }
-##        rvstd <- (rv - esperance)/variance^0.5
-##        return(list(rvstd = rvstd, rv = rv, moyenne = esperance,
-##            variance = variance))
-##    }
-##    multiply.vec <- function(vec) {
-##        k <- length(vec)
-##        rep(vec, rep(factorial(k - 1), k))
-##    }
-##    permute <- function(nbp) {
-##        if (nbp == 2) {
-##            perm <- rbind(c(1, 2), c(2, 1))
-##        }
-##        else {
-##            perm <- matrix(nrow = factorial(nbp), ncol = nbp)
-##            perm[, 1] <- multiply.vec(1:nbp)
-##            for (j in 2:(nbp - 1)) {
-##                restants <- apply(matrix(perm[seq(1, factorial(nbp),
-##                  factorial(nbp - j + 1)), 1:(j - 1)], ncol = j -
-##                  1, nrow = length(seq(1, factorial(nbp), factorial(nbp -
-##                  j + 1)))), 1, setdiff, x = 1:nbp)
-##                perm[, j] <- as.vector(apply(restants, 2, multiply.vec))
-##            }
-##            perm[, nbp] <- apply(perm[, 1:nbp - 1], 1, setdiff,
-##                x = 1:nbp)
-##        }
-##        perm
-##    }
-##    coeffRV <- function(X, Y) {
-##        if (dim(X)[[1]] != dim(Y)[[1]])
-##            stop("no the same dimension for X and Y")
-##        if (dim(X)[[1]] == 1) {
-##            print("1 configuration RV is  NA")
-##            rv = NA
-##        }
-##        else {
-##            Y <- scale(Y, scale = FALSE)
-##            X <- scale(X, scale = FALSE)
-##            W1 <- X %*% t(X)
-##            W2 <- Y %*% t(Y)
-##            rv <- sum(diag(W1 %*% W2))/(sum(diag(W1 %*% W1)) *
-##                sum(diag(W2 %*% W2)))^0.5
-##        }
-##        return(rv)
-##    }
-#-------------------------------------------------------------------------------
-# Table de PANOVA
-#-------------------------------------------------------------------------------
     crit.procGPAcvmqte <- function(x) {
         if (!inherits(x, "GPAc"))
             stop("Object of type 'GPAc' expected")
@@ -329,9 +228,6 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
         contribution$dimension <- contridim/nbj * 100
         return(contribution)
     }
-#-------------------------------------------------------------------------------
-# Utilitaire emplacement de valeurs manquantes
-#-------------------------------------------------------------------------------
     placevm <- function(mat) {
         if (!is.matrix(mat))
             stop("A matrix please !!")
@@ -354,14 +250,11 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
         sol$vect <- vect
         return(sol)
     }
-#-------------------------------------------------------------------------------
-# Analyse Procrusteene (AP)
-#-------------------------------------------------------------------------------
     procrustesbis <- function(X1, X2) {
         if (!is.matrix(X1))
-            stop("On souhaite ici avoir un tableau de type matrice  ")
+            stop("A matrix please !!" )
         if (!is.matrix(X2))
-            stop("On souhaite ici avoir un tableau de type matrice  ")
+            stop("A matrix please !!")
         if (dim(X2)[[2]] != dim(X1)[[2]])
             stop("On souhaite ici avoir un tableau de type matrice ayant le meme nombre de colonnes  ")
         nbcolonne <- dim(X1)[[2]]
@@ -415,10 +308,6 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
         result$rho <- rho
         return(result)
     }
-    
-#-------------------------------------------------------------------------------
-# Algorithme de GPA
-#-------------------------------------------------------------------------------
     algogpa <- function(X, tolerance = 10^-7, nbiteration = 200,
         scale = TRUE, df, name.group) {
         Xm <- NULL
@@ -555,6 +444,7 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
         itpoids <- lossf2
         lossf <- lossf2
         compteur <- 0
+
         while (tol > tolerance && compteur < nbiteration) {
             for (j in 1:nbjuge) {
                 sommetemp <- pds[1] * Cj[, , 1] %*% Xnorm[, ,
@@ -562,18 +452,18 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
                 for (i in 2:nbjuge) {
                   sommetemp <- sommetemp + pds[i] * Cj[, , i] %*%
                     Xnorm[, , i] %*% R[, , i]
-                }
+                                }
                 R[, , j] <- procrustesbis(Cj[, , j] %*% Xnorm[,
                   , j], invgC %*% (sommetemp - pds[j] * Cj[,
                   , j] %*% Xnorm[, , j] %*% R[, , j]))$H
-            }
+                              }
             sommetemp2 <- NULL
             sommetemp2 <- pds[1] * Cj[, , 1] %*% Xnorm[, , 1] %*%
                 R[, , 1]
             for (i in 2:nbjuge) {
                 sommetemp2 <- sommetemp2 + pds[i] * Cj[, , i] %*%
                   Xnorm[, , i] %*% R[, , i]
-            }
+                              }
             matidd <- t(sommetemp2) %*% invgC %*% sommetemp2
             lossf2ortho <- nbjuge - sum(diag(t(sommetemp2) %*%
                 invgC %*% sommetemp2))
@@ -611,59 +501,68 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
                 lossf2 <- (nbjuge - sum(diag(t(sommetemp2) %*%
                   invgC %*% sommetemp2)))
             }
+
             tol <- (lossf - lossf2)
             lossf <- lossf2
             itorth <- c(itorth, lossf2ortho)
             itpoids <- c(itpoids, lossfpoids)
             compteur <- compteur + 1
-        }
+            }
         sommetemp2 <- NULL
         sommetemp2 <- pds[1] * Cj[, , 1] %*% Xnorm[, , 1] %*%
             R[, , 1]
         for (i in 2:nbjuge) {
             sommetemp2 <- sommetemp2 + pds[i] * Cj[, , i] %*%
                 Xnorm[, , i] %*% R[, , i]
-        }
+                            }
         pp <- invgC %*% sommetemp2
         translation <- matrix(0, nbcolonne, nbjuge)
         for (i in 1:nbjuge) {
             translation[, i] <- (t(pds[i] * Xnorm[, , i] - pp %*%
                 t(R[, , i])) %*% M[, , i] %*% U)/as.numeric(pds[i] *
                 t(U) %*% M[, , i] %*% U)
-        }
+                             }
         ppeig <- eigen(t(pp) %*% Cc %*% pp)
         Xfin <- Xnorm
         for (k in 1:nbjuge) {
             Xfin[, , k] <- pds[k] * M[, , k] %*% (Xnorm[, , k] -
                 U %*% t(translation[, k])) %*% R[, , k] %*% as.matrix(ppeig$vectors)
-        }
+                            }
+
         it <- cbind(itorth, itpoids)
         colnames(it) <- c("rotation step", "scaling step")
         consensus <- pp %*% as.matrix(ppeig$vectors)
         cte <- 1
+       
         while (cte <= dim(consensus)[[2]]) {
-            if (all(abs(consensus[, cte]) < 10^-15)) {
-                fin <- cte - 1
+            if (all(abs(consensus[, cte]) < sqrt(.Machine$double.eps))) {
+                fina <- cte - 1
                 cte = dim(consensus)[[2]] + 1
             }
             else {
-                fin <- cte
+                fina <- cte
                 cte <- cte + 1
             }
+
         }
+
         row.names(consensus) <- row.names(df)
-        colnames(consensus) <- c(paste("dim.", 1:fin))
-        colnames(Xfin) <- c(paste("dim.", 1:fin))
+       colnames(consensus,do.NULL = FALSE, prefix = "dim")
+      
+      
+        
+        colnames(Xfin)<-paste("dim",1:dim(Xfin)[[2]],sep=".")
         row.names(Xfin) <- row.names(df)
+                  
         result <- list()
         class(result) <- c("GPAc", "list")
         result$depart <- df
         result$name.group <- name.group
         result$M <- M
         result$Cj <- Cj
-        result$consensus <- consensus[, 1:fin]
+        result$consensus <- consensus[, 1:fina]
         result$Z <- pp
-        result$Xfin <- Xfin[, 1:fin, ]
+        result$Xfin <- Xfin[, 1:fina, ]
         result$Xdeb <- Xnorm
         result$poids <- pds
         result$translation <- translation
@@ -674,10 +573,6 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
         result$VMQTE <- VMQTE
         return(result)
     }
-    
-#-------------------------------------------------------------------------------
-# Utilitaire de calcul
-#-------------------------------------------------------------------------------
     crit <- function(Ys, MATRICEFIN) {
         s1 <- 0
         nbj <- dim(MATRICEFIN)[[3]]
@@ -687,210 +582,127 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
         }
         return(s1)
     }
-#-------------------------------------------------------------------------------
-f1ter<-function(tab,P=5,scal,df, name.group,vm,tol )
-{
-
-nbj<-dim(tab)[[3]]
-
-# permutation
-         permutation<-NULL
-         for (i in 1:P)
-         {
-         permutation<-rbind(permutation,sample(nbj))
-         }
-# pour les colonnnes et les signes on creer a chaque passage
-
-         listresult<-list()
-         length(listresult)<-3*P
-         critfin<-NULL
-        
-     for (i in 1:P)
-     {
-     # on fait une permutation des sous-tableau puis des colonnes puis des signes
-     
-     #colonne
-         permutcolonne<-NULL
-     for (colonne in 1:nbj)
-             {
-             permutcolonne<-rbind(permutcolonne,sample(dim(tab)[[2]]))
-             }
-    
-              
-    
-     #signe
-     listesigne<-list()
-   length( listesigne)<-nbj
-     compteur<-1
-     while (compteur<=nbj)
-    {
-     topn2<-sample(seq(0,dim(tab)[[2]],1),1)
-     #   topn2<-0
-         if (topn2==0) compteur<-compteur+1
-         if(topn2!=0)
-         {
-      listesigne[[compteur]]<-sample(dim(tab)[[2]],topn2)
-       compteur<-compteur+1
-       }
+    f1ter <- function(tab, P = 5, scal, df, name.group, vm, tol) {
+        nbj <- dim(tab)[[3]]
+        permutation <- NULL
+        for (i in 1:P) {
+            permutation <- rbind(permutation, sample(nbj))
+        }
+        listresult <- list()
+        length(listresult) <- 3 * P
+        critfin <- NULL
+        for (i in 1:P) {
+            permutcolonne <- NULL
+            for (colonne in 1:nbj) {
+                permutcolonne <- rbind(permutcolonne, sample(dim(tab)[[2]]))
+            }
+            listesigne <- list()
+            length(listesigne) <- nbj
+            compteur <- 1
+            while (compteur <= nbj) {
+                topn2 <- sample(seq(0, dim(tab)[[2]], 1), 1)
+                if (topn2 == 0)
+                  compteur <- compteur + 1
+                if (topn2 != 0) {
+                  listesigne[[compteur]] <- sample(dim(tab)[[2]],
+                    topn2)
+                  compteur <- compteur + 1
+                }
+            }
+            organisation <- sample(1:3)
+            if (organisation[[1]] == 1) {
+                tempo <- tab[, , permutation[i, ]]
+                if (organisation[[2]] == 2) {
+                  tempo2 <- permutcolonneX(tempo, permutcolonne)
+                  tempo3 <- changesignecolonneX(tempo2, listesigne)
+                }
+                else {
+                  tempo2 <- changesignecolonneX(tempo, listesigne)
+                  tempo3 <- permutcolonneX(tempo2, permutcolonne)
+                }
+            }
+            else {
+                if (organisation[[1]] == 2) {
+                  tempo <- permutcolonneX(tab, permutcolonne)
+                  if (organisation[[2]] == 1) {
+                    tempo2 <- tempo[, , permutation[i, ]]
+                    tempo3 <- changesignecolonneX(tempo2, listesigne)
+                  }
+                  else {
+                    tempo2 <- changesignecolonneX(tempo, listesigne)
+                    tempo3 <- tempo2[, , permutation[i, ]]
+                  }
+                }
+                else {
+                  tempo <- changesignecolonneX(tab, listesigne)
+                  if (organisation[[2]] == 1) {
+                    tempo2 <- tempo[, , permutation[i, ]]
+                    tempo3 <- permutcolonneX(tempo2, permutcolonne)
+                  }
+                  else {
+                    tempo2 <- permutcolonneX(tempo, permutcolonne)
+                    tempo3 <- tempo2[, , permutation[i, ]]
+                  }
+                }
+            }
+            listresult[[i]] <- algogpa(tempo3, scale = scal,
+                df = df, name.group = name.group, tolerance = tol)
+             
+            if (vm) {
+                tableau <- crit.procGPAcvmqte(gpafin)$objet
+                crit1 <- tableau[dim(tableau)[[1]], 2] * 100/tableau[dim(tableau)[[1]],
+                  3]
+            }
+            else {
+                crit1 <- crit(listresult[[i]]$consensus, listresult[[i]]$Xfin)
+            }
+            critfin <- c(critfin, crit1)
+        }
+        ord1 <- order(critfin)
+        gpafin <- listresult[[ord1[1]]]
+        return(list(gpafin = gpafin, permutab = permutation[ord1[[1]],
+            ]))
     }
-     
-      organisation<-sample(1:3)
-          
-      if(organisation[[1]]==1)  
-        {
-        #premier chiffre1
-        tempo<-tab[,,permutation[i,]]
-        if (organisation[[2]]==2)
-        {
-        #deuxieme chiffre 2 troisieme chifre 3
-         tempo2<-permutcolonneX(tempo,permutcolonne)
-         tempo3<-changesignecolonneX(tempo2,listesigne)
+    permutcolonneX <- function(X, permutcolonne) {
+        Xfin <- X
+        for (i in 1:dim(X)[[3]]) {
+            Xfin[, , i] <- as.matrix(X[, , i][, permutcolonne[i,
+                ]])
         }
-        # on a couvert 123
-        else
-        {
-        # deuxieme chiffre 3 troisieme chiffre 2
-          tempo2<-changesignecolonneX(tempo,listesigne)
-           tempo3<-permutcolonneX(tempo2,permutcolonne)
+        return(Xfin)
+    }
+    changesignecolonneX <- function(X, chgesigne) {
+        Xfin <- X
+        for (i in 1:dim(X)[[3]]) {
+            if (is.null(chgesigne[[i]]))
+                Xfin[, , i] <- X[, , i]
+            else {
+                Xfin[, chgesigne[[i]], i] <- -X[, chgesigne[[i]],
+                  i]
+            }
         }
-        # on a couvert 132
-        }
-      else
-      {
-
-       if (organisation[[1]]==2) 
-         {
-          # premier chiffre 2
-         tempo<-permutcolonneX(tab,permutcolonne)
-         
-         if (organisation[[2]]==1) 
-         {
-         #    2eme chiffre 1 troisieme 3
-         tempo2<-tempo[,,permutation[i,]]
-         tempo3<-changesignecolonneX(tempo2,listesigne)
-         }
-         # couvert 2 1 3
-        else
-        {
-        # deuxieme chiffre 3 3eme 1
-          tempo2<-changesignecolonneX(tempo,listesigne)
-          tempo3<-tempo2[,,permutation[i,]]
-        }
-        }
-        # on a couvert 2 3 1
-        else
-        {
-        # 1er chiffre 3
-        tempo<-changesignecolonneX(tab,listesigne)
-        if (organisation[[2]]==1) 
-         {
-         # deuxieme chiffre 1 troisieme 2
-         tempo2<-tempo[,,permutation[i,]]
-         tempo3<-permutcolonneX(tempo2,permutcolonne)
-         }
-         #couvert 312
-         else
-         {
-         tempo2<-permutcolonneX(tempo,permutcolonne)
-          tempo3<-tempo2[,,permutation[i,]]
-         }
-        
-        }       
-        
-      }
-      
-
-       
-    listresult[[i]]<-algogpa(tempo3,scale=scal,df = df, name.group = name.group,tolerance=tol)  
-          
-    
-    if(vm)
-    { 
-     tableau <- crit.procGPAcvmqte(gpafin)$objet
-            crit1 <- tableau[dim(tableau)[[1]], 2] * 100/tableau[dim(tableau)[[1]],
-                3]
-  }
-  else
-  {
-  crit1<-crit(listresult[[i]]$consensus,listresult[[i]]$Xfin)
-  }
-    critfin<-c(critfin,crit1)
-     }
-     
-     ord1 <- order(critfin)
-      gpafin <- listresult[[ord1[1]]]
-        
-
-     return(list(gpafin=gpafin,permutab=permutation[ord1[[1]],]))
-}
- 
-#------------------------------------------------------------------------------- 
- permutcolonneX<-function(X,permutcolonne)
-{
-# X : tableau multiple
-# permutcolonne : permutation des colonnes pour chaque sous tableau
-
-Xfin<-X
-
-for (i in 1:dim(X)[[3]])
-{
- 
-Xfin[,,i]<-as.matrix(X[,,i][,permutcolonne[i,]])
-
-}
-
-return(Xfin)
-}
-changesignecolonneX<-function(X,chgesigne)
-{
-# X : tableau multiple
-# changesigne : signe des colonnes pour chaque sous tableau
-
-Xfin<-X
- for (i in 1:dim(X)[[3]])
-{
-if(is.null(chgesigne[[i]])) Xfin[,,i]<-X[,,i]
-else
-{
-
-        
-Xfin[,chgesigne[[i]],i]<--X[,chgesigne[[i]],i]
-}
-}
-return(Xfin)
-}
-
-
-
-#-------------------------------------------------------------------------------
-   
-  
-  
-#-------------------------------------------------------------------------------
-# Pour des raisons pratiques on travaille sur les composantes principales
-#
-#-------------------------------------------------------------------------------
-calibre <- function(X) {
-        if (!is.array(X)) 
+        return(Xfin)
+    }
+    calibre <- function(X) {
+        if (!is.array(X))
             stop("On souhaite ici avoir un tableau de type array  ")
         nbj <- dim(X)[[3]]
-       
-    
         dimlist <- NULL
         mattravlist <- list()
         for (i in 1:nbj) {
             if (length(placevm(X[, , i])$vect) == 0) {
-                res.pca <- PCA(as.matrix(X[, , i]), scale.unit = FALSE, 
-                  graph = FALSE,ncp=min(dim(X[, , i])[[1]],dim(X[, , i])[[2]]))
+                res.pca <- PCA(as.matrix(X[, , i]), scale.unit = FALSE,
+                  graph = FALSE, ncp = min(dim(X[, , i])[[1]],
+                    dim(X[, , i])[[2]]))
                 mattravlist[[i]] <- as.matrix(res.pca$ind$coord)
                 dimlist <- c(dimlist, dim(mattravlist[[i]])[[2]])
             }
             else {
-                res.pca <- PCA(as.matrix(X[-(placevm(X[, , i])$vect), 
-                  , i]), scale.unit = FALSE, graph = FALSE,ncp=min(dim(X[, , i])[[1]],dim(X[, , i])[[2]]))
+                res.pca <- PCA(as.matrix(X[-(placevm(X[, , i])$vect),
+                  , i]), scale.unit = FALSE, graph = FALSE, ncp = min(dim(X[,
+                  , i])[[1]], dim(X[, , i])[[2]]))
                 temp <- matrix(0, dim(X)[[1]], dim(as.matrix(res.pca$ind$coord))[[2]])
                 temp[-placevm(X[, , i])$vect, ] <- as.matrix(res.pca$ind$coord)
-  
                 mattravlist[[i]] <- temp
                 dimlist <- c(dimlist, dim(mattravlist[[i]])[[2]])
             }
@@ -899,28 +711,18 @@ calibre <- function(X) {
         for (i in 1:nbj) {
             mattrav[, 1:dimlist[[i]], i] <- mattravlist[[i]]
         }
-        
-      tabfin <- mattrav 
-        
+        tabfin <- mattrav
         for (i in 1:nbj) {
             if (length(placevm(X[, , i])$vect) == 0) {
                 mattrav[, , i] <- tabfin[, , i]
-                
             }
             else {
                 tabfin[placevm(X[, , i])$vect, , i] <- NA
                 mattrav[, , i] <- tabfin[, , i]
-                
             }
         }
-    
-    
-              
         return(mattrav)
     }
-
-
-#-------------------------------------------------------------------------------
     if (is.null(name.group))
         name.group <- paste("group", c(1:length(group)), sep = ".")
     if (!is.data.frame(df))
@@ -928,7 +730,9 @@ calibre <- function(X) {
     blo <- group
     nbjuge <- length(blo)
     X <- array(0, c(nrow(df), max(blo), nbjuge))
+
     dimnames(X) <- list(rownames(df), 1:max(blo), name.group)
+
     indice <- 0
     for (i in 1:nbjuge) {
         X[, 1:blo[i], i] <- as.matrix(df[, (indice + 1):(indice +
@@ -936,39 +740,28 @@ calibre <- function(X) {
         indice <- indice + blo[i]
     }
     Xdd <- X
+
     X1 <- calibre(X)
+     
+    gpafin <- algogpa(X1, df = df, name.group = name.group)
 
-  gpafin <- algogpa(X1, df = df, name.group = name.group)
-
-    gpares<-f1ter(X1,P=5,scal=scale,tol=tolerance,df=df, name.group=name.group,vm=gpafin$VMQTE)
-  
-  
-    odd<-order(gpares$permutab)
-   
-
-   x <- gpares$gpafin
-   gpafin<-x
-#x<-gpafin
-#odd<-c(1:nbjuge)
-
+    gpares <- f1ter(X1, P = 5, scal = scale, tol = tolerance,
+        df = df, name.group = name.group, vm = gpafin$VMQTE)
+    odd <- order(gpares$permutab)
+    x <- gpares$gpafin
+    gpafin <- x
     gpafin$translation <- x$translation[, odd]
     gpafin$M <- (x$M)[, , odd]
     gpafin$Cj <- (x$Cj)[, , odd]
     gpafin$Xfin <- x$Xfin[, , odd]
     gpafin$Xdeb <- x$Xdeb[, , odd]
-      
     gpafin$Rj <- x$Rj[, , odd]
     gpafin$poids <- as.matrix(x$poids[odd])
     Xdep <- calibre(X)
     row.names(Xdep) <- row.names(df)
     colnames(Xdep) <- c(paste("dim", 1:dim(Xdep)[[2]]))
     x <- gpafin
-  
-   
-#-------------------------------------------------------------------------------
-# Calcul des coefficients RV et de similarite
-#-------------------------------------------------------------------------------
- RVs <- matrix(-1, nbjuge, nbjuge)
+    RVs <- matrix(-1, nbjuge, nbjuge)
     RV <- matrix(-1, nbjuge, nbjuge)
     sim <- matrix(-1, nbjuge, nbjuge)
     if (x$VMQTE) {
@@ -999,68 +792,54 @@ calibre <- function(X) {
                   Xi <- Xdd[, , i]
                   Xj <- Xdd[, , j]
                 }
-                RVs[i, j] <-RVs[j, i] <- coeffRV(Xi, Xj)$rvstd
-                RV[i, j] <- RV[j, i] <-coeffRV(Xi, Xj)$rv
-                sim[i, j] <-sim[j, i] <-  similarite(Xi, Xj)
+                RVs[i, j] <- RVs[j, i] <- coeffRV(Xi, Xj)$rvstd
+                RV[i, j] <- RV[j, i] <- coeffRV(Xi, Xj)$rv
+                sim[i, j] <- sim[j, i] <- similarite(Xi, Xj)
             }
         }
     }
     else {
-     
         for (i in 1:nbjuge) {
             for (j in i:nbjuge) {
                 Xi <- Xdd[, , i]
                 Xj <- Xdd[, , j]
-                RVs[i, j] <-RVs[j, i] <-coeffRV(Xi, Xj)$rvstd
-                RV[i, j] <-RV[j, i] <-  coeffRV(Xi, Xj)$rv
-                sim[i, j] <-sim[j, i] <- similarite(Xi, Xj)
+                RVs[i, j] <- RVs[j, i] <- coeffRV(Xi, Xj)$rvstd
+                RV[i, j] <- RV[j, i] <- coeffRV(Xi, Xj)$rv
+                sim[i, j] <- sim[j, i] <- similarite(Xi, Xj)
             }
         }
     }
     row.names(RV) <- colnames(RV) <- name.group
     row.names(RVs) <- colnames(RVs) <- name.group
     row.names(sim) <- colnames(sim) <- name.group
-  
-#-------------------------------------------------------------------------------    
-
-#-------------------------------------------------------------------------------
-   
-     listcor <- list()
+    listcor <- list()
     namelist <- NULL
     for (i in 1:dim(x$Xfin)[[3]]) {
         namelist <- c(namelist, paste("cor", name.group[[i]]))
-        listcor[[i]] <- cor(scale(Xdd[,1:blo[[i]], i], scale = FALSE),
+        listcor[[i]] <- cor(scale(Xdd[, 1:blo[[i]], i], scale = FALSE),
             x$consensus, use = "pairwise.complete.obs")
     }
-# on verifie qu'il y ait bien les memes dimensions
- listdimblo<-NULL
-for (i in 1:length(blo))
-{
-listdimblo<-c(listdimblo,(max(blo)-blo[[i]]))
-}
-  if(max(round(listdimblo,6))<=10^-5)
-    { 
-    averagecor <- 0 *listcor[[1]]
-    for (i in 1:dim(x$Xfin)[[3]]) {
-        averagecor <- averagecor + listcor[[i]]
+    listdimblo <- NULL
+    for (i in 1:length(blo)) {
+        listdimblo <- c(listdimblo, (max(blo) - blo[[i]]))
     }
-    averagecor <- averagecor/dim(x$Xfin)[[3]]
-    listcor[[(dim(x$Xfin)[[3]] + 1)]] <- averagecor
-    
-    namelist <- c(namelist, "averagecor")
-    names(listcor) <- namelist
-    
+    if (max(round(listdimblo, 6)) <= 10^-5) {
+        averagecor <- 0 * listcor[[1]]
+        for (i in 1:dim(x$Xfin)[[3]]) {
+            averagecor <- averagecor + listcor[[i]]
+        }
+        averagecor <- averagecor/dim(x$Xfin)[[3]]
+        listcor[[(dim(x$Xfin)[[3]] + 1)]] <- averagecor
+        namelist <- c(namelist, "averagecor")
+        names(listcor) <- namelist
     }
     names(listcor) <- namelist
     Xfin <- x$Xfin
     if (x$VMQTE) {
         for (i in 1:dim(x$Xfin)[[3]]) {
-           Xfin[vmplacelist[[i]], , i] <- NA
+            Xfin[vmplacelist[[i]], , i] <- NA
         }
     }
-    
-
-#-------------------------------------------------------------------------------
     resultat <- list()
     class(resultat) <- c("GPA", "list")
     resultat$RV <- RV
@@ -1071,12 +850,10 @@ listdimblo<-c(listdimblo,(max(blo)-blo[[i]]))
     resultat$consensus <- x$consensus
     resultat$Xfin <- Xfin
     resultat$correlations <- listcor
-                
-            
     if (x$VMQTE)
         resultat$PANOVA <- crit.procGPAcvmqte(x)
     else resultat$PANOVA <- crit.procGPAcsansvm(x)
-    
-    if (graph) plot.GPA(resultat,axes=axes)
+    if (graph)
+        plot.GPA(resultat, axes = axes)
     return(resultat)
 }

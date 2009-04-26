@@ -27,7 +27,8 @@ Returns a list including:
 
 \author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
-\seealso{ }
+
+\seealso{ \code{\link{plot.catdes}},\code{\link{condes}}}
 
 \references{
 Lebart, L., Morineau, A. and Piron, M. (1995)

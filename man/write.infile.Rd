@@ -9,7 +9,7 @@ Print in a file.
 }
 
 \usage{
-write.infile(X, file, sep=";", append = FALSE)
+write.infile(X, file, sep=";", append = FALSE, nb.dec=4)
 }
 
 \arguments{
@@ -19,6 +19,7 @@ write.infile(X, file, sep=";", append = FALSE)
   \item{append}{logical. If TRUE output will be
           appended to file; otherwise, it will overwrite the contents
           of file.}
+  \item{nb.dec}{number of decimal printed, by default 4}
 }
 
 \author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}

@@ -56,7 +56,9 @@ Returns the individuals factor map and the variables factor map.
 data(decathlon)
 res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup = 13)
 plot(res.pca, habillage = 13, col.hab=c("green","blue"))
-## To draw ellipses around the barycentres
+## To automatically draw ellipses around the barycentres of all the categorical variables
+plotellipses(res.pca)
+## or another graph
 aa=cbind.data.frame(decathlon[,13],res.pca$ind$coord)
 bb=coord.ellipse(aa,bary=TRUE)
 plot.PCA(res.pca,habillage=13,ellipse=bb)

@@ -1,15 +1,15 @@
 print.CA <- function (x, file = NULL, sep = ";", ...){
     res.ca <- x
     if (!inherits(res.ca, "CA")) stop("non convenient data")
-    cat("**Results of the Correspondence Analysis (CA)**\n\n")
+    cat("**Results of the Correspondence Analysis (CA)**\n")
     cat("The variable in rows have", nrow(res.ca$call$X),
-        "categories, the variable in column", ncol(res.ca$call$X), "categories\n\n")
+        "categories, the variable in columns", ncol(res.ca$call$X), "categories\n")
 ##    IT <- res.ca$eig[length(res.ca$eig), 3] * sum(res.ca$call$X)
     IT <- sum(res.ca$eig[, 1] )* sum(res.ca$call$X) 
     df <- (nrow(res.ca$call$X) - 1) * (ncol(res.ca$call$X) - 1)
     pc <- pchisq(IT, df = df,lower.tail = FALSE)
-    cat("\nThe chi square of independance between the two variables is equal to", IT, 
-        ", the p-value associated to this chi square is equal to", pc, ".\n")
+    cat("The chi square of independence between the two variables is equal to", IT, 
+        "(p-value = ", pc, ").\n")
     cat("*The results are available in the following objects:\n\n")
     res <- array("", c(16, 2), list(1:16, c("name", "description")))
     res[1, ] <- c("$eig", "eigenvalues")

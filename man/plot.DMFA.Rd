@@ -33,7 +33,5 @@ Returns the individuals factor map and the variables factor map, the partial var
 
 \seealso{ \code{\link{DMFA}}}
 
-\examples{
-}
 
 \keyword{dplot}

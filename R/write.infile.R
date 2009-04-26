@@ -1,9 +1,9 @@
-    write.infile <- function(X, file, sep=";", append = FALSE) {
+    write.infile <- function(X, file, sep=";", append = FALSE,nb.dec=4) {
         if (!append) cat("\n", file = file, append = FALSE)
-        if (inherits(X, "array")) affichetableau(X, file, sep)
-        else if (is.matrix(X)) affichmatrice(X, file, sep)
-        else if (is.data.frame(X)) affichtabldon(X, file, sep)
-        else if (is.list(X)) affichlist(X, file,sep)
+        if (inherits(X, "array")) affichetableau(X, file, sep, nb.dec=nb.dec)
+        else if (is.matrix(X)) affichmatrice(X, file, sep,nb.dec=nb.dec)
+        else if (is.data.frame(X)) affichtabldon(X, file, sep,nb.dec=nb.dec)
+        else if (is.list(X)) affichlist(X, file,sep,nb.dec=nb.dec)
         else if (is.numeric(X)) cat(X, "\n", file = file, append = TRUE)
         else if (is.character(X)) cat(X, "\n", file = file, append = TRUE)
         else if (is.vector(X)) cat(X, "\n", file = file, append = TRUE)
@@ -13,15 +13,15 @@
         }
     }
     
-    affichetableau <- function(X, file, sep) {
-        X <- round(X, 4)
+    affichetableau <- function(X, file, sep,nb.dec=4) {
+        X <- round(X, nb.dec)
         for (j in 1:(dim(X)[[3]])) {
             cat("sous tableau", j, "\n", file = file, append = TRUE)
-            affichmatrice(X[, , j], file, sep=sep)
+            affichmatrice(X[, , j], file, sep=sep,nb.dec=nb.dec)
         }
         cat("\n", file = file, append = TRUE)
     }
-    affichtabldon <- function(X, file, sep) {
+    affichtabldon <- function(X, file, sep,nb.dec=nb.dec) {
         nomligne <- labels(X)[[1]]
         nomcol <- labels(X)[[2]]
         cat("  ", nomcol, "\n", file = file, append = TRUE, sep = sep)
@@ -33,8 +33,8 @@
         }
         cat("\n", file = file, append = TRUE)
     }
-    affichmatrice <- function(X, file, sep) {
-        X <- round(X, 4)
+    affichmatrice <- function(X, file, sep,nb.dec=4) {
+        X <- round(X, nb.dec)
         nomligne <- rownames(X)
         nomcol <- colnames(X)
         cat("   ",nomcol, "\n", file = file, append = TRUE, sep = sep)
@@ -42,13 +42,13 @@
         for (i in 1:alpha) cat(nomligne[i], X[i, ], "\n", file = file, append = TRUE, sep=sep)
         cat("\n", file = file, append = TRUE)
     }
-    affichlist <- function(X, file,sep) {
+    affichlist <- function(X, file,sep,nb.dec=4) {
         taillelist <- length(X)
         noms <- labels(X)
         for (i in 1:taillelist) {
             if (noms[i]!= "call"){
               cat(noms[i], "\n", file = file, append = TRUE)
-              write.infile(X[[i]], file, sep=sep, append = TRUE)
+              write.infile(X[[i]], file, sep=sep, append = TRUE,nb.dec=nb.dec)
             }
         }
     }

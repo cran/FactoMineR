@@ -1,4 +1,4 @@
-MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp = 5, name.group = NULL, num.group.sup = NULL, graph = TRUE, weight.col.mfa = NULL, axes=c(1,2)){
+MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp = 5, name.group = NULL, num.group.sup = NULL, graph = TRUE, weight.col.mfa = NULL, row.w = NULL, axes=c(1,2)){
 
     moy.p <- function(V, poids){
       res <- sum(V*poids) / sum(poids)
@@ -63,7 +63,9 @@ MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp
         }
         ind.grpe <- ind.grpe + group[g]
     }
-    row.w <- as.integer(!((1:nbre.ind)%in%ind.sup))/nb.actif
+    if (is.null(row.w)) row.w <- as.integer(!((1:nbre.ind)%in%ind.sup))/nb.actif
+    row.w <- row.w/sum(row.w)
+#    row.w <- as.integer(!((1:nbre.ind)%in%ind.sup))/nb.actif
     data <- matrix(0,nbre.ind,0)
     ind.grpe <- ind.grpe.mod <- 0
     ponderation <- vector(length = sum(group.mod))
@@ -140,7 +142,9 @@ MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp
       else aux.quali.sup.indice <- (ncol(data)+ncol(data.group.sup)+1):(ncol(data)+ncol(data.group.sup)+ncol(aux.quali.sup))
       data.pca <- cbind.data.frame(data.pca,aux.quali.sup)
     }
-    res.globale <- PCA(data.pca, scale.unit = FALSE, col.w = ponderation, ncp = ncp.tmp, ind.sup = ind.sup, quali.sup = aux.quali.sup.indice, quanti.sup = data.group.sup.indice, graph = FALSE)
+#    res.globale <- PCA(data.pca, scale.unit = FALSE, col.w = ponderation, ncp = ncp.tmp, ind.sup = ind.sup, quali.sup = aux.quali.sup.indice, quanti.sup = data.group.sup.indice, graph = FALSE)
+row.w = row.w[1:nb.actif]
+    res.globale <- PCA(data.pca, scale.unit = FALSE, col.w = ponderation, row.w=row.w,ncp = ncp.tmp, ind.sup = ind.sup, quali.sup = aux.quali.sup.indice, quanti.sup = data.group.sup.indice, graph = FALSE)
     ncp <- min(ncp, nrow(res.globale$eig))
     call <- res.globale$call
     call$group <- group
@@ -350,7 +354,7 @@ MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp
     if (!is.null(ind.quali)) {
       coord.quali <- res.globale$quali.sup$coord[, 1:ncp]
       cos2.quali <- res.globale$quali.sup$cos2[, 1:ncp]
-      val.test.quali <- res.globale$quali.sup$vtest[, 1:ncp]
+      val.test.quali <- res.globale$quali.sup$v.test[, 1:ncp]
       contrib.quali <- sweep(res.globale$quali.sup$coord^2, 2, res.globale$eig[,1], "/")
       poids.bary <- res.globale$call$quali.sup$nombre * res.globale$call$row.w[1]
       contrib.quali <- 100 * sweep(contrib.quali, 1, poids.bary, "*")[,1:ncp]

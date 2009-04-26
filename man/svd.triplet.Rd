@@ -20,8 +20,8 @@ svd.triplet(X, row.w=NULL, col.w=NULL)
 
 \value{
 \item{d}{ a vector containing the singular values of 'x';}
-\item{u} {a matrix whose columns contain the left singular vectors of 'x';}
-\item{v} {a matrix whose columns contain the right singular vectors of 'x'.}
+\item{u}{a matrix whose columns contain the left singular vectors of 'x';}
+\item{v}{a matrix whose columns contain the right singular vectors of 'x'.}
 }
 
 \seealso{ \code{\link{svd}}}

@@ -7,7 +7,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.
     if (!inherits(res.mfa, "MFA")) stop("non convenient data")
     if (is.null(palette)) palette(c("black","red","green3","blue",      "cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
   
-    sub.title <- NULL
+#    sub.title <- NULL
     lab.x <- paste("Dim ", axes[1], " (",signif(res.mfa$eig[axes[1],2],4)," %)",sep="")
     lab.y <- paste("Dim ", axes[2], " (",signif(res.mfa$eig[axes[2],2],4)," %)",sep="")
     group <- res.mfa$call$group
@@ -25,10 +25,10 @@ plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.
     if (choix == "axes") {
       if (new.plot) dev.new()
       if (is.null(title)) title <- "Partial axes"
-      else sub.title <- "Partial axes"
+#      else sub.title <- "Partial axes"
       coord.axes <- res.mfa$partial.axes$coord[, axes]
       plot(0, 0, xlab = lab.x, ylab = lab.y, xlim = c(-1.1, 1.1), ylim = c(-1.1, 1.1), col = "white", asp=1, cex=cex, main = title)
-      title(sub = sub.title, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)
+#      title(sub = sub.title, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)
       x.cercle <- seq(-1, 1, by = 0.01)
       y.cercle <- sqrt(1 - x.cercle^2)
       lines(x.cercle, y = y.cercle)
@@ -79,7 +79,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.
     if (choix == "group") {
       if (new.plot) dev.new()
       if (is.null(title)) title <- "Groups representation"
-      else sub.title <- "Groups representation"
+#      else sub.title <- "Groups representation"
       coord.actif <- res.mfa$group$coord[, axes]
       if (!is.null(res.mfa$group$coord.sup)) coord.illu <- res.mfa$group$coord.sup[,axes]
       if (is.null(col.hab)){
@@ -88,7 +88,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.
       }
       if (habillage=="group") col.hab <- (2:(length(group)+1))
       plot(coord.actif, xlab = lab.x, ylab = lab.y, xlim = c(0, 1), ylim = c(0, 1), pch = 17, col = col.hab[1:nrow(coord.actif)], cex = cex, main = title, cex.main = cex*1.2, asp = 1)
-      title(sub = sub.title, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)
+#      title(sub = sub.title, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)
       if (lab.grpe) text(coord.actif[, 1], y = coord.actif[, 2], labels = rownames(coord.actif), pos = 3, col = col.hab[1:nrow(coord.actif)])
       if (!is.null(res.mfa$group$coord.sup)){
         points(coord.illu, pch = 17, col = col.hab[(nrow(coord.actif)+1):(nrow(coord.actif)+nrow(coord.illu))])
@@ -111,9 +111,9 @@ plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.
       }
       else col <- rep(1,sum(group[type != "n"]))
       if (is.null(title)) title <- "Correlation circle"
-      else sub.title <- "Correlation circle"
+#      else sub.title <- "Correlation circle"
       plot(0, 0, main = title, xlab = lab.x, ylab = lab.y, xlim = c(-1.1, 1.1), ylim = c(-1.1, 1.1), col = "white", asp=1, cex=cex)
-      title(sub = sub.title, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)
+#      title(sub = sub.title, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)
       x.cercle <- seq(-1, 1, by = 0.01)
       y.cercle <- sqrt(1 - x.cercle^2)
       lines(x.cercle, y = y.cercle)
@@ -359,11 +359,11 @@ plot.MFA <- function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.
         
         if (habillage == "none") col.ind <- col.ind.sup <- col.quali.sup <- col.quali <- col.ellipse<-col.ellipse.par <- rep("black",nb.ind*(nbre.grpe+1))
 
-        if (new.plot) dev.new()
+        if (new.plot) dev.new(width=min(14,max(8,8*(xmax-xmin)/(ymax-ymin))),height=8)
         if (is.null(title)) title <- "Individual factor map"
-        else sub.title <- "Individual factor map"
+#        else sub.title <- "Individual factor map"
         plot(0, 0, main = title, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp=1, cex=cex)
-        title(sub = sub.title, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)
+#        title(sub = sub.title, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)
         abline(v=0,lty=2, cex=cex)
         abline(h=0,lty=2, cex=cex)
         if (is.na(test.invisible[1])) {

@@ -17,9 +17,6 @@ who suffered from food poisoning. They were asked about their symptoms and about
 A data frame with 55 rows and 3 columns (the sex, if they are sick or not, and a textual variable with their symptom and what they eat).
 }
 
-\source{
-}
-
 \examples{
 data(poison.text)
 res.text <- textual(poison.text, num.text = 3, contingence.by = c(1,2))

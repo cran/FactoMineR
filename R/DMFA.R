@@ -76,7 +76,7 @@ DMFA = function(don, num.fact = ncol(data), scale.unit=TRUE, ncp=5,quanti.sup=NU
     res=res.pca
     res$quali.sup$coord=res$quali.sup$coord[-(1:ng),]
     res$quali.sup$cos2=res$quali.sup$cos2[-(1:ng),]
-    res$quali.sup$vtest=res$quali.sup$vtest[-(1:ng),]
+    res$quali.sup$v.test=res$quali.sup$v.test[-(1:ng),]
   }
   else   res=res.pca[names(res.pca)!=c("quali.sup")]
   res$var.partiel = cor.partiel

@@ -70,10 +70,10 @@ X <- as.data.frame(X)
     cos2.ind <- sweep(as.matrix(coord.ind^2), 1, dist2, FUN = "/")
     contrib.ind <- sweep(as.matrix(coord.ind^2),1,row.w/sum(row.w), FUN = "*")
     contrib.ind <- sweep(as.matrix(contrib.ind),2,eig, FUN = "/")
-    rownames(coord.ind) <- rownames(cos2.ind) <- rownames(contrib.ind) <- rownames(X)
+    rownames(coord.ind) <- rownames(cos2.ind) <- rownames(contrib.ind)<- names(dist2) <- rownames(X)
     colnames(coord.ind) <- colnames(cos2.ind) <- colnames(contrib.ind) <- paste("Dim", c(1:ncol(U)), sep = ".")
     
-    res.ind <- list(coord = coord.ind[, 1:ncp], cos2 = cos2.ind[,1:ncp], contrib = contrib.ind[, 1:ncp] * 100)
+    res.ind <- list(coord = coord.ind[, 1:ncp], cos2 = cos2.ind[,1:ncp], contrib = contrib.ind[, 1:ncp] * 100, dist=sqrt(dist2))
     res <- list(eig = vp, var = res.var,ind = res.ind, svd = tmp)
 ###  For illustrative individuals
     if (!is.null(ind.sup)){
@@ -87,12 +87,12 @@ X <- as.data.frame(X)
       coord.ind.sup <- as.data.frame(coord.ind.sup[,1:ncp,drop=F])
       cos2.ind.sup <- as.data.frame(cos2.ind.sup[,1:ncp,drop=F])
       colnames(coord.ind.sup) <- colnames(cos2.ind.sup) <- paste("Dim", c(1:ncp), sep = ".")
-      rownames(coord.ind.sup) <- rownames(cos2.ind.sup) <- rownames(X.ind.sup)
-      res.ind.sup <- list(coord = coord.ind.sup, cos2 = cos2.ind.sup)
+      rownames(coord.ind.sup) <- rownames(cos2.ind.sup) <- names(dist2) <- rownames(X.ind.sup)
+      res.ind.sup <- list(coord = coord.ind.sup, cos2 = cos2.ind.sup, dist=sqrt(dist2))
       res$ind.sup = res.ind.sup
       res.call$ind.sup = ind.sup
     }    
-    
+
 ### For illustrative variables
     if (!is.null(quanti.sup)){
       X.quanti.sup <- as.data.frame(Xtot [ , quanti.sup])
@@ -164,14 +164,15 @@ X <- as.data.frame(X)
       cos2.bary.sup <- cos2.bary.sup[,1:ncp]
       coord.barycentre <- coord.barycentre[,1:ncp]
       vtest <- vtest[,1:ncp]
-      dimnames(cos2.bary.sup) <- dimnames(vtest) <- dimnames(coord.barycentre)
-      res.quali.sup <- list(coord = coord.barycentre, cos2 = cos2.bary.sup, vtest = vtest)
-      call.quali.sup <- list(quali.sup = X.quali.sup, modalite = modalite, nombre = nombre, barycentre = barycentre)
+      dimnames(cos2.bary.sup) <- dimnames(vtest) <- dimnames(coord.barycentre) 
+      names(dist2) <- rownames(coord.barycentre)
+      res.quali.sup <- list(coord = coord.barycentre, cos2 = cos2.bary.sup, v.test = vtest, dist=sqrt(dist2))
+      call.quali.sup <- list(quali.sup = X.quali.sup, modalite = modalite, nombre = nombre, barycentre = barycentre, numero=quali.sup)
       res$quali.sup = res.quali.sup
       res.call$quali.sup = call.quali.sup
 }
 res$call = res.call
-    
+
 class(res) <- c("PCA", "list ")
 if (graph) {
   plot.PCA(res, choix="ind",axes=axes)

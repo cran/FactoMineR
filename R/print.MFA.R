@@ -1,9 +1,9 @@
 print.MFA <- function (x, file = NULL, sep = ";", ...){
     res.mfa <- x
     if (!inherits(res.mfa, "MFA")) stop("non convenient data")
-    cat("**Results of the Multiple Factor Analysis (MFA)**\n\n")
-    cat("There are", nrow(res.mfa$call$X), "individuals, characterized by",
-        ncol(res.mfa$call$X), "variables\n\n")
+    cat("**Results of the Multiple Factor Analysis (MFA)**\n")
+    cat("The analysis was performed on ", nrow(res.mfa$call$X),
+        "individuals, described by", ncol(res.mfa$call$X), "variables\n")
     cat("*Results are available in the following objects :\n\n")
     res <- array("", c(22, 2), list(1:22, c("name", "description")))
     res[1, ] <- c("$eig", "eigenvalues")
