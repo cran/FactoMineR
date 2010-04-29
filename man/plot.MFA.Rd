@@ -9,7 +9,7 @@ Draw the Multiple Factor Analysis (MFA) graphs.
 }
 
 \usage{
-plot.MFA(x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par = NULL,
+\method{plot}{MFA}(x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par = NULL,
     lab.grpe = TRUE, lab.var = TRUE, lab.ind.moy = TRUE, 
     lab.par = FALSE, habillage = "ind", col.hab = NULL, 
     invisible = NULL, partial = NULL, lim.cos2.var = 0., 
@@ -19,7 +19,7 @@ plot.MFA(x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par = NULL,
 
 \arguments{
   \item{x}{an object of class MFA}
-  \item{choix}{a string corresponding to the graph that you want to do ("ind" for the individual or qualitative
+  \item{choix}{a string corresponding to the graph that you want to do ("ind" for the individual or categorical
   variables graph, "var" for the quantitative variables graph, "axes" for the graph of the partial axes,
   "group" for the groups representation)}
   \item{axes}{a length 2 vector specifying the components to plot}
@@ -30,11 +30,11 @@ plot.MFA(x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par = NULL,
   \item{lab.ind.moy}{boolean, if TRUE, the label of the mean points are drwan}
   \item{lab.par}{boolean, if TRUE, the label of the partial points are drwan}
   \item{habillage}{string corresponding to the color which are used. If "ind", one color is used for each individual;
-  if "group" the individuals are colored according to the group; else if it is the name or the position of a qualitative variable, it colors 
+  if "group" the individuals are colored according to the group; else if it is the name or the position of a categorical variable, it colors 
   according to the different categories of this variable}
   \item{col.hab}{the colors to use. By default, colors are chosen}
   \item{invisible}{list of string; for choix ="ind", the individuals can be omit (invisible = "ind"),
-  or supplementary individuals (invisible="ind.sup") or the centerg of gravity of the qualitative variables 
+  or supplementary individuals (invisible="ind.sup") or the centerg of gravity of the categorical variables 
   (invisible= "quali"); if invisible = c("ind","ind.sup"), just the centers of gravity are drawn}
   \item{partial}{list of the individuals or of the center of gravity for which the partial points should be drawn (by
   default, partial = NULL and no partial points are drawn)}

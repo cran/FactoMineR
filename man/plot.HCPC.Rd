@@ -9,7 +9,7 @@
   first factor map with or without the tree, in 2 or 3 dimensions.}
 
 \usage{
-plot.HCPC(x, axes=c(1,2), choice="3D.map", rect=TRUE, 
+\method{plot}{HCPC}(x, axes=c(1,2), choice="3D.map", rect=TRUE, 
   draw.tree=TRUE, ind.names=TRUE, t.level="all", title=NULL,
   new.plot=TRUE, max.plot=15, tree.barplot=TRUE,
   centers.plot=FALSE, \dots)

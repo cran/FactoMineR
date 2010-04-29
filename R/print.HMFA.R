@@ -16,7 +16,7 @@ print.HMFA <- function (x, file = NULL, sep = ";", ...){
     }
     if (!is.null(res.hmfa["quali.var"]$quali.var)){
       indice <- indice + 1
-      res[indice, ] <- c("$quali.var", "results for the qualitative variables")
+      res[indice, ] <- c("$quali.var", "results for the categorical variables")
     }
     print(res[1:indice,])
     if (!is.null(file)) {

@@ -6,7 +6,7 @@
 
 \description{
 Performs Principal Component Analysis (PCA) with supplementary individuals, supplementary quantitative 
-variables and supplementary qualitative variables.\cr
+variables and supplementary categorical variables.\cr
 Missing values are replaced by the column mean.
 }
 
@@ -21,7 +21,7 @@ PCA(X, scale.unit = TRUE, ncp = 5, ind.sup = NULL,
   \item{scale.unit}{a boolean, if TRUE (value set by default) then data are scaled to unit variance}
   \item{ind.sup}{a vector indicating the indexes of the supplementary individuals}
   \item{quanti.sup}{a vector indicating the indexes of the quantitative supplementary variables}
-  \item{quali.sup}{a vector indicating the indexes of the qualitative supplementary variables}
+  \item{quali.sup}{a vector indicating the indexes of the categorical supplementary variables}
   \item{row.w}{an optional row weights (by default, uniform row weights)}
   \item{col.w}{an optional column weights (by default, uniform column weights)}
   \item{graph}{boolean, if TRUE a graph is displayed}
@@ -35,12 +35,12 @@ Returns a list including:
   \item{ind}{a list of matrices containing all the results for the active individuals (coordinates, square cosine, contributions)}
   \item{ind.sup}{a list of matrices containing all the results for the supplementary individuals (coordinates, square cosine)}
   \item{quanti.sup}{a list of matrices containing all the results for the supplementary quantitative variables (coordinates, correlation between variables and axes)}
-  \item{quali.sup}{a list of matrices containing all the results for the supplementary qualitative variables (coordinates of each categories of each variables, and v.test which is a criterion with a Normal distribution)}
+  \item{quali.sup}{a list of matrices containing all the results for the supplementary categorical variables (coordinates of each categories of each variables, and v.test which is a criterion with a Normal distribution)}
 
 Returns the individuals factor map and the variables factor map.
 }
 
-\author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}, Jeremy Mazet}
 
 \seealso{ \code{\link{print.PCA}}, \code{\link{plot.PCA}}, \code{\link{dimdesc}}}
 
@@ -52,9 +52,20 @@ res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup=13)
 plot(res.pca,choix="ind",habillage=13)
 dimdesc(res.pca, axes = 1:2)
 ## To draw ellipses around the categories of the 13th variable (which is categorical)
-aa=cbind.data.frame(decathlon[,13],res.pca$ind$coord)
-bb=coord.ellipse(aa,bary=TRUE)
-plot.PCA(res.pca,habillage=13,ellipse=bb)
+axes <- 1:2
+aux <- cbind.data.frame(decathlon[,13],res.pca$ind$coord[,axes])
+coord.ell <- coord.ellipse(aux,bary=TRUE)
+plot.PCA(res.pca,habillage=13,ellipse=coord.ell, axes=axes)
+
+## Example with missing data
+## use package missMDA
+\dontrun{
+require(missMDA)
+data(orange)
+nb <- estim.ncpPCA(orange,ncp.min=0,ncp.max=5,method.cv="Kfold",nbsim=50)
+imputed <- imputePCA(orange,ncp=nb$ncp)
+res.pca <- PCA(imputed$completeObs)
+}
 }
 
 \keyword{multivariate}

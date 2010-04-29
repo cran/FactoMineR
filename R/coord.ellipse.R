@@ -24,23 +24,29 @@ coord.ellipse <- function (coord.simul, centre = NULL, axes = c(1, 2), level.con
     nbre.fact <- nlevels(coord.simul[, 1])
     res <- NULL
     label <- NULL
+    lev <- levels(coord.simul[, 1])
     for (f in 1:nbre.fact) {
-      x <- coord.simul[which(coord.simul[, 1] == unique(coord.simul[, 1])[f]), axes[1] + 1]
-      y <- coord.simul[which(coord.simul[, 1] == unique(coord.simul[, 1])[f]), axes[2] + 1]
+#      x <- coord.simul[which(coord.simul[, 1] == unique(coord.simul[, 1])[f]), axes[1] + 1]
+#      y <- coord.simul[which(coord.simul[, 1] == unique(coord.simul[, 1])[f]), axes[2] + 1]
+      x <- coord.simul[which(coord.simul[, 1] == lev[f]), axes[1] + 1]
+      y <- coord.simul[which(coord.simul[, 1] == lev[f]), axes[2] + 1]
       if (is.null(centre))  center <- c(mean(x, na.rm = TRUE), mean(y, na.rm = TRUE))
       else {
         if (ncol(coord.simul) != ncol(centre)) stop("ncol de centre incorrect")
-        if (!all.equal(levels(coord.simul[, 1]), levels(centre[, 1]))) stop("Les facteurs de centre sont incorrects")
-        center <- as.numeric(centre[which(centre[, 1] == unique(centre[, 1])[f]), c(axes[1] + 1, axes[2] + 1)])
+        if (!all.equal(lev, levels(centre[, 1]))) stop("Leveles of centre are not corrects")
+#        center <- as.numeric(centre[which(centre[, 1] == unique(centre[, 1])[f]), c(axes[1] + 1, axes[2] + 1)])
+        center <- as.numeric(centre[which(centre[, 1] == levels(centre[, 1])[f]), c(axes[1] + 1, axes[2] + 1)])
       }
       tab <- data.frame(x = x, y = y)
       mat.cov <- cov(tab)
       if (bary) mat.cov = mat.cov/nrow(tab)
       elli.tmp <- ellipse(mat.cov, centre = center, level = level.conf, npoints = npoint)
       res <- rbind(res, elli.tmp)
-      label <- c(label, rep(as.character(unique(coord.simul[, 1])[f]), npoint))
+#      label <- c(label, rep(lev[f], npoint))
     }
+    label <- factor(rep(lev,each=npoint),level=lev)
     result <- data.frame(facteur = label, res)
+    colnames(result)[1]="facteur"
     colnames(result) <- colnames(coord.simul)[c(1, axes + 1)]
     return(list(res = result, call = npoint))
 }

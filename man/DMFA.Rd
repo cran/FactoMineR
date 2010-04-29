@@ -6,7 +6,7 @@
 
 \description{
 Performs Dual Multiple Factor Analysis (DMFA) with supplementary individuals, supplementary quantitative 
-variables and supplementary qualitative variables.
+variables and supplementary categorical variables.
 }
 
 \usage{
@@ -15,11 +15,11 @@ DMFA(don, num.fact = ncol(data), scale.unit = TRUE, ncp = 5,
 
 \arguments{
   \item{don}{a data frame with \emph{n} rows (individuals) and \emph{p} columns (numeric variables)}
-  \item{num.fact}{the number of the qualitative variable which allows to make the group of individuals}
+  \item{num.fact}{the number of the categorical variable which allows to make the group of individuals}
   \item{scale.unit}{a boolean, if TRUE (value set by default) then data are scaled to unit variance}
   \item{ncp}{number of dimensions kept in the results (by default 5)}
   \item{quanti.sup}{a vector indicating the indexes of the quantitative supplementary variables}
-  \item{quali.sup}{a vector indicating the indexes of the qualitative supplementary variables}
+  \item{quali.sup}{a vector indicating the indexes of the categorical supplementary variables}
   \item{graph}{boolean, if TRUE a graph is displayed}
   \item{axes}{a length 2 vector specifying the components to plot}
 }
@@ -31,7 +31,13 @@ Returns a list including:
   \item{ind}{a list of matrices containing all the results for the active individuals (coordinates, square cosine, contributions)}
   \item{ind.sup}{a list of matrices containing all the results for the supplementary individuals (coordinates, square cosine)}
   \item{quanti.sup}{a list of matrices containing all the results for the supplementary quantitative variables (coordinates, correlation between variables and axes)}
-  \item{quali.sup}{a list of matrices containing all the results for the supplementary qualitative variables (coordinates of each categories of each variables, and v.test which is a criterion with a Normal distribution)}
+  \item{quali.sup}{a list of matrices containing all the results for the supplementary categorical variables (coordinates of each categories of each variables, and v.test which is a criterion with a Normal distribution)}
+  \item{svd}{the result of the singular value decomposition}
+  \item{var.partiel}{a list with the partial coordinate of the variables for each group}
+  \item{cor.dim.gr}{}
+  \item{Xc}{a list with the data centered by group}
+  \item{group}{a list with the results for the groups (cordinate, normalized coordinates, cos2)}
+  \item{Cov }{a list with the covariance matrices for each group}
 
 Returns the individuals factor map and the variables factor map.
 }

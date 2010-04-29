@@ -9,6 +9,7 @@
     
 X <- as.data.frame(X)
     if (any(is.na(X))){
+      warnings("Missing values are imputed by the mean of the variable: you should use the imputePCA function of the missMDA package")
       if (is.null(quali.sup)) for (j in 1:ncol(X)) X[,j] <- replace(X[,j],is.na(X[,j]),mean(X[,j],na.rm=TRUE))
       else for (j in (1:ncol(X))[-quali.sup]) X[,j] <- replace(X[,j],is.na(X[,j]),mean(X[,j],na.rm=TRUE))
     }
@@ -82,7 +83,7 @@ X <- as.data.frame(X)
       X.ind.sup <- as.matrix(sweep(as.matrix(X.ind.sup), 2, ecart.type, FUN = "/"))
       coord.ind.sup <- sweep(as.matrix(X.ind.sup),2,col.w,FUN="*")
       coord.ind.sup <- coord.ind.sup %*% tmp$V
-      dist2 <- apply(coord.ind.sup^2,1,sum)
+      dist2 <- apply(X.ind.sup^2,1,sum)
       cos2.ind.sup <- sweep(as.matrix(coord.ind.sup^2), 1, dist2, FUN = "/")
       coord.ind.sup <- as.data.frame(coord.ind.sup[,1:ncp,drop=F])
       cos2.ind.sup <- as.data.frame(cos2.ind.sup[,1:ncp,drop=F])

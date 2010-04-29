@@ -2,18 +2,19 @@
 
 \alias{HCPC}
 
-\title{Hierarchical Classification on Principle Components (HCPC)}
+\title{Hierarchical Clustering on Principle Components (HCPC)}
 
 \description{
-  Performs an unsupervised hierarchical classification on results from a
+  Performs an agglomerative hierarchical clustering on results from a
   factor analysis. It is possible to cut the tree by clicking at the
-  suggested (or an other) level. Results inlude paragons, description
+  suggested (or an other) level. Results include paragons, description
   of the clusters, graphics.}
 
 \usage{
 HCPC(res, nb.clust=0, consol=TRUE, iter.max=10, min=3, 
   max=NULL, metric="euclidean", method="ward", order=TRUE,
-  graph.scale="inertia", nb.par=5, graph=TRUE, proba=0.05, \dots)}
+  graph.scale="inertia", nb.par=5, graph=TRUE, proba=0.05, 
+  cluster.CA="rows",\dots)}
 
 \arguments{
   \item{res}{Either the result of a factor analysis, a dataframe, or a vector.}
@@ -23,7 +24,7 @@ HCPC(res, nb.clust=0, consol=TRUE, iter.max=10, min=3,
   \item{consol}{a boolean. If TRUE, a k-means consolidation is performed.}
   \item{iter.max}{An integer. The maximum number of iterations for the consolidation.}
   \item{min}{an integer. The least possible number of clusters suggested.}
-  \item{max}{an integer. The higher possible number of clusters suggested.}
+  \item{max}{an integer. The higher possible number of clusters suggested; by default the minimum between 10 and the number of individuals divided by 2.}
   \item{metric}{The metric used to built the tree. See \code{\link{agnes}} for details.}
   \item{method}{The method used to built the tree. See \code{\link{agnes}} for details.}
   \item{order}{A boolean. If TRUE, clusters are ordered following their center
@@ -34,6 +35,7 @@ HCPC(res, nb.clust=0, consol=TRUE, iter.max=10, min=3,
   \item{graph}{If TRUE, graphics are displayed. If FALSE, no graph are displayed.}
   \item{proba}{The probability used to select axes and variables in
   catdes (see \code{\link{catdes}} for details.}
+  \item{cluster.CA}{A string equals to "rows" or "columns" for the clustering of Correspondence Analysis results.}
   \item{\dots}{Other arguments from other methods.}
 }
 
@@ -51,8 +53,10 @@ HCPC(res, nb.clust=0, consol=TRUE, iter.max=10, min=3,
   Returns a list including:
   \item{data.clust}{The original data with a supplementary row called
     class containing the partition.}
-  \item{desc.fact}{The description of the classes by factors (axes)  or
-    variables (var). See \code{\link{catdes}} for details.}
+  \item{desc.axes}{The description of the classes by the factors (axes). 
+     See \code{\link{catdes}} for details.}
+  \item{desc.fact}{The description of the classes by the variables.
+     See \code{\link{catdes}} for details.}
   \item{call}{A list or parameters and internal objects.}
   \item{ind.desc}{The paragons (para) and the more typical individuals
     of each cluster. See details.}
@@ -73,9 +77,6 @@ data(iris)
 res.pca <- PCA(iris[,1:4], ncp=10, graph=FALSE)
 # Clustering, auto nb of clusters:
 res.hcpc=HCPC(res.pca, nb.clust=-1)
-
-## To choose an other partition on the tree:
-res.HCPC=HCPC(res.hcpc)
 }
 }
 \keyword{multivariate}

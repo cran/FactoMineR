@@ -29,7 +29,7 @@ print.MCA <- function (x, file = NULL, sep = ";", ...){
       indice <- indice +2
     }
     if (!is.null(res.mca$quali.sup)){
-      res[indice, ] <- c("$quali.sup", "results for the supplementary qualitative variables")
+      res[indice, ] <- c("$quali.sup", "results for the supplementary categorical variables")
       res[indice+1, ] <- c("$quali.sup$coord", "coord. for the supplementary categories")
       res[indice+2, ] <- c("$quali.sup$cos2", "cos2 for the supplementary categories")
       res[indice+3, ] <- c("$quali.sup$v.test", "v-test for the supplementary categories")

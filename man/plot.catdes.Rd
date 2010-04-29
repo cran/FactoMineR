@@ -8,13 +8,13 @@
   Plots a graph from a catdes output.}
 
 \usage{
-plot.catdes (x,col="deepskyblue",show="all",numchar=10,\dots)
+\method{plot}{catdes}(x,col="deepskyblue",show="all",numchar=10,\dots)
 }
 
 \arguments{
   \item{x}{A catdes object, see \code{\link{catdes}} for details.}
   \item{col}{The color of the bars.}
-  \item{show}{a strig. If "quali", only the qualitative variables are
+  \item{show}{a strig. If "quali", only the categorical variables are
   used. If "quanti", only the the quantitative variables are used. If
   "all", both quali and quanti are used.}
   \item{numchar}{number of characters for the labels}

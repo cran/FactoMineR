@@ -25,7 +25,7 @@ textual(tab, num.text, contingence.by=1:ncol(tab),
 
 \value{
 Returns a list including:
-  \item{cont.table}{the contingence table with in rows the categories of the qualitative variables (or the couple of categories), and in column the words, 
+  \item{cont.table}{the contingence table with in rows the categories of the categorical variables (or the couple of categories), and in column the words, 
   and in each cell the number of occurence}
   \item{nb.words}{a data.frame with all the words and for each word, the number of lists in which it is present, and the number of occurence}
 }

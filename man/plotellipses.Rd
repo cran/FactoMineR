@@ -17,9 +17,9 @@ plotellipses(model, keepvar = "all", axis = c(1, 2), means=TRUE, level = 0.95,
 \item{keepvar}{a boolean or numeric vector of
   indexes of variables or a character vector of names of variables. If
   keepvar is "all", "quanti" or "quanti.sup" variables which are plotted
-  are all the qualitative variables, only those which are used to
+  are all the categorical variables, only those which are used to
   compute the MCA (active variables) or only the supplementary
-  qualitative variables. If keepvar is a numeric vector of indexes or a
+  categorical variables. If keepvar is a numeric vector of indexes or a
   character vector of names of variables, only relevant variables are plotted.}
 \item{axis}{a length 2 vector specifying the components to plot}
 \item{means}{boolean which indicates if the confidence ellipses are
@@ -44,7 +44,7 @@ plotellipses(model, keepvar = "all", axis = c(1, 2), means=TRUE, level = 0.95,
   removed. If keepnames is a vector of indexes or names, trimming is done on
   all variables excepted whose in keepnames}
 \item{namescat}{a vector giving for each observation the value of
-  qualitative variable, each variable are stacked under each other. If
+  categorical variable, each variable are stacked under each other. If
   NULL, names are taken from the (modified) dataset extracted from
   modele} 
 \item{\dots}{further arguments passed to or from other methods}
