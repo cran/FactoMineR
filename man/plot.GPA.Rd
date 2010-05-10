@@ -9,7 +9,7 @@ Draw the General Procrustes Analysis (GPA) map.
 }
 
 \usage{
-plot.GPA(x, axes = c(1, 2), 
+\method{plot}{GPA}(x, axes = c(1, 2), 
     lab.ind.moy = TRUE, habillage = "ind",
     partial = "all", chrono = FALSE, xlim = NULL, ylim = NULL, 
     cex = 1, title = NULL, palette = NULL, \dots)

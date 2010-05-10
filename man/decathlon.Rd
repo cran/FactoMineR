@@ -16,7 +16,7 @@ The data used here refer to athletes' performance during two sporting events.
 A data frame with 41 rows and 13 columns: the first ten columns corresponds to 
 the performance of the athletes for the 10 events of the decathlon. 
 The columns 11 and 12 correspond respectively to the rank and the points obtained. 
-The last column is a qualitative variable
+The last column is a categorical variable
 corresponding to the sporting event (2004 Olympic Game or 2004 Decastar)
 }
 

@@ -121,7 +121,8 @@ plot.MCA <- function (x, axes = c(1, 2), choix="ind",
     if (choix == "quanti.sup") {
      if (!is.null(res.mca$quanti.sup)) {
       if (new.plot) dev.new()
-      plot(0, 0, main = "Supplementary variables on the MCA factor map", xlab = paste("Dim ",axes[1]," (",signif(res.mca$eig[axes[1],2],4),"%)",sep=""), ylab = paste("Dim ",axes[2]," (",signif(res.mca$eig[axes[2],2],4),"%)",sep=""), xlim = c(-1.1,1.1), ylim = c(-1.1,1.1), col = "white", asp=1, cex=cex)
+	  if (is.null(title)) title <- "Supplementary variables on the MCA factor map"
+      plot(0, 0, main = title, xlab = paste("Dim ",axes[1]," (",signif(res.mca$eig[axes[1],2],4),"%)",sep=""), ylab = paste("Dim ",axes[2]," (",signif(res.mca$eig[axes[2],2],4),"%)",sep=""), xlim = c(-1.1,1.1), ylim = c(-1.1,1.1), col = "white", asp=1, cex=cex)
       abline(v=0,lty=2, cex=cex)
       abline(h=0,lty=2, cex=cex)
       x.cercle <- seq(-1, 1, by = 0.01)
@@ -129,19 +130,22 @@ plot.MCA <- function (x, axes = c(1, 2), choix="ind",
       lines(x.cercle, y = y.cercle)
       lines(x.cercle, y = -y.cercle)
       for (v in 1:nrow(res.mca$quanti.sup$coord)) {
-        arrows(0, 0, res.mca$quanti.sup$coord[v, 1], res.mca$quanti.sup$coord[v, 2], length = 0.1, angle = 15, code = 2, col = col.quanti.sup)
-        if (abs(res.mca$quanti.sup$coord[v,1])>abs(res.mca$quanti.sup$coord[v,2])){
-          if (res.mca$quanti.sup$coord[v,1]>=0) pos<-4
+        arrows(0, 0, res.mca$quanti.sup$coord[v, axes[1]], res.mca$quanti.sup$coord[v, axes[2]], length = 0.1, angle = 15, code = 2, col = col.quanti.sup)
+        if (abs(res.mca$quanti.sup$coord[v,axes[1]])>abs(res.mca$quanti.sup$coord[v,axes[2]])){
+          if (res.mca$quanti.sup$coord[v,axes[1]]>=0) pos<-4
           else pos<-2
         }
         else {
-          if (res.mca$quanti.sup$coord[v,2]>=0) pos<-3
+          if (res.mca$quanti.sup$coord[v,axes[2]]>=0) pos<-3
           else pos<-1
         }
-        text(res.mca$quanti.sup$coord[v, 1], y = res.mca$quanti.sup$coord[v, 2], labels = rownames(res.mca$quanti.sup$coord)[v], pos = pos, cex=cex, col = col.quanti.sup)
+		if((!is.null(label)) && (label=="all" | "quanti.sup" %in% label)){
+        	text(res.mca$quanti.sup$coord[v, axes[1]], y = res.mca$quanti.sup$coord[v, axes[2]], labels = rownames(res.mca$quanti.sup$coord)[v], pos = pos, cex=cex, col = col.quanti.sup)
+		}
       }
     }
     }
+
     
     if (choix == "var") {
       lab.var <- lab.quali.sup <- FALSE

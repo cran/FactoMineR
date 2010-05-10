@@ -17,19 +17,19 @@ Draw the Multiple Factor Analysis for Mixt Data graphs.
 
 \arguments{
   \item{x}{an object of class AFDM} 
-  \item{choix}{a string corresponding to the graph that you want to do ("ind" for the individual or qualitative
-  variables graph, "group" for all the variables (quantitative and qualitative), "var" for the correlation circle)}
+  \item{choix}{a string corresponding to the graph that you want to do ("ind" for the individual or categorical
+  variables graph, "group" for all the variables (quantitative and categorical), "var" for the correlation circle)}
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{lab.grpe}{boolean, if TRUE, the label of the groups are drwan}
   \item{lab.var}{boolean indicating if the labelled of the variables should be drawn on the map}
   \item{lab.ind}{boolean indicating if the labelled of the individuals should be drawn on the map}
   \item{habillage}{string corresponding to the color which are used. If "ind", one color is used for each individual else if it is the name 
-  or the position of a qualitative variable, it colors 
+  or the position of a categorical variable, it colors 
   according to the different categories of this variable}
   \item{col.lab}{boolean indicating if the labelled should be colored}
   \item{col.hab}{vector indicating the colors to use to labelled the rows or columns elements chosen in habillage}
   \item{invisible}{list of string; for choix ="ind", the individuals can be omit (invisible = "ind"),
-  or supplementary individuals (invisible="ind.sup") or the centerg of gravity of the qualitative variables 
+  or supplementary individuals (invisible="ind.sup") or the centerg of gravity of the categorical variables 
   (invisible= "quali"); if invisible = c("ind","ind.sup"), just the centers of gravity are drawn}
   \item{lim.cos2.var}{value of the square cosinus under the variables are not drawn}
   \item{xlim}{range for the plotted 'x' values, defaulting to the range of the finite values of 'x'}

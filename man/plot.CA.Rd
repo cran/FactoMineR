@@ -9,7 +9,7 @@ Draw the Correspondance Analysis (CA) graphs.
 }
 
 \usage{
-plot.CA(x, axes = c(1, 2),
+\method{plot}{CA}(x, axes = c(1, 2),
     xlim = NULL, ylim = NULL, invisible = NULL, col.row = "blue",
     col.col = "red", col.row.sup = "darkblue", 
     col.col.sup = "darkred", label = "all", cex = 1, 

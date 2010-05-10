@@ -21,7 +21,7 @@ dimdesc(res, axes = 1:3, proba = 0.05)}
 \value{
 Returns a list including:
   \item{quanti}{the description of the dimensions by the quantitative variables. The variables are sorted.}
-  \item{quali}{the description of the dimensions by the qualitative variables}
+  \item{quali}{the description of the dimensions by the categorical variables}
 }
 
 \author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}

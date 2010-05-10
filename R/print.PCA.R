@@ -30,7 +30,7 @@ print.PCA <- function (x, file = NULL, sep = ";", ...){
       indice <- indice +3
     }
     if (!is.null(res.pca$quali.sup)){
-      res[indice, ] <- c("$quali.sup", "results for the supplementary qualitative variables")
+      res[indice, ] <- c("$quali.sup", "results for the supplementary categorical variables")
       res[indice+1, ] <- c("$quali.sup$coord", "coord. for the supplementary categories")
       res[indice+2, ] <- c("$quali.sup$v.test", "v-test of the supplementary categories")
       indice <- indice +3

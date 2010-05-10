@@ -40,6 +40,12 @@ DMFA = function(don, num.fact = ncol(data), scale.unit=TRUE, ncp=5,quanti.sup=NU
     X <- cbind.data.frame(don[,num.fact],X.quali,X[,-1])
     res.pca = PCA(X,quali.sup=1:(1+2*length(quali.sup)),graph=FALSE,ncp=ncp,quanti.sup=quanti.sup)
   }
+### deb ajout
+res.pca$ind$coord <- res.pca$ind$coord[rownames(don),]
+res.pca$ind$contrib <- res.pca$ind$contrib[rownames(don),]
+res.pca$ind$cos2 <- res.pca$ind$cos2[rownames(don),]
+res.pca$ind$dist <- res.pca$ind$dist[rownames(don)]
+### fin ajout
 
   ncp=ncol(res.pca$var$coord)
   V = res.pca$var$coord
@@ -86,7 +92,7 @@ DMFA = function(don, num.fact = ncol(data), scale.unit=TRUE, ncp=5,quanti.sup=NU
   res$group$coord.n = coord.gr2
   res$group$cos2 = cos2.gr
   res$Cov = Cov
-  class(res) <- c("DMFA", "list ")
+  class(res) <- c("DMFA", "list")
   if (graph) {
     plot.DMFA(res, choix="ind",invisible="quali", label="none", axes=axes)
     plot.DMFA(res, choix="var", axes=axes)

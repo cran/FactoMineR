@@ -22,11 +22,11 @@ plot.MFApartial(x, axes = c(1, 2),
   \item{lab.ind.moy}{boolean, if TRUE, the label of the mean points are drwan}
   \item{lab.par}{boolean, if TRUE, the label of the partial points are drwan}
   \item{habillage}{string corresponding to the color which are used. If "ind", one color is used for each individual;
-  if "quali" the individuals are colored according to one qualitative variable; if "group" the individuals are colored according to the group}
+  if "quali" the individuals are colored according to one categorical variable; if "group" the individuals are colored according to the group}
   \item{chrono}{boolean, if TRUE, the partial points of a same point are linked (useful when groups correspond to different moment)}
   \item{col.hab}{the colors to use. By default, colors are chosen}
   \item{invisible}{list of string; for choix ="ind", the individuals can be omit (invisible = "ind"),
-  or supplementary individuals (invisible="ind.sup") or the centerg of gravity of the qualitative variables 
+  or supplementary individuals (invisible="ind.sup") or the centerg of gravity of the categorical variables 
   (invisible= "quali"); if invisible = c("ind","ind.sup"), just the centers of gravity are drawn}
   \item{draw.partial}{data frame of a boolean variable for all the individuals and all the centers of gravity and with for which the partial points should be drawn (by
   default, NULL and no partial points are drawn)}

@@ -5,7 +5,7 @@
 \title{Multiple Factor Analysis for Mixed Data}
 
 \description{
-Performs Multiple Factor Analysis with both quantitative and qualitative data.
+Performs Multiple Factor Analysis with both quantitative and categorical data.
 }
 
 \usage{
@@ -26,10 +26,9 @@ AFDM (base, ncp = 5, graph = TRUE, sup.var = NULL,
 \value{
 Returns a list including:
   \item{eig}{a matrix containing all the eigenvalues, the percentage of variance and the cumulative percentage of variance}
-  \item{link.group}{}
-  \item{group}{}
+  \item{group}{a matrix with the variables (continuous and categorical) considered as a group}
   \item{ind}{a list of matrices with all the results for the individuals (coordinates, square cosine, contributions)}
-  \item{quali.var}{a list of matrices with all the results for the qualitative variables (coordinates, square cosine, contributions, v.test)}
+  \item{quali.var}{a list of matrices with all the results for the categorical variables (coordinates, square cosine, contributions, v.test)}
   \item{quanti.var}{a list of matrices with all the results for the quantitative variables (coordinates, correlation, square cosine, contributions)}
   \item{call}{a list with some statistics}
 

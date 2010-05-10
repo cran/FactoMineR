@@ -1,15 +1,13 @@
 \name{JO}
 \alias{JO}
 \docType{data}
-\title{Jeu de donnes sur nombre de medailles par pays}
+\title{Number of medals in athletism during olympic games per country}
 \description{
-Le jeu de donnees est un tableau de contingence croisant en lignes les epreuves d'athletisme et en colonnes les differents
-pays. Chaque cellule contient le nombre total de medailles (or, argent et bronze) obtenues
-lors des olympiades de 1992 à 2008 (Barcelone 1992, Atlanta 1996, Sydney 2000, Athenes 2004, Pekin 2008).
+This data frame is a contengency table with the athletism events (in row) and the coutries (in columns). Each cell gives the number of medals obtained during the 5 olympis games from 1992 to 2008 (Barcelona 1992, Atlanta 1996, Sydney 2000, Athens 2004, Beijing 2008).
 }
 \usage{data(JO)}
 \format{
-Un data frame avec en lignes les 24 disciplines d'athletisme et en colonne les 58 pays ayant obtenu au moins une medaille
+A data frame with the 24 events in athletism and in colum the 58 countries who obtained at least on medal
 }
 \examples{
 \dontrun{

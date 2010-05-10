@@ -22,7 +22,7 @@ print.MFA <- function (x, file = NULL, sep = ";", ...){
       indice <- indice + 1
     }
     if (!is.null(res.mfa["quali.var"]$quali.var)){
-      res[indice, ] <- c("$quali.var", "results for the qualitative variables")
+      res[indice, ] <- c("$quali.var", "results for the categorical variables")
       indice <- indice + 1
     }
     if (!is.null(res.mfa["quanti.var.sup"]$quanti.var.sup)){
@@ -30,7 +30,7 @@ print.MFA <- function (x, file = NULL, sep = ";", ...){
       indice <- indice + 1
     }
     if (!is.null(res.mfa["quali.var.sup"]$quali.var.sup)){
-      res[indice, ] <- c("$quali.var.sup", "results for the qualitative supplementary variables")
+      res[indice, ] <- c("$quali.var.sup", "results for the categorical supplementary variables")
       indice <- indice + 1
     }
     if (!is.null(res.mfa$quanti.var)){
@@ -38,7 +38,7 @@ print.MFA <- function (x, file = NULL, sep = ";", ...){
       indice <- indice + 1
     }
     if (!is.null(res.mfa$quali.var)){
-      res[indice, ] <- c("$summary.quali", "summary for the qualitative variables")
+      res[indice, ] <- c("$summary.quali", "summary for the categorical variables")
       indice <- indice + 1
     }
     res[indice, ] <- c("$global.pca", "results for the global PCA")
