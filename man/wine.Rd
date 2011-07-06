@@ -29,6 +29,7 @@ data(wine)
 ## Example of PCA
 res.pca = PCA(wine,ncp=5, quali.sup = 1:2)
 
+\dontrun{
 ## Example of MCA
 res.mca = MCA(wine,ncp=5, quanti.sup = 3:ncol(wine))
 
@@ -36,6 +37,9 @@ res.mca = MCA(wine,ncp=5, quanti.sup = 3:ncol(wine))
 res.mfa = MFA(wine,group=c(2,5,3,10,9,2),type=c("n",rep("s",5)),ncp=5,
     name.group=c("orig","olf","vis","olfag","gust","ens"),
     num.group.sup=c(1,6),graph=FALSE)
+plotellipses(res.mfa)
+plotellipses(res.mfa,keepvar="Label") ## for 1 variable
+}
 }
 
 \keyword{datasets}

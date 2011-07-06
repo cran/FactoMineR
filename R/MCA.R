@@ -134,7 +134,6 @@ tab.disj.prop<-function (tab)
 nonact <- c(quanti.sup,quali.sup)
 if (!is.null(nonact)) act <- (1:ncol(X))[-nonact]
 else act <- (1:ncol(X))
-
 Z <- tab.disjonctif(X[, act])
 if (any(is.na(X[,act]))){
  if (is.null(tab.disj)){
@@ -183,6 +182,7 @@ if (!is.null(quanti.sup)){
     if (!is.null(quali.sup) | !is.null(quanti.sup)) res.mca$call$quali <- res.mca$call$quali[-c(quali.sup, quanti.sup)]
     res.mca$call$quali.sup = quali.sup
     res.mca$call$quanti.sup = quanti.sup
+    res.mca$call$row.w = row.w
     if (length(act)>1) res.mca$eig <- res.mca$eig[1:(sum(unlist(lapply(Xact,nlevels)))-ncol(Xact)),]
     else res.mca$eig <- res.mca$eig[1:(nlevels(Xact)-1),]
     names(res.mca)[3] <- "ind"

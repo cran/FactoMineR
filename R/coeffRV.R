@@ -117,7 +117,8 @@
         Y <- scale(Y, scale = FALSE)
         X <- scale(X, scale = FALSE)
         rv <- coefficientRV(X, Y)
-        if (n < 4) {
+#        if (n < 4) {
+        if (n < 6) {
             if (n == 1) {
                 rvstd = NA
                 esperance <- variance <- NA
@@ -136,6 +137,9 @@
                 }
                 esperance <- mean(listRV)
                 variance <- sum((listRV - esperance)^2)/dim(perm24)[[1]]
+
+            return(list(rv = rv, rvstd = (rv - esperance)/variance^0.5, mean = esperance,
+            variance = variance, skewness = NA, p.value =  sum(rv<listRV)/dim(perm24)[[1]] ))
             }
         }
         else {

@@ -11,7 +11,7 @@ The data used here concern a questionnaire on tea.
 We asked to 300 individuals how they drink tea (18 questions), what are their product's perception (12 questions) and some personal details (4 questions).
 }
 
-\usage{data(children)}
+\usage{data(tea)}
 
 \format{
 A data frame with 300 rows and 36 columns. Rows represent the individuals,

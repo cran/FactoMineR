@@ -12,14 +12,12 @@ plot.catdes <- function (x,col="deepskyblue",show="all",numchar=10,...){
       quanti=as.data.frame(x$quanti[[i]])
       quanti.catdes=as.vector(quanti[,1])
       names(quanti.catdes)=rownames(quanti)
-    }
-    else quanti.catdes=NULL
+    } else quanti.catdes=NULL
     if (!is.null(x$category[[i]])){
       category=as.data.frame(x$category[[i]])
       category.catdes=as.vector(category[,5])
       names(category.catdes)=rownames(category)
-    }
-    else category.catdes=NULL
+    } else category.catdes=NULL
                                         #print(category.catdes)
     
     if (show=="all") catdes.aux=c(quanti.catdes,category.catdes)
@@ -29,22 +27,18 @@ plot.catdes <- function (x,col="deepskyblue",show="all",numchar=10,...){
     if (!is.null(catdes.aux)) {
       count=count+1								#count is a counter of the catdes clusters which are non null.   
       long[i]=length(catdes.aux)
-      if (min(catdes.aux)<minimum)  minimum=min(catdes.aux)			# find the longest catdes clusters and the smallest.
-      if (max(catdes.aux)>maximum)  maximum=max(catdes.aux)
-    }
-    else long[i]=0
-    
+      minimum=min(catdes.aux,minimum)			# find the longest catdes clusters and the smallest.
+      maximum=max(catdes.aux,maximum)
+    } else long[i]=0
     list.catdes[[i]]=catdes.aux								# list the catdes clusters
   }
   if(count!=0){
-    if (count<4){ 
+    if (count<=4){ 
       numc=count									# design of the graphic window
       numr=1
-    }
-    else{
+    } else{
       numc=4
-      if(count==4) numr=1
-      else numr=round(count/4)
+      numr=round(count/4)+1
     }
     dev.new()
     par(las = 3)
@@ -55,7 +49,7 @@ plot.catdes <- function (x,col="deepskyblue",show="all",numchar=10,...){
         catdes.aux=sort(catdes.aux,decreasing=FALSE)					#plot the catdes for every cluster in the graphic window
         barplot(catdes.aux, width =c(1,1), col = col, border = "black", 
                 ylim = c(minimum-1,maximum+1),xlim=c(0,max(long)+1), 
-                main = paste("cluster",i), cex.names = 1, ylab="v.test", 
+                main = unique(names(x$category)[i],names(x$quanti)), cex.names = 1, ylab="v.test", 
                 names.arg = substr(names(catdes.aux), 1, numchar))
 	
       }

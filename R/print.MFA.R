@@ -33,6 +33,17 @@ print.MFA <- function (x, file = NULL, sep = ";", ...){
       res[indice, ] <- c("$quali.var.sup", "results for the categorical supplementary variables")
       indice <- indice + 1
     }
+
+    if (!is.null(res.mfa["freq"]$freq)){
+      res[indice, ] <- c("$freq", "results for the frequencies")
+      indice <- indice + 1
+    }
+    if (!is.null(res.mfa["freq.sup"]$freq.sup)){
+      res[indice, ] <- c("$freq.sup", "results for the supplementary frequencies")
+      indice <- indice + 1
+    }
+	
+	
     if (!is.null(res.mfa$quanti.var)){
       res[indice, ] <- c("$summary.quanti", "summary for the quantitative variables")
       indice <- indice + 1

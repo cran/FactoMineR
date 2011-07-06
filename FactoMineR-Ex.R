@@ -1,0 +1,847 @@
+pkgname <- "FactoMineR"
+source(file.path(R.home("share"), "R", "examples-header.R"))
+options(warn = 1)
+options(pager = "console")
+library('FactoMineR')
+
+assign(".oldSearch", search(), pos = 'CheckExEnv')
+cleanEx()
+nameEx("AFDM")
+### * AFDM
+
+flush(stderr()); flush(stdout())
+
+### Name: AFDM
+### Title: Multiple Factor Analysis for Mixed Data
+### Aliases: AFDM
+### Keywords: multivariate
+
+### ** Examples
+
+## Not run: 
+##D data(wine)
+##D res.afdm = AFDM(wine[,c(1,2,30,31)])
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("CA")
+### * CA
+
+flush(stderr()); flush(stdout())
+
+### Name: CA
+### Title: Correspondence Analysis (CA)
+### Aliases: CA
+### Keywords: multivariate
+
+### ** Examples
+
+data(children)
+res.ca <- CA (children, col.sup = 6:8, row.sup = 15:18)
+
+
+
+cleanEx()
+nameEx("DMFA")
+### * DMFA
+
+flush(stderr()); flush(stdout())
+
+### Name: DMFA
+### Title: Dual Multiple Factor Analysis (DMFA)
+### Aliases: DMFA
+### Keywords: multivariate
+
+### ** Examples
+
+## Example with the famous Fisher's iris data
+res.dmfa = DMFA ( iris, num.fact = 5)
+
+
+
+cleanEx()
+nameEx("HCPC")
+### * HCPC
+
+flush(stderr()); flush(stdout())
+
+### Name: HCPC
+### Title: Hierarchical Clustering on Principle Components (HCPC)
+### Aliases: HCPC
+### Keywords: multivariate
+
+### ** Examples
+
+## Not run: 
+##D data(iris)
+##D # Principal Component Analysis:
+##D res.pca <- PCA(iris[,1:4], ncp=10, graph=FALSE)
+##D # Clustering, auto nb of clusters:
+##D res.hcpc=HCPC(res.pca, nb.clust=-1)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("HMFA")
+### * HMFA
+
+flush(stderr()); flush(stdout())
+
+### Name: HMFA
+### Title: Hierarchical Multiple Factor Analysis
+### Aliases: HMFA
+### Keywords: multivariate
+
+### ** Examples
+ 
+data(wine)
+hierar <- list(c(2,5,3,10,9,2), c(4,2))
+res.hmfa <- HMFA(wine, H = hierar, type=c("n",rep("s",5)))
+
+
+
+cleanEx()
+nameEx("JO")
+### * JO
+
+flush(stderr()); flush(stdout())
+
+### Name: JO
+### Title: Number of medals in athletism during olympic games per country
+### Aliases: JO
+### Keywords: datasets
+
+### ** Examples
+
+## Not run: 
+##D data(JO)
+##D res.ca <- CA(JO)
+##D res.ca <- CA(JO, axes = 3:4)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("MCA")
+### * MCA
+
+flush(stderr()); flush(stdout())
+
+### Name: MCA
+### Title: Multiple Correspondence Analysis (MCA)
+### Aliases: MCA
+### Keywords: multivariate
+
+### ** Examples
+
+## Not run: 
+##D  data(tea)
+##D  res.mca=MCA(tea,quanti.sup=19,quali.sup=20:36)
+##D  plot(res.mca,invisible=c("var","quali.sup","quanti.sup"),cex=0.7)
+##D  plot(res.mca,invisible=c("ind","quali.sup","quanti.sup"),cex=0.8)
+##D  plot(res.mca,invisible=c("quali.sup","quanti.sup"),cex=0.8)
+##D  dimdesc(res.mca)
+##D  plotellipses(res.mca,keepvar=1:4)
+##D  plotellipses(res.mca,keepvar="Tea")
+##D 
+##D ## Example with missing values : use the missMDA package
+##D require(missMDA)
+##D data(vnf.example)
+##D tab.disj.comp <- imputeMCA(vnf.example,ncp=2)
+##D res.mca <- MCA(vnf.example,tab.disj=tab.disj.comp)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("MFA")
+### * MFA
+
+flush(stderr()); flush(stdout())
+
+### Name: MFA
+### Title: Multiple Factor Analysis (MFA)
+### Aliases: MFA
+### Keywords: multivariate
+
+### ** Examples
+
+data(wine)
+res = MFA(wine, group=c(2,5,3,10,9,2), type=c("n",rep("s",5)),
+    ncp=5, name.group=c("orig","olf","vis","olfag","gust","ens"),
+    num.group.sup=c(1,6))
+barplot(res$eig[,1],main="Eigenvalues",names.arg=1:nrow(res$eig))
+
+## Not run: 
+##D #### Confience ellipses around categories per variable
+##D plotellipses(res)
+##D plotellipses(res,keepvar="Label") ## for 1 variable
+##D 
+##D #### Interactive graph
+##D liste = plot.MFApartial(res)
+##D plot(res,choix="ind",habillage = "Terroir")
+##D 
+##D ###Example with groups of categorical variables
+##D data (poison)
+##D MFA(poison, group=c(2,2,5,6), type=c("s","n","n","n"),
+##D     name.group=c("desc","desc2","symptom","eat"),
+##D     num.group.sup=1:2)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("PCA")
+### * PCA
+
+flush(stderr()); flush(stdout())
+
+### Name: PCA
+### Title: Principal Component Analysis (PCA)
+### Aliases: PCA
+### Keywords: multivariate
+
+### ** Examples
+
+data(decathlon)
+res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup=13)
+## plot of the eigenvalues
+## barplot(res.pca$eig[,1],main="Eigenvalues",names.arg=1:nrow(res.pca$eig))
+plot(res.pca,choix="ind",habillage=13)
+dimdesc(res.pca, axes = 1:2)
+## To draw ellipses around the categories of the 13th variable (which is categorical)
+axes <- 1:2
+aux <- cbind.data.frame(decathlon[,13],res.pca$ind$coord[,axes])
+coord.ell <- coord.ellipse(aux,bary=TRUE)
+plot.PCA(res.pca,habillage=13,ellipse=coord.ell, axes=axes)
+
+## Example with missing data
+## use package missMDA
+## Not run: 
+##D require(missMDA)
+##D data(orange)
+##D nb <- estim.ncpPCA(orange,ncp.min=0,ncp.max=5,method.cv="Kfold",nbsim=50)
+##D imputed <- imputePCA(orange,ncp=nb$ncp)
+##D res.pca <- PCA(imputed$completeObs)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("catdes")
+### * catdes
+
+flush(stderr()); flush(stdout())
+
+### Name: catdes
+### Title: Categories description
+### Aliases: catdes
+### Keywords: multivariate
+
+### ** Examples
+
+data(wine)
+catdes(wine, num.var=2)
+
+
+
+cleanEx()
+nameEx("children")
+### * children
+
+flush(stderr()); flush(stdout())
+
+### Name: children
+### Title: Children (data)
+### Aliases: children
+### Keywords: datasets
+
+### ** Examples
+
+data(children)
+res.ca <- CA (children, col.sup = 6:8, row.sup = 15:18)
+
+
+
+cleanEx()
+nameEx("coeffRV")
+### * coeffRV
+
+flush(stderr()); flush(stdout())
+
+### Name: coeffRV
+### Title: Calculate the RV coefficient and test its significance
+### Aliases: coeffRV
+### Keywords: multivariate
+
+### ** Examples
+
+data(wine)
+X <- wine[,3:7]
+Y <- wine[,11:20]
+coeffRV(X,Y)
+
+
+
+cleanEx()
+nameEx("condes")
+### * condes
+
+flush(stderr()); flush(stdout())
+
+### Name: condes
+### Title: Continuous variable description
+### Aliases: condes
+### Keywords: multivariate
+
+### ** Examples
+
+data(decathlon)
+condes(decathlon, num.var=3)
+
+
+
+cleanEx()
+nameEx("decathlon")
+### * decathlon
+
+flush(stderr()); flush(stdout())
+
+### Name: decathlon
+### Title: Performance in decathlon (data)
+### Aliases: decathlon
+### Keywords: datasets
+
+### ** Examples
+
+data(decathlon)
+res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup=13)
+
+
+
+cleanEx()
+nameEx("dimdesc")
+### * dimdesc
+
+flush(stderr()); flush(stdout())
+
+### Name: dimdesc
+### Title: Dimension description
+### Aliases: dimdesc
+### Keywords: multivariate
+
+### ** Examples
+
+data(decathlon)
+res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup=13, graph=FALSE)
+dimdesc(res.pca)
+
+
+
+cleanEx()
+nameEx("estim_ncp")
+### * estim_ncp
+
+flush(stderr()); flush(stdout())
+
+### Name: estim_ncp
+### Title: Estimate the number of components in Principal Component
+###   Analysis
+### Aliases: estim_ncp
+### Keywords: multivariate
+
+### ** Examples
+
+data(decathlon)
+nb.dim <- estim_ncp(decathlon[,1:10],scale=TRUE)
+
+
+
+cleanEx()
+nameEx("gpa")
+### * gpa
+
+flush(stderr()); flush(stdout())
+
+### Name: GPA
+### Title: Generalised Procrustes Analysis
+### Aliases: GPA
+### Keywords: multivariate
+
+### ** Examples
+
+## Not run: 
+##D data(wine)
+##D res.gpa <- GPA(wine[,-(1:2)], group=c(5,3,10,9,2),
+##D     name.group=c("olf","vis","olfag","gust","ens"))
+##D 
+##D ### If you want to construct the partial points for some individuals only
+##D plot.GPApartial (res.gpa)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("graph.var")
+### * graph.var
+
+flush(stderr()); flush(stdout())
+
+### Name: graph.var
+### Title: Make graph of variables
+### Aliases: graph.var
+### Keywords: dplot
+
+### ** Examples
+
+data(decathlon)
+res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup = 13, graph = FALSE)
+graph.var (res.pca, draw = c("var","Points"), 
+    label = c("Long.jump", "Points"))
+
+
+
+cleanEx()
+nameEx("plot.CA")
+### * plot.CA
+
+flush(stderr()); flush(stdout())
+
+### Name: plot.CA
+### Title: Draw the Correspondance Analysis (CA) graphs
+### Aliases: plot.CA
+### Keywords: dplot
+
+### ** Examples
+
+data(children)
+res.ca <- CA (children, col.sup = 6:8, row.sup = 15:18)
+
+
+
+cleanEx()
+nameEx("plot.HCPC")
+### * plot.HCPC
+
+flush(stderr()); flush(stdout())
+
+### Name: plot.HCPC
+### Title: Plots for Hierarchical Classification on Principle Components
+###   (HCPC) results
+### Aliases: plot.HCPC
+### Keywords: dplot
+
+### ** Examples
+
+## Not run: 
+##D data(iris)
+##D # Clustering, auto nb of clusters:
+##D res.hcpc=HCPC(iris[1:4], nb.clust=3)
+##D # 3D graph from a different point of view:
+##D plot.HCPC(res.hcpc, choice="3D.map", angle=60)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("plot.HMFA")
+### * plot.HMFA
+
+flush(stderr()); flush(stdout())
+
+### Name: plot.HMFA
+### Title: Draw the Hierarchical Multiple Factor Analysis (HMFA) graphs
+### Aliases: plot.HMFA
+### Keywords: dplot
+
+### ** Examples
+
+data(wine)
+hierar <- list(c(2,5,3,10,9,2), c(4,2))
+res.hmfa <- HMFA(wine, H = hierar, type=c("n",rep("s",5)), graph = FALSE)
+plot(res.hmfa, invisible="quali")
+plot(res.hmfa, invisible="ind")
+
+
+
+cleanEx()
+nameEx("plot.MCA")
+### * plot.MCA
+
+flush(stderr()); flush(stdout())
+
+### Name: plot.MCA
+### Title: Draw the Multiple Correspondance Analysis (MCA) graphs
+### Aliases: plot.MCA
+### Keywords: dplot
+
+### ** Examples
+
+data (poison)
+res.mca = MCA (poison, quali.sup = 3:4, quanti.sup = 1:2, graph=FALSE)
+plot.MCA(res.mca,invisible=c("var","quali.sup"))
+plot.MCA(res.mca,invisible="ind")
+plot.MCA(res.mca,choix="var")
+
+
+
+cleanEx()
+nameEx("plot.MFA")
+### * plot.MFA
+
+flush(stderr()); flush(stdout())
+
+### Name: plot.MFA
+### Title: Draw the Multiple Factor Analysis (MFA) graphs
+### Aliases: plot.MFA
+### Keywords: dplot
+
+### ** Examples
+
+## Not run: 
+##D data(wine)
+##D aa = MFA(wine,group=c(2,5,3,10,9,2),type=c("n",rep("s",5)),ncp=5,
+##D     name.group=c("orig","olf","vis","olfag","gust","ens"),
+##D     num.group.sup=c(1,6),graph=FALSE)
+##D plot(aa, choix = "ind")
+##D plot(aa, choix = "ind", partial="all")
+##D plot(aa, choix = "Terroir")
+##D plot(aa, choix = "var", habillage="group")
+##D plot(aa, choix = "axes")
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("plot.MFApartial")
+### * plot.MFApartial
+
+flush(stderr()); flush(stdout())
+
+### Name: plot.MFApartial
+### Title: Plot an interactive Multiple Factor Analysis (MFA) graph
+### Aliases: plot.MFApartial
+### Keywords: dplot
+
+### ** Examples
+
+## Not run: 
+##D data(wine)
+##D aa = MFA(wine,group=c(2,5,3,10,9,2),type=c("n",rep("s",5)),ncp=5,
+##D     name.group=c("orig","olf","vis","olfag","gust","ens"),
+##D     num.group.sup=c(1,6),graph=FALSE)
+##D liste = plot.MFApartial(aa)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("plot.PCA")
+### * plot.PCA
+
+flush(stderr()); flush(stdout())
+
+### Name: plot.PCA
+### Title: Make the Principal Component Analysis (PCA) graphs
+### Aliases: plot.PCA
+### Keywords: dplot
+
+### ** Examples
+
+data(decathlon)
+res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup = 13)
+plot(res.pca, habillage = 13, col.hab=c("green","blue"))
+## To automatically draw ellipses around the barycentres of all the categorical variables
+plotellipses(res.pca)
+## or another graph
+aa=cbind.data.frame(decathlon[,13],res.pca$ind$coord)
+bb=coord.ellipse(aa,bary=TRUE)
+plot.PCA(res.pca,habillage=13,ellipse=bb)
+
+
+
+cleanEx()
+nameEx("plot.catdes")
+### * plot.catdes
+
+flush(stderr()); flush(stdout())
+
+### Name: plot.catdes
+### Title: Plots for description of clusters (catdes)
+### Aliases: plot.catdes
+### Keywords: dplot
+
+### ** Examples
+
+## Not run: 
+##D data(wine)
+##D res.c=catdes(wine, num.var=2)
+##D plot.catdes(res.c)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("plotellipses")
+### * plotellipses
+
+flush(stderr()); flush(stdout())
+
+### Name: plotellipses
+### Title: Draw confidence ellipses around the categories
+### Aliases: plotellipses
+### Keywords: multivariate
+
+### ** Examples
+
+## Not run: 
+##D data(poison)
+##D res.mca = MCA(poison, quali.sup = 3:4, quanti.sup = 1:2)
+##D plotellipses(res.mca)
+##D plotellipses(res.mca,keepvar=1:4)
+## End(Not run)
+
+data(decathlon)
+res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup=13)
+plotellipses(res.pca,keepvar=13)
+
+
+
+cleanEx()
+nameEx("poison")
+### * poison
+
+flush(stderr()); flush(stdout())
+
+### Name: poison
+### Title: Poison
+### Aliases: poison
+### Keywords: datasets
+
+### ** Examples
+
+data(poison)
+res.mca <- MCA(poison, quanti.sup = 1:2, quali.sup=c(3,4))
+
+
+
+cleanEx()
+nameEx("poison.text")
+### * poison.text
+
+flush(stderr()); flush(stdout())
+
+### Name: poison.text
+### Title: Poison
+### Aliases: poison.text
+### Keywords: datasets
+
+### ** Examples
+
+data(poison.text)
+res.text <- textual(poison.text, num.text = 3, contingence.by = c(1,2))
+## Contingence table for the sex variable, the sich variable and the couple
+## of variable sick-sex
+res.text2 <- textual(poison.text, num.text = 3, contingence.by = list(1,2,c(1,2)))
+
+
+
+cleanEx()
+nameEx("poulet")
+### * poulet
+
+flush(stderr()); flush(stdout())
+
+### Name: poulet
+### Title: Donnees genomiques sur les poulets
+### Aliases: poulet
+### Keywords: datasets
+
+### ** Examples
+
+## Not run: 
+##D data(poulet)
+##D res.pca = PCA(poulet,quali.sup=1, graph=FALSE)
+##D plot(res.pca)
+##D plot(res.pca,habillage=1,label="quali",palette=palette(c("black","red","blue","darkgreen","purple","orange")))
+##D dimdesc(res.pca)
+##D ## Dessine des ellipses autour des centres de gravite
+##D aa=cbind.data.frame(poulet[,1],res.pca$ind$coord)
+##D bb=coord.ellipse(aa,bary=TRUE)
+##D plot.PCA(res.pca,habillage=1,ellipse=bb)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("prefpls")
+### * prefpls
+
+flush(stderr()); flush(stdout())
+
+### Name: prefpls
+### Title: Scatter plot and additional variables with quality of
+###   representation contour lines
+### Aliases: prefpls
+### Keywords: dplot
+
+### ** Examples
+
+data(decathlon)
+prefpls(decathlon[,c(11,12,1:10)])
+
+
+
+cleanEx()
+nameEx("print.PCA")
+### * print.PCA
+
+flush(stderr()); flush(stdout())
+
+### Name: print.PCA
+### Title: Print the Principal Component Analysis (PCA) results
+### Aliases: print.PCA
+### Keywords: print
+
+### ** Examples
+
+## Not run: 
+##D data(decathlon)
+##D res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup = 13)
+##D print(res.pca, file="c:/essai.csv", sep = ";")
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("reconst")
+### * reconst
+
+flush(stderr()); flush(stdout())
+
+### Name: reconst
+### Title: Reconstruction of the data from the PCA or MFA results
+### Aliases: reconst
+### Keywords: multivariate
+
+### ** Examples
+
+data(decathlon)
+res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup=13, graph=FALSE)
+rec <- reconst(res.pca,ncp=2)
+
+
+
+cleanEx()
+nameEx("tea")
+### * tea
+
+flush(stderr()); flush(stdout())
+
+### Name: tea
+### Title: tea (data)
+### Aliases: tea
+### Keywords: datasets
+
+### ** Examples
+
+data(tea)
+res.mca=MCA(tea,quanti.sup=19,quali.sup=20:36)
+plot(res.mca,invisible=c("var","quali.sup","quanti.sup"),cex=0.7)
+plot(res.mca,invisible=c("ind","quali.sup","quanti.sup"),cex=0.8)
+plot(res.mca,invisible=c("quali.sup","quanti.sup"),cex=0.8)
+dimdesc(res.mca)
+plotellipses(res.mca,keepvar=1:4)
+
+## make a hierarchical clustering: click on the tree to define the number of clusters
+## HCPC(res.mca)
+
+
+
+cleanEx()
+nameEx("textual")
+### * textual
+
+flush(stderr()); flush(stdout())
+
+### Name: textual
+### Title: Text mining
+### Aliases: textual
+### Keywords: multivariate
+
+### ** Examples
+
+data(poison.text)
+res.text <- textual(poison.text, num.text = 3, contingence.by = c(1,2))
+## Contingence table for the sex variable, the sich variable and the couple
+## of variable sick-sex
+res.text2 <- textual(poison.text, num.text = 3, contingence.by = list(1,2,c(1,2)))
+
+
+
+cleanEx()
+nameEx("wine")
+### * wine
+
+flush(stderr()); flush(stdout())
+
+### Name: wine
+### Title: Wine
+### Aliases: wine
+### Keywords: datasets
+
+### ** Examples
+
+data(wine)
+
+## Example of PCA
+res.pca = PCA(wine,ncp=5, quali.sup = 1:2)
+
+## Not run: 
+##D ## Example of MCA
+##D res.mca = MCA(wine,ncp=5, quanti.sup = 3:ncol(wine))
+##D 
+##D ## Example of MFA
+##D res.mfa = MFA(wine,group=c(2,5,3,10,9,2),type=c("n",rep("s",5)),ncp=5,
+##D     name.group=c("orig","olf","vis","olfag","gust","ens"),
+##D     num.group.sup=c(1,6),graph=FALSE)
+##D plotellipses(res.mfa)
+##D plotellipses(res.mfa,keepvar="Label") ## for 1 variable
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("write.infile")
+### * write.infile
+
+flush(stderr()); flush(stdout())
+
+### Name: write.infile
+### Title: Print in a file
+### Aliases: write.infile
+### Keywords: print
+
+### ** Examples
+
+## Not run: 
+##D data(decathlon)
+##D res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup = 13)
+##D write.infile(res.pca, file="c:/essai.csv", sep = ";")
+## End(Not run)
+
+
+
+### * <FOOTER>
+###
+cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
+grDevices::dev.off()
+###
+### Local variables: ***
+### mode: outline-minor ***
+### outline-regexp: "\\(> \\)?### [*]+" ***
+### End: ***
+quit('no')

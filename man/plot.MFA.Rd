@@ -10,8 +10,8 @@ Draw the Multiple Factor Analysis (MFA) graphs.
 
 \usage{
 \method{plot}{MFA}(x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par = NULL,
-    lab.grpe = TRUE, lab.var = TRUE, lab.ind.moy = TRUE, 
-    lab.par = FALSE, habillage = "ind", col.hab = NULL, 
+    lab.grpe = TRUE, lab.var = TRUE, lab.ind = TRUE, 
+    lab.par = FALSE, lab.col = TRUE, habillage = "ind", col.hab = NULL, 
     invisible = NULL, partial = NULL, lim.cos2.var = 0., 
     chrono = FALSE, xlim = NULL, ylim = NULL, 
     cex = 1, title = NULL, palette = NULL, new.plot = TRUE, \dots)
@@ -20,15 +20,16 @@ Draw the Multiple Factor Analysis (MFA) graphs.
 \arguments{
   \item{x}{an object of class MFA}
   \item{choix}{a string corresponding to the graph that you want to do ("ind" for the individual or categorical
-  variables graph, "var" for the quantitative variables graph, "axes" for the graph of the partial axes,
-  "group" for the groups representation)}
+  variables graph, "var" for the quantitative variables graph, "freq" for the frequence or contingency tables,
+  "axes" for the graph of the partial axes, "group" for the groups representation)}
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{ellipse}{boolean (NULL by default), if not null, draw ellipses around the individuals, and use the results of \code{coord.ellipse}}
   \item{ellipse.par}{boolean (NULL by default), if not null, draw ellipses around the partial individuals, and use the results of \code{coord.ellipse}}
-  \item{lab.grpe}{boolean, if TRUE, the label of the groups are drwan}
-  \item{lab.var}{boolean, if TRUE, the label of the variables are drwan}
-  \item{lab.ind.moy}{boolean, if TRUE, the label of the mean points are drwan}
-  \item{lab.par}{boolean, if TRUE, the label of the partial points are drwan}
+  \item{lab.grpe}{boolean, if TRUE, the labels of the groups are drwan}
+  \item{lab.var}{boolean, if TRUE, the labels of the variables are drwan}
+  \item{lab.ind}{boolean, if TRUE, the labels of the mean points are drwan}
+  \item{lab.par}{boolean, if TRUE, the labels of the partial points are drwan}
+  \item{lab.col}{boolean, if TRUE, the labels of the columns for the contingency tables are drwan}
   \item{habillage}{string corresponding to the color which are used. If "ind", one color is used for each individual;
   if "group" the individuals are colored according to the group; else if it is the name or the position of a categorical variable, it colors 
   according to the different categories of this variable}
@@ -53,7 +54,7 @@ Draw the Multiple Factor Analysis (MFA) graphs.
 Returns the individuals factor map and the variables factor map.
 }
 
-\author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr},Jeremy Mazet}
 
 \seealso{ \code{\link{MFA}}}
 
