@@ -13,8 +13,8 @@ condes(donnee,num.var,proba = 0.05)}
 
 \arguments{
   \item{donnee}{a data frame made up of at least one quantitative variable and a set of quantitative variables and/or categorical variables}
-  \item{num.var}{the indice of the variable to caracterized}
-  \item{proba}{the significance threshold considered to caracterized the category (by default 0.05)}
+  \item{num.var}{the number of the variable to characterized}
+  \item{proba}{the significance threshold considered to characterized the category (by default 0.05)}
 }
 
 \value{

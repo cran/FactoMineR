@@ -1,14 +1,15 @@
-HCPC=function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3, 
+HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3, 
     max = NULL, metric = "euclidean", method = "ward", order = TRUE, 
     graph.scale = "inertia", nb.par = 5, graph = TRUE, proba = 0.05,cluster.CA="rows", 
     ...) 
 {
     auto.cut.tree = function(res, min, max, metric, method, ...) {
         if (order) {
-            sss = cbind.data.frame(res$ind$coord, res$call$X)
+            sss = cbind.data.frame(res$ind$coord, res$call$X, res$call$row.w)
             sss = sss[order(sss[, 1], decreasing = FALSE), ]
             res$ind$coord = sss[, 1:ncol(res$ind$coord)]
-            res$call$X = sss[, (ncol(res$ind$coord) + 1):ncol(sss)]
+            res$call$X = sss[, (ncol(res$ind$coord) + 1):(ncol(sss)-1)]
+            res$call$row.w = sss[,ncol(sss)]
         }
         X = as.data.frame(res$ind$coord)
         intra = NULL
@@ -16,7 +17,7 @@ HCPC=function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
         ag = agnes(X, diss = FALSE, metric = metric, method = method, 
             stand = FALSE, ...)
         hc = as.hclust(ag)
-        i = sum(scale(X, scale = F)^2)/nrow(X)
+        i = sum(scale(X, scale = FALSE)^2)/nrow(X)
         intra[1] = i
         for (j in 1:(nrow(X) - 1)) {
             inert.gain[j] = hc$height[nrow(X) - j]^2/(2 * nrow(X))

@@ -15,7 +15,7 @@ dimdesc(res, axes = 1:3, proba = 0.05)}
 \arguments{
   \item{res}{an object of class PCA, MCA, CA, MFA or HMFA}
   \item{axes}{a vector with the dimensions to describe}
-  \item{proba}{the significance threshold considered to caracterized the dimension (by default 0.05)}
+  \item{proba}{the significance threshold considered to characterized the dimension (by default 0.05)}
 }
 
 \value{

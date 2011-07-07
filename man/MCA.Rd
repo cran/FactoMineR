@@ -24,7 +24,7 @@ MCA(X, ncp = 5, ind.sup = NULL, quanti.sup = NULL,
   \item{graph}{boolean, if TRUE a graph is displayed}
   \item{level.ventil}{a number corresponding to the level under which the category is ventilated; by default, 0 and no ventilation is done}
   \item{axes}{a length 2 vector specifying the components to plot}
-  \item{row.w}{an optional row weights (by default, uniform row weights)}
+  \item{row.w}{an optional row weights (by default, a vector of 1 for uniform row weights)}
   \item{na.method}{a string corresponding to the name of the method used if there are missing values; available methods are "NA" or "Average" (by default, "NA")}
   \item{tab.disj}{optional data.frame corresponding to the disjunctive table used for the analysis; it corresponds to a disjunctive table obtained from imputation method (see package missMDA).}
 }
@@ -55,6 +55,7 @@ Returns the graphs of the individuals and categories and the graph with the vari
  plot(res.mca,invisible=c("quali.sup","quanti.sup"),cex=0.8)
  dimdesc(res.mca)
  plotellipses(res.mca,keepvar=1:4)
+ plotellipses(res.mca,keepvar="Tea")
 
 ## Example with missing values : use the missMDA package
 require(missMDA)

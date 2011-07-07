@@ -11,14 +11,15 @@ Draw confidence ellipses around the categories.
 \usage{
 plotellipses(model, keepvar = "all", axis = c(1, 2), means=TRUE, level = 0.95, 
     magnify = 2, cex = 0.5, pch = 20, pch.means=15, type = c("g","p"), 
-    keepnames = TRUE, namescat = NULL, \dots)}
+    keepnames = TRUE, namescat = NULL, xlim=xlim, ylim=ylim, lwd=1, 
+    label="all", \dots)}
 \arguments{
-  \item{model}{an object of class MCA}
+  \item{model}{an object of class MCA or PCA or MFA}
 \item{keepvar}{a boolean or numeric vector of
   indexes of variables or a character vector of names of variables. If
-  keepvar is "all", "quanti" or "quanti.sup" variables which are plotted
+  keepvar is "all", "quali" or "quali.sup" variables which are plotted
   are all the categorical variables, only those which are used to
-  compute the MCA (active variables) or only the supplementary
+  compute the dimensions (active variables) or only the supplementary
   categorical variables. If keepvar is a numeric vector of indexes or a
   character vector of names of variables, only relevant variables are plotted.}
 \item{axis}{a length 2 vector specifying the components to plot}
@@ -47,23 +48,28 @@ plotellipses(model, keepvar = "all", axis = c(1, 2), means=TRUE, level = 0.95,
   categorical variable, each variable are stacked under each other. If
   NULL, names are taken from the (modified) dataset extracted from
   modele} 
+\item{xlim}{range for the plotted 'x' values, defaulting to the range of the finite values of 'x'}
+\item{ylim}{range for the plotted 'y' values, defaulting to the range of the finite values of 'y'}
+\item{lwd}{The line width, a positive number, defaulting to 1}
+\item{label}{a list of character for the elements which are labelled (by default, "all", you can use "none", "ind", ind.sup"))}
 \item{\dots}{further arguments passed to or from other methods}
 }
 
 \value{
 Return a graph with the ellipses.
+If only one variable is chosen, the graph is different.
 }
 
 \author{Pierre-Andre Cornillon, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
-\seealso{ \code{\link{MCA}}}
+\seealso{ \code{\link{MCA}},\code{\link{PCA}}}
 
 \examples{
 \dontrun{
 data(poison)
 res.mca = MCA(poison, quali.sup = 3:4, quanti.sup = 1:2)
-plotellipses(res.mca,c(1,2))
-plotellipses(res.mca,c(1,2),keepvar=1:4)
+plotellipses(res.mca)
+plotellipses(res.mca,keepvar=1:4)
 }
 
 data(decathlon)

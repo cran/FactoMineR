@@ -1,5 +1,5 @@
 plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par = NULL, 
-    lab.grpe = TRUE, lab.var = TRUE, lab.ind.moy = TRUE, lab.par = FALSE, 
+    lab.grpe = TRUE, lab.var = TRUE, lab.ind = TRUE, lab.par = FALSE, lab.col = TRUE,
     habillage = "ind", col.hab = NULL, invisible = NULL, partial = NULL, 
     lim.cos2.var = 0., chrono = FALSE, xlim = NULL, ylim = NULL, 
     cex = 1, title = NULL, palette = NULL, new.plot = TRUE, ...) 
@@ -123,8 +123,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
         }
     }
     if (choix == "var") {
-        if (new.plot) 
-            dev.new()
+        if (new.plot) dev.new()
         test.invisible <- vector(length = 2)
         if (!is.null(invisible)) {
             test.invisible[1] <- match("actif", invisible)
@@ -133,20 +132,13 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
         else test.invisible <- rep(NA, 2)
         col <- NULL
         if (habillage == "group") {
-            if (is.null(col.hab) | length(col.hab) < length(group[type != 
-                "n"])) 
-                col.hab <- 2:(length(group[type != "n"]) + 1)
-            for (i in 1:length(group[type != "n"])) col <- c(col, 
-                rep(col.hab[i], group[type != "n"][i]))
-        }
-        else {
-            if (is.null(col.hab) | length(col.hab) < sum(group[type != 
-                "n"])) 
-                col <- rep(1, sum(group[type != "n"]))
+            if (is.null(col.hab) | length(col.hab) < length(group[type == "c"])) col.hab <- 2:(length(group[type == "c"]) + 1)
+            for (i in 1:length(group[type == "c"])) col <- c(col, rep(col.hab[i], group[type == "c"][i]))
+        } else {
+            if (is.null(col.hab) | length(col.hab) < sum(group[type == "c"])) col <- rep(1, sum(group[type == "c"]))
             else col <- col.hab
         }
-        if (is.null(title)) 
-            title <- "Correlation circle"
+        if (is.null(title))  title <- "Correlation circle"
         plot(0, 0, main = title, xlab = lab.x, ylab = lab.y, 
             xlim = c(-1.1, 1.1), ylim = c(-1.1, 1.1), col = "white", 
             asp = 1, cex = cex)
@@ -156,54 +148,37 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
         lines(x.cercle, y = -y.cercle)
         abline(v = 0, lty = 2, cex = cex)
         abline(h = 0, lty = 2, cex = cex)
-        if (habillage == "group" & is.na(test.invisible[1]) & 
-            is.na(test.invisible[2])) 
-            legend("topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg), 
-                ])[type != "n"], text.col = col.hab, cex = 0.8)
-        if (habillage == "group" & is.na(test.invisible[1]) & 
-            !is.na(test.invisible[2])) 
-            legend("topleft", legend = rownames(res.mfa$group$Lg[-c(num.group.sup, 
-                nrow(res.mfa$group$Lg)), ])[type.act != "n"], 
+        if (habillage == "group" & is.na(test.invisible[1]) & is.na(test.invisible[2])) 
+            legend("topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg), ])[type == "c"], text.col = col.hab, cex = 0.8)
+        if (habillage == "group" & is.na(test.invisible[1]) & !is.na(test.invisible[2])) 
+            legend("topleft", legend = rownames(res.mfa$group$Lg[-c(num.group.sup, nrow(res.mfa$group$Lg)), ])[type.act == "c"], 
                 text.col = col.hab, cex = 0.8)
-        if (habillage == "group" & !is.na(test.invisible[1]) & 
-            is.na(test.invisible[2])) 
-            legend("topleft", legend = rownames(res.mfa$group$Lg[num.group.sup, 
-                ])[type.sup != "n"], text.col = col.hab, cex = 0.8)
+        if (habillage == "group" & !is.na(test.invisible[1]) & is.na(test.invisible[2])) 
+            legend("topleft", legend = rownames(res.mfa$group$Lg[num.group.sup, ])[type.sup == "c"], text.col = col.hab, cex = 0.8)
         nrow.coord.var <- 0
-        if (!is.null(res.mfa["quanti.var"]$quanti.var$coord) & 
-            is.na(test.invisible[1])) {
+        if (!is.null(res.mfa["quanti.var"]$quanti.var$coord) & is.na(test.invisible[1])) {
             coord.var <- res.mfa$quanti.var$cor[, axes, drop = FALSE]
             nrow.coord.var <- nrow(coord.var)
             for (v in 1:nrow(coord.var)) {
-                if (sum(res.mfa$quanti.var$cos2[v, axes], na.rm = TRUE) >= 
-                  lim.cos2.var && !is.na(sum(res.mfa$quanti.var$cos2[v, 
-                  axes], na.rm = TRUE))) {
-                  arrows(0, 0, coord.var[v, 1], coord.var[v, 
-                    2], length = 0.1, angle = 15, code = 2, col = col[v])
+                if (sum(res.mfa$quanti.var$cos2[v, axes], na.rm = TRUE) >= lim.cos2.var && !is.na(sum(res.mfa$quanti.var$cos2[v, axes], na.rm = TRUE))) {
+                  arrows(0, 0, coord.var[v, 1], coord.var[v, 2], length = 0.1, angle = 15, code = 2, col = col[v])
                   if (lab.var) {
-                    if (abs(coord.var[v, 1]) > abs(coord.var[v, 
-                      2])) {
-                      if (coord.var[v, 1] >= 0) 
-                        pos <- 4
+                    if (abs(coord.var[v, 1]) > abs(coord.var[v,  2])) {
+                      if (coord.var[v, 1] >= 0)  pos <- 4
                       else pos <- 2
                     }
                     else {
-                      if (coord.var[v, 2] >= 0) 
-                        pos <- 3
+                      if (coord.var[v, 2] >= 0) pos <- 3
                       else pos <- 1
                     }
-                    text(coord.var[v, 1], y = coord.var[v, 2], 
-                      labels = rownames(coord.var)[v], pos = pos, 
-                      col = col[v])
+                    text(coord.var[v, 1], y = coord.var[v, 2], labels = rownames(coord.var)[v], pos = pos, col = col[v])
                   }
                 }
             }
         }
         if (!is.null(res.mfa$quanti.var.sup$coord) & is.na(test.invisible[2])) {
-            coord.var.sup <- res.mfa$quanti.var.sup$cor[, axes, 
-                drop = FALSE]
+            coord.var.sup <- res.mfa$quanti.var.sup$cor[, axes, drop = FALSE]
             for (q in 1:nrow(coord.var.sup)) {
-print(sum(res.mfa$quanti.var.sup$cos2[q, axes], na.rm = TRUE) )
                 if (sum(res.mfa$quanti.var.sup$cos2[q, axes], na.rm = TRUE) >= 
                   lim.cos2.var && !is.na(sum(res.mfa$quanti.var.sup$cos2[q, 
                   axes], na.rm = TRUE))) {
@@ -231,6 +206,99 @@ print(sum(res.mfa$quanti.var.sup$cos2[q, axes], na.rm = TRUE) )
         }
         par(mar = c(5, 4, 4, 2) + 0.1)
     }
+
+	if (choix=="freq"){
+      if (new.plot) dev.new()
+      col.row = "black"
+	  col.row.sup = "grey60"
+      coord.col <- res.mfa$freq$coord[, axes]
+      coord.row <- res.mfa$ind$coord[, axes]
+      coord.row.sup <- coord.col.sup <- NULL
+      if (!is.null(res.mfa$ind.sup)) coord.row.sup <- res.mfa$ind.sup$coord[, axes]
+      if (!is.null(res.mfa$freq.sup)) coord.col.sup <- res.mfa$freq.sup$coord[, axes]
+
+      test.invisible <- vector(length = 4)
+      if (!is.null(invisible)) {
+          test.invisible[1] <- match("row", invisible)
+		  if (is.na(test.invisible[1])) test.invisible[1] <- match("ind", invisible)
+          test.invisible[2] <- match("col", invisible)
+		  if (is.na(test.invisible[2])) test.invisible[2] <- match("var", invisible)
+          test.invisible[3] <- match("row.sup", invisible)
+		  if (is.na(test.invisible[3])) test.invisible[3] <- match("ind.sup", invisible)
+          test.invisible[4] <- match("col.sup", invisible)
+		  if (is.na(test.invisible[4])) test.invisible[4] <- match("var.sup", invisible)
+      }
+      else  test.invisible <- rep(NA, 4)
+      if (is.null(xlim)) {
+        xmin <- xmax <- 0
+        if(is.na(test.invisible[1])) xmin <- min(xmin, coord.row[,1])
+        if(is.na(test.invisible[1])) xmax <- max(xmax, coord.row[,1])
+        if(is.na(test.invisible[3])) xmin <- min(xmin, coord.row.sup[, 1])
+        if(is.na(test.invisible[3])) xmax <- max(xmax, coord.row.sup[, 1])
+        if(is.na(test.invisible[2])) xmin <- min(xmin, coord.col[,1])
+        if(is.na(test.invisible[2])) xmax <- max(xmax, coord.col[,1])
+        if(is.na(test.invisible[4])) xmin <- min(xmin, coord.col.sup[, 1])
+        if(is.na(test.invisible[4])) xmax <- max(xmax, coord.col.sup[, 1])
+          xlim <- c(xmin, xmax) * 1.2
+      }
+      else {
+        xmin = xlim[1]
+        xmax = xlim[2]
+      }
+      if (is.null(ylim)) {
+        ymin <- ymax <- 0
+        if(is.na(test.invisible[1])) ymin <- min(ymin, coord.row[,2])
+        if(is.na(test.invisible[1])) ymax <- max(ymax, coord.row[,2])
+        if(is.na(test.invisible[3])) ymin <- min(ymin, coord.row.sup[,2])
+        if(is.na(test.invisible[3])) ymax <- max(ymax, coord.row.sup[,2])
+        if(is.na(test.invisible[2])) ymin <- min(ymin, coord.col[,2])
+        if(is.na(test.invisible[2])) ymax <- max(ymax, coord.col[,2])
+        if(is.na(test.invisible[4])) ymin <- min(ymin, coord.col.sup[,2])
+        if(is.na(test.invisible[4])) ymax <- max(ymax, coord.col.sup[,2])
+        ylim <- c(ymin, ymax) * 1.2
+      }
+      else {
+        ymin = ylim[1]
+        ymax = ylim[2]
+      }
+
+      col <- NULL
+      if (habillage == "group") {
+          if (is.null(col.hab) | length(col.hab) < length(group[type == "f"])) col.hab <- 2:(length(group[type == "f"]) + 1)
+          for (i in 1:length(group[type == "f"])) col <- c(col, rep(col.hab[i], group[type == "f"][i]))
+      } else {
+          if (is.null(col.hab) | length(col.hab) < sum(group[type == "f"])) col <- rep(1, sum(group[type == "f"]))
+          else col <- col.hab
+      }
+
+      if (is.null(title)) titre <- "Factor map for the contingency table(s)"
+      else titre <- title
+      plot(0, 0, main = titre, xlab = paste("Dim ",axes[1]," (",signif(res.mfa$eig[axes[1],2],4),"%)",sep=""), ylab = paste("Dim ",axes[2]," (",signif(res.mfa$eig[axes[2],2],4),"%)",sep=""), xlim = xlim, ylim = ylim, col = "white", asp=1, cex=cex)
+      abline(h=0,lty=2)
+      abline(v=0,lty=2)
+      if (is.na(test.invisible[1])) {
+        points(coord.row, pch = 20, col = col.row, cex = cex)
+        if (lab.ind)  text(coord.row[, 1], y = coord.row[, 2], labels = rownames(coord.row), pos = 3, col = col.row, cex = cex)
+      }
+      if (is.na(test.invisible[2])) {
+        for (v in 1:nrow(coord.col)){
+		  points(coord.col[v, 1], y = coord.col[v, 2], pch = 17, col = col[v], cex = cex)
+          if (lab.col) text(coord.col[v, 1], y = coord.col[v, 2], labels = rownames(coord.col)[v], pos = 3, col = col[v], cex = cex)
+		 }
+      }
+      if (!is.null(res.mfa$quanti.sup) & is.na(test.invisible[4])) {
+        for (v in 1:nrow(coord.col)){
+		  points(coord.col.sup[v, 1], y = coord.col.sup[v, 2], pch = 17, col = col[v], cex = cex)
+          if (lab.col) text(coord.col.sup[v, 1], y = coord.col.sup[v, 2], labels = rownames(coord.col.sup)[v], pos = 3, col = col[v], cex = cex)
+		 }
+      }
+      if (!is.null(res.mfa$ind.sup) & is.na(test.invisible[3])) {
+        points(coord.row.sup[, 1], y = coord.row.sup[, 2], pch = 20, col = col.row.sup, cex = cex)
+        if (lab.ind) text(coord.row.sup[, 1], y = coord.row.sup[, 2], labels = rownames(coord.row.sup), pos = 3, col = col.row.sup, cex = cex)
+      }
+        if (habillage == "group") legend("topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg), ])[type == "f"], text.col = col.hab, cex = 0.8)
+	}
+
     if (choix == "ind") {
         test.invisible <- vector(length = 3)
         if (!is.null(invisible)) {
@@ -282,16 +350,16 @@ print(sum(res.mfa$quanti.var.sup$cos2[q, axes], na.rm = TRUE) )
                 else {
                   for (i in 1:length(partial)) {
                     if (partial[i] %in% rownames(coord.ind)) 
-                      group.ind.actif <- c(group.ind.actif, grep(partial[i], 
+                      group.ind.actif <- c(group.ind.actif, match(partial[i], 
                         rownames(coord.ind)))
                     if (partial[i] %in% rownames(coord.ind.sup)) 
-                      group.ind.sup <- c(group.ind.sup, grep(partial[i], 
+                      group.ind.sup <- c(group.ind.sup, match(partial[i], 
                         rownames(coord.ind.sup)))
                     if (partial[i] %in% rownames(coord.quali)) 
-                      group.quali <- c(group.quali, grep(partial[i], 
+                      group.quali <- c(group.quali, match(partial[i], 
                         rownames(coord.quali)))
                     if (partial[i] %in% rownames(coord.quali.sup)) 
-                      group.quali.sup <- c(group.quali.sup, grep(partial[i], 
+                      group.quali.sup <- c(group.quali.sup, match(partial[i], 
                         rownames(coord.quali.sup)))
                   }
                 }
@@ -299,16 +367,16 @@ print(sum(res.mfa$quanti.var.sup$cos2[q, axes], na.rm = TRUE) )
             else {
                 for (i in 1:length(partial)) {
                   if (partial[i] %in% rownames(coord.ind)) 
-                    group.ind.actif <- c(group.ind.actif, grep(partial[i], 
+                    group.ind.actif <- c(group.ind.actif, match(partial[i], 
                       rownames(coord.ind)))
                   if (partial[i] %in% rownames(coord.ind.sup)) 
-                    group.ind.sup <- c(group.ind.sup, grep(partial[i], 
+                    group.ind.sup <- c(group.ind.sup, match(partial[i], 
                       rownames(coord.ind.sup)))
                   if (partial[i] %in% rownames(coord.quali)) 
-                    group.quali <- c(group.quali, grep(partial[i], 
+                    group.quali <- c(group.quali, match(partial[i], 
                       rownames(coord.quali)))
                   if (partial[i] %in% rownames(coord.quali.sup)) 
-                    group.quali.sup <- c(group.quali.sup, grep(partial[i], 
+                    group.quali.sup <- c(group.quali.sup, match(partial[i], 
                       rownames(coord.quali.sup)))
                 }
             }
@@ -559,7 +627,7 @@ print(sum(res.mfa$quanti.var.sup$cos2[q, axes], na.rm = TRUE) )
         if (is.na(test.invisible[1])) {
             points(coord.ind, pch = 20, col = col.ind[1:nb.ind.actif], 
                 cex = cex)
-            if (lab.ind.moy) 
+            if (lab.ind) 
                 text(coord.ind[, 1], y = coord.ind[, 2], labels = rownames(coord.ind), 
                   pos = 3, col = col.ind[1:nb.ind.actif])
             for (i in group.ind.actif) {
@@ -592,7 +660,7 @@ print(sum(res.mfa$quanti.var.sup$cos2[q, axes], na.rm = TRUE) )
         if (!is.null(res.mfa$ind.sup) & is.na(test.invisible[2])) {
             points(coord.ind.sup, pch = 21, col = col.ind.sup[1:(nb.ind - 
                 nb.ind.actif)], cex = cex)
-            if (lab.ind.moy) 
+            if (lab.ind) 
                 text(coord.ind.sup[, 1], y = coord.ind.sup[, 
                   2], labels = rownames(coord.ind.sup), pos = 3, 
                   col = col.ind.sup[1:(nb.ind - nb.ind.actif)])

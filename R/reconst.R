@@ -1,4 +1,4 @@
-reconst = function (res, ncp=NULL){
+reconst <- function (res, ncp=NULL){
   if (is.null(ncp)) ncp = ncol(res$ind$coord)
   if (inherits(res, "MFA")) coord.var = sweep(as.matrix(res$quanti.var$coord)[,1:ncp,drop=F],1,res$call$col.w,FUN="*")
   if (inherits(res, "PCA")) coord.var = as.matrix(res$var$coord)[,1:ncp,drop=F]

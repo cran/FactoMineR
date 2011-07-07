@@ -5,7 +5,6 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
   centers.plot=FALSE,...){
   
 ######## sub-function #############################################################################################
-  
   f.draw.tree=function(X, merge, height, dimens, t.level,
     ind.names, axes, xlim=NULL, vec=NULL, scale.y=NULL, xlab=NULL,
     ylab=NULL, y.ticklabs=NULL,...){
@@ -158,10 +157,13 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
       leg.map=NULL
       for(p in 1:nrow(X)) leg.map[p]=paste("cluster", X$clust[p], " ", sep=" ")
       Y=cbind.data.frame(Y, as.factor(leg.map))
-      res2=PCA(Y, quali.sup=ncol(Y), scale.unit=FALSE, ncp=Inf, graph=FALSE)
-      res2$eig=res$call$t$res$eig
-      if(ind.names) plot.PCA(res2, title=title, habillage=ncol(Y), cex=0.8,  axes=axes,...)
-      else plot.PCA(res2, title=title, habillage=ncol(Y), cex=0.8, axes=axes, label="none",...)
+#      res2=PCA(Y, quali.sup=ncol(Y), scale.unit=FALSE, ncp=Inf, graph=FALSE)
+#      res2$eig=res$call$t$res$eig
+
+      res2 = PCA(Y, quali.sup = ncol(Y), scale.unit = FALSE, row.w = res$call$t$res$call$row.w ,ncp = Inf, graph = FALSE)
+
+      if(ind.names) plot.PCA(res2, title=title, habillage=ncol(Y), cex=0.8,  axes=axes,new.plot=new.plot,...)
+      else plot.PCA(res2, title=title, habillage=ncol(Y), cex=0.8, axes=axes, label="none",new.plot=new.plot,...)
       if(draw.tree) f.draw.tree(X, merge=res$call$t$tree$merge, height=res$call$t$tree$height, dimens=2, t.level=t.level, axes=axes,...)
     }
   }
