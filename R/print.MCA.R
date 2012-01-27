@@ -2,7 +2,7 @@ print.MCA <- function (x, file = NULL, sep = ";", ...){
     res.mca <- x
     if (!inherits(res.mca, "MCA")) stop("non convenient data")
     cat("**Results of the Multiple Correspondence Analysis (MCA)**\n")
-    cat("The analysis was performed on ", nrow(res.mca$call$X),
+    cat("The analysis was performed on", nrow(res.mca$call$X),
         "individuals, described by", ncol(res.mca$call$X), "variables\n")
     cat("*The results are available in the following objects:\n\n")
     res <- array("", c(22, 2), list(1:22, c("name", "description")))

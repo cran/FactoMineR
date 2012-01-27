@@ -40,6 +40,9 @@ Returns a list including:
 Returns the individuals factor map and the variables factor map.
 }
 
+\references{
+Husson, F., Le, S. and Pages, J. (2010). Exploratory Multivariate Analysis by Example Using R, \emph{Chapman and Hall}.
+}
 \author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}, Jeremy Mazet}
 
 \seealso{ \code{\link{print.PCA}}, \code{\link{plot.PCA}}, \code{\link{dimdesc}}}
@@ -52,17 +55,14 @@ res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup=13)
 plot(res.pca,choix="ind",habillage=13)
 dimdesc(res.pca, axes = 1:2)
 ## To draw ellipses around the categories of the 13th variable (which is categorical)
-axes <- 1:2
-aux <- cbind.data.frame(decathlon[,13],res.pca$ind$coord[,axes])
-coord.ell <- coord.ellipse(aux,bary=TRUE)
-plot.PCA(res.pca,habillage=13,ellipse=coord.ell, axes=axes)
+plotellipses(res.pca,13)
 
 ## Example with missing data
 ## use package missMDA
 \dontrun{
 require(missMDA)
 data(orange)
-nb <- estim.ncpPCA(orange,ncp.min=0,ncp.max=5,method.cv="Kfold",nbsim=50)
+nb <- estim_ncpPCA(orange,ncp.min=0,ncp.max=5,method.cv="Kfold",nbsim=50)
 imputed <- imputePCA(orange,ncp=nb$ncp)
 res.pca <- PCA(imputed$completeObs)
 }

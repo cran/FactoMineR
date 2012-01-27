@@ -216,12 +216,12 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
     if (graph) {
         if (vec) 
             plot.HCPC(res.HCPC, choice = "3D.map", t.level = "all", 
-                angle = 0, ind.names = FALSE)
+                angle = 0, ind.names = FALSE,new.plot=TRUE)
         else {
             plot.HCPC(res.HCPC, choice = "3D.map", t.level = "all", 
-                ind.names = TRUE)
+                ind.names = TRUE,new.plot=TRUE)
             plot.HCPC(res.HCPC, choice = "map", draw.tree = FALSE, 
-                label = "ind")
+                label = "ind",new.plot=TRUE)
         }
     }
     class(res.HCPC) = "HCPC"

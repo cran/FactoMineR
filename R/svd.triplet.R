@@ -33,8 +33,8 @@ else{
 #            svd.usuelle$v[, i] <- -svd.usuelle$v[, i]
 #        }
 #    }
-    U <-  svd.usuelle$v[, 1:ncp]
-    V <- svd.usuelle$u[, 1:ncp]
+    U <-  svd.usuelle$v[, 1:ncp,drop=FALSE]
+    V <- svd.usuelle$u[, 1:ncp,drop=FALSE]
     mult <- sign(apply(V,2,sum))
 	mult[mult==0] <- 1
     V <- sweep(V,2,mult,FUN="*")

@@ -1,6 +1,6 @@
 plot.HMFA <- function(x, axes = c(1,2),num=6, choix = "ind", 
     lab.grpe = TRUE, lab.var = TRUE, lab.ind.moy = TRUE, invisible = NULL, 
-    lim.cos2.var = 0., xlim = NULL, ylim = NULL, cex = 1, title = NULL, new.plot=TRUE, ...) {
+    lim.cos2.var = 0., xlim = NULL, ylim = NULL, cex = 1, title = NULL, new.plot=FALSE, ...) {
 
 partial.tab.pour.plot <- function(res.hmfa,coord=c(1,2)) {
     H <- res.hmfa$call$H

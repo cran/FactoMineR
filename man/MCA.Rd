@@ -42,6 +42,10 @@ Returns a list including:
 Returns the graphs of the individuals and categories and the graph with the variables.
 }
 
+\references{
+Husson, F., Le, S. and Pages, J. (2010). Exploratory Multivariate Analysis by Example Using R, \emph{Chapman and Hall}.
+}
+
 \author{Francois Husson \email{husson@agrocampus-ouest.fr}, Julie Josse, Jeremy Mazet}
 
 \seealso{ \code{\link{plotellipses}},\code{\link{print.MCA}}, \code{\link{plot.MCA}}, \code{\link{dimdesc}}}

@@ -2,7 +2,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
     lab.grpe = TRUE, lab.var = TRUE, lab.ind = TRUE, lab.par = FALSE, lab.col = TRUE,
     habillage = "ind", col.hab = NULL, invisible = NULL, partial = NULL, 
     lim.cos2.var = 0., chrono = FALSE, xlim = NULL, ylim = NULL, 
-    cex = 1, title = NULL, palette = NULL, new.plot = TRUE, ...) 
+    cex = 1, title = NULL, palette = NULL, new.plot = FALSE, ...) 
 {
     res.mfa <- x
     if (!inherits(res.mfa, "MFA")) 

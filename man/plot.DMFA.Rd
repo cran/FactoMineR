@@ -2,7 +2,7 @@
 
 \alias{plot.DMFA}
 
-\title{Perform a Duale Multiple Factor Analysis (DMFA) graphs}
+\title{Draw the Duale Multiple Factor Analysis (DMFA) graphs}
 
 \description{
 Plot the graphs for a Principal Component Analysis (DMFA) with supplementary individuals, supplementary quantitative 
@@ -12,7 +12,7 @@ variables and supplementary categorical variables.
 \usage{
 \method{plot}{DMFA}(x, axes = c(1, 2), choix = "ind", label="all",
     lim.cos2.var = 0., xlim=NULL, ylim=NULL, title = NULL,
-    palette = NULL, new.plot = TRUE, \dots)
+    palette = NULL, new.plot = FALSE, \dots)
 }
 
 \arguments{

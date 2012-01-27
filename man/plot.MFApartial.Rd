@@ -1,6 +1,6 @@
-\name{plot.MFApartial}
+\name{plotMFApartial}
 
-\alias{plot.MFApartial}
+\alias{plotMFApartial}
 
 \title{Plot an interactive Multiple Factor Analysis (MFA) graph}
 
@@ -9,7 +9,7 @@ Draw an interactive Multiple Factor Analysis (MFA) graphs.
 }
 
 \usage{
-plot.MFApartial(x, axes = c(1, 2), 
+plotMFApartial(x, axes = c(1, 2), 
     lab.ind.moy = TRUE, lab.par = FALSE, habillage = "ind",
     chrono = FALSE, col.hab = NULL, invisible = NULL, 
     draw.partial = NULL, xlim = NULL, ylim = NULL, 
@@ -51,10 +51,10 @@ To stop the interactive plot, click on the title (or in the top of the graph)
 \examples{
 \dontrun{
 data(wine)
-aa = MFA(wine,group=c(2,5,3,10,9,2),type=c("n",rep("s",5)),ncp=5,
+res.wine = MFA(wine,group=c(2,5,3,10,9,2),type=c("n",rep("s",5)),ncp=5,
     name.group=c("orig","olf","vis","olfag","gust","ens"),
     num.group.sup=c(1,6),graph=FALSE)
-liste = plot.MFApartial(aa)
+liste = plotMFApartial(res.wine)
 }
 }
 

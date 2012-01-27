@@ -1,6 +1,7 @@
 plotellipses <- function (model, keepvar = "all", axis = c(1, 2), means = TRUE,
     level = 0.95, magnify = 2, cex = 0.5, pch = 20, pch.means = 15,
     type = c("g", "p"), keepnames = TRUE, namescat = NULL, xlim=xlim, ylim=ylim, lwd=1, label="all",...)
+
 {
     monpanel <- function(x, y, level, means, nommod, magnify = magnify,
         pchmeans = pchmeans, ...) {
@@ -30,7 +31,7 @@ plotellipses <- function (model, keepvar = "all", axis = c(1, 2), means = TRUE,
         else cdg <- c(x, y)
         ltext(cdg[1], cdg[2], unique(nommod), cex = cex * magnify,
             col = col.line, pos = 3, offset = 0.4 * cex * magnify)
-        lpoints(cdg[1], cdg[2], pch = pchmeans, col = col.line,
+        lpoints(cdg[1], cdg[2], pch = pchmeans[group.number], col = col.line, 
             cex = cex * magnify)
     }
     panel.superpose2 <- function(x, y = NULL, subscripts, groups,
@@ -48,7 +49,7 @@ plotellipses <- function (model, keepvar = "all", axis = c(1, 2), means = TRUE,
             type <- unique(type)
             wg <- match("g", type, nomatch = NA)
             if (!is.na(wg)) {
-                #panel.grid(h = -1, v = -1)
+                panel.grid(h = -1, v = -1)
                 type <- type[-wg]
             }
             type <- list(type)
@@ -238,12 +239,24 @@ if (nbevar==1) {
         selecti <- as.vector(mapply(seq, (kept - 1) * nindiv + 1, (kept) * nindiv))
         nommod[selecti] <- substr(nommod[selecti], nchar(nomvar[selecti]) + 2, nchar(nommod[selecti]))
     }
-    don <- cbind.data.frame(don, var = nomvar, modalite = factor(modalite2))
+    modalite = factor(modalite2)
+	don <- cbind.data.frame(don, var = nomvar, modalite = factor(modalite2))
     xyplot(y ~ x | var , data = don, groups = modalite, panel = monpanel,
         level = level, means = means, magnify = magnify, cex = cex,
         pch = pch, lwd=lwd, pchmeans = pch.means, nommod = nommod, type = type,
         xlab = paste("Dim ", axis[1], " (", round(model$eig[axis[1],
             2], 1), "%)", sep = ""), ylab = paste("Dim ", axis[2],
             " (", round(model$eig[axis[2], 2], 1), "%)", sep = ""), ylim=ylim, xlim=xlim)
+
+    if ( length(pch.means) < max(modalite2)) pch.means <- rep(pch.means,length=max(modalite2))
+    xyplot(y ~ x | var, data = don, groups = modalite, panel = monpanel, 
+        level = level, means = means, magnify = magnify, cex = cex, 
+        pch = pch, pchmeans = pch.means, nommod = nommod, type = type, 
+        xlab = paste("Dim ", axis[1], " (", round(model$eig[axis[1], 
+            2], 2), "%)", sep = ""), ylab = paste("Dim ", axis[2], 
+            " (", round(model$eig[axis[2], 2], 2), "%)", sep = ""))
+
+			
+			
 }
 }

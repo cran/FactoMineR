@@ -59,6 +59,11 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE, ax
     if (is.null(colnames(X))) colnames(X) = paste("V",1:ncol(X),sep="")
     for (j in 1:ncol(X)) if (colnames(X)[j]=="") colnames(X)[j] = paste("V",j,sep="")
     for (j in 1:nrow(X)) if (is.null(rownames(X)[j])) rownames(X)[j] = paste("row",j,sep="")
+	## avoid problem when a category has 0 individuals
+    for (j in 1:ncol(X)) {
+      if (!is.numeric(X[,j])) levels(X[,j])[which(table(X[,j])==0)] <- levels(X[,j])[which(table(X[,j])!=0)[1]]
+    }
+
     poids <- hweight(X, H, type = type)
     nbind <- dim(X)[1]
     nbnivo <- length(H)
@@ -176,9 +181,9 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE, ax
     if (!is.null(ind.quali)) results$call$Hq <- Xdes
     class(results) <- c("HMFA", "list")
     if (graph) {
-        plot.HMFA(results, choix = "ind",axes=axes)
-        plot.HMFA(results, choix = "var",axes=axes)
-        plot.HMFA(results, choix = "group",axes=axes)
+        plot.HMFA(results, choix = "ind",axes=axes,new.plot=TRUE)
+        plot.HMFA(results, choix = "var",axes=axes,new.plot=TRUE)
+        plot.HMFA(results, choix = "group",axes=axes,new.plot=TRUE)
     }
     return(results)
 }

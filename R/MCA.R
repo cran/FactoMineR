@@ -80,34 +80,6 @@ ventilation.ordonnee <- function(Xqual,level.ventil=0.05,ind.sup=NULL,row.w=NULL
  return(Xqual)
 }
 
-tab.disj.prop<-function (tab) 
-{
-    tab <- as.data.frame(tab)
-    modalite.disjonctif <- function(i) {
-        moda <- tab[, i]
-        nom <- names(tab)[i]
-        n <- length(moda)
-        moda <- as.factor(moda)
-        x <- matrix(0, n, length(levels(moda)))
-          ind<-(1:n) + n * (unclass(moda) - 1)
-          indNA<-which(is.na(ind))
-                
-        x[(1:n) + n * (unclass(moda) - 1)] <- 1
-        if (length(indNA)!=0) x[indNA,]<- matrix(rep(apply(x,2,sum)/sum(x),each=length(indNA)),nrow=length(indNA))
-        if ((ncol(tab) != 1) & (levels(moda)[1] %in% c(1:nlevels(moda),"n", "N", "y", "Y"))) 
-            dimnames(x) <- list(row.names(tab), paste(nom, levels(moda),sep = "."))
-        else dimnames(x) <- list(row.names(tab), levels(moda))
-        return(x)
-    }
-    if (ncol(tab) == 1) 
-        res <- modalite.disjonctif(1)
-    else {
-        res <- lapply(1:ncol(tab), modalite.disjonctif)
-        res <- as.matrix(data.frame(res, check.names = FALSE))
-    }
-    return(res)
-}
-
 #############
 ## Main program    
 #############
@@ -115,8 +87,7 @@ tab.disj.prop<-function (tab)
   X <- as.data.frame(X)
   if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
   if (is.null(colnames(X))) colnames(X) = paste("V", 1:ncol(X), sep = "")
-  if (!is.null(ind.sup)) ind.act <- (1:nrow(X))[-ind.sup]
-  else ind.act <- (1:nrow(X))
+  ind.act <- (1:nrow(X))[!(1:nrow(X))%in%ind.sup]
 
   ## avoid problem when a category has 0 individuals
     for (j in 1:ncol(X)) {
@@ -138,7 +109,7 @@ Z <- tab.disjonctif(X[, act])
 if (any(is.na(X[,act]))){
  if (is.null(tab.disj)){
   if (na.method=="Average") {
-    tab.disj <- tab.disj.prop(X[ind.act, act])
+    tab.disj <- tab.disjonctif.prop(X[ind.act, act],row.w=row.w)
     Z[ind.act,] <- tab.disj
   }
   if (na.method=="NA"){
@@ -183,7 +154,7 @@ if (!is.null(quanti.sup)){
     res.mca$call$quali.sup = quali.sup
     res.mca$call$quanti.sup = quanti.sup
     res.mca$call$row.w = row.w
-    if (length(act)>1) res.mca$eig <- res.mca$eig[1:(sum(unlist(lapply(Xact,nlevels)))-ncol(Xact)),]
+    if (length(act)>1) res.mca$eig <- res.mca$eig[1:min(length(ind.act)-1,sum(unlist(lapply(Xact,nlevels)))-ncol(Xact)),]
     else res.mca$eig <- res.mca$eig[1:(nlevels(Xact)-1),]
     names(res.mca)[3] <- "ind"
     res.mca$ind <- res.mca$ind[1:3]
@@ -254,9 +225,10 @@ if (!is.null(quanti.sup)){
     }
     class(res.mca) <- c("MCA", "list")
     if (graph) {
-        plot.MCA(res.mca, choix = "ind", axes = axes)
-        plot.MCA(res.mca, choix = "var", axes = axes)
-        if (!is.null(quanti.sup)) plot.MCA(res.mca, choix = "quanti.sup", axes = axes)
+        plot.MCA(res.mca, choix = "ind", invisible="ind", axes = axes,new.plot=TRUE)
+        plot.MCA(res.mca, choix = "ind", invisible=c("var","quali.sup","quanti.sup"), axes = axes,new.plot=TRUE,cex=0.8)
+        plot.MCA(res.mca, choix = "var", axes = axes,new.plot=TRUE)
+        if (!is.null(quanti.sup)) plot.MCA(res.mca, choix = "quanti.sup", axes = axes,new.plot=TRUE)
     }
     return(res.mca)
 }

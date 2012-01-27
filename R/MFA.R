@@ -1,11 +1,17 @@
-MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp = 5, name.group = NULL, num.group.sup = NULL, graph = TRUE, weight.col.mfa = NULL, row.w = NULL, axes=c(1,2)){
+MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp = 5, name.group = NULL, num.group.sup = NULL, graph = TRUE, weight.col.mfa = NULL, row.w = NULL, axes=c(1,2),tab.comp=NULL){
 
-    moy.p <- function(V, poids){
-      res <- sum(V*poids) / sum(poids)
+    moy.p <- function(V, poids) {
+        res <- sum(V * poids,na.rm=TRUE)/sum(poids[!is.na(V)])
     }
     ec <- function(V, poids) {
-      res <- sqrt(sum(V^2 * poids)/sum(poids))
+        res <- sqrt(sum(V^2 * poids,na.rm=TRUE)/sum(poids[!is.na(V)]))
     }
+if (!is.null(tab.comp)){
+  if (!is.null(weight.col.mfa)) stop("Weigthings on the variables are not allowed with the tab.comp argument")
+  if (!is.null(ind.sup)) stop("Supplementary individuals are not allowed with tab.comp")
+  if (!is.null(num.group.sup)) stop("Supplementary groups are not allowed with tab.comp")
+}
+
 nature.var <- NULL
 for (i in 1:length(group)){
   if ((type[i] == "n")&&(!(i%in%num.group.sup))) nature.var <- c(nature.var,rep("quali",group[i]))
@@ -27,6 +33,10 @@ for (i in 1:length(group)){
 }
 ## End add
     base <- as.data.frame(base)
+  ## avoid problem when a category has 0 individuals
+    for (j in 1:ncol(base)) {
+      if (!is.numeric(base[,j])) levels(base[,j])[which(table(base[!(1:nrow(base))%in%ind.sup,j])==0)] <- levels(base[,j])[which(table(base[!(1:nrow(base))%in%ind.sup,j])!=0)[1]]
+    }
     if (!is.null(ind.sup)) {
       base <- rbind.data.frame(base[-ind.sup,],base[ind.sup,])
       ind.sup <- (nrow(base)-length(ind.sup)+1) : nrow(base)
@@ -78,7 +88,6 @@ for (i in 1:length(group)){
 
 ## pour avoir individus actifs, que ind.sup soit NULL ou non
 ##		ind.actif <- !((1:nrow(base))%in%intersect(ind.sup,(1:nrow(base))))
-
 		for (i in grfrec){
 			if ((type[i]=="f2")||(type[i]=="f3")||(i%in%num.group.sup)){
 				if (i==1) base[,1:group[1]]<- base[,1:group[1]]/sum(base[1:nb.actif,1:group[1]])
@@ -86,6 +95,10 @@ for (i in 1:length(group)){
 			}
 		}
 		type.var=="f"
+## Modif november 2011
+        if(!any(type.var=="f")) sumT <-1
+		else sumT <- sum(base[1:nb.actif,as.logical((type.var=="f")+(type.var=="f2")+(type.var=="f3"))])
+## Modif november 2011
 		sumT <- sum(base[1:nb.actif,as.logical((type.var=="f")+(type.var=="f2")+(type.var=="f3"))])
 		if (sumT==0) sumT <- 1
 		base[,as.logical((type.var=="f")+(type.var=="f_sup")+(type.var=="f2")+(type.var=="f2_sup")+(type.var=="f3")+(type.var=="f3_sup"))]<-base[,as.logical((type.var=="f")+(type.var=="f_sup")+(type.var=="f2")+(type.var=="f2_sup")+(type.var=="f3")+(type.var=="f3_sup"))]/sumT
@@ -129,6 +142,14 @@ for (i in 1:length(group)){
     else row.w.moy.ec <- row.w
 
 if (is.null(weight.col.mfa)) weight.col.mfa <- rep(1,sum(group.mod))
+
+### Begin handle missing values
+if (!is.null(tab.comp)){
+  group.mod <- tab.comp$call$group.mod
+  ind.var.group <- tab.comp$call$ind.var
+  tab.comp <- tab.comp$completeObs
+}
+### End  handle missing values
     for (g in 1:nbre.group) {
         aux.base <- as.data.frame(base[, (ind.grpe + 1):(ind.grpe + group[g])])
         dimnames(aux.base) <- list(rownames(base),colnames(base)[(ind.grpe + 1):(ind.grpe + group[g])])
@@ -143,6 +164,14 @@ F.jt[[g]]*weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])])
           }
           res.separe[[g]] <- MCA(aux.base, ind.sup = ind.sup, ncp=ncp, graph = FALSE, row.w=row.w)
         }
+###  Begin handle missing values
+if (!is.null(tab.comp)){
+ if (type[g] == "s") res.separe[[g]] <- PCA(tab.comp[,ind.var.group[[g]]],scale=TRUE,row.w=row.w,ind.sup=ind.sup,col.w=weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])],graph=FALSE)
+ if (type[g] == "c") res.separe[[g]] <- PCA(tab.comp[,ind.var.group[[g]]],scale=FALSE,row.w=row.w,ind.sup=ind.sup,col.w=weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])],graph=FALSE)
+ if (type[g] == "n") res.separe[[g]] <- MCA(aux.base, ind.sup = ind.sup, ncp=ncp, graph = FALSE, row.w=row.w,tab.disj=tab.comp[,ind.var.group[[g]]])
+}
+###  End handle missing values
+
         ind.grpe <- ind.grpe + group[g]
     }
     data <- matrix(0,nbre.ind,0)
@@ -152,6 +181,12 @@ F.jt[[g]]*weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])])
 ##if (is.null(weight.col.mfa)) weight.col.mfa <- rep(1,length(ponderation))
     for (g in 1:nbre.group) {
         aux.base <- base[, (ind.grpe + 1):(ind.grpe + group[g])]
+###  Begin handle missing values
+        if (!is.null(tab.comp)){
+          if (g==1) aux.base <- tab.comp[,1:group.mod[1]]
+          else aux.base <- tab.comp[,(cumsum(group.mod)[g-1]+1):cumsum(group.mod)[g],drop=FALSE]
+        }
+###  End handle missing values
         aux.base <- as.data.frame(aux.base)
         colnames(aux.base) <- colnames(base)[(ind.grpe + 1):(ind.grpe + group[g])]
         if (type[g] == "s") {
@@ -171,16 +206,27 @@ F.jt[[g]]*weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])])
 			ponderation[(ind.grpe.mod+1):(ind.grpe.mod+group[g])]<-F.jt[[g]]/res.separe[[g]]$eig[1,1]
 #    		if (type[g]=="f") ponderation[(ind.grpe.mod+1):(ind.grpe.mod+group[g])]<-F.jt[[g]]/res.separe[[g]]$eig[1,1]
 #		    else ponderation[(ind.grpe+1):(ind.grpe.mod+group[g])]<-P.jt[[g]]/length(grfrec2)/res.separe[[g]]$eig[1,1]
- }
+        }
 
 ## modif Avril 2011
         if (type[g] == "n") {
-            tmp <- tab.disjonctif(aux.base)
-            group.mod[g] <- ncol(tmp)
+## a remettre si j'enleve yyyyy
+#              tmp <- tab.disjonctif(aux.base)
+#              group.mod[g] <- ncol(tmp)
+## fin  a remettre si j'enleve yyyyy
+###  Begin handle missing values
+            if (!is.null(tab.comp)){
+              if (g==1) tmp <- tab.comp[,1:group.mod[1]]
+              else tmp <- tab.comp[,(cumsum(group.mod)[g-1]+1):cumsum(group.mod)[g],drop=FALSE]
+            } else {
+              tmp <- tab.disjonctif(aux.base)
+              group.mod[g] <- ncol(tmp)
+			}
+###  End handle missing values
             centre.tmp <- apply(tmp, 2, moy.p, row.w.moy.ec)
             centre.tmp <- centre.tmp/sum(row.w.moy.ec)
             tmp2 <- sweep(tmp,1,row.w.moy.ec/sum(row.w.moy.ec),FUN="*")
-        poids.bary<-c(poids.bary,apply(tmp2,2,sum))
+            poids.bary<-c(poids.bary,apply(tmp2,2,sum))
             poids.tmp <- 1-apply(tmp2, 2, sum)
             ponderation[(ind.grpe.mod + 1):(ind.grpe.mod + group.mod[g])] <- poids.tmp/(res.separe[[g]]$eig[1,1] * group[g])
             tmp <- tmp/sum(row.w.moy.ec)
@@ -191,7 +237,6 @@ F.jt[[g]]*weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])])
             data <- cbind.data.frame(data, as.data.frame(tmp))
         }
 ## Fin modif
-
         ind.grpe <- ind.grpe + group[g]
         ind.grpe.mod <- ind.grpe.mod + group.mod[g]
     }
@@ -235,9 +280,25 @@ F.jt[[g]]*weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])])
       else aux.quali.sup.indice <- (ncol(data)+ncol(data.group.sup)+1):(ncol(data)+ncol(data.group.sup)+ncol(aux.quali.sup))
       data.pca <- cbind.data.frame(data.pca,aux.quali.sup)
     }
-#    res.globale <- PCA(data.pca, scale.unit = FALSE, col.w = ponderation, ncp = ncp.tmp, ind.sup = ind.sup, quali.sup = aux.quali.sup.indice, quanti.sup = data.group.sup.indice, graph = FALSE)
 row.w = row.w[1:nb.actif]
+###  Begin handle missing values
+if ((!is.null(tab.comp))&(any("n"%in%type))){
+  data.pca = data.pca[,-aux.quali.sup.indice]
+  aux.quali.sup.indice=NULL
+}
+
+###  End handle missing values
     res.globale <- PCA(data.pca, scale.unit = FALSE, col.w = ponderation, row.w=row.w,ncp = ncp.tmp, ind.sup = ind.sup, quali.sup = aux.quali.sup.indice, quanti.sup = data.group.sup.indice, graph = FALSE)
+
+###  Begin handle missing values
+if ((!is.null(tab.comp))&(any("n"%in%type))){
+  res.globale$quali.var$coord = res.globale$var$coord[unlist(ind.var.group[type%in%"n"]),]
+  res.globale$quali.var$contrib = res.globale$var$contrib[unlist(ind.var.group[type%in%"n"]),]
+  res.globale$quali.var$cos2 = res.globale$var$cos2[unlist(ind.var.group[type%in%"n"]),]
+  res.globale$call$quali.sup$barycentre <- sweep(crossprod(tab.comp[,unlist(ind.var.group[type%in%"n"])],as.matrix(data.pca)),1,apply(tab.comp[,unlist(ind.var.group[type%in%"n"])],2,sum),FUN="/")
+  res.globale$quali.sup$coord <- sweep(crossprod(tab.comp[,unlist(ind.var.group[type%in%"n"])],res.globale$ind$coord),1,apply(tab.comp[,unlist(ind.var.group[type%in%"n"])],2,sum),FUN="/")
+}
+###  End handle missing values
     ncp <- min(ncp, nrow(res.globale$eig))
     call <- res.globale$call
     call$group <- group
@@ -634,15 +695,15 @@ cor.partial.axes <- cov.wt(aux,wt=row.w/sum(row.w),method="ML",cor=TRUE)$cor
           max.inertia <- order(apply(resultats$quali.var.sup$within.inertia[,1:2],1,sum))
           cg.plot.partial <- c(cg.plot.partial,rownames(resultats$quali.var.sup$coord)[max.inertia[1:length(max.inertia)]])
         }
-        plot.MFA(resultats,choix="ind",invisible="ind",partial=cg.plot.partial,habillage="group",axes=axes)
+        plot.MFA(resultats,choix="ind",invisible="ind",partial=cg.plot.partial,habillage="group",axes=axes,new.plot=TRUE)
       }
       max.inertia <- order(apply(resultats$ind$within.inertia[,1:2],1,sum))
-      plot.MFA(resultats,choix="ind",invisible="quali",partial=rownames(resultats$ind$coord)[max.inertia[c(1:2,nrow(resultats$ind$coord)-1,nrow(resultats$ind$coord))]],habillage="group",axes=axes)
-      if ("c"%in%type) plot.MFA(resultats,choix="var",habillage="group",axes=axes)
-      if ("f"%in%type) plot.MFA(resultats,choix="freq",habillage="group",axes=axes)
-      plot.MFA(resultats,choix="ind",invisible="quali",habillage = "none",axes=axes)
-      plot.MFA(resultats,choix="axes",habillage="group",axes=axes)
-      plot.MFA(resultats,choix="group",axes=axes)
+      plot.MFA(resultats,choix="ind",invisible="quali",partial=rownames(resultats$ind$coord)[max.inertia[c(1:2,nrow(resultats$ind$coord)-1,nrow(resultats$ind$coord))]],habillage="group",axes=axes,new.plot=TRUE)
+      if ("c"%in%type) plot.MFA(resultats,choix="var",habillage="group",axes=axes,new.plot=TRUE)
+      if ("f"%in%type) plot.MFA(resultats,choix="freq",habillage="group",axes=axes,new.plot=TRUE)
+      plot.MFA(resultats,choix="ind",invisible="quali",habillage = "none",axes=axes,new.plot=TRUE)
+      plot.MFA(resultats,choix="axes",habillage="group",axes=axes,new.plot=TRUE)
+      plot.MFA(resultats,choix="group",axes=axes,new.plot=TRUE)
     }
     return(resultats)
 }

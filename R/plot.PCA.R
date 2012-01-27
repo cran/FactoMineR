@@ -3,7 +3,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
     col.hab = NULL, col.ind = "black", col.ind.sup = "blue", 
     col.quali = "magenta", col.quanti.sup = "blue", 
     col.var = "black", label="all", invisible = NULL, lim.cos2.var = 0.,
-    cex = 1, title = NULL, palette=NULL, new.plot=TRUE, ...){
+    cex = 1, title = NULL, palette=NULL, new.plot=FALSE, ...){
     
     res.pca <- x
     if (!inherits(res.pca, "PCA")) stop("non convenient data")

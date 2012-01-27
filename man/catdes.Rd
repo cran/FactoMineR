@@ -31,8 +31,8 @@ Returns a list including:
 \seealso{ \code{\link{plot.catdes}},\code{\link{condes}}}
 
 \references{
-Lebart, L., Morineau, A. and Piron, M. (1995)
-Statistique exploratoire multidimensionnelle, \emph{Dunod}.
+Husson, F., Le, S. and Pages, J. (2010). Exploratory Multivariate Analysis by Example Using R, \emph{Chapman and Hall}.
+Lebart, L., Morineau, A. and Piron, M. (1995) Statistique exploratoire multidimensionnelle, \emph{Dunod}.\cr
 }
 
 \examples{
