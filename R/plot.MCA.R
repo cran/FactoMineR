@@ -2,7 +2,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix="ind",
     xlim = NULL, ylim = NULL, invisible = NULL, 
     col.ind = "blue", col.var = "red", col.quali.sup = "darkgreen",
     col.ind.sup = "darkblue", col.quanti.sup = "black",
-    label="all", cex = 1, title = NULL, habillage = "none", palette=NULL, new.plot=TRUE, ...){
+    label="all", cex = 1, title = NULL, habillage = "none", palette=NULL, new.plot=FALSE, ...){
     
     res.mca <- x
     if (!inherits(res.mca, "MCA")) stop("non convenient data")

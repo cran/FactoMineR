@@ -15,14 +15,15 @@ Missing values in categorical variables are treated as an additional level.
 MFA (base, group, type = rep("s",length(group)), ind.sup = NULL, 
     ncp = 5, name.group = NULL, num.group.sup = NULL, 
     graph = TRUE, weight.col.mfa = NULL, row.w = NULL,
-    axes = c(1,2))
+    axes = c(1,2), tab.comp=NULL)
 }
 
 \arguments{
   \item{base}{a data frame with \emph{n} rows (individuals) and \emph{p} columns (variables)}
   \item{group}{a list indicating the number of variables in each group}
-  \item{type}{the type of variables in each group; three possibilities: "c" or "s" for quantitative variables
-  (the difference is that for "s" variables are scaled to unit variance), "n" for categorical variables; by default,
+  \item{type}{the type of variables in each group; four possibilities: "c" or "s" for quantitative variables
+  (the difference is that for "s" variables are scaled to unit variance), "n" for categorical variables and
+  "f" for frequencies (from a contingency tables); by default,
   all variables are quantitative and scaled to unit variance}
   \item{ind.sup}{a vector indicating the indexes of the supplementary individuals}
   \item{ncp}{number of dimensions kept in the results (by default 5)}
@@ -32,6 +33,7 @@ MFA (base, group, type = rep("s",length(group)), ind.sup = NULL,
   \item{weight.col.mfa}{vector of weights, useful for HMFA method (by default, NULL and an MFA is performed)}
   \item{row.w}{an optional row weights (by default, a vector of 1 for uniform row weights)}
   \item{axes}{a length 2 vector specifying the components to plot}
+  \item{tab.comp}{object obtained from the imputeMFA function of the missMDA package that allows to handle missing values}
 }
 
 \value{
@@ -73,12 +75,12 @@ res = MFA(wine, group=c(2,5,3,10,9,2), type=c("n",rep("s",5)),
 barplot(res$eig[,1],main="Eigenvalues",names.arg=1:nrow(res$eig))
 
 \dontrun{
-#### Confience ellipses around categories per variable
+#### Confidence ellipses around categories per variable
 plotellipses(res)
 plotellipses(res,keepvar="Label") ## for 1 variable
 
 #### Interactive graph
-liste = plot.MFApartial(res)
+liste = plotMFApartial(res)
 plot(res,choix="ind",habillage = "Terroir")
 
 ###Example with groups of categorical variables
@@ -86,6 +88,11 @@ data (poison)
 MFA(poison, group=c(2,2,5,6), type=c("s","n","n","n"),
     name.group=c("desc","desc2","symptom","eat"),
     num.group.sup=1:2)
+
+###Example with groups of frequency tables
+data(mortality)
+res<-MFA(mortality,group=c(9,9),type=c("f","f"),
+    name.group=c("1979","2006"))
 }
 }
 

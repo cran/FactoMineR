@@ -209,8 +209,8 @@ dist2 <- apply(sweep(as.matrix(bary)^2,2,col.w,FUN="*"),1,sum)
     res$call = res.call
     class(res) <- c("PCA", "list ")
     if (graph) {
-        plot.PCA(res, choix = "ind", axes = axes)
-        plot.PCA(res, choix = "var", axes = axes)
+        plot.PCA(res, choix = "ind", axes = axes,new.plot=TRUE)
+        plot.PCA(res, choix = "var", axes = axes,new.plot=TRUE)
     }
     return(res)
 }

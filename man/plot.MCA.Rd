@@ -2,10 +2,10 @@
 
 \alias{plot.MCA}
 
-\title{Draw the Multiple Correspondance Analysis (MCA) graphs}
+\title{Draw the Multiple Correspondence Analysis (MCA) graphs}
 
 \description{
-Draw the Multiple Correspondance Analysis (MCA) graphs.
+Draw the Multiple Correspondence Analysis (MCA) graphs.
 }
 
 \usage{
@@ -14,7 +14,7 @@ Draw the Multiple Correspondance Analysis (MCA) graphs.
     col.ind = "blue", col.var = "red", col.quali.sup = "darkgreen",
     col.ind.sup = "darkblue", col.quanti.sup = "black",
     label = "all", cex = 1, title = NULL, habillage = "none", 
-    palette = NULL, new.plot = TRUE, \dots)
+    palette = NULL, new.plot = FALSE, \dots)
 }
 
 \arguments{

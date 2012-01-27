@@ -176,12 +176,12 @@ res = MFA(wine, group=c(2,5,3,10,9,2), type=c("n",rep("s",5)),
 barplot(res$eig[,1],main="Eigenvalues",names.arg=1:nrow(res$eig))
 
 ## Not run: 
-##D #### Confience ellipses around categories per variable
+##D #### Confidence ellipses around categories per variable
 ##D plotellipses(res)
 ##D plotellipses(res,keepvar="Label") ## for 1 variable
 ##D 
 ##D #### Interactive graph
-##D liste = plot.MFApartial(res)
+##D liste = plotMFApartial(res)
 ##D plot(res,choix="ind",habillage = "Terroir")
 ##D 
 ##D ###Example with groups of categorical variables
@@ -189,6 +189,11 @@ barplot(res$eig[,1],main="Eigenvalues",names.arg=1:nrow(res$eig))
 ##D MFA(poison, group=c(2,2,5,6), type=c("s","n","n","n"),
 ##D     name.group=c("desc","desc2","symptom","eat"),
 ##D     num.group.sup=1:2)
+##D 
+##D ###Example with groups of frequency tables
+##D data(mortality)
+##D res<-MFA(mortality,group=c(9,9),type=c("f","f"),
+##D     name.group=c("1979","2006"))
 ## End(Not run)
 
 
@@ -213,17 +218,14 @@ res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup=13)
 plot(res.pca,choix="ind",habillage=13)
 dimdesc(res.pca, axes = 1:2)
 ## To draw ellipses around the categories of the 13th variable (which is categorical)
-axes <- 1:2
-aux <- cbind.data.frame(decathlon[,13],res.pca$ind$coord[,axes])
-coord.ell <- coord.ellipse(aux,bary=TRUE)
-plot.PCA(res.pca,habillage=13,ellipse=coord.ell, axes=axes)
+plotellipses(res.pca,13)
 
 ## Example with missing data
 ## use package missMDA
 ## Not run: 
 ##D require(missMDA)
 ##D data(orange)
-##D nb <- estim.ncpPCA(orange,ncp.min=0,ncp.max=5,method.cv="Kfold",nbsim=50)
+##D nb <- estim_ncpPCA(orange,ncp.min=0,ncp.max=5,method.cv="Kfold",nbsim=50)
 ##D imputed <- imputePCA(orange,ncp=nb$ncp)
 ##D res.pca <- PCA(imputed$completeObs)
 ## End(Not run)
@@ -379,7 +381,7 @@ flush(stderr()); flush(stdout())
 ##D     name.group=c("olf","vis","olfag","gust","ens"))
 ##D 
 ##D ### If you want to construct the partial points for some individuals only
-##D plot.GPApartial (res.gpa)
+##D plotGPApartial (res.gpa)
 ## End(Not run)
 
 
@@ -405,13 +407,41 @@ graph.var (res.pca, draw = c("var","Points"),
 
 
 cleanEx()
+nameEx("mortality")
+### * mortality
+
+flush(stderr()); flush(stdout())
+
+### Name: mortality
+### Title: The cause of mortality in France in 1979 and 2006
+### Aliases: mortality
+### Keywords: datasets
+
+### ** Examples
+
+data(mortality)
+
+## Not run: 
+##D res<-MFA(mortality,group=c(9,9),type=c("f","f"),
+##D     name.group=c("1979","2006"))
+##D 
+##D plot(res,choix="freq",invisible="ind",habillage="group")
+##D lines(res$freq$coord[1:9,1],mfa$freq$coord[1:9,2],col="red")
+##D lines(res$freq$coord[10:18,1],mfa$freq$coord[10:18,2],col="green")
+##D     
+##D     
+## End(Not run)
+
+
+
+cleanEx()
 nameEx("plot.CA")
 ### * plot.CA
 
 flush(stderr()); flush(stdout())
 
 ### Name: plot.CA
-### Title: Draw the Correspondance Analysis (CA) graphs
+### Title: Draw the Correspondence Analysis (CA) graphs
 ### Aliases: plot.CA
 ### Keywords: dplot
 
@@ -474,7 +504,7 @@ nameEx("plot.MCA")
 flush(stderr()); flush(stdout())
 
 ### Name: plot.MCA
-### Title: Draw the Multiple Correspondance Analysis (MCA) graphs
+### Title: Draw the Multiple Correspondence Analysis (MCA) graphs
 ### Aliases: plot.MCA
 ### Keywords: dplot
 
@@ -521,19 +551,19 @@ nameEx("plot.MFApartial")
 
 flush(stderr()); flush(stdout())
 
-### Name: plot.MFApartial
+### Name: plotMFApartial
 ### Title: Plot an interactive Multiple Factor Analysis (MFA) graph
-### Aliases: plot.MFApartial
+### Aliases: plotMFApartial
 ### Keywords: dplot
 
 ### ** Examples
 
 ## Not run: 
 ##D data(wine)
-##D aa = MFA(wine,group=c(2,5,3,10,9,2),type=c("n",rep("s",5)),ncp=5,
+##D res.wine = MFA(wine,group=c(2,5,3,10,9,2),type=c("n",rep("s",5)),ncp=5,
 ##D     name.group=c("orig","olf","vis","olfag","gust","ens"),
 ##D     num.group.sup=c(1,6),graph=FALSE)
-##D liste = plot.MFApartial(aa)
+##D liste = plotMFApartial(res.wine)
 ## End(Not run)
 
 
@@ -545,7 +575,7 @@ nameEx("plot.PCA")
 flush(stderr()); flush(stdout())
 
 ### Name: plot.PCA
-### Title: Make the Principal Component Analysis (PCA) graphs
+### Title: Draw the Principal Component Analysis (PCA) graphs
 ### Aliases: plot.PCA
 ### Keywords: dplot
 

@@ -2,10 +2,10 @@
 
 \alias{plot.CA}
 
-\title{Draw the Correspondance Analysis (CA) graphs}
+\title{Draw the Correspondence Analysis (CA) graphs}
 
 \description{
-Draw the Correspondance Analysis (CA) graphs.
+Draw the Correspondence Analysis (CA) graphs.
 }
 
 \usage{

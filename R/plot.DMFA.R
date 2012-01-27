@@ -1,5 +1,5 @@
 plot.DMFA <- function (x, axes = c(1, 2), choix = "ind", label = "all", 
-    lim.cos2.var = 0., xlim=NULL, ylim=NULL, title = NULL,palette = NULL, new.plot = TRUE, ...) 
+    lim.cos2.var = 0., xlim=NULL, ylim=NULL, title = NULL,palette = NULL, new.plot = FALSE, ...) 
 {
     res.dmfa = x
     class(res.dmfa) <- c("PCA", "list ")

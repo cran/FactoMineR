@@ -1,6 +1,6 @@
-\name{plot.GPApartial}
+\name{plotGPApartial}
 
-\alias{plot.GPApartial}
+\alias{plotGPApartial}
 
 \title{Draw an interactive General Procrustes Analysis (GPA) map}
 
@@ -11,7 +11,7 @@ To stop the interactive plot, click on the title (or in the top of the graph)
 }
 
 \usage{
-plot.GPApartial(x, axes = c(1, 2), 
+plotGPApartial(x, axes = c(1, 2), 
     lab.ind.moy = TRUE, habillage = "ind",
     chrono = FALSE, draw.partial = NULL, 
     xlim = NULL, ylim = NULL, cex = 1, title = NULL, palette = NULL, \dots)

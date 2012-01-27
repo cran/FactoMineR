@@ -37,8 +37,8 @@ Returns the row and column points factor map.
 \references{
 Benzecri, J.-P. (1992) \emph{Correspondence Analysis Handbook}, New-York : Dekker \cr
 Benzecri, J.-P. (1980) \emph{L'analyse des données tome 2 : l'analyse des correspondances}, Paris : Bordas \cr
-Greenacre, M.J. (1993) \emph{Correspondence Analysis in Practice}, London : Academic Press
-
+Greenacre, M.J. (1993) \emph{Correspondence Analysis in Practice}, London : Academic Press\cr
+Husson, F., Le, S. and Pages, J. (2010). Exploratory Multivariate Analysis by Example Using R, \emph{Chapman and Hall}.
 }
 
 \author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}

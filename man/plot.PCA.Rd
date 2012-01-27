@@ -2,7 +2,7 @@
 
 \alias{plot.PCA}
 
-\title{Make the Principal Component Analysis (PCA) graphs}
+\title{Draw the Principal Component Analysis (PCA) graphs}
 
 \description{
 Plot the graphs for a Principal Component Analysis (PCA) with supplementary individuals, supplementary quantitative 
@@ -16,7 +16,7 @@ variables and supplementary categorical variables.
     col.quali = "magenta", col.quanti.sup = "blue", 
     col.var = "black", label = "all", invisible = NULL, 
     lim.cos2.var = 0., cex = 1, title = NULL, palette=NULL,
-    new.plot = TRUE, \dots)
+    new.plot = FALSE, \dots)
     }
 
 \arguments{

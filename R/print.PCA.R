@@ -2,7 +2,7 @@ print.PCA <- function (x, file = NULL, sep = ";", ...){
     res.pca <- x
     if (!inherits(res.pca, "PCA")) stop("non convenient data")
     cat("**Results for the Principal Component Analysis (PCA)**\n")
-    cat("The analysis was performed on ", nrow(res.pca$call$X),
+    cat("The analysis was performed on", nrow(res.pca$call$X),
         "individuals, described by", ncol(res.pca$call$X), "variables\n")
     cat("*The results are available in the following objects:\n\n")
     res <- array("", c(24, 2), list(1:24, c("name", "description")))

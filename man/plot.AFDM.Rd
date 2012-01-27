@@ -12,7 +12,7 @@ Draw the Multiple Factor Analysis for Mixt Data graphs.
 \method{plot}{AFDM}(x, choix = "group", axes = c(1, 2), lab.grpe = TRUE,
     lab.var = TRUE, lab.ind = TRUE, habillage = "none", col.lab = FALSE,
     col.hab = NULL, invisible = NULL, lim.cos2.var = 0., xlim = NULL,
-    ylim = NULL, cex = 1, title = NULL, palette=NULL, new.plot = TRUE, \dots)
+    ylim = NULL, cex = 1, title = NULL, palette=NULL, new.plot = FALSE, \dots)
 }
 
 \arguments{

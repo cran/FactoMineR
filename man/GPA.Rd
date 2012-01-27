@@ -66,7 +66,7 @@ res.gpa <- GPA(wine[,-(1:2)], group=c(5,3,10,9,2),
     name.group=c("olf","vis","olfag","gust","ens"))
 
 ### If you want to construct the partial points for some individuals only
-plot.GPApartial (res.gpa)
+plotGPApartial (res.gpa)
 }
 }  
 \keyword{multivariate}

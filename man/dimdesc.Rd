@@ -24,6 +24,9 @@ Returns a list including:
   \item{quali}{the description of the dimensions by the categorical variables}
 }
 
+\references{
+Husson, F., Le, S. and Pages, J. (2010). Exploratory Multivariate Analysis by Example Using R, \emph{Chapman and Hall}.
+}
 \author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{PCA}}, \code{\link{CA}}, \code{\link{MCA}}, \code{\link{MFA}}, \code{\link{HMFA}}}

@@ -1,4 +1,4 @@
-plot.GPApartial <- function (x, axes = c(1, 2), 
+plotGPApartial <- function (x, axes = c(1, 2), 
     lab.ind.moy = TRUE, habillage = "ind", chrono = FALSE,
     draw.partial = NULL, xlim = NULL, ylim = NULL, cex = 1, title = NULL, palette=NULL, ...){
     

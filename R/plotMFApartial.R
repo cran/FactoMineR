@@ -1,4 +1,4 @@
-plot.MFApartial <- function (x, axes = c(1, 2), 
+plotMFApartial <- function (x, axes = c(1, 2), 
     lab.ind.moy = TRUE, lab.par = FALSE, habillage = "ind", chrono = FALSE,
     col.hab = NULL, invisible = NULL, draw.partial = NULL,
     xlim = NULL, ylim = NULL, cex = 1, title = NULL, palette=NULL, ...){
