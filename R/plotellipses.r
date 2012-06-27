@@ -211,16 +211,16 @@ if (nbevar==1) {
   aux <- cbind.data.frame(model$call$X[,var],model$ind$coord[,axis])
   if (class(model)[1]=="PCA"){
     coord.ell <- coord.ellipse(aux,bary=means)
-    plot.PCA(model,scale=model$call$scale.unit,habillage=var,ellipse=coord.ell, label=label,axes=axis,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]))
+    plot.PCA(model,habillage=var,ellipse=coord.ell, label=label,axes=axis,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]))
   }
   if (class(model)[1]=="MCA"){
-    res.pca <- PCA(aux,quali.sup=1,scale=FALSE,graph=FALSE)
+    res.pca <- PCA(aux,quali.sup=1,scale.unit=FALSE,graph=FALSE)
     res.pca$eig[axis,]=model$eig[axis,]
     coord.ell <- coord.ellipse(aux,bary=means)
     plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]))
   }
   if (class(model)[1]=="MFA"){
-    res.pca <- PCA(aux,quali.sup=1,scale=FALSE,graph=FALSE)
+    res.pca <- PCA(aux,quali.sup=1,scale.unit=FALSE,graph=FALSE)
     res.pca$eig[axis,]=model$eig[axis,]
     coord.ell <- coord.ellipse(aux,bary=means)
     plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]))

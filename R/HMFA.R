@@ -153,7 +153,23 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE, ax
         }
     }
 
-    results <- list(eig = res.afmh$eig, group = coord.group, ind = res.afmh$ind, partial = part1)
+## ajout
+    canonical <- matrix(0, 0 ,ncol(res.afmh$ind$coord))
+	colnames(canonical)=colnames(res.afmh$ind$coord)
+    for (h in 1:nbnivo) {
+      nbgroup <- length(H[[h]])
+	  for (g in 1:nbgroup) {
+	  canonical = rbind(canonical, diag(cor(res.afmh$ind$coord,part1[[h]][,,g])))
+	  }
+      if (is.null(name.group)){
+        name.aux <- paste("L", h, ".", sep = "")
+        rownames(canonical)[(nrow(canonical)-nbgroup+1):nrow(canonical)] <- paste(name.aux, "G", 1:nbgroup, sep = "")
+      }
+      else rownames(canonical)[(nrow(canonical)-nbgroup+1):nrow(canonical)] <- name.group[[h]]
+	}
+	## fin ajout
+	res.afmh$group = list(coord=coord.group,canonical=canonical)
+    results <- list(eig = res.afmh$eig, group = res.afmh$group, ind = res.afmh$ind, partial = part1)
     if (!is.null(ind.quali) & length(ind.quali) < nrow(res.afmh$var$coord)) {
         results$quanti.var$coord <- res.afmh$var$coord[-ind.quali, ]
         results$quanti.var$cor <- res.afmh$var$cor[-ind.quali,  ]

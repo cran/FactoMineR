@@ -15,8 +15,8 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
     if("var" %in% label) lab.var<-TRUE
     if("quanti.sup" %in% label) lab.quanti<-TRUE
     if("ind.sup" %in% label) lab.ind.sup<-TRUE
-    cp1 <- round((res.pca$eig[axes[1],2]), digit = 2)
-    cp2 <- round((res.pca$eig[axes[2],2]), digit = 2)
+    cp1 <- round((res.pca$eig[axes[1],2]), digits = 2)
+    cp2 <- round((res.pca$eig[axes[2],2]), digits = 2)
     lab.x <- paste("Dim ",axes[1]," (",cp1,"%)",sep="")
     lab.y <- paste("Dim ",axes[2]," (",cp2,"%)",sep="")
     plan <- cp1 + cp2

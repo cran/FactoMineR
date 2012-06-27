@@ -1,6 +1,6 @@
 Package: FactoMineR
-Version: 1.18
-Date: 2012-01-27
+Version: 1.19
+Date: 2012-06-27
 Title: Multivariate Exploratory Data Analysis and Data Mining with R
 Author: Francois Husson, Julie Josse, Sebastien Le, Jeremy Mazet
 Maintainer: Francois Husson <francois.husson@agrocampus-ouest.fr>
@@ -8,8 +8,8 @@ Depends: ellipse,lattice,cluster,scatterplot3d
 Suggests: missMDA
 Description: an R package for exploratory data analysis
 License: GPL (>= 2)
-URL: http://factominer.free.fr, http://www.agrocampus-ouest.fr/math/
+URL: http://factominer.free.fr
 Encoding: latin1
-Packaged: 2012-01-27 14:50:06 UTC; Husson
+Packaged: 2012-06-27 13:15:49 UTC; Husson
 Repository: CRAN
-Date/Publication: 2012-01-27 15:13:09
+Date/Publication: 2012-06-27 13:24:59

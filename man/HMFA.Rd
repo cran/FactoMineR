@@ -25,7 +25,7 @@ HMFA(X,H,type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE,
 \value{
   Returns a list including:
   \item{eig}{a matrix containing all the eigenvalues, the percentage of variance and the cumulative percentage of variance}
-  \item{group}{a list of matrices with all the results for the groups (Lg and RV coefficients, coordinates, square cosine, contributions, distance to the origin, the correlations between each group and each factor)}
+  \item{group}{a list with first a list of matrices with the coordinates of the groups for each level and second a matrix with the canonical correlation (correlation between the coordinates of the individuals and the partial points))}
   \item{ind}{a list of matrices with all the results for the active individuals (coordinates, square cosine, contributions)}
   \item{quanti.var}{a list of matrices with all the results for the quantitative variables (coordinates, correlation between variables and axes)}
   \item{quali.var}{a list of matrices with all the results for the supplementary categorical variables (coordinates of each categories of each variables, and v.test which is a criterion with a Normal distribution)}

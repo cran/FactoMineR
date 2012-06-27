@@ -1,6 +1,6 @@
 MCA <- function (X, ncp = 5, ind.sup = NULL, quanti.sup = NULL, quali.sup = NULL,
     graph = TRUE, level.ventil = 0, axes = c(1, 2), row.w = NULL, 
-    na.method="NA", tab.disj=NULL){
+    method="Indicator",na.method="NA",tab.disj=NULL){
     
 ############
 ventil.tab <- function (tab, level.ventil=0.05,row.w=NULL,ind.sup=NULL,quali.sup=NULL,quanti.sup=NULL) {
@@ -80,6 +80,10 @@ ventilation.ordonnee <- function(Xqual,level.ventil=0.05,ind.sup=NULL,row.w=NULL
  return(Xqual)
 }
 
+fct.eta2 <- function(vec,x,weights) {
+  res <- summary(lm(x~vec,weights=weights))$r.squared
+}
+
 #############
 ## Main program    
 #############
@@ -144,6 +148,15 @@ if (!is.null(quanti.sup)){
 
     if (is.null(row.w)) row.w = rep(1, nrow(X) - length(ind.sup))
     if (length(row.w) != nrow(X) - length(ind.sup)) stop("length of vector row.w should be the number of active rows")
+    if (tolower(method)=="burt") {  ## boucle utile pour calculer la distance au cdg et pour calculer les cos2
+      res.mca <- CA(Ztot, ncp = ncol(Z)-length(act), row.sup = ind.sup, col.sup = col.sup, graph = FALSE, row.w = row.w) 
+      res.mca$col$coord <- sweep(res.mca$col$coord,2,sqrt(res.mca$eig[1:ncol(res.mca$col$coord),1]),FUN="*")
+      auxil <- apply(res.mca$col$coord^2,1,sum)
+      if (!is.null(col.sup)){ 
+	    res.mca$col.sup$coord <- sweep(res.mca$col.sup$coord,2,sqrt(res.mca$eig[1:ncol(res.mca$col.sup$coord),1]),FUN="*")
+        auxil2 <- apply(res.mca$col.sup$coord^2,1,sum)
+	  }
+    }
     res.mca <- CA(Ztot, ncp = ncp, row.sup = ind.sup, col.sup = col.sup, graph = FALSE, row.w = row.w)
     if (is.null(ncol(res.mca$row$coord))) res.mca$row$coord = matrix(res.mca$row$coord,ncol=1) 
     ncp <- ncol(res.mca$row$coord)
@@ -160,6 +173,10 @@ if (!is.null(quanti.sup)){
     res.mca$ind <- res.mca$ind[1:3]
     names(res.mca$ind) <- c("coord", "contrib", "cos2")
     names(res.mca)[4] <- "var"
+    if (tolower(method)=="burt"){
+      res.mca$var$coord <- sweep(res.mca$var$coord,2,sqrt(res.mca$eig[1:ncol(res.mca$var$coord),1]),FUN="*")
+      res.mca$var$cos2 <- sweep(res.mca$var$coord^2,1,auxil,FUN="/")
+    }
     res.mca$var <- res.mca$var[1:3]
     names(res.mca$var) <- c("coord", "contrib", "cos2")
     indice <- 6
@@ -172,22 +189,18 @@ if (!is.null(quanti.sup)){
     if (!is.null(quali.sup)) {
         names(res.mca)[indice] <- "quali.sup"
         names(res.mca$quali.sup) <- c("coord", "cos2")
+        if (tolower(method)=="burt"){
+          res.mca$quali.sup$coord <- sweep(res.mca$quali.sup$coord,2,sqrt(res.mca$eig[1:ncol(res.mca$quali.sup$coord),1]),FUN="*")
+          res.mca$quali.sup$cos2 <- sweep(res.mca$quali.sup$coord^2,1,auxil2,FUN="/")
+        }
     }
+
     if (!is.null(ind.sup)) Z = Z[ind.act, ]
     Nj <- apply(Z * row.w, 2, sum)
     N <- sum(Nj)/(ncol(X) - length(quali.sup) - length(quanti.sup))
     coef <- sqrt(Nj * ((N - 1)/(N - Nj)))
     vtest <- sweep(as.data.frame(res.mca$var$coord), 1, coef, "*")
     res.mca$var$v.test <- vtest
-#    eta2 = matrix(NA, ncol(Xact), ncp)
-#    colnames(eta2) = paste("Dim", 1:ncp)
-#    rownames(eta2) = colnames(Xact)
-#    for (k in 1:ncol(Xact)) {
-#        for (i in 1:ncp) {
-#            auxi <- summary(aov(res.mca$ind$coord[, i] ~ Xact[, k]))[[1]]
-#            eta2[k, i] <- auxi[1, 2]/sum(auxi[, 2])
-#        }
-#    }
     variable <- rep(colnames(Xact),unlist(lapply(Xact,nlevels)))
     if (length(act)>1){
       CTR <- aggregate(res.mca$var$contrib/100,by=list(factor(variable)),FUN=sum)
@@ -206,28 +219,32 @@ if (!is.null(quanti.sup)){
         eta2 = matrix(NA, length(quali.sup), ncp)
         colnames(eta2) = paste("Dim", 1:ncp)
         rownames(eta2) = colnames(X[, quali.sup, drop = FALSE])
-        for (k in 1:length(quali.sup)) {
-            for (i in 1:ncp) {
-                auxi <- summary(aov(res.mca$ind$coord[, i] ~ X[rownames(Xact), quali.sup[k]]))[[1]]
-                eta2[k, i] <- auxi[1, 2]/sum(auxi[, 2])
-            }
-        }
+#        for (k in 1:length(quali.sup)) {
+#            for (i in 1:ncp)  eta2[k, i] <- summary(lm(res.mca$ind$coord[, i] ~ X[rownames(Xact), quali.sup[k]]))$r.squared
+#        }
+        for (i in 1:ncp)  eta2[, i] <- unlist(lapply(as.data.frame(X[rownames(Xact), quali.sup]),fct.eta2,res.mca$ind$coord[,i],weights=row.w))
         res.mca$quali.sup$eta2 <- eta2
     }
+
     if (!is.null(quanti.sup)) {
         U <- res.mca$svd$U
         coord.quanti.sup <- matrix(NA, ncol(X.quanti.sup), ncp)
-        for (i in 1:ncp) {
-            for (j in 1:ncol(X.quanti.sup)) coord.quanti.sup[j, i] <- cor(U[, i], X.quanti.sup[, j], method = "pearson")
-        }
+        coord.quanti.sup <- cor(X.quanti.sup,U,method="pearson")
         dimnames(coord.quanti.sup) <- list(colnames(X.quanti.sup), paste("Dim", 1:ncp, sep = "."))
         res.mca$quanti.sup$coord <- coord.quanti.sup
     }
+
+    if (tolower(method)=="burt"){
+      res.mca$eig[,1] <- res.mca$eig[,1]^2
+      res.mca$eig[,2] <- res.mca$eig[,1]/sum(res.mca$eig[,1]) * 100
+      res.mca$eig[,3] <- cumsum(res.mca$eig[,2])      
+    }
+
     class(res.mca) <- c("MCA", "list")
     if (graph) {
         plot.MCA(res.mca, choix = "ind", invisible="ind", axes = axes,new.plot=TRUE)
-        plot.MCA(res.mca, choix = "ind", invisible=c("var","quali.sup","quanti.sup"), axes = axes,new.plot=TRUE,cex=0.8)
-        plot.MCA(res.mca, choix = "var", axes = axes,new.plot=TRUE)
+        if (method=="Indicator") plot.MCA(res.mca, choix = "ind", invisible=c("var","quali.sup","quanti.sup"), axes = axes,new.plot=TRUE,cex=0.8)
+		plot.MCA(res.mca, choix = "var", axes = axes,new.plot=TRUE)
         if (!is.null(quanti.sup)) plot.MCA(res.mca, choix = "quanti.sup", axes = axes,new.plot=TRUE)
     }
     return(res.mca)

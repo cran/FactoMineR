@@ -12,7 +12,7 @@ Draw the Multiple Correspondence Analysis (MCA) graphs.
 \method{plot}{MCA}(x, axes = c(1, 2),  choix="ind",
     xlim = NULL, ylim = NULL, invisible = NULL,
     col.ind = "blue", col.var = "red", col.quali.sup = "darkgreen",
-    col.ind.sup = "darkblue", col.quanti.sup = "black",
+    col.ind.sup = "darkblue", col.quanti.sup = "blue",
     label = "all", cex = 1, title = NULL, habillage = "none", 
     palette = NULL, new.plot = FALSE, \dots)
 }

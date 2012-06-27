@@ -12,7 +12,7 @@ nameEx("AFDM")
 flush(stderr()); flush(stdout())
 
 ### Name: AFDM
-### Title: Multiple Factor Analysis for Mixed Data
+### Title: Factor Analysis for Mixed Data
 ### Aliases: AFDM
 ### Keywords: multivariate
 
@@ -138,6 +138,7 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
+##D ## Tea example
 ##D  data(tea)
 ##D  res.mca=MCA(tea,quanti.sup=19,quali.sup=20:36)
 ##D  plot(res.mca,invisible=c("var","quali.sup","quanti.sup"),cex=0.7)
@@ -146,6 +147,15 @@ flush(stderr()); flush(stdout())
 ##D  dimdesc(res.mca)
 ##D  plotellipses(res.mca,keepvar=1:4)
 ##D  plotellipses(res.mca,keepvar="Tea")
+##D 
+##D ## Hobbies example
+##D data(hobbies)
+##D res.mca <- MCA(hobbies,quali.sup=19:22,quanti.sup=23)
+##D plot(res.mca,invisible=c("ind","quali.sup"),hab="quali") 
+##D plot(res.mca,invisible=c("var","quali.sup"),cex=.5,label="none") 
+##D plot(res,invisible=c("ind","var"),hab="quali")
+##D dimdesc(res.mca)
+##D plotellipses(res.mca,keepvar=1:4)
 ##D 
 ##D ## Example with missing values : use the missMDA package
 ##D require(missMDA)
@@ -325,6 +335,25 @@ res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup=13)
 
 
 cleanEx()
+nameEx("desfreq")
+### * desfreq
+
+flush(stderr()); flush(stdout())
+
+### Name: descfreq
+### Title: Description of frequencies
+### Aliases: descfreq
+### Keywords: multivariate
+
+### ** Examples
+
+data(children)
+descfreq(children[1:14,1:5])    ## desc of rows
+descfreq(t(children[1:14,1:5])) ## desc of columns
+
+
+
+cleanEx()
 nameEx("dimdesc")
 ### * dimdesc
 
@@ -403,6 +432,33 @@ data(decathlon)
 res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup = 13, graph = FALSE)
 graph.var (res.pca, draw = c("var","Points"), 
     label = c("Long.jump", "Points"))
+
+
+
+cleanEx()
+nameEx("hobbies")
+### * hobbies
+
+flush(stderr()); flush(stdout())
+
+### Name: hobbies
+### Title: hobbies (data)
+### Aliases: hobbies
+### Keywords: datasets
+
+### ** Examples
+
+data(hobbies)
+## Not run: 
+##D res.mca <- MCA(hobbies,quali.sup=19:22,quanti.sup=23,method="Burt")
+##D plot(res.mca,invisible=c("ind","quali.sup"),hab="quali") ### active var. only
+##D plot(res.mca,invisible=c("var","quali.sup"),cex=.5,label="none") ### individuals only
+##D plot(res.mca,invisible=c("ind","var"),hab="quali") ### supp. qualitative var. only
+##D 
+##D dimdesc(res.mca)
+##D plotellipses(res.mca,keepvar=1:4)
+## End(Not run)
+
 
 
 
@@ -805,9 +861,12 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(poison.text)
-res.text <- textual(poison.text, num.text = 3, contingence.by = c(1,2))
-## Contingence table for the sex variable, the sich variable and the couple
-## of variable sick-sex
+res.text <- textual(poison.text, num.text = 3, contingence.by = 1)
+descfreq(res.text$cont.table)
+## Contingence table for the couple of variable sick-sex
+res.text2 <- textual(poison.text, num.text = 3, contingence.by = list(c(1,2)))
+descfreq(res.text2$cont.table)
+## Contingence table for sex, sick and the couple of variable sick-sex
 res.text2 <- textual(poison.text, num.text = 3, contingence.by = list(1,2,c(1,2)))
 
 

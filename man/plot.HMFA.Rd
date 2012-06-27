@@ -20,9 +20,9 @@
   \item{choix}{a string corresponding to the graph that you want to do ("ind" for the individual or categorical
   variables graph, "var" for the quantitative variables graph, "axes" for the graph of the partial axes,
   "group" for the groups representation)}
-  \item{lab.grpe}{boolean, if TRUE, the label of the groups are drwan}
-  \item{lab.var}{boolean, if TRUE, the label of the variables are drwan}
-  \item{lab.ind.moy}{boolean, if TRUE, the label of the mean points are drwan}
+  \item{lab.grpe}{boolean, if TRUE, the label of the groups are drawn}
+  \item{lab.var}{boolean, if TRUE, the label of the variables are drawn}
+  \item{lab.ind.moy}{boolean, if TRUE, the label of the mean points are drawn}
   \item{invisible}{list of string; for choix ="ind", the individuals can be omit (invisible = "ind"),
   or the centers of gravity of the categorical variables 
   (invisible= "quali")}
