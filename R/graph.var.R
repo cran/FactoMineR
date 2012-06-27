@@ -57,8 +57,8 @@ graph.var <- function (x, axes = c(1, 2),
       }
     }
 
-    cp1 <- round((x$eig[axes[1],2]), digit = 2)
-    cp2 <- round((x$eig[axes[2],2]), digit = 2)
+    cp1 <- round((x$eig[axes[1],2]), digits = 2)
+    cp2 <- round((x$eig[axes[2],2]), digits = 2)
     lab.x <- paste("Dimension ",axes[1]," (",cp1,"%)",sep="")
     lab.y <- paste("Dimension ",axes[2]," (",cp2,"%)",sep="")
     plan <- cp1 + cp2

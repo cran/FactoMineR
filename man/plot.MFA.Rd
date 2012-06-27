@@ -25,11 +25,11 @@ Draw the Multiple Factor Analysis (MFA) graphs.
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{ellipse}{boolean (NULL by default), if not null, draw ellipses around the individuals, and use the results of \code{coord.ellipse}}
   \item{ellipse.par}{boolean (NULL by default), if not null, draw ellipses around the partial individuals, and use the results of \code{coord.ellipse}}
-  \item{lab.grpe}{boolean, if TRUE, the labels of the groups are drwan}
-  \item{lab.var}{boolean, if TRUE, the labels of the variables are drwan}
-  \item{lab.ind}{boolean, if TRUE, the labels of the mean points are drwan}
-  \item{lab.par}{boolean, if TRUE, the labels of the partial points are drwan}
-  \item{lab.col}{boolean, if TRUE, the labels of the columns for the contingency tables are drwan}
+  \item{lab.grpe}{boolean, if TRUE, the labels of the groups are drawn}
+  \item{lab.var}{boolean, if TRUE, the labels of the variables are drawn}
+  \item{lab.ind}{boolean, if TRUE, the labels of the mean points are drawn}
+  \item{lab.par}{boolean, if TRUE, the labels of the partial points are drawn}
+  \item{lab.col}{boolean, if TRUE, the labels of the columns for the contingency tables are drawn}
   \item{habillage}{string corresponding to the color which are used. If "ind", one color is used for each individual;
   if "group" the individuals are colored according to the group; else if it is the name or the position of a categorical variable, it colors 
   according to the different categories of this variable}

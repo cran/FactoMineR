@@ -139,7 +139,7 @@ plot.partial <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL
             for (i in 1:nrow(coord.partial[[k]])) lines(c(coord.partial[[k+1]][i,coord[1],jj],coord.partial[[k]][i,coord[1],j]),c(coord.partial[[k+1]][i,coord[2],jj],coord.partial[[k]][i,coord[2],j]))
           }
         }
-        name <- c(name,rownames(res.hmfa$group[[k]]))
+        name <- c(name,rownames(res.hmfa$group$coord[[k]]))
       }
       }
       for (j in 1:length(H[[nbnivo]])) {
@@ -147,7 +147,7 @@ plot.partial <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL
         points(coord.partial[[nbnivo]][,coord,j],col=color[index.col],pch=20,cex=cex*0.8)
         for (i in 1:nrow(coord.partial[[nbnivo]])) lines(c(res.hmfa$ind$coord[i,coord[1]],coord.partial[[nbnivo]][i,coord[1],j]),c(res.hmfa$ind$coord[i,coord[2]],coord.partial[[nbnivo]][i,coord[2],j]))
       }
-      name <- c(name,rownames(res.hmfa$group[[nbnivo]]))
+      name <- c(name,rownames(res.hmfa$group$coord[[nbnivo]]))
     }
 
    if (!is.null(res.hmfa$quali.var)){
@@ -184,7 +184,7 @@ plot.partial <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL
             for (i in 1:nrow(coord.partial[[k]])) lines(c(coord.partial[[k+1]][i,coord[1],jj],coord.partial[[k]][i,coord[1],j]),c(coord.partial[[k+1]][i,coord[2],jj],coord.partial[[k]][i,coord[2],j]))
           }
         }
-        name <- c(name,rownames(res.hmfa$group[[k]]))
+        name <- c(name,rownames(res.hmfa$group$coord[[k]]))
       }
       }
       for (j in 1:length(H[[nbnivo]])) {
@@ -192,7 +192,7 @@ plot.partial <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL
         points(coord.partial[[nbnivo]][,coord,j],col=color[index.col],pch=15,cex=cex*0.8)
         for (i in 1:nrow(coord.partial[[nbnivo]])) lines(c(res.hmfa$quali.var$coord[i,coord[1]],coord.partial[[nbnivo]][i,coord[1],j]),c(res.hmfa$quali.var$coord[i,coord[2]],coord.partial[[nbnivo]][i,coord[2],j]))
       }
-      name <- c(name,rownames(res.hmfa$group[[nbnivo]]))
+      name <- c(name,rownames(res.hmfa$group$coord[[nbnivo]]))
     }
 }
     legend("topleft",legend= name,text.col= color[1:index.col],cex=0.8,bg="white")
@@ -273,8 +273,8 @@ plot.moy <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL, ce
       if (new.plot) dev.new()
       if (is.null(title)) title <- "Groups representation"
       else sub.title <- "Groups representation"
-      for (h in 1:length(res.hmfa$group)){
-        coord.actif <- res.hmfa$group[[h]][, axes]
+      for (h in 1:length(res.hmfa$group$coord)){
+        coord.actif <- res.hmfa$group$coord[[h]][, axes]
         if (h ==1) plot(coord.actif, xlab = lab.x, ylab = lab.y, xlim = c(0, 1), ylim = c(0, 1), pch = 17, col = color[h], cex = cex, main = title, cex.main = cex, asp = 1)
         else points(coord.actif[,1],coord.actif[,2],col=color[h], pch = 17, cex=cex)
         if (lab.grpe) text(coord.actif[, 1], y = coord.actif[, 2], labels = rownames(coord.actif), pos = 3, col = color[h])

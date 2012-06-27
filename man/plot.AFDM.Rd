@@ -9,7 +9,7 @@ Draw the Multiple Factor Analysis for Mixt Data graphs.
 }
 
 \usage{
-\method{plot}{AFDM}(x, choix = "group", axes = c(1, 2), lab.grpe = TRUE,
+\method{plot}{AFDM}(x, choix = "var", axes = c(1, 2), lab.grpe = TRUE,
     lab.var = TRUE, lab.ind = TRUE, habillage = "none", col.lab = FALSE,
     col.hab = NULL, invisible = NULL, lim.cos2.var = 0., xlim = NULL,
     ylim = NULL, cex = 1, title = NULL, palette=NULL, new.plot = FALSE, \dots)
@@ -18,9 +18,9 @@ Draw the Multiple Factor Analysis for Mixt Data graphs.
 \arguments{
   \item{x}{an object of class AFDM} 
   \item{choix}{a string corresponding to the graph that you want to do ("ind" for the individual or categorical
-  variables graph, "group" for all the variables (quantitative and categorical), "var" for the correlation circle)}
+  variables graph, "var" for all the variables (quantitative and categorical), "quanti" for the correlation circle)}
   \item{axes}{a length 2 vector specifying the components to plot}
-  \item{lab.grpe}{boolean, if TRUE, the label of the groups are drwan}
+  \item{lab.grpe}{boolean, if TRUE, the label of the groups are drawn}
   \item{lab.var}{boolean indicating if the labelled of the variables should be drawn on the map}
   \item{lab.ind}{boolean indicating if the labelled of the individuals should be drawn on the map}
   \item{habillage}{string corresponding to the color which are used. If "ind", one color is used for each individual else if it is the name 

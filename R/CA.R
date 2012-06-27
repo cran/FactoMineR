@@ -35,8 +35,7 @@ CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE, axes=c
     colnames(vp) <- c("eigenvalue", "percentage of variance", "cumulative percentage of variance")
     vp[, "eigenvalue"] <- eig
     vp[, "percentage of variance"] <- (eig/sum(eig))*100
-    vp[1, "cumulative percentage of variance"] <- vp[1, "percentage of variance"]
-    if (length(eig)>1) for (i in 2:length(eig))  vp[i, "cumulative percentage of variance"] <- vp[i, "percentage of variance"] + vp[i - 1, "cumulative percentage of variance"]
+    vp[, "cumulative percentage of variance"] <- cumsum(vp[, "percentage of variance"])
     V <- tmp$V
     U <- tmp$U
 	eig <- eig[1:ncol(U)]

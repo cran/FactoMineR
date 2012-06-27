@@ -166,8 +166,8 @@ F.jt[[g]]*weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])])
         }
 ###  Begin handle missing values
 if (!is.null(tab.comp)){
- if (type[g] == "s") res.separe[[g]] <- PCA(tab.comp[,ind.var.group[[g]]],scale=TRUE,row.w=row.w,ind.sup=ind.sup,col.w=weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])],graph=FALSE)
- if (type[g] == "c") res.separe[[g]] <- PCA(tab.comp[,ind.var.group[[g]]],scale=FALSE,row.w=row.w,ind.sup=ind.sup,col.w=weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])],graph=FALSE)
+ if (type[g] == "s") res.separe[[g]] <- PCA(tab.comp[,ind.var.group[[g]]],scale.unit=TRUE,row.w=row.w,ind.sup=ind.sup,col.w=weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])],graph=FALSE)
+ if (type[g] == "c") res.separe[[g]] <- PCA(tab.comp[,ind.var.group[[g]]],scale.unit=FALSE,row.w=row.w,ind.sup=ind.sup,col.w=weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])],graph=FALSE)
  if (type[g] == "n") res.separe[[g]] <- MCA(aux.base, ind.sup = ind.sup, ncp=ncp, graph = FALSE, row.w=row.w,tab.disj=tab.comp[,ind.var.group[[g]]])
 }
 ###  End handle missing values

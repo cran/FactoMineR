@@ -12,11 +12,12 @@ if (!is.numeric(X[,1])){
     ponder <- 1-apply(tab.disj/nrow(X), 2, sum)
     X <- sweep(X,2,sqrt(ponder),FUN="*")
     scale = FALSE
+	if (method=="smooth") warning("You should use the GCV criterion in the argument method\n")
 }
 
 p=ncol(X)
 n=nrow(X)
-if (is.null(ncp.max)) ncp.max <- ncol(X)-1
+if (is.null(ncp.max)) ncp.max <- ncol(X)-pquali-1
 ncp.max <- min(nrow(X)-2,ncol(X)-1,ncp.max)
 crit <- NULL
 
@@ -27,7 +28,9 @@ if (scale){
  et = apply(X,2,sd)
  X = sweep(X,2,et,FUN="/")
 }
-if (ncp.min==0)  crit = mean(X^2, na.rm = TRUE)*n/(n-1)
+##if (ncp.min==0)  crit = mean(X^2, na.rm = TRUE)*n/(n-1)
+##if (ncp.min==0)  crit = mean(X^2, na.rm = TRUE)*(n*(p-pquali))/(p*(n-1))
+if (ncp.min==0)  crit = mean(X^2, na.rm = TRUE)*(n*p)/((p-pquali)*(n-1))
 
 rr = svd(X,nu=ncp.max,nv=ncp.max)
 
@@ -52,7 +55,9 @@ for (q in max(ncp.min,1):ncp.max){
       crit=c(crit,mean(sol^2))
     }    
 ##    if (method=="gcv") crit=c(crit,mean(( (n*(p-pquali))*(X-rec)/ (n*(p-pquali)- q*(n+p-pquali-q)))^2,na.rm=T))
-    if (method=="gcv") crit=c(crit,mean(( (n*(p-pquali))*(X-rec)/ ((n-1)*(p-pquali)- q*(n+p-pquali-q-1)))^2,na.rm=T))
+##    if (method=="gcv") crit=c(crit,mean(( (n*(p-pquali))*(X-rec)/ ((n-1)*(p-pquali)- q*(n+p-pquali-q-1)))^2,na.rm=T))
+##avec Julie    if (method=="gcv") crit=c(crit,mean(( n*(p-pquali)*(X-rec)/ ((n-1)*p- q*(n+p-pquali-q-1)))^2,na.rm=T))
+    if (method=="gcv") crit=c(crit,mean(( n*p*(X-rec)/ ((n-1)*(p-pquali)- q*(n+p-pquali-q-1)))^2,na.rm=T))
   }
   if (any(diff(crit)>0)) { ncp = which(diff(crit)>0)[1]
   } else ncp <- which.min(crit)

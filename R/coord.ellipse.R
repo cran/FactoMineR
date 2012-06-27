@@ -33,7 +33,7 @@ coord.ellipse <- function (coord.simul, centre = NULL, axes = c(1, 2), level.con
       if (is.null(centre))  center <- c(mean(x, na.rm = TRUE), mean(y, na.rm = TRUE))
       else {
         if (ncol(coord.simul) != ncol(centre)) stop("ncol de centre incorrect")
-        if (!all.equal(lev, levels(centre[, 1]))) stop("Leveles of centre are not corrects")
+        if (!all.equal(lev, levels(centre[, 1]))) stop("Levels of centre are not corrects")
 #        center <- as.numeric(centre[which(centre[, 1] == unique(centre[, 1])[f]), c(axes[1] + 1, axes[2] + 1)])
         center <- as.numeric(centre[which(centre[, 1] == levels(centre[, 1])[f]), c(axes[1] + 1, axes[2] + 1)])
       }
@@ -44,7 +44,7 @@ coord.ellipse <- function (coord.simul, centre = NULL, axes = c(1, 2), level.con
       res <- rbind(res, elli.tmp)
 #      label <- c(label, rep(lev[f], npoint))
     }
-    label <- factor(rep(lev,each=npoint),level=lev)
+    label <- factor(rep(lev,each=npoint),levels=lev)
     result <- data.frame(facteur = label, res)
     colnames(result)[1]="facteur"
     colnames(result) <- colnames(coord.simul)[c(1, axes + 1)]

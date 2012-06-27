@@ -32,13 +32,16 @@ Returns a list including:
 
 \author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
-\seealso{ \code{\link{CA}}}
+\seealso{ \code{\link{CA}}, \code{\link{descfreq}}}
 
 \examples{
 data(poison.text)
-res.text <- textual(poison.text, num.text = 3, contingence.by = c(1,2))
-## Contingence table for the sex variable, the sich variable and the couple
-## of variable sick-sex
+res.text <- textual(poison.text, num.text = 3, contingence.by = 1)
+descfreq(res.text$cont.table)
+## Contingence table for the couple of variable sick-sex
+res.text2 <- textual(poison.text, num.text = 3, contingence.by = list(c(1,2)))
+descfreq(res.text2$cont.table)
+## Contingence table for sex, sick and the couple of variable sick-sex
 res.text2 <- textual(poison.text, num.text = 3, contingence.by = list(1,2,c(1,2)))
 }
 

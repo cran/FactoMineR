@@ -1,7 +1,7 @@
 plot.MCA <- function (x, axes = c(1, 2), choix="ind",
     xlim = NULL, ylim = NULL, invisible = NULL, 
     col.ind = "blue", col.var = "red", col.quali.sup = "darkgreen",
-    col.ind.sup = "darkblue", col.quanti.sup = "black",
+    col.ind.sup = "darkblue", col.quanti.sup = "blue",
     label="all", cex = 1, title = NULL, habillage = "none", palette=NULL, new.plot=FALSE, ...){
     
     res.mca <- x
@@ -14,7 +14,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix="ind",
 
    if (choix =="ind"){
     lab.ind <- lab.var <- lab.quali.sup <- lab.ind.sup <- FALSE
-    if(length(label)==1 && label=="all") lab.ind <- lab.var <- lab.quali.sup <- lab.ind.sup <-TRUE
+    if(length(label)==1 && label=="all") lab.ind <- lab.var <- lab.quali.sup <- lab.ind.sup <- TRUE
     if("ind" %in% label) lab.ind<-TRUE
     if("var" %in% label) lab.var<-TRUE
     if("quali.sup" %in% label) lab.quali.sup<-TRUE
@@ -148,22 +148,25 @@ plot.MCA <- function (x, axes = c(1, 2), choix="ind",
 
     
     if (choix == "var") {
-      lab.var <- lab.quali.sup <- FALSE
-      if(length(label)==1 && label=="all") lab.var <- lab.quali.sup <-TRUE
+      lab.var <- lab.quali.sup <- lab.quanti.sup <- FALSE
+      if(length(label)==1 && label=="all") lab.var <- lab.quali.sup <- lab.quanti.sup <- TRUE
       if("var" %in% label) lab.var<-TRUE
       if("quali.sup" %in% label) lab.quali.sup<-TRUE
+      if("quanti.sup" %in% label) lab.quanti.sup<-TRUE
 
-      test.invisible <- vector(length = 2)
+      test.invisible <- vector(length = 3)
       if (!is.null(invisible)) {
           test.invisible[1] <- match("var", invisible)
           test.invisible[2] <- match("quali.sup", invisible)
+          test.invisible[3] <- match("quanti.sup", invisible)
       }
-      else  test.invisible <- rep(NA, 2)
+      else  test.invisible <- rep(NA, 3)
 
       if (new.plot) dev.new()
       if (is.null(title)) title <- "Variables representation"
       coord.actif <- res.mca$var$eta2[, axes]
       if (!is.null(res.mca$quali.sup$eta2)) coord.illu <- res.mca$quali.sup$eta2[,axes,drop=FALSE]
+      if (!is.null(res.mca$quanti.sup$coord)) coord.illuq <- res.mca$quanti.sup$coord[,axes,drop=FALSE]^2
       if (is.na(test.invisible[1])){
         plot(coord.actif, xlab = lab.x, ylab = lab.y, xlim = c(0, 1), ylim = c(0, 1), pch = 20, col = col.var, cex = cex, main = title, cex.main = cex*1.2, asp = 1)
         if (lab.var) text(coord.actif[, 1], y = coord.actif[, 2], labels = rownames(coord.actif), pos = 3, col = col.var)
@@ -172,6 +175,11 @@ plot.MCA <- function (x, axes = c(1, 2), choix="ind",
         if (!is.na(test.invisible[1])) plot(coord.illu, xlab = lab.x, ylab = lab.y, xlim = c(0, 1), ylim = c(0, 1), pch = 20, col = col.quali.sup, cex = cex, main = title, cex.main = cex*1.2, asp = 1)
         else points(coord.illu, pch = 20, col = col.quali.sup)
         if (lab.quali.sup) text(coord.illu[, 1], y = coord.illu[, 2], labels = rownames(coord.illu), pos = 3, col = col.quali.sup)
+      }
+      if ((!is.null(res.mca$quanti.sup$coord))&&(is.na(test.invisible[3]))){
+        if ((!is.na(test.invisible[1]))&&(!is.na(test.invisible[2]))) plot(coord.illuq, xlab = lab.x, ylab = lab.y, xlim = c(0, 1), ylim = c(0, 1), pch = 20, col = col.quanti.sup, cex = cex, main = title, cex.main = cex*1.2, asp = 1)
+        else points(coord.illuq, pch = 20, col = col.quanti.sup)
+        if (lab.quanti.sup) text(coord.illuq[, 1], y = coord.illuq[, 2], labels = rownames(coord.illuq), pos = 3, col = col.quanti.sup)
       }
     }
     

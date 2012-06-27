@@ -95,6 +95,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
 	  if(cluster.CA=="rows") res=as.data.frame(res$row$coord)
 	  if(cluster.CA=="columns") res=as.data.frame(res$col$coord)
     }
+    if (is.matrix(res)) res <- as.data.frame(res)
     if (is.data.frame(res)){
 	  num=c()
 	  for (i in 1:ncol(res)) if(is.numeric(res[,i])) num=c(num,i)
@@ -105,13 +106,13 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
         max = min(10, round(nrow(res$ind$coord)/2))
     max = min(max, nrow(res$ind$coord) - 1)
     if (inherits(res, "PCA") | inherits(res, "MCA") | inherits(res, 
-        "MFA") | inherits(res, "HMFA")) {
+        "MFA") | inherits(res, "HMFA") | inherits(res, "AFDM")) {
         if (!is.null(res$call$ind.sup)) 
             res$call$X = res$call$X[-res$call$ind.sup, ]
         t = auto.cut.tree(res, min = min, max = max, metric = metric, 
             method = method, ...)
     }
-    else stop("res should be from PCA, MCA, or MFA class")
+    else stop("res should be from PCA, MCA, AFDM, MFA, or HMFA class")
     if (inherits(t$tree, "agnes")) 
         t$tree <- as.hclust(t$tree)
     if (inherits(t$tree, "hclust")) {

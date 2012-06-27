@@ -8,22 +8,20 @@ PCA <- function (X, scale.unit = TRUE, ncp = 5, ind.sup = NULL, quanti.sup = NUL
     ec <- function(V, poids) {
         res <- sqrt(sum(V^2 * poids)/sum(poids))
     }
+    fct.eta2 <- function(vec,x,weights) {
+      res <- summary(lm(x~vec,weights=weights))$r.squared
+    }
     X <- as.data.frame(X)
     if (any(is.na(X))) {
         warnings("Missing values are imputed by the mean of the variable: you should use the imputePCA function of the missMDA package")
         if (is.null(quali.sup)) 
-#            for (j in 1:ncol(X)) X[, j] <- replace(X[, j], is.na(X[, j]), mean(X[, j], na.rm = TRUE))
-            X[is.na(X)] = matrix(apply(X,2,mean,na.rm=TRUE),ncol=ncol(X),nrow=nrow(X),byrow=TRUE)[is.na(X)]
+          X[is.na(X)] = matrix(apply(X,2,mean,na.rm=TRUE),ncol=ncol(X),nrow=nrow(X),byrow=TRUE)[is.na(X)]
         else for (j in (1:ncol(X))[-quali.sup]) X[, j] <- replace(X[, j], is.na(X[, j]), mean(X[, j], na.rm = TRUE))
     }
     if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
     if (is.null(colnames(X))) colnames(X) = paste("V", 1:ncol(X), sep = "")
     colnames(X)[colnames(X)==""] <- paste("V",1:sum(colnames(X)==""),sep="")
     rownames(X)[is.null(rownames(X))] <- paste("row",1:sum(rownames(X)==""),sep="")
-#    for (j in 1:ncol(X)) if (colnames(X)[j] == "") 
-#        colnames(X)[j] = paste("V", j, sep = "")
-#    for (j in 1:nrow(X)) if (is.null(rownames(X)[j])) 
-#        rownames(X)[j] = paste("row", j, sep = "")
     Xtot <- X
     if (!is.null(quali.sup)) 
         X <- X[, -quali.sup]
@@ -31,8 +29,7 @@ PCA <- function (X, scale.unit = TRUE, ncp = 5, ind.sup = NULL, quanti.sup = NUL
         auxi = NULL
         for (j in 1:ncol(X)) if (!is.numeric(X[, j])) 
             auxi = c(auxi, colnames(X)[j])
-        stop(paste("\nThe following variables are not quantitative: ", 
-            auxi))
+        stop(paste("\nThe following variables are not quantitative: ", auxi))
     }
     todelete <- c(quali.sup, quanti.sup)
     if (!is.null(todelete)) X <- Xtot[, -todelete]
@@ -67,10 +64,7 @@ dist2.var <- apply(sweep(X,1,sqrt(row.w),FUN="*")^2,2,sum)
         "cumulative percentage of variance")
     vp[, "eigenvalue"] <- eig
     vp[, "percentage of variance"] <- (eig/sum(eig)) * 100
-    vp[1, "cumulative percentage of variance"] <- vp[1, "percentage of variance"]
-    if (length(eig) >= 2) 
-        for (i in 2:length(eig)) vp[i, "cumulative percentage of variance"] <- vp[i, 
-            "percentage of variance"] + vp[i - 1, "cumulative percentage of variance"]
+    vp[, "cumulative percentage of variance"] <- cumsum(vp[, "percentage of variance"])
     V <- tmp$V
     U <- tmp$U
 	eig <- eig[1:ncp]
@@ -168,6 +162,12 @@ dist2 <- apply(sweep(X.quanti.sup,1,sqrt(row.w),FUN="*")^2,2,sum)
                 ])
         colnames(X.quali.sup) <- colnames(Xtot)[quali.sup]
         nombre <- modalite <- NULL
+
+       eta2 = matrix(NA, length(quali.sup), ncp)
+        colnames(eta2) = paste("Dim", 1:ncp)
+        rownames(eta2) = colnames(X.quali.sup)
+        for (i in 1:ncp)  eta2[, i] <- unlist(lapply(X.quali.sup,fct.eta2,res$ind$coord[,i],weights=row.w))
+
         for (i in 1:ncol(X.quali.sup)) {
             var <- as.factor(X.quali.sup[, i])
             n.mod <- nlevels(var)
@@ -201,7 +201,7 @@ dist2 <- apply(sweep(as.matrix(bary)^2,2,col.w,FUN="*"),1,sum)
         vtest <- vtest[, 1:ncp]
         dimnames(cos2.bary.sup) <- dimnames(vtest) <- dimnames(coord.barycentre)
         names(dist2) <- rownames(coord.barycentre)
-        res.quali.sup <- list(coord = coord.barycentre, cos2 = cos2.bary.sup, v.test = vtest, dist = sqrt(dist2))
+        res.quali.sup <- list(coord = coord.barycentre, cos2 = cos2.bary.sup, v.test = vtest, dist = sqrt(dist2), eta2=eta2)
         call.quali.sup <- list(quali.sup = X.quali.sup, modalite = modalite, nombre = nombre, barycentre = barycentre, numero = quali.sup)
         res$quali.sup = res.quali.sup
         res.call$quali.sup = call.quali.sup

@@ -26,6 +26,7 @@ catdes <- function(donnee,num.var,proba = 0.05){
     Test.chi = matrix(NA,nrow=nb.quali,ncol=2)
     marge.li = xtabs(~donnee[,num.var])
     nom = tri = structure(vector(mode = "list", length = nb.modalite), names = levels(donnee[,num.var]))
+    indicateur.quali <- 0
     for (i in 1:nb.quali){
       Table <- xtabs(~donnee[,num.var]+donnee[,quali[i]])
       marge.col = xtabs(~donnee[,quali[i]])
@@ -63,9 +64,11 @@ catdes <- function(donnee,num.var,proba = 0.05){
        Test.chi = Test.chi[oo,]
      }  
      colnames(Test.chi) = c("p.value","df")
+     res$test.chi2 = Test.chi
    }
    for (j in 1:nb.modalite){
      if (!is.null(tri[[j]])){
+       indicateur.quali <- 1
        oo = rev(order(tri[[j]][,5]))
        tri[[j]] = tri[[j]][oo,]
        nom[[j]] = nom[[j]][oo,]
@@ -77,13 +80,16 @@ catdes <- function(donnee,num.var,proba = 0.05){
        colnames(tri[[j]]) =  c("Cla/Mod","Mod/Cla","Global","p.value","v.test")
      }
    }
-   res$test.chi2 = Test.chi
-   res$category = tri
+   if (indicateur.quali>0) res$category = tri
   }
 
   if (!is.null(quanti)){
     nom = result = structure(vector(mode = "list", length = nb.modalite), names = levels(donnee[,num.var]))
-    for (i in 1:length(quanti)){
+	tabF <- matrix(0, length(quanti), 2)
+    for (i in 1:length(quanti)){	
+      res.aov <- summary(aov(donnee[,quanti[i]]~donnee[,num.var], na.action = na.exclude))[[1]]
+      tabF[i, 1] <- res.aov[1,2]/sum(res.aov[,2])
+      tabF[i, 2] <- res.aov[1,5]
       moy.mod = by(donnee[,quanti[i]],donnee[,num.var],mean,na.rm=TRUE)
       n.mod = summary(donnee[,num.var])
       sd.mod = by(donnee[,quanti[i]],donnee[,num.var],sd,na.rm=TRUE)
@@ -100,7 +106,11 @@ catdes <- function(donnee,num.var,proba = 0.05){
         }
        }
       }
-    }
+	}
+    dimnames(tabF) <- list(colnames(donnee)[quanti], c("Eta2", "P-value"))
+    auxF <- tabF[order(tabF[, 2]),]
+    select1 <- (1:nrow(auxF))[auxF[, 2]<proba]
+    if (length(select1) > 0) resF <- auxF[select1,,drop=FALSE]
     for (j in 1:nb.modalite){
       if (!is.null(result[[j]])){
         oo = rev(order(result[[j]][,1]))
@@ -117,7 +127,10 @@ catdes <- function(donnee,num.var,proba = 0.05){
         }
       }
     }
-    res$quanti = result
+    if (length(select1)>0) {
+	  res$quanti.var = resF
+	  res$quanti = result
+	}
   }
   options(old.warn)
 class(res) <- c("catdes", "list ")

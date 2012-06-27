@@ -35,7 +35,7 @@ Returns a list including:
   \item{ind}{a list of matrices containing all the results for the active individuals (coordinates, square cosine, contributions)}
   \item{ind.sup}{a list of matrices containing all the results for the supplementary individuals (coordinates, square cosine)}
   \item{quanti.sup}{a list of matrices containing all the results for the supplementary quantitative variables (coordinates, correlation between variables and axes)}
-  \item{quali.sup}{a list of matrices containing all the results for the supplementary categorical variables (coordinates of each categories of each variables, and v.test which is a criterion with a Normal distribution)}
+  \item{quali.sup}{a list of matrices containing all the results for the supplementary categorical variables (coordinates of each categories of each variables, v.test which is a criterion with a Normal distribution, and eta2 which is the square correlation corefficient between a qualitative variable and a dimension)}
 
 Returns the individuals factor map and the variables factor map.
 }

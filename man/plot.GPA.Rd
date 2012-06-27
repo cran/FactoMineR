@@ -18,7 +18,7 @@ Draw the General Procrustes Analysis (GPA) map.
 \arguments{
   \item{x}{an object of class GPA}
   \item{axes}{a length 2 vector specifying the components to plot}
-  \item{lab.ind.moy}{boolean, if TRUE, the label of the mean points are drwan}
+  \item{lab.ind.moy}{boolean, if TRUE, the label of the mean points are drawn}
   \item{habillage}{string corresponding to the color which are used. If "ind", one color is used for each individual;
   if "group" the individuals are colored according to the group}
   \item{partial}{list of the individuals or of the center of gravity for which the partial points should be drawn (by
