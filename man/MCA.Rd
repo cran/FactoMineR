@@ -23,7 +23,7 @@ MCA(X, ncp = 5, ind.sup = NULL, quanti.sup = NULL,
   \item{quanti.sup}{a vector indicating the indexes of the quantitative supplementary variables}
   \item{quali.sup}{a vector indicating the indexes of the categorical supplementary variables}
   \item{graph}{boolean, if TRUE a graph is displayed}
-  \item{level.ventil}{a number corresponding to the level under which the category is ventilated; by default, 0 and no ventilation is done}
+  \item{level.ventil}{a proportion corresponding to the level under which the category is ventilated; by default, 0 and no ventilation is done}
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{row.w}{an optional row weights (by default, a vector of 1 for uniform row weights)}
   \item{method}{a string corresponding to the name of the method used: "Indicator" (by default) is the CA on the Indicator matrix, "Burt" is the CA on the Burt table. For Burt and the Indicator, the graph of the individuals and the graph of the categories are given}

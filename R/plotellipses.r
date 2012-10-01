@@ -241,12 +241,12 @@ if (nbevar==1) {
     }
     modalite = factor(modalite2)
 	don <- cbind.data.frame(don, var = nomvar, modalite = factor(modalite2))
-    xyplot(y ~ x | var , data = don, groups = modalite, panel = monpanel,
-        level = level, means = means, magnify = magnify, cex = cex,
-        pch = pch, lwd=lwd, pchmeans = pch.means, nommod = nommod, type = type,
-        xlab = paste("Dim ", axis[1], " (", round(model$eig[axis[1],
-            2], 1), "%)", sep = ""), ylab = paste("Dim ", axis[2],
-            " (", round(model$eig[axis[2], 2], 1), "%)", sep = ""), ylim=ylim, xlim=xlim)
+#    xyplot(y ~ x | var , data = don, groups = modalite, panel = monpanel,
+#        level = level, means = means, magnify = magnify, cex = cex,
+#        pch = pch, lwd=lwd, pchmeans = pch.means, nommod = nommod, type = type,
+#        xlab = paste("Dim ", axis[1], " (", round(model$eig[axis[1],
+#            2], 1), "%)", sep = ""), ylab = paste("Dim ", axis[2],
+#            " (", round(model$eig[axis[2], 2], 1), "%)", sep = ""), ylim=ylim, xlim=xlim)
 
     if ( length(pch.means) < max(modalite2)) pch.means <- rep(pch.means,length=max(modalite2))
     xyplot(y ~ x | var, data = don, groups = modalite, panel = monpanel, 

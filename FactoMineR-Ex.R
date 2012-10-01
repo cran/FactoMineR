@@ -19,6 +19,9 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
+##D data(geomorphology)
+##D res.afdm = AFDM(geomorphology)
+##D 
 ##D data(wine)
 ##D res.afdm = AFDM(wine[,c(1,2,30,31)])
 ## End(Not run)
@@ -392,6 +395,25 @@ nb.dim <- estim_ncp(decathlon[,1:10],scale=TRUE)
 
 
 cleanEx()
+nameEx("geomorphology")
+### * geomorphology
+
+flush(stderr()); flush(stdout())
+
+### Name: geomorphology
+### Title: geomorphology(data)
+### Aliases: geomorphology
+### Keywords: datasets
+
+### ** Examples
+
+data(geomorphology)
+res.afdm <- AFDM(geomorphology)
+plot(res.afdm,choix="ind",habillage=4)
+
+
+
+cleanEx()
 nameEx("gpa")
 ### * gpa
 
@@ -491,6 +513,25 @@ data(mortality)
 
 
 cleanEx()
+nameEx("plot.AFDM")
+### * plot.AFDM
+
+flush(stderr()); flush(stdout())
+
+### Name: plot.AFDM
+### Title: Draw the Multiple Factor Analysis for Mixt Data graphs
+### Aliases: plot.AFDM
+### Keywords: dplot
+
+### ** Examples
+
+data(geomorphology)
+res.afdm <- AFDM(geomorphology)
+plot(res.afdm,choix="ind",habillage=4)
+
+
+
+cleanEx()
 nameEx("plot.CA")
 ### * plot.CA
 
@@ -522,13 +563,11 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-## Not run: 
-##D data(iris)
-##D # Clustering, auto nb of clusters:
-##D res.hcpc=HCPC(iris[1:4], nb.clust=3)
-##D # 3D graph from a different point of view:
-##D plot.HCPC(res.hcpc, choice="3D.map", angle=60)
-## End(Not run)
+data(iris)
+# Clustering, auto nb of clusters:
+res.hcpc=HCPC(iris[1:4], nb.clust=3)
+# 3D graph from a different point of view:
+plot.HCPC(res.hcpc, choice="3D.map", angle=60)
 
 
 

@@ -108,8 +108,8 @@ catdes <- function(donnee,num.var,proba = 0.05){
       }
 	}
     dimnames(tabF) <- list(colnames(donnee)[quanti], c("Eta2", "P-value"))
-    auxF <- tabF[order(tabF[, 2]),]
-    select1 <- (1:nrow(auxF))[auxF[, 2]<proba]
+    auxF <- tabF[order(tabF[, 2]),,drop=FALSE]
+    select1 <- (1:nrow(auxF))[auxF[, 2,drop=FALSE]<proba]
     if (length(select1) > 0) resF <- auxF[select1,,drop=FALSE]
     for (j in 1:nb.modalite){
       if (!is.null(result[[j]])){

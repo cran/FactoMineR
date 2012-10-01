@@ -31,7 +31,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
     }
     consolidation = function(X, clust, iter.max = 10, ...) {
         centers = NULL
-        centers = by(X, clust, mean)
+        centers = by(X, clust, colMeans)
         centers = matrix(unlist(centers), ncol = ncol(X), byrow = TRUE)
         km = kmeans(X, centers = centers, iter.max = iter.max, 
             ...)
@@ -146,12 +146,10 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
             legend("top", "inertia gain  ", box.lty = NULL, cex = 1)
         }
         else {
-            if (nb.clust == 0 | nb.clust == 1) 
-                nb.clust = -1
+            if (nb.clust == 0 | nb.clust == 1) nb.clust = -1
         }
         if ((nb.clust == 0) | (nb.clust == 1)) {
-            plot(t$tree, hang = -1, main = "Click to cut the tree", 
-                xlab = "", sub = "")
+            plot(t$tree, hang = -1, main = "Click to cut the tree",  xlab = "", sub = "")
             abline(h = auto.haut, col = "black", lwd = 3)
             coupe = locator(n = 1)
             while (coupe$y < min(t$tree$height)) {
@@ -176,8 +174,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
     nb.clust = max(clust)
     X = as.data.frame(t$res$ind$coord)
     if (graph) {
-        rect = rect.hclust(t$tree, h = y, border = seq(1, nb.clust, 
-            1))
+        rect = rect.hclust(t$tree, h = y, border = seq(1, nb.clust, 1))
         clust = NULL
         for (j in 1:nb.clust) clust = c(clust, rep(j, length(rect[[j]])))
         clust = as.factor(clust)
@@ -192,7 +189,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
         coordon = coord.construction(res.consol$centers, X, clust = clust)
     }
     if (!consol) {
-        list.centers = by(X, clust, mean)
+        list.centers = by(X, clust, colMeans)
         centers = matrix(unlist(list.centers), ncol = ncol(X), 
             byrow = TRUE)
         colnames(centers) = colnames(X)
@@ -207,8 +204,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
     clust = as.factor(clust)
     X = cbind.data.frame(X, clust)
     data.clust = cbind.data.frame(t$res$call$X, clust)
-    if (vec) 
-        data.clust = as.data.frame(data.clust[, -2])
+    if (vec) data.clust = as.data.frame(data.clust[, -2])
     desc.var = catdes(data.clust, ncol(data.clust), proba = proba)
     desc.axe = catdes(X, ncol(X), proba = proba)
     call = list(t = t, min = min, max = max, X = X, vec = vec)
