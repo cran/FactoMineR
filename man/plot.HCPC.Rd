@@ -53,12 +53,10 @@
 \seealso{ \code{\link{HCPC}}}
 
 \examples{
-\dontrun{
 data(iris)
 # Clustering, auto nb of clusters:
 res.hcpc=HCPC(iris[1:4], nb.clust=3)
 # 3D graph from a different point of view:
 plot.HCPC(res.hcpc, choice="3D.map", angle=60)
-}
 }
 \keyword{dplot}

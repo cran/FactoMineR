@@ -83,14 +83,13 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
       aa[i,3]=height[i]
       aa[i,4]=w1+w2
       
-      
       if(i>(nrow(merge)-t.level+1)){
         if(dimens==3) s$points3d(rbind(c(x1,y1,h1),c(x1,y1,height[i]), c(x2,y2,height[i]),c(x2,y2,h2)), lty=1, type="o", pch="")
         if(dimens==2) lines(c(x1,x2), c(y1,y2), lwd=(height[i]/max(height))*3)
       }
     }
     if(dimens==3){
-      list.centers=by(X[,-ncol(X)], X$clust, mean)
+      list.centers=by(X[,-ncol(X)], X$clust, colMeans)
       centers=matrix(unlist(list.centers), ncol=ncol(X)-1, byrow=TRUE)
       for(l in 1:nb.clust){
         if(centers.plot){
@@ -162,7 +161,7 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
 #      res2$eig=res$call$t$res$eig
 
       res2 = PCA(Y, quali.sup = ncol(Y), scale.unit = FALSE, row.w = res$call$t$res$call$row.w ,ncp = Inf, graph = FALSE)
-
+res2$eig <- res$call$t$res$eig
       if(ind.names) plot.PCA(res2, title=title, habillage=ncol(Y), cex=0.8,  axes=axes,new.plot=new.plot,palette=palette(),...)
       else plot.PCA(res2, title=title, habillage=ncol(Y), cex=0.8, axes=axes, label="none",new.plot=new.plot,palette=palette(),...)
       if(draw.tree) f.draw.tree(X, merge=res$call$t$tree$merge, height=res$call$t$tree$height, dimens=2, t.level=t.level, axes=axes,...)

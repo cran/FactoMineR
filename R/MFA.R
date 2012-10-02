@@ -99,7 +99,7 @@ for (i in 1:length(group)){
         if(!any(type.var=="f")) sumT <-1
 		else sumT <- sum(base[1:nb.actif,as.logical((type.var=="f")+(type.var=="f2")+(type.var=="f3"))])
 ## Modif november 2011
-		sumT <- sum(base[1:nb.actif,as.logical((type.var=="f")+(type.var=="f2")+(type.var=="f3"))])
+#		sumT <- sum(base[1:nb.actif,as.logical((type.var=="f")+(type.var=="f2")+(type.var=="f3"))])
 		if (sumT==0) sumT <- 1
 		base[,as.logical((type.var=="f")+(type.var=="f_sup")+(type.var=="f2")+(type.var=="f2_sup")+(type.var=="f3")+(type.var=="f3_sup"))]<-base[,as.logical((type.var=="f")+(type.var=="f_sup")+(type.var=="f2")+(type.var=="f2_sup")+(type.var=="f3")+(type.var=="f3_sup"))]/sumT
 		F.jt<-list()

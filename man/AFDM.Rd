@@ -5,7 +5,7 @@
 \title{Factor Analysis for Mixed Data}
 
 \description{
-Performs Factor Analysis with both quantitative and categorical data.
+AFDM is a principal component method dedicated to explore data with both continuous and categorical variables. It can be seen roughly as a mixed between PCA and MCA. More precisely, the continuous variables are scaled to unit variance and the categorical variables are transformed into a disjunctive data table (crisp coding) and then scaled using the specific scaling of MCA. This ensures to balance the influence of both continous and categorical variables in the analysis. It means that both variables are on a equal foot to determine the dimensions of variability. This method allows one to study the similarities between individuals taking into account mixed variables and to study the relationships between all the variables. It also provides graphical outputs such as the representation of the individuals, the correlation circle for the continuous variables and representations of the categories of the categorical variables, and also specific graphs to visulaize the associations between both type of variables. 
 }
 
 \usage{
@@ -46,6 +46,9 @@ Pages J. (2004). Analyse factorielle de donnees mixtes. Revue Statistique Appliq
 
 \examples{
 \dontrun{
+data(geomorphology)
+res.afdm = AFDM(geomorphology)
+
 data(wine)
 res.afdm = AFDM(wine[,c(1,2,30,31)])
 }
