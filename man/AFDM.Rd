@@ -10,7 +10,7 @@ AFDM is a principal component method dedicated to explore data with both continu
 
 \usage{
 AFDM (base, ncp = 5, graph = TRUE, sup.var = NULL, 
-    ind.sup = NULL, axes = c(1,2), row.w = NULL)
+    ind.sup = NULL, axes = c(1,2), row.w = NULL, tab.comp = NULL)
 }
 
 \arguments{
@@ -21,6 +21,7 @@ AFDM (base, ncp = 5, graph = TRUE, sup.var = NULL,
   \item{sup.var}{a vector indicating the indexes of the supplementary variables}
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{row.w}{an optional row weights (by default, uniform row weights)}
+  \item{tab.comp}{object obtained from the imputeAFDM function of the missMDA package that allows to handle missing values}
 }
 
 \value{

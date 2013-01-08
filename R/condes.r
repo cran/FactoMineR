@@ -6,32 +6,29 @@ condes <- function (donnee, num.var, proba = 0.05)
         lab[i] = gsub(" ", ".", lab[i])
         if (is.factor(donnee[, i])) {
             if (any(is.na(donnee[, i]))) {
-                levels(donnee[, i]) <- c(levels(donnee[, i]),
-                  "NA")
+                levels(donnee[, i]) <- c(levels(donnee[, i]),"NA")
                 donnee[, i][is.na(donnee[, i])] <- "NA"
             }
-            if (levels(donnee[, i])[1] == "")
-                levels(donnee[, i])[1] = "NA"
-            if (i != num.var)
-                quali = c(quali, i)
+            if (levels(donnee[, i])[1] == "") levels(donnee[, i])[1] = "NA"
+            if (i != num.var) quali = c(quali, i)
         }
     }
     quanti = (1:ncol(donnee))[-c(quali, num.var)]
-    if (length(quanti) == 0)
-        quanti = NULL
+    if (length(quanti) == 0) quanti = NULL
     colnames(donnee) = lab
     result = list()
     if (!is.null(quanti)) {
-        tab.quanti = cor(donnee[, quanti], donnee[, num.var])
-        aux = cbind(tab.quanti, pf(tab.quanti^2 * (nrow(donnee) -
-            2)/(1 - tab.quanti^2), 1, nrow(donnee) - 2, lower.tail = FALSE))
+#        tab.quanti = cor(donnee[, quanti], donnee[, num.var],use="pairwise.complete.obs")
+#        aux = cbind(tab.quanti, pf(tab.quanti^2 * (nrow(donnee) - 2)/(1 - tab.quanti^2), 1, nrow(donnee) - 2, lower.tail = FALSE))
+        if (length(quanti)>1){
+		  tab.quanti=apply(donnee[,quanti],2,cor.test,donnee[,num.var],use="pairwise.complete.obs")
+          aux = matrix(as.numeric(sapply(tab.quanti,unlist)[4:3,]),byrow=T,ncol=2)
+		} else aux <- matrix(unlist(cor.test(donnee[, quanti], donnee[, num.var],use="pairwise.complete.obs")[4:3]),ncol=2)
         rownames(aux) = colnames(donnee)[quanti]
         resQ = NULL
-        if (NROW(aux) > 1)
-            aux <- aux[rev(order(aux[, 1])), ]
+        if (NROW(aux) > 1) aux <- aux[rev(order(aux[, 1])), ]
         resQ <- aux[aux[, 2] < proba, , drop = F]
-        if (!is.null(resQ))
-            colnames(resQ) = c("correlation", "p.value")
+        if (!is.null(resQ)) colnames(resQ) = c("correlation", "p.value")
         result$quanti <- resQ
     }
     if (!is.null(quali)) {
@@ -55,9 +52,7 @@ condes <- function (donnee, num.var, proba = 0.05)
             if (nrow(resT) > 2) {
                 resT = resT[-1, ]
                 cov.mat = vcov(res.aov)
-                dern.mod = c(-sum(resT[, 1]), pt(abs(sum(resT[,
-                  1]))/sqrt(sum(cov.mat[, -1])), res[2, 1], lower.tail = FALSE) *
-                  2)
+                dern.mod = c(-sum(resT[, 1]), pt(abs(sum(resT[,1]))/sqrt(sum(cov.mat[, -1])), res[2, 1], lower.tail = FALSE) * 2)
                 resT = rbind(resT, dern.mod)
             }
             rownames(resT) = levels(donnee[, quali[v]])

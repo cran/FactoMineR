@@ -169,17 +169,17 @@ plot.MCA <- function (x, axes = c(1, 2), choix="ind",
       if (!is.null(res.mca$quanti.sup$coord)) coord.illuq <- res.mca$quanti.sup$coord[,axes,drop=FALSE]^2
       if (is.na(test.invisible[1])){
         plot(coord.actif, xlab = lab.x, ylab = lab.y, xlim = c(0, 1), ylim = c(0, 1), pch = 20, col = col.var, cex = cex, main = title, cex.main = cex*1.2, asp = 1)
-        if (lab.var) text(coord.actif[, 1], y = coord.actif[, 2], labels = rownames(coord.actif), pos = 3, col = col.var)
+        if (lab.var) text(coord.actif[, 1], y = coord.actif[, 2], labels = rownames(coord.actif), pos = 3, col = col.var, cex=cex)
       }
       if ((!is.null(res.mca$quali.sup$eta2))&&(is.na(test.invisible[2]))){
         if (!is.na(test.invisible[1])) plot(coord.illu, xlab = lab.x, ylab = lab.y, xlim = c(0, 1), ylim = c(0, 1), pch = 20, col = col.quali.sup, cex = cex, main = title, cex.main = cex*1.2, asp = 1)
-        else points(coord.illu, pch = 20, col = col.quali.sup)
-        if (lab.quali.sup) text(coord.illu[, 1], y = coord.illu[, 2], labels = rownames(coord.illu), pos = 3, col = col.quali.sup)
+        else points(coord.illu, pch = 20, col = col.quali.sup, cex=cex)
+        if (lab.quali.sup) text(coord.illu[, 1], y = coord.illu[, 2], labels = rownames(coord.illu), pos = 3, col = col.quali.sup, cex=cex)
       }
       if ((!is.null(res.mca$quanti.sup$coord))&&(is.na(test.invisible[3]))){
         if ((!is.na(test.invisible[1]))&&(!is.na(test.invisible[2]))) plot(coord.illuq, xlab = lab.x, ylab = lab.y, xlim = c(0, 1), ylim = c(0, 1), pch = 20, col = col.quanti.sup, cex = cex, main = title, cex.main = cex*1.2, asp = 1)
-        else points(coord.illuq, pch = 20, col = col.quanti.sup)
-        if (lab.quanti.sup) text(coord.illuq[, 1], y = coord.illuq[, 2], labels = rownames(coord.illuq), pos = 3, col = col.quanti.sup)
+        else points(coord.illuq, pch = 20, col = col.quanti.sup, cex=cex)
+        if (lab.quanti.sup) text(coord.illuq[, 1], y = coord.illuq[, 2], labels = rownames(coord.illuq), pos = 3, col = col.quanti.sup, cex=cex)
       }
     }
     

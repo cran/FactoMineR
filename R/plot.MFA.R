@@ -33,8 +33,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
         nbre.grpe <- nbre.grpe - length(num.group.sup)
     }
     if (choix == "axes") {
-        if (new.plot) 
-            dev.new()
+        if (new.plot) dev.new()
         if (is.null(title)) 
             title <- "Partial axes"
         coord.axes <- res.mfa$partial.axes$coord[, axes, drop = FALSE]
@@ -72,54 +71,39 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
                 rep("black", ncol(res.mfa$partial.axes$coord)))
         }
         for (v in 1:nrow(coord.axes)) {
-            arrows(0, 0, coord.axes[v, 1], coord.axes[v, 2], 
-                length = 0.1, angle = 15, code = 2, col = couleur.axes[v])
+            arrows(0, 0, coord.axes[v, 1], coord.axes[v, 2], length = 0.1, angle = 15, code = 2, col = couleur.axes[v], cex=cex)
             if (abs(coord.axes[v, 1]) > abs(coord.axes[v, 2])) {
-                if (coord.axes[v, 1] >= 0) 
-                  pos <- 4
+                if (coord.axes[v, 1] >= 0) pos <- 4
                 else pos <- 2
             }
             else {
-                if (coord.axes[v, 2] >= 0) 
-                  pos <- 3
+                if (coord.axes[v, 2] >= 0) pos <- 3
                 else pos <- 1
             }
-            text(coord.axes[v, 1], y = coord.axes[v, 2], labels = rownames(coord.axes)[v], 
-                pos = pos, col = couleur.axes[v])
+            text(coord.axes[v, 1], y = coord.axes[v, 2], labels = rownames(coord.axes)[v], pos = pos, col = couleur.axes[v], cex=cex)
         }
         if (habillage == "group") {
-            legend("topleft", legend = rownames(res.mfa$group$Lg)[-length(rownames(res.mfa$group$Lg))], 
-                text.col = unique(couleur.axes), cex = 0.8)
+            legend("topleft", legend = rownames(res.mfa$group$Lg)[-length(rownames(res.mfa$group$Lg))], text.col = unique(couleur.axes), cex = 0.8*cex)
         }
     }
     if (choix == "group") {
-        if (new.plot) 
-            dev.new()
-        if (is.null(title)) 
-            title <- "Groups representation"
+        if (new.plot) dev.new()
+        if (is.null(title))  title <- "Groups representation"
         coord.actif <- res.mfa$group$coord[, axes, drop = FALSE]
-        if (!is.null(res.mfa$group$coord.sup)) 
-            coord.illu <- res.mfa$group$coord.sup[, axes, drop = FALSE]
+        if (!is.null(res.mfa$group$coord.sup))  coord.illu <- res.mfa$group$coord.sup[, axes, drop = FALSE]
+		if (length(col.hab)==1) col.hab=rep(col.hab,length(group))
         if (is.null(col.hab)) {
             col.hab = rep("darkred", nrow(coord.actif))
-            if (!is.null(res.mfa$group$coord.sup)) 
-                col.hab = c(col.hab, rep("darkolivegreen", nrow(coord.illu)))
+            if (!is.null(res.mfa$group$coord.sup))  col.hab = c(col.hab, rep("darkolivegreen", nrow(coord.illu)))
         }
-        if (habillage == "group") 
-            col.hab <- (2:(length(group) + 1))
-        plot(coord.actif, xlab = lab.x, ylab = lab.y, xlim = c(0, 
-            1), ylim = c(0, 1), pch = 17, col = col.hab[1:nrow(coord.actif)], 
+        if (habillage == "group")  col.hab <- (2:(length(group) + 1))
+        plot(coord.actif, xlab = lab.x, ylab = lab.y, xlim = c(0, 1), ylim = c(0, 1), pch = 17, col = col.hab[1:nrow(coord.actif)], 
             cex = cex, main = title, cex.main = cex * 1.2, asp = 1)
         if (lab.grpe) 
-            text(coord.actif[, 1], y = coord.actif[, 2], labels = rownames(coord.actif), 
-                pos = 3, col = col.hab[1:nrow(coord.actif)])
+            text(coord.actif[, 1], y = coord.actif[, 2], labels = rownames(coord.actif),  pos = 3, col = col.hab[1:nrow(coord.actif)],cex=cex)
         if (!is.null(res.mfa$group$coord.sup)) {
-            points(coord.illu, pch = 17, col = col.hab[(nrow(coord.actif) + 
-                1):(nrow(coord.actif) + nrow(coord.illu))])
-            if (lab.grpe) 
-                text(coord.illu[, 1], y = coord.illu[, 2], labels = rownames(coord.illu), 
-                  pos = 3, col = col.hab[(nrow(coord.actif) + 
-                    1):(nrow(coord.actif) + nrow(coord.illu))])
+            points(coord.illu, pch = 17, col = col.hab[(nrow(coord.actif) + 1):(nrow(coord.actif) + nrow(coord.illu))],cex=cex)
+            if (lab.grpe) text(coord.illu[, 1], y = coord.illu[, 2], labels = rownames(coord.illu), pos = 3, col = col.hab[(nrow(coord.actif) + 1):(nrow(coord.actif) + nrow(coord.illu))],cex=cex)
         }
     }
     if (choix == "var") {
@@ -161,7 +145,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
             nrow.coord.var <- nrow(coord.var)
             for (v in 1:nrow(coord.var)) {
                 if (sum(res.mfa$quanti.var$cos2[v, axes], na.rm = TRUE) >= lim.cos2.var && !is.na(sum(res.mfa$quanti.var$cos2[v, axes], na.rm = TRUE))) {
-                  arrows(0, 0, coord.var[v, 1], coord.var[v, 2], length = 0.1, angle = 15, code = 2, col = col[v])
+                  arrows(0, 0, coord.var[v, 1], coord.var[v, 2], length = 0.1, angle = 15, code = 2, col = col[v],cex=cex)
                   if (lab.var) {
                     if (abs(coord.var[v, 1]) > abs(coord.var[v,  2])) {
                       if (coord.var[v, 1] >= 0)  pos <- 4
@@ -171,7 +155,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
                       if (coord.var[v, 2] >= 0) pos <- 3
                       else pos <- 1
                     }
-                    text(coord.var[v, 1], y = coord.var[v, 2], labels = rownames(coord.var)[v], pos = pos, col = col[v])
+                    text(coord.var[v, 1], y = coord.var[v, 2], labels = rownames(coord.var)[v], pos = pos, col = col[v],cex=cex)
                   }
                 }
             }
@@ -184,7 +168,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
                   axes], na.rm = TRUE))) {
                 arrows(0, 0, coord.var.sup[q, 1], coord.var.sup[q, 
                   2], length = 0.1, angle = 15, code = 2, lty = 2, 
-                  col = col[nrow.coord.var + q])
+                  col = col[nrow.coord.var + q],cex=cex)
                 if (lab.var) {
                   if (abs(coord.var.sup[q, 1]) > abs(coord.var.sup[q, 
                     2])) {
@@ -199,7 +183,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
                   }
                   text(coord.var.sup[q, 1], y = coord.var.sup[q, 
                     2], labels = rownames(coord.var.sup)[q], 
-                    pos = pos, col = col[nrow.coord.var + q])
+                    pos = pos, col = col[nrow.coord.var + q],cex=cex)
                 }
 		  }
             }
@@ -629,7 +613,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
                 cex = cex)
             if (lab.ind) 
                 text(coord.ind[, 1], y = coord.ind[, 2], labels = rownames(coord.ind), 
-                  pos = 3, col = col.ind[1:nb.ind.actif])
+                  pos = 3, col = col.ind[1:nb.ind.actif],cex=cex)
             for (i in group.ind.actif) {
                 for (j in 1:nbre.grpe) {
                   points(coord.ind.partiel[(i - 1) * nbre.grpe + 
@@ -640,7 +624,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
                       j, 1], y = coord.ind.partiel[(i - 1) * 
                       nbre.grpe + j, 2], labels = rownames(coord.ind.partiel)[(i - 
                       1) * nbre.grpe + j], pos = 3, col = col.ind[nb.ind.actif + 
-                      (i - 1) * nbre.grpe + j])
+                      (i - 1) * nbre.grpe + j],cex=cex)
                   if (chrono) {
                     if (j > 1) 
                       lines(c(coord.ind.partiel[(i - 1) * nbre.grpe + 
@@ -663,7 +647,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
             if (lab.ind) 
                 text(coord.ind.sup[, 1], y = coord.ind.sup[, 
                   2], labels = rownames(coord.ind.sup), pos = 3, 
-                  col = col.ind.sup[1:(nb.ind - nb.ind.actif)])
+                  col = col.ind.sup[1:(nb.ind - nb.ind.actif)],cex=cex)
             for (i in group.ind.sup) {
                 for (j in 1:nbre.grpe) {
                   points(coord.ind.partiel.sup[(i - 1) * nbre.grpe + 
@@ -675,7 +659,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
                       j, 1], y = coord.ind.partiel.sup[nb.ind + 
                       (i - 1) * nbre.grpe + j, 2], labels = rownames(coord.ind.partiel.sup)[(i - 
                       1) * nbre.grpe + j], pos = 3, col = col.ind.sup[nb.ind - 
-                      nb.ind.actif + (i - 1) * nbre.grpe + j])
+                      nb.ind.actif + (i - 1) * nbre.grpe + j],cex=cex*0.8)
                   if (chrono) {
                     if (j > 1) 
                       lines(c(coord.ind.partiel.sup[(i - 1) * 
@@ -698,7 +682,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
                 cex = cex)
             if (lab.var) 
                 text(coord.quali[, 1], y = coord.quali[, 2], 
-                  labels = rownames(coord.quali), pos = 3, col = col.quali[1:nrow.coord.quali])
+                  labels = rownames(coord.quali), pos = 3, col = col.quali[1:nrow.coord.quali],cex=cex)
             for (i in group.quali) {
                 for (j in 1:nbre.grpe) {
                   points(coord.quali.partiel[(i - 1) * nbre.grpe + 
@@ -709,7 +693,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
                       j, 1], y = coord.quali.partiel[(i - 1) * 
                       nbre.grpe + j, 2], labels = rownames(coord.quali.partiel)[(i - 
                       1) * nbre.grpe + j], pos = 3, col = col.quali[nrow.coord.quali + 
-                      (i - 1) * nbre.grpe + j])
+                      (i - 1) * nbre.grpe + j],cex=cex)
                   if (chrono) {
                     if (j > 1) 
                       lines(c(coord.quali.partiel[(i - 1) * nbre.grpe + 
@@ -732,7 +716,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
             if (lab.var) 
                 text(coord.quali.sup[, 1], y = coord.quali.sup[, 
                   2], labels = rownames(coord.quali.sup), pos = 3, 
-                  col = col.quali.sup[1:nrow(coord.quali.sup)])
+                  col = col.quali.sup[1:nrow(coord.quali.sup)],cex=cex)
             for (i in group.quali.sup) {
                 for (j in 1:nbre.grpe) {
                   points(coord.quali.partiel.sup[(i - 1) * nbre.grpe + 
@@ -743,7 +727,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
                       j, 1], y = coord.quali.partiel.sup[(i - 
                       1) * nbre.grpe + j, 2], labels = rownames(coord.quali.partiel.sup)[(i - 
                       1) * nbre.grpe + j], pos = 3, col = col.quali.sup[nrow(coord.quali.sup) + 
-                      (i - 1) * nbre.grpe + j])
+                      (i - 1) * nbre.grpe + j],cex=cex)
                   if (chrono) {
                     if (j > 1) 
                       lines(c(coord.quali.partiel.sup[(i - 1) * 
@@ -776,8 +760,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
                 habillage]), text.col = col.hab, cex = 0.8)
         if (!is.null(coord.ellipse) & is.na(test.invisible[2])) {
             for (e in 1:nb.ind.actif) {
-                debut <- ((nb.ind.actif - 1) * npoint.ellipse) + 
-                  1
+                debut <- ((nb.ind.actif - 1) * npoint.ellipse) + 1
                 fin <- debut + npoint.ellipse - 1
                 data.elli <- coord.ellipse[debut:fin, -1]
                 lines(data.elli[, 1], y = data.elli[, 2], col = col.ellipse[e])
@@ -795,8 +778,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
                 for (j in 1:nbre.grpe) {
                   ind.e <- (i - 1) * nbre.grpe + j
                   data.elli <- coord.ellipse.par[(npoint.ellipse.par * 
-                    (ind.e - 1) + 1):(npoint.ellipse.par * ind.e), 
-                    -1]
+                    (ind.e - 1) + 1):(npoint.ellipse.par * ind.e), -1]
                   lines(data.elli[, 1], y = data.elli[, 2], col = col.ellipse.par[ind.e], 
                     lty = 2)
                 }

@@ -1,46 +1,56 @@
 HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3, 
     max = NULL, metric = "euclidean", method = "ward", order = TRUE, 
-    graph.scale = "inertia", nb.par = 5, graph = TRUE, proba = 0.05,cluster.CA="rows", 
-    ...) 
+    graph.scale = "inertia", nb.par = 5, graph = TRUE, proba = 0.05,cluster.CA="rows",
+    kk=Inf,...) 
 {
-    auto.cut.tree = function(res, min, max, metric, method, ...) {
+    auto.cut.tree = function(res, min, max, metric, method, weight=NULL,cla=NULL,...) {
         if (order) {
-            sss = cbind.data.frame(res$ind$coord, res$call$X, res$call$row.w)
+		    if (is.null(res$call$row.w)) res$call$row.w = rep(1/nrow(res$ind$coord),nrow(res$ind$coord))
+            sss = cbind.data.frame(res$ind$coord, res$call$X, res$call$row.w, res$call$row.w.init)
             sss = sss[order(sss[, 1], decreasing = FALSE), ]
             res$ind$coord = sss[, 1:ncol(res$ind$coord)]
-            res$call$X = sss[, (ncol(res$ind$coord) + 1):(ncol(sss)-1)]
-            res$call$row.w = sss[,ncol(sss)]
+            res$call$X = sss[, (ncol(res$ind$coord) + 1):(ncol(sss)-2)]
+            res$call$row.w = sss[,ncol(sss)-1]
+            res$call$row.w.init = sss[,ncol(sss)]
         }
-        X = as.data.frame(res$ind$coord)
-        intra = NULL
-        inert.gain = NULL
-        ag = agnes(X, diss = FALSE, metric = metric, method = method, 
-            stand = FALSE, ...)
-        hc = as.hclust(ag)
-        i = sum(scale(X, scale = FALSE)^2)/nrow(X)
-        intra[1] = i
-        for (j in 1:(nrow(X) - 1)) {
-            inert.gain[j] = hc$height[nrow(X) - j]^2/(2 * nrow(X))
-            intra[j + 1] = intra[j] - inert.gain[j]
-        }
+        X = as.data.frame(res$ind$coord)		
+		
+#        intra = NULL
+#        inert.gain = NULL
+#        ag <- agnes(X, diss = FALSE, metric = metric, method = method, stand = FALSE, ...)
+#        hc <- as.hclust(ag)
+#        i = sum(scale(X, scale = FALSE)^2)/nrow(X)
+#        intra[1] = i
+#        for (j in 1:(nrow(X) - 1)) {
+#            inert.gain[j] = hc$height[nrow(X) - j]^2/(2 * nrow(X))
+#            intra[j + 1] = intra[j] - inert.gain[j]
+#        }
+
+		if("flashClust"%in%rownames(installed.packages())) require(flashClust, quietly = TRUE)
+        do <- dist(X,method=metric)^2
+        if (is.null(weight)) weight=rep(1,nrow(X))
+        eff <- outer(weight,weight,FUN=function(x,y,n) {x*y/n/(x+y)},n=sum(weight))
+        dissi <- do*eff[lower.tri(eff)]
+        hc <- hclust(dissi, method = method, members = weight)
+		inert.gain <- rev(hc$height)
+		if (!is.null(cla)) inert.gain <- c(inert.gain,cla$tot.withinss/sum(cla$size))
+		intra <- rev(cumsum(rev(inert.gain)))
+
         quot = intra[min:(max)]/intra[(min - 1):(max - 1)]
         nb.clust = which.min(quot) + min - 1
         return(list(res = res, tree = hc, nb.clust = nb.clust, 
-            within = intra, inert.gain = inert.gain, quot = quot, 
-            i = i))
+            within = intra, inert.gain = inert.gain, quot = quot))
     }
     consolidation = function(X, clust, iter.max = 10, ...) {
         centers = NULL
         centers = by(X, clust, colMeans)
         centers = matrix(unlist(centers), ncol = ncol(X), byrow = TRUE)
-        km = kmeans(X, centers = centers, iter.max = iter.max, 
-            ...)
+        km = kmeans(X, centers = centers, iter.max = iter.max, ...)
         return(km)
     }
     coord.construction = function(coord.centers, coord.ind, clust) {
         coord.centers = as.data.frame(coord.centers)
-        for (i in 1:nrow(coord.centers)) rownames(coord.centers)[i] = paste("center", 
-            i)
+        for (i in 1:nrow(coord.centers)) rownames(coord.centers)[i] = paste("center", i)
         coord.ind = cbind(coord.ind, clust)
         return(list(coord.ind = coord.ind, coord.centers = coord.centers))
     }
@@ -74,15 +84,12 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
         }
         else {
             distance = as.matrix(dist(Z, method = method))
-            distance = distance[(nrow(Y) + 1):nrow(distance), 
-                -((nrow(Y) + 1):ncol(distance))]
-            if (nrow(distance) == 2) 
-                center.min = distance[-clust, ]
+            distance = distance[(nrow(Y) + 1):nrow(distance),-((nrow(Y) + 1):ncol(distance))]
+            if (nrow(distance) == 2) center.min = distance[-clust, ]
             else center.min = apply(distance[-clust, ], 2, min)
             ind.car = sort(center.min, decreasing = TRUE)
         }
-        if (length(ind.car) > default.size) 
-            ind.car = ind.car[1:default.size]
+        if (length(ind.car) > default.size) ind.car = ind.car[1:default.size]
         else ind.car = ind.car
     }
     if (is.vector(res)) {
@@ -91,38 +98,41 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
         vec = TRUE
     }
     else vec = FALSE
-    if(inherits(res,"CA")){
-	  if(cluster.CA=="rows") res=as.data.frame(res$row$coord)
-	  if(cluster.CA=="columns") res=as.data.frame(res$col$coord)
-    }
+#    if(inherits(res,"CA")){
+#	  if(cluster.CA=="rows") res=as.data.frame(res$row$coord)
+#	  if(cluster.CA=="columns") res=as.data.frame(res$col$coord)
+#    }
     if (is.matrix(res)) res <- as.data.frame(res)
+    cla <- NULL
     if (is.data.frame(res)){
-	  num=c()
-	  for (i in 1:ncol(res)) if(is.numeric(res[,i])) num=c(num,i)
-	  res=res[,num]
-        res = PCA(res, scale.unit = FALSE, ncp = Inf, graph = FALSE)
+	  res <-  res[,unlist(lapply(res,is.numeric))]
+### AJOUT K-means
+	  if (kk<nrow(res)){
+	    cla <- kmeans(res,centers=kk)
+        res <- PCA(cla$centers, row.w=cla$size, scale.unit = FALSE, ncp = Inf, graph = FALSE)
+      } else res <- PCA(res, scale.unit = FALSE, ncp = Inf, graph = FALSE)
+### Fin AJOUT K-means
+##      res <- PCA(res, scale.unit = FALSE, ncp = Inf, graph = FALSE)
     }
-    if (is.null(max)) 
-        max = min(10, round(nrow(res$ind$coord)/2))
+    if(inherits(res,"CA")){
+	  if(cluster.CA=="rows") res=PCA(res$row$coord, scale.unit = FALSE, ncp = Inf, graph = FALSE,row.w=res$call$marge.row*sum(res$call$X))
+	  if(cluster.CA=="columns") res=PCA(res$col$coord, scale.unit = FALSE, ncp = Inf, graph = FALSE,row.w=res$call$marge.col*sum(res$call$X))
+    }
+    if (is.null(max)) max = min(10, round(nrow(res$ind$coord)/2))
     max = min(max, nrow(res$ind$coord) - 1)
-    if (inherits(res, "PCA") | inherits(res, "MCA") | inherits(res, 
-        "MFA") | inherits(res, "HMFA") | inherits(res, "AFDM")) {
-        if (!is.null(res$call$ind.sup)) 
-            res$call$X = res$call$X[-res$call$ind.sup, ]
-        t = auto.cut.tree(res, min = min, max = max, metric = metric, 
-            method = method, ...)
+    if (inherits(res, "PCA") | inherits(res, "MCA") | inherits(res,"MFA") | inherits(res, "HMFA") | inherits(res, "AFDM")) {
+        if (!is.null(res$call$ind.sup)) res$call$X = res$call$X[-res$call$ind.sup, ]
+        t = auto.cut.tree(res, min = min, max = max, metric = metric, method = method, weight = res$call$row.w.init,cla=cla,...)
     }
     else stop("res should be from PCA, MCA, AFDM, MFA, or HMFA class")
-    if (inherits(t$tree, "agnes")) 
-        t$tree <- as.hclust(t$tree)
+    if (inherits(t$tree, "agnes")) t$tree <- as.hclust(t$tree)
     if (inherits(t$tree, "hclust")) {
         if (graph.scale == "inertia") {
             nb.ind = nrow(t$res$ind$coord)
             inertia.height = rep(0, nb.ind - 1)
-            for (i in 1:(nb.ind - 1)) inertia.height[i] = t$inert.gain[(nb.ind - 
-                i)]
-            inertia.height = sort(inertia.height, decreasing = FALSE)
-            t$tree$height = inertia.height
+            for (i in 1:(nb.ind - 1)) inertia.height[i] = t$inert.gain[(nb.ind - i)]
+            inertia.height = sort(inertia.height, decreasing = FALSE) 
+			t$tree$height = inertia.height
         }
         auto.haut = ((t$tree$height[length(t$tree$height) - t$nb.clust + 
             2]) + (t$tree$height[length(t$tree$height) - t$nb.clust + 
@@ -184,7 +194,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
         clust = as.factor(clust)
     }
     if (consol) {
-        res.consol = consolidation(X, clust = clust, iter.max = iter.max)
+        res.consol = consolidation(X, clust = clust, iter.max = iter.max, ...)
         clust = res.consol$cluster
         coordon = coord.construction(res.consol$centers, X, clust = clust)
     }

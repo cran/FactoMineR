@@ -142,12 +142,12 @@ for (i in 1:length(group)){
     else row.w.moy.ec <- row.w
 
 if (is.null(weight.col.mfa)) weight.col.mfa <- rep(1,sum(group.mod))
-
 ### Begin handle missing values
 if (!is.null(tab.comp)){
   group.mod <- tab.comp$call$group.mod
   ind.var.group <- tab.comp$call$ind.var
-  tab.comp <- tab.comp$completeObs
+#  tab.comp <- tab.comp$completeObs
+  tab.comp <- tab.comp$tab.disj
 }
 ### End  handle missing values
     for (g in 1:nbre.group) {
@@ -164,6 +164,7 @@ F.jt[[g]]*weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])])
           }
           res.separe[[g]] <- MCA(aux.base, ind.sup = ind.sup, ncp=ncp, graph = FALSE, row.w=row.w)
         }
+
 ###  Begin handle missing values
 if (!is.null(tab.comp)){
  if (type[g] == "s") res.separe[[g]] <- PCA(tab.comp[,ind.var.group[[g]]],scale.unit=TRUE,row.w=row.w,ind.sup=ind.sup,col.w=weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])],graph=FALSE)
@@ -226,12 +227,15 @@ if (!is.null(tab.comp)){
             centre.tmp <- apply(tmp, 2, moy.p, row.w.moy.ec)
             centre.tmp <- centre.tmp/sum(row.w.moy.ec)
             tmp2 <- sweep(tmp,1,row.w.moy.ec/sum(row.w.moy.ec),FUN="*")
-            poids.bary<-c(poids.bary,apply(tmp2,2,sum))
+            poids.bary <- c(poids.bary,apply(tmp2,2,sum))
             poids.tmp <- 1-apply(tmp2, 2, sum)
             ponderation[(ind.grpe.mod + 1):(ind.grpe.mod + group.mod[g])] <- poids.tmp/(res.separe[[g]]$eig[1,1] * group[g])
             tmp <- tmp/sum(row.w.moy.ec)
             tmp <- as.matrix(sweep(tmp, 2, centre.tmp, FUN = "-"))
             ecart.type.tmp <- apply(tmp, 2, ec, row.w.moy.ec)
+### Pb if the disjunctive table doesn't have only 0 and 1
+			if (!is.null(tab.comp)) ecart.type.tmp <- sqrt(centre.tmp*sum(row.w.moy.ec) * (1-centre.tmp*sum(row.w.moy.ec) ))/sum(row.w.moy.ec)
+### End pb if the disjunctive table doesn't have only 0 and 1
             ecart.type.tmp[ecart.type.tmp <= 1e-08] <- 1
             tmp <- as.matrix(sweep(tmp, 2, ecart.type.tmp, FUN = "/"))
             data <- cbind.data.frame(data, as.data.frame(tmp))
@@ -242,6 +246,7 @@ if (!is.null(tab.comp)){
     }
     data.group.sup.indice <- data.group.sup <- NULL
     data.pca <- data
+    rownames(data.pca) <- rownames(base)
     if (!is.null(num.group.sup)){
       ponderation.tot <- ponderation
       ponderation.group.sup <- NULL
@@ -286,10 +291,8 @@ if ((!is.null(tab.comp))&(any("n"%in%type))){
   data.pca = data.pca[,-aux.quali.sup.indice]
   aux.quali.sup.indice=NULL
 }
-
 ###  End handle missing values
     res.globale <- PCA(data.pca, scale.unit = FALSE, col.w = ponderation, row.w=row.w,ncp = ncp.tmp, ind.sup = ind.sup, quali.sup = aux.quali.sup.indice, quanti.sup = data.group.sup.indice, graph = FALSE)
-
 ###  Begin handle missing values
 if ((!is.null(tab.comp))&(any("n"%in%type))){
   res.globale$quali.var$coord = res.globale$var$coord[unlist(ind.var.group[type%in%"n"]),]

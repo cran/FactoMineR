@@ -29,6 +29,37 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("AovSum")
+### * AovSum
+
+flush(stderr()); flush(stdout())
+
+### Name: AovSum
+### Title: Analysis of variance with the contrasts sum (the sum of the
+###   coefficients is 0)
+### Aliases: AovSum
+### Keywords: models
+
+### ** Examples
+
+## Example two-way anova
+data(senso)
+res = AovSum (Score~ Product + Day , data=senso)
+res
+
+## Example two-way anova with interaction
+data(senso)
+res2 = AovSum (Score~ Product + Day + Product : Day, data=senso)
+res2
+
+## Example ancova
+data(footsize)
+res3 = AovSum (footsize ~ size + sex + size : sex, data=footsize)
+res3
+
+
+
+cleanEx()
 nameEx("CA")
 ### * CA
 
@@ -80,9 +111,13 @@ flush(stderr()); flush(stdout())
 ## Not run: 
 ##D data(iris)
 ##D # Principal Component Analysis:
-##D res.pca <- PCA(iris[,1:4], ncp=10, graph=FALSE)
+##D res.pca <- PCA(iris[,1:4], graph=FALSE)
 ##D # Clustering, auto nb of clusters:
-##D res.hcpc=HCPC(res.pca, nb.clust=-1)
+##D hc <- HCPC(res.pca, nb.clust=-1)
+##D 
+##D ### Construct a hierarchical tree from a partition (with 10 clusters)
+##D ### (useful when the number of individuals is very important)
+##D hc2 <- HCPC(iris[,1:4], kk=10, nb.clust=-1)
 ## End(Not run)
 
 
@@ -156,7 +191,7 @@ flush(stderr()); flush(stdout())
 ##D res.mca <- MCA(hobbies,quali.sup=19:22,quanti.sup=23)
 ##D plot(res.mca,invisible=c("ind","quali.sup"),hab="quali") 
 ##D plot(res.mca,invisible=c("var","quali.sup"),cex=.5,label="none") 
-##D plot(res,invisible=c("ind","var"),hab="quali")
+##D plot(res.mca,invisible=c("ind","var"),hab="quali")
 ##D dimdesc(res.mca)
 ##D plotellipses(res.mca,keepvar=1:4)
 ##D 
@@ -242,6 +277,25 @@ plotellipses(res.pca,13)
 ##D imputed <- imputePCA(orange,ncp=nb$ncp)
 ##D res.pca <- PCA(imputed$completeObs)
 ## End(Not run)
+
+
+
+cleanEx()
+nameEx("RegBest")
+### * RegBest
+
+flush(stderr()); flush(stdout())
+
+### Name: RegBest
+### Title: Select variables in multiple linear regression
+### Aliases: RegBest
+### Keywords: models
+
+### ** Examples
+
+data(milk)
+res = RegBest(y=milk[,6],x=milk[,-6])
+res$best
 
 
 
@@ -395,6 +449,26 @@ nb.dim <- estim_ncp(decathlon[,1:10],scale=TRUE)
 
 
 cleanEx()
+nameEx("footsize")
+### * footsize
+
+flush(stderr()); flush(stdout())
+
+### Name: footsize
+### Title: footsize
+### Aliases: footsize
+### Keywords: datasets
+
+### ** Examples
+
+
+data(footsize)
+res3 <- AovSum (footsize ~ size + sex + size :sex, data=footsize)
+res3
+
+
+
+cleanEx()
 nameEx("geomorphology")
 ### * geomorphology
 
@@ -481,6 +555,26 @@ data(hobbies)
 ##D plotellipses(res.mca,keepvar=1:4)
 ## End(Not run)
 
+
+
+
+cleanEx()
+nameEx("milk")
+### * milk
+
+flush(stderr()); flush(stdout())
+
+### Name: milk
+### Title: milk
+### Aliases: milk
+### Keywords: datasets
+
+### ** Examples
+
+
+data(milk)
+res = RegBest(y=milk[,6],x=milk[,-6])
+res$best
 
 
 
@@ -710,6 +804,28 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("plot.spMCA")
+### * plot.spMCA
+
+flush(stderr()); flush(stdout())
+
+### Name: plot.spMCA
+### Title: Draw the specific Multiple Correspondence Analysis (spMCA)
+###   graphs
+### Aliases: plot.spMCA
+### Keywords: dplot
+
+### ** Examples
+
+data (poison)
+res <- spMCA (poison[,3:8],excl=c(1,3))
+plot(res,invisible="ind")
+plot(res,invisible="var")
+plot(res,choix="var")
+
+
+
+cleanEx()
 nameEx("plotellipses")
 ### * plotellipses
 
@@ -857,6 +973,52 @@ flush(stderr()); flush(stdout())
 data(decathlon)
 res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup=13, graph=FALSE)
 rec <- reconst(res.pca,ncp=2)
+
+
+
+cleanEx()
+nameEx("senso")
+### * senso
+
+flush(stderr()); flush(stdout())
+
+### Name: senso
+### Title: senso
+### Aliases: senso
+### Keywords: datasets
+
+### ** Examples
+
+## Example of 2-way analysis of variance
+data(senso)
+res <- AovSum (Score~ Product + Day, data=senso)
+res
+
+## Example of 2-way analysis of variance with interaction
+data(senso)
+res2 <- AovSum (Score~ Product + Day + Product : Day, data=senso)
+res2
+
+
+
+
+cleanEx()
+nameEx("spMCA")
+### * spMCA
+
+flush(stderr()); flush(stdout())
+
+### Name: spMCA
+### Title: Specific Multiple Correspondence Analysis (spMCA)
+### Aliases: spMCA
+### Keywords: multivariate
+
+### ** Examples
+
+## Not run: 
+##D data (poison)
+##D res <- spMCA (poison[,3:8],excl=c(1,3))
+## End(Not run)
 
 
 

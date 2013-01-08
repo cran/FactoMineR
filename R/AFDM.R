@@ -1,4 +1,4 @@
-AFDM <- function (base, ncp = 5, graph = TRUE,sup.var=NULL, ind.sup = NULL, axes=c(1,2),row.w=NULL){
+AFDM <- function (base, ncp = 5, graph = TRUE,sup.var=NULL, ind.sup = NULL, axes=c(1,2),row.w=NULL,tab.comp=NULL){
     base <- as.data.frame(base)
     type=NULL
     for (v in 1:ncol(base)) {
@@ -7,8 +7,7 @@ AFDM <- function (base, ncp = 5, graph = TRUE,sup.var=NULL, ind.sup = NULL, axes
     }
     if (!any("n"%in%type)) warning("All your variables are quantitative: you should make PCA")
     if (!any("s"%in%type)) warning("All your variables are qualitative: you should make MCA")
-    resultats <- MFA(base=base, group = rep(1,ncol(base)), type=type, name.group = colnames(base), num.group.sup = sup.var, ind.sup = ind.sup, graph=FALSE, ncp = ncp,row.w=row.w)
-    
+    resultats <- MFA(base=base, group = rep(1,ncol(base)), type=type, name.group = colnames(base), num.group.sup = sup.var, ind.sup = ind.sup, graph=FALSE, ncp = ncp,row.w=row.w,tab.comp=tab.comp)
     class(resultats) <- c("MFA", "list")
     if (graph){
       if (any("n"%in%type)) plot(resultats,choix="ind", axes=axes,habillage="none")
