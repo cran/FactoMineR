@@ -4,9 +4,9 @@
         else if (is.matrix(X)) affichmatrice(X, file, sep,nb.dec=nb.dec)
         else if (is.data.frame(X)) affichtabldon(X, file, sep,nb.dec=nb.dec)
         else if (is.list(X)) affichlist(X, file,sep=sep,nb.dec=nb.dec)
-        else if (is.numeric(X)) cat(X, "\n", file = file, append = TRUE,sep="")
-        else if (is.character(X)) cat(X, "\n", file = file, append = TRUE,sep="")
-        else if (is.vector(X)) cat(X, "\n", file = file, append = TRUE,sep="")
+        else if (is.numeric(X)) cat(X, "\n", file = file, append = TRUE,sep=sep)
+        else if (is.character(X)) cat(X, "\n", file = file, append = TRUE,sep=sep)
+        else if (is.vector(X)) cat(X, "\n", file = file, append = TRUE,sep=sep)
         else {
             cat("format non affichable", "\n", file = file, append = TRUE,sep="")
             cat(X, "\n", file = file, append = TRUE,sep="")

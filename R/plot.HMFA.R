@@ -277,7 +277,7 @@ plot.moy <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL, ce
         coord.actif <- res.hmfa$group$coord[[h]][, axes]
         if (h ==1) plot(coord.actif, xlab = lab.x, ylab = lab.y, xlim = c(0, 1), ylim = c(0, 1), pch = 17, col = color[h], cex = cex, main = title, cex.main = cex, asp = 1)
         else points(coord.actif[,1],coord.actif[,2],col=color[h], pch = 17, cex=cex)
-        if (lab.grpe) text(coord.actif[, 1], y = coord.actif[, 2], labels = rownames(coord.actif), pos = 3, col = color[h])
+        if (lab.grpe) text(coord.actif[, 1], y = coord.actif[, 2], labels = rownames(coord.actif), pos = 3, col = color[h],cex=cex)
       }
       title(sub = sub.title, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)
 
@@ -300,7 +300,7 @@ plot.moy <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL, ce
         coord.var <- res.hmfa$quanti.var$cor[, axes]
         for (v in 1:nrow(coord.var)) {
           if (sum(res.hmfa$quanti.var$cos2[v, axes], na.rm = TRUE) >= lim.cos2.var & !is.na(sum(res.hmfa$quanti.var$cos2[v, axes], na.rm = TRUE))) {
-            arrows(0, 0, coord.var[v, 1], coord.var[v, 2], length = 0.1, angle = 15, code = 2)
+            arrows(0, 0, coord.var[v, 1], coord.var[v, 2], length = 0.1, angle = 15, code = 2,cex=cex)
             if (lab.var) {
                 if (abs(coord.var[v,1])>abs(coord.var[v,2])){
                  if (coord.var[v,1]>=0) pos<-4
@@ -310,7 +310,7 @@ plot.moy <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL, ce
                  if (coord.var[v,2]>=0) pos<-3
                  else pos<-1
                 }
-              text(coord.var[v, 1], y = coord.var[v, 2], labels = rownames(coord.var)[v], pos = pos)
+              text(coord.var[v, 1], y = coord.var[v, 2], labels = rownames(coord.var)[v], pos = pos,cex=cex)
             }
           }
         }

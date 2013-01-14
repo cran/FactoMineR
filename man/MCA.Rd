@@ -69,7 +69,7 @@ data(hobbies)
 res.mca <- MCA(hobbies,quali.sup=19:22,quanti.sup=23)
 plot(res.mca,invisible=c("ind","quali.sup"),hab="quali") 
 plot(res.mca,invisible=c("var","quali.sup"),cex=.5,label="none") 
-plot(res,invisible=c("ind","var"),hab="quali")
+plot(res.mca,invisible=c("ind","var"),hab="quali")
 dimdesc(res.mca)
 plotellipses(res.mca,keepvar=1:4)
 

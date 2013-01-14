@@ -3,8 +3,15 @@ plot.AFDM <- function (x, choix = "var", axes = c(1, 2),
     col.hab = NULL, invisible = NULL, lim.cos2.var = 0., xlim = NULL,
     ylim = NULL, cex = 1, title = NULL, palette=NULL, new.plot=FALSE, ...) {
 
-if (choix=="var") choix=="group"
-if (choix=="quanti") choix=="var"
+if (choix=="var") {
+  choix="group"
+  x$group$coord <- x$var$coord
+}
+if (choix=="quanti")  choix="var"
+if (choix=="quali"){
+  choix="ind"
+  invisible=c(invisible,"ind","ind.sup")
+}
 class(x) <- c("MFA", "list")
 if ((choix=="ind") & (is.numeric(habillage))) {
   x$separate.analyses=vector(mode = "list", length = ncol(x$call$X))

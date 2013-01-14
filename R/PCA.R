@@ -55,7 +55,7 @@ dist2.ind <- apply(sweep(X,2,sqrt(col.w),FUN="*")^2,1,sum)
 dist2.var <- apply(sweep(X,1,sqrt(row.w),FUN="*")^2,2,sum)
     res.call <- list(row.w = (row.w/sum(row.w)), col.w = col.w, 
         scale.unit = scale.unit, ncp = ncp, centre = centre, 
-        ecart.type = ecart.type, X = Xtot)
+        ecart.type = ecart.type, X = Xtot, row.w.init = row.w.init)
     tmp <- svd.triplet(X, row.w = row.w, col.w = col.w,ncp=ncp)
     eig <- tmp$vs^2
     vp <- as.data.frame(matrix(NA, length(eig), 3))

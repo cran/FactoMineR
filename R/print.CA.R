@@ -2,8 +2,7 @@ print.CA <- function (x, file = NULL, sep = ";", ...){
     res.ca <- x
     if (!inherits(res.ca, "CA")) stop("non convenient data")
     cat("**Results of the Correspondence Analysis (CA)**\n")
-    cat("The variable in rows have", nrow(res.ca$call$X),
-        "categories, the variable in columns", ncol(res.ca$call$X), "categories\n")
+    cat("The row variable has ",nrow(res.ca$call$X)," categories; the column variable has", ncol(res.ca$call$X), "categories\n")
 ##    IT <- res.ca$eig[length(res.ca$eig), 3] * sum(res.ca$call$X)
     IT <- sum(res.ca$eig[, 1] )* sum(res.ca$call$X) 
     df <- (nrow(res.ca$call$X) - 1) * (ncol(res.ca$call$X) - 1)
