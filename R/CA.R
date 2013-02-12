@@ -1,4 +1,9 @@
-CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE, axes=c(1,2), row.w=NULL){
+CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, quanti.sup=NULL, quali.sup=NULL, graph = TRUE, axes=c(1,2), row.w=NULL){
+
+fct.eta2 <- function(vec,x,weights) {
+  res <- summary(lm(x~vec,weights=weights))$r.squared
+}
+
     X <- as.data.frame(X)
     if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
     if (is.null(colnames(X))) colnames(X) = paste("V",1:ncol(X),sep="")
@@ -9,12 +14,12 @@ CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE, axes=c
     Xtot <- X
     if (!any(apply(X,2,is.numeric))){
       auxi = NULL
-      for (j in 1:ncol(X)) if (!is.numeric(X[,j])) auxi = c(auxi,colnames(X)[j])
-      stop(paste("\nThe following variables are not quantitative: ", auxi))
+      for (j in (1:ncol(X))[!((1:ncol(X))%in%quali.sup)]) if (!is.numeric(X[,j])) auxi = c(auxi,colnames(X)[j])
+      if (!is.null(auxi)) stop(paste("\nThe following variables are not quantitative: ", auxi))
     }
     if (!inherits(X, "data.frame")) stop("X is not a data.frame")
     if (!is.null(row.sup)) X <- as.data.frame(X[-row.sup,])
-    if (!is.null(col.sup)) X <- as.data.frame(X[,-col.sup])
+    if ((!is.null(col.sup))||(!is.null(quanti.sup))||(!is.null(quali.sup))) X <- as.data.frame(X[,-c(col.sup,quanti.sup,quali.sup)])
 ### 3 lignes rajoutées
     if (is.null(row.w)) row.w = rep(1,nrow(X))
 	row.w.init <- row.w
@@ -66,22 +71,21 @@ dist2.row <- apply(sweep(Tc^2,2,marge.col,FUN="*"),1,sum)
     res <- list(eig = vp, call = res.call, row = res.row, col = res.col, svd = tmp)
   if (!is.null(row.sup)){
     X.row.sup <- as.data.frame(Xtot[row.sup,])
-    if (!is.null(col.sup)) X.row.sup <- as.data.frame(X.row.sup[,-col.sup])
+    if ((!is.null(col.sup))||(!is.null(quanti.sup))||(!is.null(quali.sup))) X.row.sup <- as.data.frame(X.row.sup[,-c(col.sup,quanti.sup,quali.sup)])
     somme.row <- apply(X.row.sup, 1, sum)
     X.row.sup <- sweep(X.row.sup, 1, somme.row, "/")
     coord.row.sup <- as.matrix(X.row.sup) %*% V
 dist2.row <- apply(sweep(sweep(X.row.sup,2,marge.col,FUN="-")^2,2,1/marge.col,FUN="*"),1,sum)
 ##    dist2.row <- apply(coord.row.sup^2,1,sum)
     cos2.row.sup <- sweep(coord.row.sup^2,1,dist2.row,FUN="/")
-    coord.row.sup <- as.data.frame(coord.row.sup)[, 1:ncp,drop=FALSE]
-    cos2.row.sup <- as.data.frame(cos2.row.sup)[, 1:ncp,drop=FALSE]
+    coord.row.sup <- coord.row.sup[, 1:ncp,drop=FALSE]
+    cos2.row.sup <- cos2.row.sup[, 1:ncp,drop=FALSE]
     colnames(coord.row.sup) <- colnames(cos2.row.sup) <- paste("Dim", 1:ncp)
     rownames(coord.row.sup) <- rownames(cos2.row.sup) <- rownames(X.row.sup)
     res.row.sup <- list(coord = coord.row.sup, cos2 = cos2.row.sup)
     res$row.sup <- res.row.sup
     res$call$row.sup <- row.sup
 }
-
  if (!is.null(col.sup)){
     X.col.sup <- as.data.frame(Xtot[,col.sup])
     if (!is.null(row.sup)) X.col.sup <- as.data.frame(X.col.sup[-row.sup,])
@@ -95,15 +99,58 @@ dist2.row <- apply(sweep(sweep(X.row.sup,2,marge.col,FUN="-")^2,2,1/marge.col,FU
 dist2.col <- apply(sweep(sweep(X.col.sup,1,marge.row,FUN="-")^2,1,1/marge.row,FUN="*"),2,sum)
 ##    dist2.col <- apply(coord.col.sup^2,1,sum)
     cos2.col.sup <- sweep(coord.col.sup^2,1,dist2.col,FUN="/")
-    coord.col.sup <- as.data.frame(coord.col.sup)[,1:ncp]
-    cos2.col.sup <- as.data.frame(cos2.col.sup)[,1:ncp]
+    coord.col.sup <- coord.col.sup[,1:ncp,drop=FALSE]
+    cos2.col.sup <- cos2.col.sup[,1:ncp,drop=FALSE]
     colnames(coord.col.sup) <- colnames(cos2.col.sup) <- paste("Dim", 1:ncp)
     rownames(coord.col.sup) <- rownames(cos2.col.sup) <- colnames(X.col.sup)
     res.col.sup <- list(coord = coord.col.sup, cos2 = cos2.col.sup)
     res$col.sup <- res.col.sup
     res$call$col.sup <- col.sup
 }
+## Ajout variable quanti supp.
+    if (!is.null(quanti.sup)) {
+        coord.quanti.sup <- matrix(NA, length(quanti.sup), ncp)
+        if (is.null(row.sup)) coord.quanti.sup <- cov.wt(cbind.data.frame(res$row$coord,Xtot[,quanti.sup,drop=FALSE]),cor=TRUE,wt=marge.row,method="ML")$cor[-(1:ncp),1:ncp,drop=FALSE]
+        else coord.quanti.sup <- cov.wt(cbind.data.frame(res$row$coord,Xtot[-row.sup,quanti.sup,drop=FALSE]),wt=marge.row,cor=TRUE,method="ML")$cor[-(1:ncp),1:ncp,drop=FALSE]
+        dimnames(coord.quanti.sup) <- list(colnames(Xtot)[quanti.sup], paste("Dim", 1:ncp, sep = "."))
+        res$quanti.sup$coord <- coord.quanti.sup
+        res$quanti.sup$cos2 <- coord.quanti.sup^2
+        res$call$quanti.sup <- quanti.sup
+    }
+## Ajout variable quali supp.
+	if (!is.null(quali.sup)) {
+	    res$quali.sup$coord <- NULL
+		if (!is.null(row.sup)) {
+		  for (j in 1:length(quali.sup)) res$quali.sup$coord <- rbind.data.frame(res$quali.sup$coord,sweep(sapply(as.data.frame(sweep(res$row$coord,1,marge.row,FUN="*")),tapply,Xtot[-row.sup,quali.sup[j]],sum), 1, tapply(marge.row,Xtot[-row.sup,quali.sup[j]],sum),FUN="/"))
+		} else {
+		  for (j in 1:length(quali.sup)) res$quali.sup$coord <- rbind.data.frame(res$quali.sup$coord,sweep(sapply(as.data.frame(sweep(res$row$coord,1,marge.row,FUN="*")),tapply,Xtot[,quali.sup[j]],sum), 1, tapply(marge.row,Xtot[,quali.sup[j]],sum),FUN="/"))
+		}
+        rownames(res$quali.sup$coord) <- paste(rep(colnames(Xtot)[quali.sup],lapply(Xtot[,quali.sup,drop=FALSE],nlevels)) , unlist(lapply(Xtot[,quali.sup,drop=FALSE],levels)),sep=".")
+
+        if (!is.null(row.sup)) Zqs <- tab.disjonctif(Xtot[-row.sup,quali.sup])
+		else Zqs <- tab.disjonctif(Xtot[,quali.sup])
+        Nj <- apply(Zqs * row.w, 2, sum)
+        Nj <- apply(Zqs * marge.row, 2, sum)*total
+        if (total>1) coef <- sqrt(Nj * ((total - 1)/(total - Nj)))
+		else coef <- sqrt(Nj)
+        res$quali.sup$v.test <- sweep(res$quali.sup$coord, 1, coef, "*")
+
+        eta2 = matrix(NA, length(quali.sup), ncp)
+        colnames(eta2) = paste("Dim", 1:ncp)
+        rownames(eta2) = colnames(Xtot)[quali.sup]
+        if (is.null(row.sup)) {
+		  for (i in 1:ncp)  eta2[, i] <- unlist(lapply(as.data.frame(Xtot[, quali.sup]),fct.eta2,res$row$coord[,i],weights=marge.row))
+		} else {
+		  for (i in 1:ncp)  eta2[, i] <- unlist(lapply(as.data.frame(Xtot[-row.sup, quali.sup]),fct.eta2,res$row$coord[,i],weights=marge.row))
+		}	  
+        res$quali.sup$eta2 <- eta2
+        res$call$quali.sup <- quali.sup
+    }
+
     class(res) <- c("CA", "list")
-    if (graph) plot.CA(res,axes=axes)
+    if (graph) {
+	  plot.CA(res,axes=axes)
+	  if (!is.null(quanti.sup)) plot.CA(res, choix="quanti.sup",axes=axes,new.plot=TRUE)
+	}
     return(res)
 }

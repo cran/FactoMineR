@@ -1,5 +1,10 @@
-catdes <- function(donnee,num.var,proba = 0.05){
+catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL){
 
+  if (!is.null(row.w)) {
+    row.w=as.vector(row.w)
+	if (!any(row.w>=1)) stop("Argument row.w must be a vector of integers")
+    else donnee = donnee[rep(1:nrow(donnee),row.w),]
+  }
   lab.sauv <- lab <- colnames(donnee)
   quali=NULL
   for (i in 1:length(lab)){
@@ -100,7 +105,7 @@ catdes <- function(donnee,num.var,proba = 0.05){
         v.test = (moy.mod[j]-moy)/et*sqrt(n.mod[j])/sqrt((sum(n.mod)-n.mod[j])/(sum(n.mod)-1))
         p.value = pnorm(abs(v.test),lower.tail = FALSE)*2
         if(!is.na(v.test)){
-         if (abs(v.test)> -qnorm(proba/2)) {
+         if (p.value <= proba) {
           result[[j]] = rbind(result[[j]],c(v.test,moy.mod[j],moy,sd.mod[j],et,p.value))
           nom[[j]] = c(nom[[j]],colnames(donnee)[quanti[i]])
         }
@@ -114,17 +119,11 @@ catdes <- function(donnee,num.var,proba = 0.05){
     for (j in 1:nb.modalite){
       if (!is.null(result[[j]])){
         oo = rev(order(result[[j]][,1]))
-        result[[j]] = result[[j]][oo,]
+        result[[j]] = result[[j]][oo,,drop=FALSE]
         nom[[j]] = nom[[j]][oo]
-        if (nrow(matrix(result[[j]],ncol=6))>1){
-          rownames(result[[j]]) = nom[[j]]
-          colnames(result[[j]])=c("v.test","Mean in category","Overall mean","sd in category","Overall sd","p.value")
-        }
-        else {
-          result[[j]] = matrix(result[[j]],ncol=6)
-          rownames(result[[j]]) = nom[[j]]
-          colnames(result[[j]])=c("v.test","Mean in category","Overall mean","sd in category","Overall sd","p.value")
-        }
+        result[[j]] = matrix(result[[j]],ncol=6)
+        rownames(result[[j]]) = nom[[j]]
+        colnames(result[[j]])=c("v.test","Mean in category","Overall mean","sd in category","Overall sd","p.value")
       }
     }
     if (length(select1)>0) {

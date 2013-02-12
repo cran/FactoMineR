@@ -198,7 +198,8 @@ if (!is.null(quanti.sup)){
     if (!is.null(ind.sup)) Z = Z[ind.act, ]
     Nj <- apply(Z * row.w, 2, sum)
     N <- sum(Nj)/(ncol(X) - length(quali.sup) - length(quanti.sup))
-    coef <- sqrt(Nj * ((N - 1)/(N - Nj)))
+    if (N>1) coef <- sqrt(Nj * ((N - 1)/(N - Nj)))
+	else coef <- sqrt(Nj)
     vtest <- sweep(as.data.frame(res.mca$var$coord), 1, coef, "*")
     res.mca$var$v.test <- vtest
     variable <- rep(colnames(Xact),unlist(lapply(Xact,nlevels)))
@@ -213,7 +214,8 @@ if (!is.null(quanti.sup)){
     if (!is.null(quali.sup)) {
         if (!is.null(ind.sup)) Zqs = Zqs[ind.act, ]
         Nj <- apply(Zqs * row.w, 2, sum)
-        coef <- sqrt(Nj * ((N - 1)/(N - Nj)))
+        if (N>1) coef <- sqrt(Nj * ((N - 1)/(N - Nj)))
+		else coef <- sqrt(Nj)
         res.mca$quali.sup$v.test <- sweep(res.mca$quali.sup$coord, 1, coef, "*")
 
         eta2 = matrix(NA, length(quali.sup), ncp)
@@ -229,7 +231,8 @@ if (!is.null(quanti.sup)){
     if (!is.null(quanti.sup)) {
         U <- res.mca$svd$U
         coord.quanti.sup <- matrix(NA, ncol(X.quanti.sup), ncp)
-        coord.quanti.sup <- cor(X.quanti.sup,U,method="pearson")
+        coord.quanti.sup <- cov.wt(cbind.data.frame(U,X.quanti.sup),cor=TRUE,wt=row.w,method="ML")$cor[-(1:ncol(U)),1:ncol(U),drop=FALSE]
+#		coord.quanti.sup <- cor(X.quanti.sup,U,method="pearson")
         dimnames(coord.quanti.sup) <- list(colnames(X.quanti.sup), paste("Dim", 1:ncp, sep = "."))
         res.mca$quanti.sup$coord <- coord.quanti.sup
     }

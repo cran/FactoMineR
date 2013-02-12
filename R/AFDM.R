@@ -12,8 +12,8 @@ AFDM <- function (base, ncp = 5, graph = TRUE,sup.var=NULL, ind.sup = NULL, axes
     if (graph){
       if (any("n"%in%type)) plot(resultats,choix="ind", axes=axes,habillage="none")
       if (any("c"%in%type)|any("s"%in%type)) plot(resultats,choix="var",axes=axes)
-      plot(resultats,choix="ind",invisible="quali", axes=axes,habillage="none",new.plot=TRUE)
-      plot(resultats,choix="ind",invisible="ind", axes=axes,habillage="none",new.plot=TRUE)
+      plot(resultats,choix="ind",invisible=c("quali","quali.sup"), axes=axes,habillage="none",new.plot=TRUE)
+      plot(resultats,choix="ind",invisible=c("ind","ind.sup"), axes=axes,habillage="none",new.plot=TRUE)
       plot(resultats,choix="group",title="Variables representation",axes=axes,new.plot=TRUE)
     }
     resultats$ind <- list(coord = resultats$ind$coord, contrib = resultats$ind$contrib, cos2 = resultats$ind$cos2)

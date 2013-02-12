@@ -17,10 +17,8 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
             "darkslateblue", "darkslategray", "darkslategrey", 
             "darkturquoise", "darkviolet", "lightgray", "lightsalmon", 
             "lightyellow", "maroon"))
-    lab.x <- paste("Dim ", axes[1], " (", signif(res.mfa$eig[axes[1], 
-        2], 4), " %)", sep = "")
-    lab.y <- paste("Dim ", axes[2], " (", signif(res.mfa$eig[axes[2], 
-        2], 4), " %)", sep = "")
+    lab.x <- paste("Dim ", axes[1], " (", signif(res.mfa$eig[axes[1], 2], 4), " %)", sep = "")
+    lab.y <- paste("Dim ", axes[2], " (", signif(res.mfa$eig[axes[2], 2], 4), " %)", sep = "")
     group <- res.mfa$call$group
     nbre.grpe <- length(group)
     type <- res.mfa$call$type
@@ -37,8 +35,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
         if (is.null(title)) 
             title <- "Partial axes"
         coord.axes <- res.mfa$partial.axes$coord[, axes, drop = FALSE]
-        plot(0, 0, xlab = lab.x, ylab = lab.y, xlim = c(-1.1, 
-            1.1), ylim = c(-1.1, 1.1), col = "white", asp = 1, 
+        plot(0, 0, xlab = lab.x, ylab = lab.y, xlim = c(-1.1, 1.1), ylim = c(-1.1, 1.1), col = "white", asp = 1, 
             cex = cex, main = title)
         x.cercle <- seq(-1, 1, by = 0.01)
         y.cercle <- sqrt(1 - x.cercle^2)
@@ -56,8 +53,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
                 ".", fixed = TRUE)[[1]]
             auxil2 = auxil[length(auxil)]
             for (j in 2:nrow(res.mfa$partial.axes$coord)) {
-                auxil = strsplit(rownames(res.mfa$partial.axes$coord)[j], 
-                  ".", fixed = TRUE)[[1]]
+                auxil = strsplit(rownames(res.mfa$partial.axes$coord)[j], ".", fixed = TRUE)[[1]]
                 if (auxil2 != auxil[length(auxil)]) {
                   i = i + 1
                   auxil2 = auxil[length(auxil)]
@@ -163,15 +159,12 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
         if (!is.null(res.mfa$quanti.var.sup$coord) & is.na(test.invisible[2])) {
             coord.var.sup <- res.mfa$quanti.var.sup$cor[, axes, drop = FALSE]
             for (q in 1:nrow(coord.var.sup)) {
-                if (sum(res.mfa$quanti.var.sup$cos2[q, axes], na.rm = TRUE) >= 
-                  lim.cos2.var && !is.na(sum(res.mfa$quanti.var.sup$cos2[q, 
-                  axes], na.rm = TRUE))) {
-                arrows(0, 0, coord.var.sup[q, 1], coord.var.sup[q, 
-                  2], length = 0.1, angle = 15, code = 2, lty = 2, 
+                if (sum(res.mfa$quanti.var.sup$cos2[q, axes, drop = FALSE], na.rm = TRUE) >= 
+                  lim.cos2.var && !is.na(sum(res.mfa$quanti.var.sup$cos2[q,  axes, drop = FALSE], na.rm = TRUE))) {
+                arrows(0, 0, coord.var.sup[q, 1], coord.var.sup[q, 2], length = 0.1, angle = 15, code = 2, lty = 2, 
                   col = col[nrow.coord.var + q],cex=cex)
                 if (lab.var) {
-                  if (abs(coord.var.sup[q, 1]) > abs(coord.var.sup[q, 
-                    2])) {
+                  if (abs(coord.var.sup[q, 1]) > abs(coord.var.sup[q, 2])) {
                     if (coord.var.sup[q, 1] >= 0) 
                       pos <- 4
                     else pos <- 2
@@ -181,8 +174,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
                       pos <- 3
                     else pos <- 1
                   }
-                  text(coord.var.sup[q, 1], y = coord.var.sup[q, 
-                    2], labels = rownames(coord.var.sup)[q], 
+                  text(coord.var.sup[q, 1], y = coord.var.sup[q, 2], labels = rownames(coord.var.sup)[q], 
                     pos = pos, col = col[nrow.coord.var + q],cex=cex)
                 }
 		  }
@@ -190,16 +182,15 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
         }
         par(mar = c(5, 4, 4, 2) + 0.1)
     }
-
 	if (choix=="freq"){
       if (new.plot) dev.new()
       col.row = "black"
 	  col.row.sup = "grey60"
-      coord.col <- res.mfa$freq$coord[, axes]
+      coord.col <- res.mfa$freq$coord[, axes, drop = FALSE]
       coord.row <- res.mfa$ind$coord[, axes]
       coord.row.sup <- coord.col.sup <- NULL
-      if (!is.null(res.mfa$ind.sup)) coord.row.sup <- res.mfa$ind.sup$coord[, axes]
-      if (!is.null(res.mfa$freq.sup)) coord.col.sup <- res.mfa$freq.sup$coord[, axes]
+      if (!is.null(res.mfa$ind.sup)) coord.row.sup <- res.mfa$ind.sup$coord[, axes, drop = FALSE]
+      if (!is.null(res.mfa$freq.sup)) coord.col.sup <- res.mfa$freq.sup$coord[, axes, drop = FALSE]
 
       test.invisible <- vector(length = 4)
       if (!is.null(invisible)) {
@@ -293,31 +284,25 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
         else test.invisible <- rep(NA, 3)
         nb.ind.actif <- nrow(res.mfa$ind$coord)
         nb.ind.illu <- 0
-        if (!is.null(res.mfa$ind.sup)) 
-            nb.ind.illu <- nrow(res.mfa$ind.sup$coord)
+        if (!is.null(res.mfa$ind.sup)) nb.ind.illu <- nrow(res.mfa$ind.sup$coord)
         nb.ind <- nb.ind.actif + nb.ind.illu
         coord.ind <- res.mfa$ind$coord[, axes, drop = FALSE]
-        coord.ind.partiel <- res.mfa$ind$coord.partiel[, axes, 
-            drop = FALSE]
+        coord.ind.partiel <- res.mfa$ind$coord.partiel[, axes, drop = FALSE]
         coord.ind.sup <- NULL
         if (!is.null(res.mfa$ind.sup)) {
             coord.ind.sup <- res.mfa$ind.sup$coord[, axes, drop = FALSE]
-            coord.ind.partiel.sup <- res.mfa$ind.sup$coord.partiel[, 
-                axes, drop = FALSE]
+            coord.ind.partiel.sup <- res.mfa$ind.sup$coord.partiel[, axes, drop = FALSE]
         }
         coord.quali <- coord.quali.sup <- coord.quali.partiel <- coord.quali.sup.partiel <- NULL
         nrow.coord.quali <- 0
         if (!is.null(res.mfa["quali.var"]$quali.var)) {
             coord.quali <- res.mfa$quali.var$coord[, axes, drop = FALSE]
-            coord.quali.partiel <- res.mfa$quali.var$coord.partiel[, 
-                axes, drop = FALSE]
+            coord.quali.partiel <- res.mfa$quali.var$coord.partiel[, axes, drop = FALSE]
             nrow.coord.quali <- nrow(coord.quali)
         }
         if (!is.null(res.mfa["quali.var.sup"])) {
-            coord.quali.sup <- res.mfa$quali.var.sup$coord[, 
-                axes, drop = FALSE]
-            coord.quali.partiel.sup <- res.mfa$quali.var.sup$coord.partiel[, 
-                axes, drop = FALSE]
+            coord.quali.sup <- res.mfa$quali.var.sup$coord[, axes, drop = FALSE]
+            coord.quali.partiel.sup <- res.mfa$quali.var.sup$coord.partiel[, axes, drop = FALSE]
         }
         group.ind.actif <- group.ind.sup <- group.quali <- group.quali.sup <- NULL
         if (!is.null(partial)) {
@@ -532,7 +517,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
         }
         if ((habillage != "none") & (habillage != "ind") & (habillage != 
             "group")) {
-            group.act <- (1:length(group))
+			group.act <- (1:length(group))
             if (!is.null(num.group.sup)) 
                 group.act <- group.act[-num.group.sup]
             nbre.modalite <- NULL
@@ -564,11 +549,9 @@ plot.MFA=function (x, axes = c(1, 2), choix = "ind", ellipse = NULL, ellipse.par
             if (is.double(habillage)) 
                 nom.quali <- colnames(res.mfa$call$X)[habillage]
             else nom.quali = habillage
-            if (!(nom.quali %in% liste.quali)) 
-                stop("The variable ", habillage, " is not qualitative")
+            if (!(nom.quali %in% liste.quali)) stop("The variable ", habillage, " is not qualitative")
             modalite <- levels(as.factor(res.mfa$call$X[, nom.quali]))
-            col.ind <- as.numeric(as.factor(res.mfa$call$X[, 
-                nom.quali]))
+            col.ind <- as.numeric(as.factor(res.mfa$call$X[, nom.quali]))
             if (is.null(col.hab) | length(col.hab) != length(modalite)) 
                 col.hab <- 2:(1 + length(modalite))
             col.ind <- col.hab[col.ind]

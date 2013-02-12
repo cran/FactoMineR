@@ -34,11 +34,11 @@ MCA(X, ncp = 5, ind.sup = NULL, quanti.sup = NULL,
 \value{
 Returns a list including:
   \item{eig}{a matrix containing all the eigenvalues, the percentage of variance and the cumulative percentage of variance}
-  \item{var}{a list of matrices containing all the results for the active variables (coordinates, square cosine, contributions, v.test)}
+  \item{var}{a list of matrices containing all the results for the active variables (coordinates, square cosine, contributions, v.test, square correlation ratio)}
   \item{ind}{a list of matrices containing all the results for the active individuals (coordinates, square cosine, contributions)}
   \item{ind.sup}{a list of matrices containing all the results for the supplementary individuals (coordinates, square cosine)}
   \item{quanti.sup}{a matrix containing the coordinates of the supplementary quantitative variables (the correlation between a variable and an axis is equal to the variable coordinate on the axis)}
-  \item{quali.sup}{a list of matrices with all the results for the supplementary categorical variables (coordinates of each categories of each variables, square cosine and v.test which is a criterion with a Normal distribution)}
+  \item{quali.sup}{a list of matrices with all the results for the supplementary categorical variables (coordinates of each categories of each variables, square cosine and v.test which is a criterion with a Normal distribution, square correlation ratio)}
   \item{call}{a list with some statistics}
 
 Returns the graphs of the individuals and categories and the graph with the variables.
@@ -76,8 +76,8 @@ plotellipses(res.mca,keepvar=1:4)
 ## Example with missing values : use the missMDA package
 require(missMDA)
 data(vnf.example)
-tab.disj.comp <- imputeMCA(vnf.example,ncp=2)
-res.mca <- MCA(vnf.example,tab.disj=tab.disj.comp)
+completed <- imputeMCA(vnf.example,ncp=2)
+res.mca <- MCA(vnf.example,tab.disj=completed$tab.disj)
 }
 }
 \keyword{multivariate}
