@@ -32,8 +32,8 @@ plot.MCA <- function (x, axes = c(1, 2), choix="ind",
     coord.var <- res.mca$var$coord[, axes]
     coord.ind <- res.mca$ind$coord[, axes]
     coord.ind.sup <- coord.quali.sup <- NULL
-    if (!is.null(res.mca$ind.sup)) coord.ind.sup <- res.mca$ind.sup$coord[, axes]
-    if (!is.null(res.mca$quali.sup)) coord.quali.sup <- res.mca$quali.sup$coord[, axes]
+    if (!is.null(res.mca$ind.sup)) coord.ind.sup <- res.mca$ind.sup$coord[, axes,drop=FALSE]
+    if (!is.null(res.mca$quali.sup)) coord.quali.sup <- res.mca$quali.sup$coord[, axes,drop=FALSE]
     if (is.null(xlim)) {
       xmin <- xmax <- 0
       if(is.na(test.invisible[1])) xmin <- min(xmin, coord.ind[,1])

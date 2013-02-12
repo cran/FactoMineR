@@ -10,7 +10,7 @@ print.CA <- function (x, file = NULL, sep = ";", ...){
     cat("The chi square of independence between the two variables is equal to", IT, 
         "(p-value = ", pc, ").\n")
     cat("*The results are available in the following objects:\n\n")
-    res <- array("", c(16, 2), list(1:16, c("name", "description")))
+    res <- array("", c(17, 2), list(1:17, c("name", "description")))
     res[1, ] <- c("$eig", "eigenvalues")
     res[2, ] <- c("$col", "results for the columns")
     res[3, ] <- c("$col$coord", "coord. for the columns")
@@ -29,6 +29,16 @@ print.CA <- function (x, file = NULL, sep = ";", ...){
     if (!is.null(res.ca$col.sup)){
       res[indice, ] <- c("$col.sup$coord", "coord. for supplementary columns")
       res[indice + 1, ] <- c("$col.sup$cos2", "cos2 for supplementary columns")
+      indice <- indice + 2    
+    }
+    if (!is.null(res.ca$quanti.sup)){
+      res[indice, ] <- c("$quanti.sup$coord", "coord. for supplementary continuous var.")
+      res[indice+1, ] <- c("$quanti.sup$cos2", "cos2 for supplementary continuous var.")
+      indice <- indice + 2    
+    }
+    if (!is.null(res.ca$quali.sup)){
+      res[indice, ] <- c("$quali.sup$coord", "coord. for supplementary categorical var.")
+      res[indice+1, ] <- c("$quali.sup$cos2", "cos2 for supplementary categorical var.")
       indice <- indice + 2    
     }
     res[indice, ] <- c("$call", "summary called parameters")

@@ -1,5 +1,6 @@
 tab.disjonctif.prop<-function (tab,seed=NULL,row.w=NULL) 
 {
+    if (!is.null(seed)){set.seed(seed)}
     moy.p <- function(V, poids) {
         res <- sum(V * poids,na.rm=TRUE)/sum(poids[!is.na(V)])
     }

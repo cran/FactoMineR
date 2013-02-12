@@ -26,8 +26,8 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
         else titre <- title
         coord.actif <- res.pca$ind$coord[, axes]
         coord.illu <- coord.quali <- coord.ellipse <- NULL
-        if (!is.null(res.pca$ind.sup)) coord.illu <- res.pca$ind.sup$coord[, axes]
-        if (!is.null(res.pca$quali.sup))  coord.quali <- res.pca$quali.sup$coord[, axes]
+        if (!is.null(res.pca$ind.sup)) coord.illu <- res.pca$ind.sup$coord[, axes,drop=FALSE]
+        if (!is.null(res.pca$quali.sup))  coord.quali <- res.pca$quali.sup$coord[, axes,drop=FALSE]
         if (!is.null(ellipse))  coord.ellipse <- ellipse$res
 
         test.invisible <- vector(length = 2)
@@ -162,7 +162,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = "ind",
         else  test.invisible <- rep(NA, 2)
         scale.unit <- res.pca$call$scale.unit
         coord.var <- res.pca$var$coord[, axes]
-        if (!is.null(res.pca$quanti.sup))  coord.quanti <- res.pca$quanti.sup$coord[, axes]
+        if (!is.null(res.pca$quanti.sup))  coord.quanti <- res.pca$quanti.sup$coord[, axes, drop=FALSE]
         else coord.quanti <- NULL
         if (scale.unit)  xlim <- ylim <- c(-1, 1)
         else {

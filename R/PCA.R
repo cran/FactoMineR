@@ -105,61 +105,50 @@ dist2 <- dist2.ind
             FUN = "*")
 ##        coord.ind.sup <- coord.ind.sup %*% tmp$V
         coord.ind.sup <- crossprod(t(coord.ind.sup),tmp$V)
-dist2 <- apply(sweep(X.ind.sup,2,sqrt(col.w),FUN="*")^2,1,sum)
-        cos2.ind.sup <- sweep(as.matrix(coord.ind.sup^2), 1, 
-            dist2, FUN = "/")
-        coord.ind.sup <- as.data.frame(coord.ind.sup[, 1:ncp, 
-            drop = F])
-        cos2.ind.sup <- as.data.frame(cos2.ind.sup[, 1:ncp, drop = F])
-        colnames(coord.ind.sup) <- colnames(cos2.ind.sup) <- paste("Dim", 
-            c(1:ncp), sep = ".")
+        dist2 <- apply(sweep(X.ind.sup,2,sqrt(col.w),FUN="*")^2,1,sum)
+        cos2.ind.sup <- sweep(as.matrix(coord.ind.sup^2), 1, dist2, FUN = "/")
+        coord.ind.sup <- coord.ind.sup[, 1:ncp, drop = F]
+        cos2.ind.sup <- cos2.ind.sup[, 1:ncp, drop = F]
+        colnames(coord.ind.sup) <- colnames(cos2.ind.sup) <- paste("Dim",  c(1:ncp), sep = ".")
         rownames(coord.ind.sup) <- rownames(cos2.ind.sup) <- names(dist2) <- rownames(X.ind.sup)
-        res.ind.sup <- list(coord = coord.ind.sup, cos2 = cos2.ind.sup, 
-            dist = sqrt(dist2))
+        res.ind.sup <- list(coord = coord.ind.sup, cos2 = cos2.ind.sup, dist = sqrt(dist2))
         res$ind.sup = res.ind.sup
         res.call$ind.sup = ind.sup
     }
     if (!is.null(quanti.sup)) {
         X.quanti.sup <- as.data.frame(Xtot[, quanti.sup])
-        if (!is.null(ind.sup)) 
-            X.quanti.sup <- as.data.frame(X.quanti.sup[-ind.sup, 
-                ])
+        if (!is.null(ind.sup)) X.quanti.sup <- as.data.frame(X.quanti.sup[-ind.sup, ])
         colnames(X.quanti.sup) <- colnames(Xtot)[quanti.sup]        
         res.call$quanti.sup = X.quanti.sup
         centre.sup <- apply(X.quanti.sup, 2, moy.p, row.w)
-        X.quanti.sup <- as.matrix(sweep(as.matrix(X.quanti.sup), 
-            2, centre.sup, FUN = "-"))
+        X.quanti.sup <- as.matrix(sweep(as.matrix(X.quanti.sup), 2, centre.sup, FUN = "-"))
         if (scale.unit) {
             ecart.type.sup <- apply(X.quanti.sup, 2, ec, row.w)
             ecart.type.sup[ecart.type.sup <= 1e-16] <- 1
-            X.quanti.sup <- as.matrix(sweep(as.matrix(X.quanti.sup), 
-                2, ecart.type.sup, FUN = "/"))
+            X.quanti.sup <- as.matrix(sweep(as.matrix(X.quanti.sup), 2, ecart.type.sup, FUN = "/"))
         }
-        coord.vcs <- sweep(as.matrix(t(X.quanti.sup)), 2, row.w, 
-            FUN = "*")
+        coord.vcs <- sweep(as.matrix(t(X.quanti.sup)), 2, row.w, FUN = "*")
 ##        coord.vcs <- coord.vcs %*% tmp$U
         coord.vcs <- crossprod(t(coord.vcs),tmp$U)
         col.w.vcs <- rep(1, ncol(coord.vcs))
         cor.vcs <- matrix(NA, ncol(X.quanti.sup), ncol(tmp$U))
         sigma <- apply(X.quanti.sup, 2, ec, row.w)
-dist2 <- apply(sweep(X.quanti.sup,1,sqrt(row.w),FUN="*")^2,2,sum)
+        dist2 <- apply(sweep(X.quanti.sup,1,sqrt(row.w),FUN="*")^2,2,sum)
 ##        cor.vcs <- sweep(as.matrix(coord.vcs), 1, sigma, FUN = "/")
-    cor.vcs <- sweep(as.matrix(coord.vcs), 1, sqrt(dist2), FUN = "/")
-        cos2.vcs <- as.data.frame(cor.vcs^2)
-        coord.vcs <- as.data.frame(coord.vcs)
-        cor.vcs <- as.data.frame(cor.vcs)
-        colnames(coord.vcs) <- colnames(cor.vcs) <- colnames(cos2.vcs) <- paste("Dim", 
-            c(1:ncol(cor.vcs)), sep = ".")
+        cor.vcs <- sweep(as.matrix(coord.vcs), 1, sqrt(dist2), FUN = "/")
+        cos2.vcs <- cor.vcs^2
+        # cos2.vcs <- as.data.frame(cor.vcs^2)
+        # coord.vcs <- as.data.frame(coord.vcs)
+        # cor.vcs <- as.data.frame(cor.vcs)
+        colnames(coord.vcs) <- colnames(cor.vcs) <- colnames(cos2.vcs) <- paste("Dim", c(1:ncol(cor.vcs)), sep = ".")
         rownames(coord.vcs) <- rownames(cor.vcs) <- rownames(cos2.vcs) <- colnames(Xtot)[quanti.sup]
-        res.quanti.sup <- list(coord = coord.vcs[, 1:ncp], cor = cor.vcs[, 
-            1:ncp], cos2 = cos2.vcs[, 1:ncp])
+        res.quanti.sup <- list(coord = coord.vcs[, 1:ncp, drop=FALSE], cor = cor.vcs[, 1:ncp, drop=FALSE], cos2 = cos2.vcs[, 1:ncp, drop=FALSE])
         res$quanti.sup = res.quanti.sup
     }
     if (!is.null(quali.sup)) {
         X.quali.sup <- as.data.frame(Xtot[, quali.sup])
         if (!is.null(ind.sup)) 
-            X.quali.sup <- as.data.frame(X.quali.sup[-ind.sup, 
-                ])
+            X.quali.sup <- as.data.frame(X.quali.sup[-ind.sup, ])
         colnames(X.quali.sup) <- colnames(Xtot)[quali.sup]
         nombre <- modalite <- NULL
 
@@ -188,17 +177,18 @@ dist2 <- apply(sweep(X.quanti.sup,1,sqrt(row.w),FUN="*")^2,2,sum)
         }
         bary <- as.matrix(sweep(as.matrix(barycentre), 2, centre, FUN = "-"))
         if (!is.null(ecart.type)) bary <- as.matrix(sweep(as.matrix(bary), 2, ecart.type, FUN = "/"))
-dist2 <- apply(sweep(as.matrix(bary)^2,2,col.w,FUN="*"),1,sum)
+        dist2 <- apply(sweep(as.matrix(bary)^2,2,col.w,FUN="*"),1,sum)
         coord.barycentre <- sweep(as.matrix(bary), 2, col.w, FUN = "*")
         coord.barycentre <- crossprod(t(coord.barycentre),tmp$V)
         colnames(coord.barycentre) <- paste("Dim", 1:ncol(coord.barycentre), sep = ".")
 ##        dist2 <- apply(coord.barycentre^2, 1, sum)
         cos2.bary.sup <- sweep(as.matrix(coord.barycentre^2), 1, dist2, FUN = "/")
         vtest <- sweep(as.matrix(coord.barycentre), 2, sqrt(eig), FUN = "/")
-        vtest <- sweep(as.matrix(vtest), 1, sqrt(nombre/((sum(row.w.init) - nombre)/(sum(row.w.init) - 1))), FUN = "*")
-        cos2.bary.sup <- cos2.bary.sup[, 1:ncp]
-        coord.barycentre <- coord.barycentre[, 1:ncp]
-        vtest <- vtest[, 1:ncp]
+        if (sum(row.w.init)>1) vtest <- sweep(as.matrix(vtest), 1, sqrt(nombre/((sum(row.w.init) - nombre)/(sum(row.w.init) - 1))), FUN = "*")
+		else vtest <- sweep(as.matrix(vtest), 1, sqrt(nombre), FUN = "*")
+        cos2.bary.sup <- cos2.bary.sup[, 1:ncp, drop=FALSE]
+        coord.barycentre <- coord.barycentre[, 1:ncp, drop=FALSE]
+        vtest <- vtest[, 1:ncp, drop=FALSE]
         dimnames(cos2.bary.sup) <- dimnames(vtest) <- dimnames(coord.barycentre)
         names(dist2) <- rownames(coord.barycentre)
         res.quali.sup <- list(coord = coord.barycentre, cos2 = cos2.bary.sup, v.test = vtest, dist = sqrt(dist2), eta2=eta2)

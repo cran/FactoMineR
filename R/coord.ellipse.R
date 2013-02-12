@@ -40,7 +40,7 @@ coord.ellipse <- function (coord.simul, centre = NULL, axes = c(1, 2), level.con
       tab <- data.frame(x = x, y = y)
       mat.cov <- cov(tab)
       if (bary) mat.cov = mat.cov/nrow(tab)
-      elli.tmp <- ellipse(mat.cov, centre = center, level = level.conf, npoints = npoint)
+      elli.tmp <- ellipse::ellipse(mat.cov, centre = center, level = level.conf, npoints = npoint)
       res <- rbind(res, elli.tmp)
 #      label <- c(label, rep(lev[f], npoint))
     }

@@ -198,8 +198,8 @@ flush(stderr()); flush(stdout())
 ##D ## Example with missing values : use the missMDA package
 ##D require(missMDA)
 ##D data(vnf.example)
-##D tab.disj.comp <- imputeMCA(vnf.example,ncp=2)
-##D res.mca <- MCA(vnf.example,tab.disj=tab.disj.comp)
+##D completed <- imputeMCA(vnf.example,ncp=2)
+##D res.mca <- MCA(vnf.example,tab.disj=completed$tab.disj)
 ## End(Not run)
 
 

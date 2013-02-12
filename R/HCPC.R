@@ -7,6 +7,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
         if (order) {
 		    if (is.null(res$call$row.w)) res$call$row.w = rep(1/nrow(res$ind$coord),nrow(res$ind$coord))
             sss = cbind.data.frame(res$ind$coord, res$call$X, res$call$row.w, res$call$row.w.init)
+			if (!is.null(weight)) weight <- weight[order(sss[, 1], decreasing = FALSE)]
             sss = sss[order(sss[, 1], decreasing = FALSE), ]
             res$ind$coord = sss[, 1:ncol(res$ind$coord)]
             res$call$X = sss[, (ncol(res$ind$coord) + 1):(ncol(sss)-2)]
@@ -15,16 +16,16 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
         }
         X = as.data.frame(res$ind$coord)		
 		
-#        intra = NULL
-#        inert.gain = NULL
-#        ag <- agnes(X, diss = FALSE, metric = metric, method = method, stand = FALSE, ...)
-#        hc <- as.hclust(ag)
-#        i = sum(scale(X, scale = FALSE)^2)/nrow(X)
-#        intra[1] = i
-#        for (j in 1:(nrow(X) - 1)) {
-#            inert.gain[j] = hc$height[nrow(X) - j]^2/(2 * nrow(X))
-#            intra[j + 1] = intra[j] - inert.gain[j]
-#        }
+       # intra = NULL
+       # inert.gain = NULL
+       # ag <- agnes(X, diss = FALSE, metric = metric, method = method, stand = FALSE, ...)
+       # hc <- as.hclust(ag)
+       # i = sum(scale(X, scale = FALSE)^2)/nrow(X)
+       # intra[1] = i
+       # for (j in 1:(nrow(X) - 1)) {
+           # inert.gain[j] = hc$height[nrow(X) - j]^2/(2 * nrow(X))
+           # intra[j + 1] = intra[j] - inert.gain[j]
+       # }
 
 		if("flashClust"%in%rownames(installed.packages())) require(flashClust, quietly = TRUE)
         do <- dist(X,method=metric)^2
@@ -35,7 +36,6 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
 		inert.gain <- rev(hc$height)
 		if (!is.null(cla)) inert.gain <- c(inert.gain,cla$tot.withinss/sum(cla$size))
 		intra <- rev(cumsum(rev(inert.gain)))
-
         quot = intra[min:(max)]/intra[(min - 1):(max - 1)]
         nb.clust = which.min(quot) + min - 1
         return(list(res = res, tree = hc, nb.clust = nb.clust, 
@@ -96,8 +96,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
         res = cbind.data.frame(res, res)
         res = PCA(res, scale.unit = FALSE, ncp = Inf, graph = FALSE)
         vec = TRUE
-    }
-    else vec = FALSE
+    } else vec = FALSE
 #    if(inherits(res,"CA")){
 #	  if(cluster.CA=="rows") res=as.data.frame(res$row$coord)
 #	  if(cluster.CA=="columns") res=as.data.frame(res$col$coord)
@@ -108,7 +107,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
 	  res <-  res[,unlist(lapply(res,is.numeric))]
 ### AJOUT K-means
 	  if (kk<nrow(res)){
-	    cla <- kmeans(res,centers=kk)
+	    cla <- kmeans(res,centers=kk,iter.max = 100, nstart = 4)
         res <- PCA(cla$centers, row.w=cla$size, scale.unit = FALSE, ncp = Inf, graph = FALSE)
       } else res <- PCA(res, scale.unit = FALSE, ncp = Inf, graph = FALSE)
 ### Fin AJOUT K-means
@@ -122,6 +121,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
     max = min(max, nrow(res$ind$coord) - 1)
     if (inherits(res, "PCA") | inherits(res, "MCA") | inherits(res,"MFA") | inherits(res, "HMFA") | inherits(res, "AFDM")) {
         if (!is.null(res$call$ind.sup)) res$call$X = res$call$X[-res$call$ind.sup, ]
+        if (inherits(res, "MCA")) res$call$row.w.init <- res$call$row.w
         t = auto.cut.tree(res, min = min, max = max, metric = metric, method = method, weight = res$call$row.w.init,cla=cla,...)
     }
     else stop("res should be from PCA, MCA, AFDM, MFA, or HMFA class")

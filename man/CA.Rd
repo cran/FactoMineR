@@ -9,14 +9,16 @@ Performs Correspondence Analysis (CA) including supplementary row and/or column 
 }
 
 \usage{
-CA(X, ncp = 5, row.sup = NULL, col.sup = NULL, graph = TRUE,
-    axes = c(1,2), row.w = NULL)}
+CA(X, ncp = 5, row.sup = NULL, col.sup = NULL, quanti.sup=NULL,
+    quali.sup = NULL, graph = TRUE, axes = c(1,2), row.w = NULL)}
 
 \arguments{
   \item{X}{a data frame with \emph{n} rows and \emph{p} columns, i.e. a contingency table}
   \item{ncp}{number of dimensions kept in the results (by default 5)}
   \item{row.sup}{a vector indicating the indexes of the supplementary rows}
   \item{col.sup}{a vector indicating the indexes of the supplementary columns}
+  \item{quanti.sup}{a vector indicating the indexes of the supplementary continuous variables}
+  \item{quali.sup}{a vector indicating the indexes of the categorical supplementary variables}
   \item{graph}{boolean, if TRUE a graph is displayed}
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{row.w}{an optional row weights (by default, uniform row weights)}
@@ -29,6 +31,8 @@ Returns a list including:
   \item{row}{a list of matrices with all the results for the row variable (coordinates, square cosine, contributions, inertia)}
   \item{col.sup}{a list of matrices containing all the results for the supplementary column points (coordinates, square cosine)}
   \item{row.sup}{a list of matrices containing all the results for the supplementary row points (coordinates, square cosine)}
+  \item{quanti.sup}{if quanti.sup is not NULL, a matrix containing the results for the supplementary continuous variables (coordinates, square cosine)}
+  \item{quali.sup}{if quali.sup is not NULL, a list of matrices with all the results for the supplementary categorical variables (coordinates of each categories of each variables, v.test which is a criterion with a Normal distribution, square correlation ratio)}
   \item{call}{a list with some statistics}
 
 Returns the row and column points factor map.
@@ -38,10 +42,11 @@ Returns the row and column points factor map.
 Benzecri, J.-P. (1992) \emph{Correspondence Analysis Handbook}, New-York : Dekker \cr
 Benzecri, J.-P. (1980) \emph{L'analyse des données tome 2 : l'analyse des correspondances}, Paris : Bordas \cr
 Greenacre, M.J. (1993) \emph{Correspondence Analysis in Practice}, London : Academic Press\cr
+Husson, F., Le, S. and Pages, J. (2009). Analyse de donnees avec R, \emph{Presses Universitaires de Rennes}.\cr
 Husson, F., Le, S. and Pages, J. (2010). Exploratory Multivariate Analysis by Example Using R, \emph{Chapman and Hall}.
 }
 
-\author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr},Jeremy Mazet}
 
 \seealso{ \code{\link{print.CA}}, \code{\link{plot.CA}}, \code{\link{dimdesc}}}
 

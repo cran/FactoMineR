@@ -23,7 +23,7 @@ plotellipses <- function (model, keepvar = "all", axis = c(1, 2), means = TRUE,
             else {
                 variance <- var(matrice)
             }
-            coord.ellipse <- ellipse(variance, centre = cdg,
+            coord.ellipse <- ellipse::ellipse(variance, centre = cdg,
                 level = level)
             llines(coord.ellipse[, 1], coord.ellipse[, 2], col = col.line,
                 lty = lty, lwd = lwd)
