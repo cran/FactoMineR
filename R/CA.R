@@ -65,7 +65,7 @@ dist2.row <- apply(sweep(Tc^2,2,marge.col,FUN="*"),1,sum)
     names(inertia.col) <- rownames(coord.col)
     names(inertia.row) <- rownames(coord.row)
     
-    res.call <- list(X = X, marge.col = marge.col, marge.row = marge.row, ncp = ncp, row.w=row.w)
+    res.call <- list(X = X, marge.col = marge.col, marge.row = marge.row, ncp = ncp, row.w=row.w,call=sys.calls()[[1]])
     res.col <- list(coord = as.matrix(coord.col[, 1:ncp]), contrib = as.matrix(contrib.col[, 1:ncp] * 100), cos2 = as.matrix(cos2.col[, 1:ncp]), inertia=inertia.col)
     res.row <- list(coord = coord.row[, 1:ncp], contrib = contrib.row[, 1:ncp] * 100, cos2 = cos2.row[, 1:ncp], inertia=inertia.row)
     res <- list(eig = vp, call = res.call, row = res.row, col = res.col, svd = tmp)
@@ -99,7 +99,7 @@ dist2.row <- apply(sweep(sweep(X.row.sup,2,marge.col,FUN="-")^2,2,1/marge.col,FU
 dist2.col <- apply(sweep(sweep(X.col.sup,1,marge.row,FUN="-")^2,1,1/marge.row,FUN="*"),2,sum)
 ##    dist2.col <- apply(coord.col.sup^2,1,sum)
     cos2.col.sup <- sweep(coord.col.sup^2,1,dist2.col,FUN="/")
-    coord.col.sup <- coord.col.sup[,1:ncp,drop=FALSE]
+    coord.col.sup <- as.matrix(coord.col.sup[,1:ncp,drop=FALSE])
     cos2.col.sup <- cos2.col.sup[,1:ncp,drop=FALSE]
     colnames(coord.col.sup) <- colnames(cos2.col.sup) <- paste("Dim", 1:ncp)
     rownames(coord.col.sup) <- rownames(cos2.col.sup) <- colnames(X.col.sup)
@@ -149,8 +149,8 @@ dist2.col <- apply(sweep(sweep(X.col.sup,1,marge.row,FUN="-")^2,1,1/marge.row,FU
 
     class(res) <- c("CA", "list")
     if (graph) {
-	  plot.CA(res,axes=axes)
-	  if (!is.null(quanti.sup)) plot.CA(res, choix="quanti.sup",axes=axes,new.plot=TRUE)
+	  plot(res,axes=axes)
+	  if (!is.null(quanti.sup)) plot(res, choix="quanti.sup",axes=axes,new.plot=TRUE)
 	}
     return(res)
 }

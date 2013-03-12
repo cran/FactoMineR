@@ -21,7 +21,7 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
 
     if (dimens==2){main=NULL}
     if (dimens==3){
-      if(new.plot) dev.new()
+      if((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
       if(vec) X[,ax1]=res$data.clust[,1]
       x=X[,ax1]
       if(vec) X[,ax2]=seq(min(x)/1000, max(x)/1000, length.out=length(x))
@@ -112,7 +112,7 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
   nb.clust=length(levels(X$clust))
   levs=levels(X$clust)
   if(choice=="tree"){
-    if(new.plot) dev.new()
+    if((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
     if(is.null(title)) title="Hierarchical clustering"
     if(tree.barplot){
       par(mar=c(0.5,2,0.75,0))
@@ -142,7 +142,7 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
   }
   
   if(choice=="bar"){
-    if(new.plot) dev.new()
+    if((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
     vec=res$call$t$inert.gain[1:max.plot]
     names.arg=NULL
     if(is.null(title)) title="Inter-cluster inertia gains"
@@ -167,4 +167,5 @@ res2$eig <- res$call$t$res$eig
       if(draw.tree) f.draw.tree(X, merge=res$call$t$tree$merge, height=res$call$t$tree$height, dimens=2, t.level=t.level, axes=axes,...)
     }
   }
+  invisible()
 }

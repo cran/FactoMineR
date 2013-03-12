@@ -93,6 +93,9 @@ fct.eta2 <- function(vec,x,weights) {
   if (is.null(colnames(X))) colnames(X) = paste("V", 1:ncol(X), sep = "")
   ind.act <- (1:nrow(X))[!(1:nrow(X))%in%ind.sup]
 
+  if (!is.null(which(lapply(X,class)=="logical"))){
+    for (k in which(lapply(X,class)=="logical")) X[,k] <- as.factor(X[,k])
+  }
   ## avoid problem when a category has 0 individuals
     for (j in 1:ncol(X)) {
       if (!is.numeric(X[,j])) levels(X[,j])[which(table(X[ind.act,j])==0)] <- levels(X[,j])[which(table(X[ind.act,j])!=0)[1]]
@@ -167,6 +170,7 @@ if (!is.null(quanti.sup)){
     res.mca$call$quali.sup = quali.sup
     res.mca$call$quanti.sup = quanti.sup
     res.mca$call$row.w = row.w
+	res.mca$call$call <- sys.calls()[[1]]
     if (length(act)>1) res.mca$eig <- res.mca$eig[1:min(length(ind.act)-1,sum(unlist(lapply(Xact,nlevels)))-ncol(Xact)),]
     else res.mca$eig <- res.mca$eig[1:(nlevels(Xact)-1),]
     names(res.mca)[3] <- "ind"
@@ -201,7 +205,7 @@ if (!is.null(quanti.sup)){
     if (N>1) coef <- sqrt(Nj * ((N - 1)/(N - Nj)))
 	else coef <- sqrt(Nj)
     vtest <- sweep(as.data.frame(res.mca$var$coord), 1, coef, "*")
-    res.mca$var$v.test <- vtest
+    res.mca$var$v.test <- as.matrix(vtest)
     variable <- rep(colnames(Xact),unlist(lapply(Xact,nlevels)))
     if (length(act)>1){
       CTR <- aggregate(res.mca$var$contrib/100,by=list(factor(variable)),FUN=sum)
@@ -216,7 +220,7 @@ if (!is.null(quanti.sup)){
         Nj <- apply(Zqs * row.w, 2, sum)
         if (N>1) coef <- sqrt(Nj * ((N - 1)/(N - Nj)))
 		else coef <- sqrt(Nj)
-        res.mca$quali.sup$v.test <- sweep(res.mca$quali.sup$coord, 1, coef, "*")
+        res.mca$quali.sup$v.test <- as.matrix(sweep(res.mca$quali.sup$coord, 1, coef, "*"))
 
         eta2 = matrix(NA, length(quali.sup), ncp)
         colnames(eta2) = paste("Dim", 1:ncp)
@@ -233,7 +237,7 @@ if (!is.null(quanti.sup)){
         coord.quanti.sup <- matrix(NA, ncol(X.quanti.sup), ncp)
         coord.quanti.sup <- cov.wt(cbind.data.frame(U,X.quanti.sup),cor=TRUE,wt=row.w,method="ML")$cor[-(1:ncol(U)),1:ncol(U),drop=FALSE]
 #		coord.quanti.sup <- cor(X.quanti.sup,U,method="pearson")
-        dimnames(coord.quanti.sup) <- list(colnames(X.quanti.sup), paste("Dim", 1:ncp, sep = "."))
+        dimnames(coord.quanti.sup) <- list(colnames(X.quanti.sup), paste("Dim", 1:ncp))
         res.mca$quanti.sup$coord <- coord.quanti.sup
     }
 

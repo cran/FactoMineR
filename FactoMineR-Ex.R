@@ -6,29 +6,6 @@ library('FactoMineR')
 
 assign(".oldSearch", search(), pos = 'CheckExEnv')
 cleanEx()
-nameEx("AFDM")
-### * AFDM
-
-flush(stderr()); flush(stdout())
-
-### Name: AFDM
-### Title: Factor Analysis for Mixed Data
-### Aliases: AFDM
-### Keywords: multivariate
-
-### ** Examples
-
-## Not run: 
-##D data(geomorphology)
-##D res.afdm = AFDM(geomorphology)
-##D 
-##D data(wine)
-##D res.afdm = AFDM(wine[,c(1,2,30,31)])
-## End(Not run)
-
-
-
-cleanEx()
 nameEx("AovSum")
 ### * AovSum
 
@@ -74,6 +51,7 @@ flush(stderr()); flush(stdout())
 
 data(children)
 res.ca <- CA (children, col.sup = 6:8, row.sup = 15:18)
+summary(res.ca)
 
 
 
@@ -92,6 +70,30 @@ flush(stderr()); flush(stdout())
 
 ## Example with the famous Fisher's iris data
 res.dmfa = DMFA ( iris, num.fact = 5)
+
+
+
+cleanEx()
+nameEx("FAMD")
+### * FAMD
+
+flush(stderr()); flush(stdout())
+
+### Name: FAMD
+### Title: Factor Analysis for Mixed Data
+### Aliases: FAMD
+### Keywords: multivariate
+
+### ** Examples
+
+## Not run: 
+##D data(geomorphology)
+##D res <- FAMD(geomorphology)
+##D summary(res.ca)
+##D 
+##D data(wine)
+##D res <- FAMD(wine[,c(1,2,30,31)])
+## End(Not run)
 
 
 
@@ -178,7 +180,8 @@ flush(stderr()); flush(stdout())
 ## Not run: 
 ##D ## Tea example
 ##D  data(tea)
-##D  res.mca=MCA(tea,quanti.sup=19,quali.sup=20:36)
+##D  res.mca <- MCA(tea,quanti.sup=19,quali.sup=20:36)
+##D  summary(res.mca)
 ##D  plot(res.mca,invisible=c("var","quali.sup","quanti.sup"),cex=0.7)
 ##D  plot(res.mca,invisible=c("ind","quali.sup","quanti.sup"),cex=0.8)
 ##D  plot(res.mca,invisible=c("quali.sup","quanti.sup"),cex=0.8)
@@ -218,9 +221,10 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(wine)
-res = MFA(wine, group=c(2,5,3,10,9,2), type=c("n",rep("s",5)),
+res <- MFA(wine, group=c(2,5,3,10,9,2), type=c("n",rep("s",5)),
     ncp=5, name.group=c("orig","olf","vis","olfag","gust","ens"),
     num.group.sup=c(1,6))
+summary(res)
 barplot(res$eig[,1],main="Eigenvalues",names.arg=1:nrow(res$eig))
 
 ## Not run: 
@@ -263,6 +267,7 @@ data(decathlon)
 res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup=13)
 ## plot of the eigenvalues
 ## barplot(res.pca$eig[,1],main="Eigenvalues",names.arg=1:nrow(res.pca$eig))
+summary(res.pca)
 plot(res.pca,choix="ind",habillage=13)
 dimdesc(res.pca, axes = 1:2)
 ## To draw ellipses around the categories of the 13th variable (which is categorical)
@@ -370,6 +375,30 @@ flush(stderr()); flush(stdout())
 
 data(decathlon)
 condes(decathlon, num.var=3)
+
+
+
+cleanEx()
+nameEx("coord.ellipse")
+### * coord.ellipse
+
+flush(stderr()); flush(stdout())
+
+### Name: coord.ellipse
+### Title: Construct confidence ellipses
+### Aliases: coord.ellipse
+### Keywords: dplot
+
+### ** Examples
+
+data(decathlon)
+res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup = 13,graph=FALSE)
+aa <- cbind.data.frame(decathlon[,13],res.pca$ind$coord)
+bb <- coord.ellipse(aa,bary=TRUE)
+plot.PCA(res.pca,habillage=13,ellipse=bb)
+
+## To automatically draw ellipses around the barycentres of all the categorical variables
+plotellipses(res.pca)
 
 
 
@@ -482,8 +511,8 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(geomorphology)
-res.afdm <- AFDM(geomorphology)
-plot(res.afdm,choix="ind",habillage=4)
+res <- FAMD(geomorphology)
+plot(res,choix="ind",habillage=4)
 
 
 
@@ -607,25 +636,6 @@ data(mortality)
 
 
 cleanEx()
-nameEx("plot.AFDM")
-### * plot.AFDM
-
-flush(stderr()); flush(stdout())
-
-### Name: plot.AFDM
-### Title: Draw the Multiple Factor Analysis for Mixt Data graphs
-### Aliases: plot.AFDM
-### Keywords: dplot
-
-### ** Examples
-
-data(geomorphology)
-res.afdm <- AFDM(geomorphology)
-plot(res.afdm,choix="ind",habillage=4)
-
-
-
-cleanEx()
 nameEx("plot.CA")
 ### * plot.CA
 
@@ -640,6 +650,27 @@ flush(stderr()); flush(stdout())
 
 data(children)
 res.ca <- CA (children, col.sup = 6:8, row.sup = 15:18)
+## select rows and columns that have a cos2 greater than 0.8
+plot(res.ca,selectCol="cos2 0.8",selectRow="cos2 0.8")
+
+
+
+cleanEx()
+nameEx("plot.FAMD")
+### * plot.FAMD
+
+flush(stderr()); flush(stdout())
+
+### Name: plot.FAMD
+### Title: Draw the Multiple Factor Analysis for Mixt Data graphs
+### Aliases: plot.FAMD
+### Keywords: dplot
+
+### ** Examples
+
+data(geomorphology)
+res <- FAMD(geomorphology)
+plot(res,choix="ind",habillage=4)
 
 
 
@@ -722,14 +753,14 @@ flush(stderr()); flush(stdout())
 
 ## Not run: 
 ##D data(wine)
-##D aa = MFA(wine,group=c(2,5,3,10,9,2),type=c("n",rep("s",5)),ncp=5,
+##D res <- MFA(wine,group=c(2,5,3,10,9,2),type=c("n",rep("s",5)),ncp=5,
 ##D     name.group=c("orig","olf","vis","olfag","gust","ens"),
 ##D     num.group.sup=c(1,6),graph=FALSE)
-##D plot(aa, choix = "ind")
-##D plot(aa, choix = "ind", partial="all")
-##D plot(aa, choix = "Terroir")
-##D plot(aa, choix = "var", habillage="group")
-##D plot(aa, choix = "axes")
+##D plot(res, choix = "ind")
+##D plot(res, choix = "ind", partial="all")
+##D plot(res, choix = "Terroir")
+##D plot(res, choix = "var", habillage="group")
+##D plot(res, choix = "axes")
 ## End(Not run)
 
 
@@ -775,10 +806,11 @@ res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup = 13)
 plot(res.pca, habillage = 13, col.hab=c("green","blue"))
 ## To automatically draw ellipses around the barycentres of all the categorical variables
 plotellipses(res.pca)
-## or another graph
-aa=cbind.data.frame(decathlon[,13],res.pca$ind$coord)
-bb=coord.ellipse(aa,bary=TRUE)
-plot.PCA(res.pca,habillage=13,ellipse=bb)
+## Selection of some individuals
+plot(res.pca,select="contrib 7") #plot the 7 individuals that have the highest cos2 
+plot(res.pca,select="cos2 0.8")  #plot the individuals that have a cos2 greater than 0.8
+plot(res.pca,select="cos2 5")     #plot the 5 individuals that have the highest cos2 
+plot(res.pca,choix="var",select="cos2 0.6")  #plot the variables that have a cos2 greater than 0.6
 
 
 
@@ -821,6 +853,8 @@ data (poison)
 res <- spMCA (poison[,3:8],excl=c(1,3))
 plot(res,invisible="ind")
 plot(res,invisible="var")
+## Categories that have a cos2 less than 0.6 are not drawn
+plot(res,invisible="var",selectMod="cos2 0.6")
 plot(res,choix="var")
 
 

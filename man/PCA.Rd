@@ -37,7 +37,8 @@ Returns a list including:
   \item{quanti.sup}{a list of matrices containing all the results for the supplementary quantitative variables (coordinates, correlation between variables and axes)}
   \item{quali.sup}{a list of matrices containing all the results for the supplementary categorical variables (coordinates of each categories of each variables, v.test which is a criterion with a Normal distribution, and eta2 which is the square correlation corefficient between a qualitative variable and a dimension)}
 
-Returns the individuals factor map and the variables factor map.
+Returns the individuals factor map and the variables factor map.\cr
+The plots may be improved using the argument autolab, modifying the size of the labels or selecting some elements thanks to the \code{\link{plot.PCA}} function.
 }
 
 \references{
@@ -45,13 +46,14 @@ Husson, F., Le, S. and Pages, J. (2010). Exploratory Multivariate Analysis by Ex
 }
 \author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}, Jeremy Mazet}
 
-\seealso{ \code{\link{print.PCA}}, \code{\link{plot.PCA}}, \code{\link{dimdesc}}}
+\seealso{ \code{\link{print.PCA}}, \code{\link{summary.PCA}}, \code{\link{plot.PCA}}, \code{\link{dimdesc}}}
 
 \examples{
 data(decathlon)
 res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup=13)
 ## plot of the eigenvalues
 ## barplot(res.pca$eig[,1],main="Eigenvalues",names.arg=1:nrow(res.pca$eig))
+summary(res.pca)
 plot(res.pca,choix="ind",habillage=13)
 dimdesc(res.pca, axes = 1:2)
 ## To draw ellipses around the categories of the 13th variable (which is categorical)

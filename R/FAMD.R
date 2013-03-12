@@ -1,4 +1,4 @@
-AFDM <- function (base, ncp = 5, graph = TRUE,sup.var=NULL, ind.sup = NULL, axes=c(1,2),row.w=NULL,tab.comp=NULL){
+FAMD <- function (base, ncp = 5, graph = TRUE,sup.var=NULL, ind.sup = NULL, axes=c(1,2),row.w=NULL,tab.comp=NULL){
     base <- as.data.frame(base)
     type=NULL
     for (v in 1:ncol(base)) {
@@ -24,6 +24,7 @@ AFDM <- function (base, ncp = 5, graph = TRUE,sup.var=NULL, ind.sup = NULL, axes
     if (!is.null(resultats$quali.var.sup)) res$quali.var.sup <- list(coord = resultats$quali.var.sup$coord, contrib = resultats$quali.var.sup$contrib, cos2 = resultats$quali.var.sup$cos2, v.test = resultats$quali.var.sup$v.test)
     if (!is.null(resultats$quanti.var.sup)) res$quanti.var.sup <- resultats$quanti.var.sup
     res$call <- resultats$call
-    class(res) <- c("AFDM", "list")
+	res$call$call <- sys.calls()[[1]]
+    class(res) <- c("FAMD", "list")
     return(res)
 }

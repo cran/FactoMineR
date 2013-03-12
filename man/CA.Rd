@@ -35,7 +35,8 @@ Returns a list including:
   \item{quali.sup}{if quali.sup is not NULL, a list of matrices with all the results for the supplementary categorical variables (coordinates of each categories of each variables, v.test which is a criterion with a Normal distribution, square correlation ratio)}
   \item{call}{a list with some statistics}
 
-Returns the row and column points factor map.
+Returns the row and column points factor map.\cr
+The plot may be improved using the argument autolab, modifying the size of the labels or selecting some elements thanks to the \code{\link{plot.CA}} function.
 }
 
 \references{
@@ -48,11 +49,12 @@ Husson, F., Le, S. and Pages, J. (2010). Exploratory Multivariate Analysis by Ex
 
 \author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr},Jeremy Mazet}
 
-\seealso{ \code{\link{print.CA}}, \code{\link{plot.CA}}, \code{\link{dimdesc}}}
+\seealso{ \code{\link{print.CA}}, \code{\link{summary.CA}}, \code{\link{plot.CA}}, \code{\link{dimdesc}}}
 
 \examples{
 data(children)
 res.ca <- CA (children, col.sup = 6:8, row.sup = 15:18)
+summary(res.ca)
 }
 
 \keyword{multivariate}

@@ -41,7 +41,8 @@ Returns a list including:
   \item{quali.sup}{a list of matrices with all the results for the supplementary categorical variables (coordinates of each categories of each variables, square cosine and v.test which is a criterion with a Normal distribution, square correlation ratio)}
   \item{call}{a list with some statistics}
 
-Returns the graphs of the individuals and categories and the graph with the variables.
+Returns the graphs of the individuals and categories and the graph with the variables.\cr
+The plots may be improved using the argument autolab, modifying the size of the labels or selecting some elements thanks to the \code{\link{plot.MCA}} function.
 }
 
 \references{
@@ -50,13 +51,14 @@ Husson, F., Le, S. and Pages, J. (2010). Exploratory Multivariate Analysis by Ex
 
 \author{Francois Husson \email{husson@agrocampus-ouest.fr}, Julie Josse, Jeremy Mazet}
 
-\seealso{ \code{\link{plotellipses}},\code{\link{print.MCA}}, \code{\link{plot.MCA}}, \code{\link{dimdesc}}}
+\seealso{ \code{\link{plotellipses}}, \code{\link{summary.MCA}},\code{\link{print.MCA}}, \code{\link{plot.MCA}}, \code{\link{dimdesc}}}
 
 \examples{
 \dontrun{
 ## Tea example
  data(tea)
- res.mca=MCA(tea,quanti.sup=19,quali.sup=20:36)
+ res.mca <- MCA(tea,quanti.sup=19,quali.sup=20:36)
+ summary(res.mca)
  plot(res.mca,invisible=c("var","quali.sup","quanti.sup"),cex=0.7)
  plot(res.mca,invisible=c("ind","quali.sup","quanti.sup"),cex=0.8)
  plot(res.mca,invisible=c("quali.sup","quanti.sup"),cex=0.8)

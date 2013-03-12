@@ -1,8 +1,13 @@
-plot.AFDM <- function (x, choix = "var", axes = c(1, 2), 
+plot.FAMD <- function (x, choix = c("ind","var","quanti","quali"), axes = c(1, 2), 
     lab.var = TRUE, lab.ind = TRUE, habillage = "none", col.lab = FALSE,
     col.hab = NULL, invisible = NULL, lim.cos2.var = 0., xlim = NULL,
-    ylim = NULL, cex = 1, title = NULL, palette=NULL, new.plot=FALSE, ...) {
+    ylim = NULL, title = NULL, palette=NULL, autoLab = c("auto","yes","no"), new.plot = FALSE, 
+	select = NULL, unselect = 0.7, shadowtext=FALSE,...) {
 
+    autoLab <- match.arg(autoLab,c("auto","yes","no"))
+	if (autoLab=="yes") autoLab=TRUE
+	if (autoLab=="no") autoLab=FALSE
+    choix <- match.arg(choix,c("ind","var","quanti","quali"))
 if (choix=="var") {
   choix="group"
   x$group$coord <- x$var$coord
@@ -20,6 +25,7 @@ if ((choix=="ind") & (is.numeric(habillage))) {
 plot.MFA (x, axes = axes, choix = choix, lab.var = lab.var,
     lab.ind = lab.ind, lab.par = FALSE, habillage = habillage,
     col.hab = col.hab, invisible = invisible, lim.cos2.var = lim.cos2.var, 
-    xlim = NULL, ylim = NULL, cex = cex, title = title, palette=palette, new.plot=new.plot,...)
-class(x) <- c("AFDM", "list")
+    xlim = xlim, ylim = ylim, title = title, palette=palette, new.plot=new.plot,
+	select=select,unselect=unselect,autoLab=autoLab,shadowtext=shadowtext,...)
+class(x) <- c("FAMD", "list")
 }

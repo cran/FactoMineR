@@ -194,6 +194,7 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE, ax
     }
     results$call$H <- H
     results$call$X <- X
+	results$call$call <- sys.calls()[[1]]
     if (!is.null(ind.quali)) results$call$Hq <- Xdes
     class(results) <- c("HMFA", "list")
     if (graph) {

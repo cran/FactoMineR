@@ -12,15 +12,17 @@ if (!is.null(tab.comp)){
   if (!is.null(num.group.sup)) stop("Supplementary groups are not allowed with tab.comp")
 }
 
-nature.var <- NULL
+nature.group <- NULL
 for (i in 1:length(group)){
-  if ((type[i] == "n")&&(!(i%in%num.group.sup))) nature.var <- c(nature.var,rep("quali",group[i]))
-  if ((type[i] == "n")&&(i%in%num.group.sup)) nature.var <- c(nature.var,rep("quali.sup",group[i]))
-  if (((type[i] == "s")||(type[i] == "c"))&&(!(i%in%num.group.sup))) nature.var <- c(nature.var,rep("quanti",group[i]))
-  if (((type[i] == "s")||(type[i] == "c"))&&(i%in%num.group.sup)) nature.var <- c(nature.var,rep("quanti.sup",group[i]))
-  if (((type[i] == "f")||(type[i] == "f2"))&&(!(i%in%num.group.sup))) nature.var <- c(nature.var,rep("contingency",group[i]))
-  if (((type[i] == "f")||(type[i] == "f2"))&&(i%in%num.group.sup)) nature.var <- c(nature.var,rep("contingency.sup",group[i]))
+  if ((type[i] == "n")&&(!(i%in%num.group.sup))) nature.group <- c(nature.group,"quali")
+  if ((type[i] == "n")&&(i%in%num.group.sup)) nature.group <- c(nature.group,"quali.sup")
+  if (((type[i] == "s")||(type[i] == "c"))&&(!(i%in%num.group.sup))) nature.group <- c(nature.group,"quanti")
+  if (((type[i] == "s")||(type[i] == "c"))&&(i%in%num.group.sup)) nature.group <- c(nature.group,"quanti.sup")
+  if (((type[i] == "f")||(type[i] == "f2"))&&(!(i%in%num.group.sup))) nature.group <- c(nature.group,"contingency")
+  if (((type[i] == "f")||(type[i] == "f2"))&&(i%in%num.group.sup)) nature.group <- c(nature.group,"contingency.sup")
 }
+nature.var <- rep(nature.group,times=group)
+
 ### Add 
 type.var <- NULL
 for (i in 1:length(group)){
@@ -309,6 +311,7 @@ if ((!is.null(tab.comp))&(any("n"%in%type))){
     call$name.group <- name.group
     call$X <- base
     call$XTDC <- data
+	call$nature.group <- nature.group
 	call$nature.var <- nature.var
     contrib.group <- matrix(NA, length(group.actif), ncp.tmp)
     dimnames(contrib.group) <- list(name.group[group.actif], paste("Dim", c(1:ncp.tmp), sep = "."))
@@ -636,7 +639,7 @@ tmp <- sweep(tmp,1,row.w,FUN="*")
     res.quanti.var <- NULL
     if (!is.null(indice.quanti)){
       coord.quanti.var <- res.globale$var$coord[indice.quanti,1:ncp,drop=FALSE]
-      coord.quanti.var <- as.data.frame(res.globale$var$coord[indice.quanti,1:ncp,drop=FALSE])
+#      coord.quanti.var <- as.data.frame(res.globale$var$coord[indice.quanti,1:ncp,drop=FALSE])
       cos2.quanti.var <- res.globale$var$cos2[indice.quanti, 1:ncp,drop=FALSE]
       contrib.quanti.var <- res.globale$var$contrib[indice.quanti, 1:ncp,drop=FALSE]
       cor.quanti.var <- res.globale$var$cor[indice.quanti, 1:ncp,drop=FALSE]
@@ -645,7 +648,7 @@ tmp <- sweep(tmp,1,row.w,FUN="*")
     res.freq <- NULL
     if (!is.null(indice.freq)){
       coord.freq <- res.globale$var$coord[indice.freq,1:ncp,drop=FALSE]
-      coord.freq <- as.data.frame(res.globale$var$coord[indice.freq,1:ncp,drop=FALSE])
+#      coord.freq <- as.data.frame(res.globale$var$coord[indice.freq,1:ncp,drop=FALSE])
       cos2.freq <- res.globale$var$cos2[indice.freq, 1:ncp,drop=FALSE]
       contrib.freq <- res.globale$var$contrib[indice.freq, 1:ncp,drop=FALSE]
       res.freq <- list(coord = coord.freq, contrib = contrib.freq, cos2 = cos2.freq)
@@ -699,6 +702,7 @@ cor.partial.axes <- cov.wt(aux,wt=row.w/sum(row.w),method="ML",cor=TRUE)$cor
     if (bool.sup) resultats$quali.var.sup = res.quali.var.sup
     resultats$partial.axes = res.partial.axes
     resultats$call = call
+	resultats$call$call <- sys.calls()[[1]]
     resultats$global.pca = res.globale
     class(resultats) <- c("MFA", "list")
 
@@ -717,10 +721,10 @@ cor.partial.axes <- cov.wt(aux,wt=row.w/sum(row.w),method="ML",cor=TRUE)$cor
       }
       max.inertia <- order(apply(resultats$ind$within.inertia[,1:2],1,sum))
       plot.MFA(resultats,choix="ind",invisible="quali",partial=rownames(resultats$ind$coord)[max.inertia[c(1:2,nrow(resultats$ind$coord)-1,nrow(resultats$ind$coord))]],habillage="group",axes=axes,new.plot=TRUE)
-      if ("c"%in%type) plot.MFA(resultats,choix="var",habillage="group",axes=axes,new.plot=TRUE)
+      if ("c"%in%type) plot.MFA(resultats,choix="var",habillage="group",axes=axes,new.plot=TRUE,shadowtext=TRUE	)
       if ("f"%in%type) plot.MFA(resultats,choix="freq",habillage="group",axes=axes,new.plot=TRUE)
       plot.MFA(resultats,choix="ind",invisible="quali",habillage = "ind",axes=axes,new.plot=TRUE,col.hab=1+3*(1:nbre.ind)%in%ind.sup)
-      plot.MFA(resultats,choix="axes",habillage="group",axes=axes,new.plot=TRUE)
+      plot.MFA(resultats,choix="axes",habillage="group",axes=axes,new.plot=TRUE,shadowtext=TRUE)
       plot.MFA(resultats,choix="group",axes=axes,new.plot=TRUE)
     }
     return(resultats)

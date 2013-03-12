@@ -79,7 +79,7 @@ graph.var <- function (x, axes = c(1, 2),
       xlim <- c(xmin, xmax) * 1.2
       ylim <- c(ymin, ymax) * 1.2
     }
-    if (new.plot) dev.new()
+    if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
     if (scale.unit) {
       plot(0, 0, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp=1, cex=cex, main=titre)
       title(sub = sub.titre, cex.sub = cex, font.sub = 2, col.sub = "steelblue4", adj = 0, line = 3.8)

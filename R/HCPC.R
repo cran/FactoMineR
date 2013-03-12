@@ -119,12 +119,12 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
     }
     if (is.null(max)) max = min(10, round(nrow(res$ind$coord)/2))
     max = min(max, nrow(res$ind$coord) - 1)
-    if (inherits(res, "PCA") | inherits(res, "MCA") | inherits(res,"MFA") | inherits(res, "HMFA") | inherits(res, "AFDM")) {
+    if (inherits(res, "PCA") | inherits(res, "MCA") | inherits(res,"MFA") | inherits(res, "HMFA") | inherits(res, "FAMD")) {
         if (!is.null(res$call$ind.sup)) res$call$X = res$call$X[-res$call$ind.sup, ]
         if (inherits(res, "MCA")) res$call$row.w.init <- res$call$row.w
         t = auto.cut.tree(res, min = min, max = max, metric = metric, method = method, weight = res$call$row.w.init,cla=cla,...)
     }
-    else stop("res should be from PCA, MCA, AFDM, MFA, or HMFA class")
+    else stop("res should be from PCA, MCA, FAMD, MFA, or HMFA class")
     if (inherits(t$tree, "agnes")) t$tree <- as.hclust(t$tree)
     if (inherits(t$tree, "hclust")) {
         if (graph.scale == "inertia") {
@@ -217,7 +217,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
     if (vec) data.clust = as.data.frame(data.clust[, -2])
     desc.var = catdes(data.clust, ncol(data.clust), proba = proba)
     desc.axe = catdes(X, ncol(X), proba = proba)
-    call = list(t = t, min = min, max = max, X = X, vec = vec)
+    call = list(t = t, min = min, max = max, X = X, vec = vec,call=sys.calls()[[1]])
     res.HCPC = list(data.clust = data.clust, desc.var = desc.var, 
         desc.axes = desc.axe, call = call, desc.ind = desc.ind)
     if (graph) {

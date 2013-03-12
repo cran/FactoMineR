@@ -20,8 +20,8 @@ The dataset is analysed in: http://www.sciencedirect.com/science/article/pii/S01
 
 \examples{
 data(geomorphology)
-res.afdm <- AFDM(geomorphology)
-plot(res.afdm,choix="ind",habillage=4)
+res <- FAMD(geomorphology)
+plot(res,choix="ind",habillage=4)
 }
 
 \keyword{datasets}
