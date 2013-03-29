@@ -1,6 +1,7 @@
 plotellipses <- function (model, keepvar = "all", axis = c(1, 2), means = TRUE,
     level = 0.95, magnify = 2, cex = 0.5, pch = 20, pch.means = 15,
-    type = c("g", "p"), keepnames = TRUE, namescat = NULL, xlim=xlim, ylim=ylim, lwd=1, label="all",...)
+    type = c("g", "p"), keepnames = TRUE, namescat = NULL, xlim=xlim, ylim=ylim, lwd=1, label="all",
+	autoLab=c("auto","yes","no"),...)
 
 {
     monpanel <- function(x, y, level, means, nommod, magnify = magnify,
@@ -106,6 +107,9 @@ plotellipses <- function (model, keepvar = "all", axis = c(1, 2), means = TRUE,
             }
         }
     }
+    autoLab <- match.arg(autoLab,c("auto","yes","no"))
+	if (autoLab=="yes") autoLab=TRUE
+	if (autoLab=="no") autoLab=FALSE
     nomtot <- names(model$call$X)
     nbevartot <- ncol(model$call$X)
     eliminer <- NULL
@@ -181,7 +185,6 @@ plotellipses <- function (model, keepvar = "all", axis = c(1, 2), means = TRUE,
         if (is.numeric(keepvar)) eliminer <- unique(c(eliminer, (1:nbevartot)[-keepvar]))
         if (is.logical(keepvar)) eliminer <- unique(c(eliminer, (1:nbevartot)[!keepvar]))
     }
-
     if (!is.null(eliminer)) nomvargardees <- nomtot[-eliminer]
     else nomvargardees <- nomtot
     if (!is.logical(keepnames)) {
@@ -198,36 +201,41 @@ plotellipses <- function (model, keepvar = "all", axis = c(1, 2), means = TRUE,
             else return(NULL)
         }
     }
-    if (!is.null(eliminer)) donnees <- model$call$X[, -eliminer, drop = FALSE]
-    else donnees <- model$call$X
+    if (is.null(model$call$ind.sup)) {
+	  if (!is.null(eliminer)) donnees <- model$call$X[, -eliminer, drop = FALSE]
+      else donnees <- model$call$X
+	} else {
+	  if (!is.null(eliminer)) donnees <- model$call$X[-model$call$ind.sup, -eliminer, drop = FALSE]
+      else donnees <- model$call$X[-model$call$ind.sup,, drop = FALSE]
+	}
     nbevar <- ncol(donnees)
-
 if (nbevar==1) {
   if (keepvar=="all"||keepvar=="quali.sup") var <-model$call$quali.sup$numero
   else {
     if (is.numeric(keepvar)) var <- keepvar
     else var <- which(keepvar==colnames(model$call$X))
   }
-  aux <- cbind.data.frame(model$call$X[,var],model$ind$coord[,axis])
+  if (!is.null(model$call$ind.sup)) aux <- cbind.data.frame(model$call$X[-model$call$ind.sup,var],model$ind$coord[,axis])
+  else aux <- cbind.data.frame(model$call$X[,var],model$ind$coord[,axis])
   if (class(model)[1]=="PCA"){
     coord.ell <- coord.ellipse(aux,bary=means)
-    plot.PCA(model,habillage=var,ellipse=coord.ell, label=label,axes=axis,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]))
+    plot.PCA(model,habillage=var,ellipse=coord.ell, label=label,axes=axis,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
   }
   if (class(model)[1]=="MCA"){
     res.pca <- PCA(aux,quali.sup=1,scale.unit=FALSE,graph=FALSE)
     res.pca$eig[axis,]=model$eig[axis,]
     coord.ell <- coord.ellipse(aux,bary=means)
-    plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]))
+    plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
   }
   if (class(model)[1]=="MFA"){
     res.pca <- PCA(aux,quali.sup=1,scale.unit=FALSE,graph=FALSE)
     res.pca$eig[axis,]=model$eig[axis,]
     coord.ell <- coord.ellipse(aux,bary=means)
-    plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]))
+    plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
   }
 } else{
-    nindiv <- nrow(donnees)
     don <- apply(model$ind$coord[, axis], 2, FUN = function(x, k) rep(x, k), k = nbevar)
+	nindiv <- nrow(donnees)
     rownames(don) <- NULL
     colnames(don) <- c("x", "y")
     nomvar <- rep(nomvargardees, each = nindiv)

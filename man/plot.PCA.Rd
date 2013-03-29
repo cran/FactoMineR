@@ -10,13 +10,15 @@ variables and supplementary categorical variables.
 }
 
 \usage{
-\method{plot}{PCA}(x, axes = c(1, 2), choix = "ind",
-    ellipse = NULL, xlim = NULL, ylim = NULL, habillage = "none", 
-    col.hab = NULL, col.ind = "black", col.ind.sup = "blue", 
-    col.quali = "magenta", col.quanti.sup = "blue", 
-    col.var = "black", label = "all", invisible = NULL, 
-    lim.cos2.var = 0., cex = 1, title = NULL, palette=NULL,
-    new.plot = FALSE, \dots)
+\method{plot}{PCA}(x, axes = c(1, 2), choix = c("ind","var"),
+    ellipse = NULL, xlim = NULL, ylim = NULL, habillage="none", 
+    col.hab = NULL, col.ind="black", col.ind.sup="blue", 
+    col.quali="magenta", col.quanti.sup="blue", col.var="black",
+    label = c("all","none","ind","ind.sup","quali","var","quanti.sup"),
+	invisible = c("none","ind","ind.sup","quali","var","quanti.sup"), 
+    lim.cos2.var = 0., title = NULL, palette=NULL,
+    autoLab = c("auto","yes","no"), new.plot = FALSE, select = NULL, 
+	unselect = 0.7, shadowtext = FALSE, \dots)
     }
 
 \arguments{
@@ -37,11 +39,26 @@ variables and supplementary categorical variables.
   \item{invisible}{string indicating if some points should not be drawn ("ind", "ind.sup" or "quali" for the individual graph and "var" or "quanti.sup" for
   the correlation circle graph)}
   \item{lim.cos2.var}{value of the square cosinus under the variables are not drawn}
-  \item{cex}{cf. function \code{\link{par}} in the \pkg{graphics} package}
   \item{title}{string corresponding to the title of the graph you draw (by default NULL and a title is chosen)}
   \item{palette}{the color palette used to draw the points. By default colors are chosen. If you want to define the colors : palette=palette(c("black","red","blue")); or you can use: palette=palette(rainbow(30)), or in black and white for example: palette=palette(gray(seq(0,.9,len=25)))}
+  \item{autoLab}{if \code{autoLab="auto"}, \code{autoLab} is equal to "yes" if there are less than 50 elements and "no" otherwise; if "yes", the labels of the drawn elements are placed in a "good" way (can be time-consuming if many elements), and if "no" the elements are placed quickly but may overlap}
   \item{new.plot}{boolean, if TRUE, a new graphical device is created}
-  \item{\dots}{further arguments passed to or from other methods}
+  \item{select}{a selection of the elements that are drawn; see the details section}
+  \item{unselect}{may be either a value between 0 and 1 that gives the transparency of the unselected objects (if \code{unselect=1} the transparceny is total and the elements are not drawn, if \code{unselect=0} the elements are drawn as usual but without any label) or may be a color (for example \code{unselect="grey60"})}
+  \item{shadowtext}{boolean; if true put a shadow on the labels (rectangles are written under the labels which may lead to difficulties to modify the graph with another program)}
+  \item{\dots}{further arguments passed to or from other methods, such as cex, cex.main, ...}
+}
+
+\details{
+The argument \code{autoLab = "yes"} is time-consuming if there are many labels that overlap. In this case, you can modify the size of the characters in order to have less overlapping, using for example cex=0.7.\cr
+The \code{select} argument can be used in order to select a part of the elements (individuals if you draw the graph of individuals, or variables if you draw the graph of variabless) that are drawn.
+For example, you can use:\cr
+\code{select = 1:5} and then the elements 1:5 are drawn.\cr 
+\code{select = c("name1","name5")} and then the elements that have the names name1 and name5 are drawn.\cr 
+\code{select = "coord 10"} and then the 10 elements that have the highest (squared) coordinates on the 2 chosen dimensions are drawn.\cr 
+\code{select = "contrib 10"} and then the 10 elements that have the highest contribution on the 2 dimensions of your plot are drawn.\cr 
+\code{select = "cos2 5"} and then the 5 elements that have the highest cos2 on the 2 dimensions of your plot are drawn.\cr 
+\code{select = "dist 8"} and then the 8 elements that have the highest distance to the center of gravity are drawn.\cr 
 }
 
 \value{
@@ -58,10 +75,11 @@ res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup = 13)
 plot(res.pca, habillage = 13, col.hab=c("green","blue"))
 ## To automatically draw ellipses around the barycentres of all the categorical variables
 plotellipses(res.pca)
-## or another graph
-aa=cbind.data.frame(decathlon[,13],res.pca$ind$coord)
-bb=coord.ellipse(aa,bary=TRUE)
-plot.PCA(res.pca,habillage=13,ellipse=bb)
+## Selection of some individuals
+plot(res.pca,select="contrib 7") #plot the 7 individuals that have the highest cos2 
+plot(res.pca,select="cos2 0.8")  #plot the individuals that have a cos2 greater than 0.8
+plot(res.pca,select="cos2 5")     #plot the 5 individuals that have the highest cos2 
+plot(res.pca,choix="var",select="cos2 0.6")  #plot the variables that have a cos2 greater than 0.6
 }
 
 \keyword{dplot}

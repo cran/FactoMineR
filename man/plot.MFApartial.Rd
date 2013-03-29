@@ -10,7 +10,7 @@ Draw an interactive Multiple Factor Analysis (MFA) graphs.
 
 \usage{
 plotMFApartial(x, axes = c(1, 2), 
-    lab.ind.moy = TRUE, lab.par = FALSE, habillage = "ind",
+    lab.ind = TRUE, lab.par = FALSE, habillage = "ind",
     chrono = FALSE, col.hab = NULL, invisible = NULL, 
     draw.partial = NULL, xlim = NULL, ylim = NULL, 
     cex = 1, title = NULL, palette = NULL, \dots)
@@ -19,7 +19,7 @@ plotMFApartial(x, axes = c(1, 2),
 \arguments{ 
   \item{x}{an object of class MFA}
   \item{axes}{a length 2 vector specifying the components to plot}
-  \item{lab.ind.moy}{boolean, if TRUE, the label of the mean points are drawn}
+  \item{lab.ind}{boolean, if TRUE, the label of the mean points are drawn}
   \item{lab.par}{boolean, if TRUE, the label of the partial points are drawn}
   \item{habillage}{string corresponding to the color which are used. If "ind", one color is used for each individual;
   if "quali" the individuals are colored according to one categorical variable; if "group" the individuals are colored according to the group}

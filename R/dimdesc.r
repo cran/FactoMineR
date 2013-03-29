@@ -1,7 +1,7 @@
 dimdesc=function (res, axes = 1:3, proba = 0.05) 
 {
     if (!inherits(res, "PCA") & !inherits(res, "CA") & !inherits(res, "MCA") & !inherits(res, 
-        "MFA") & !inherits(res, "HMFA") & !inherits(res, "DMFA") &  !inherits(res, "AFDM")) 
+        "MFA") & !inherits(res, "HMFA") & !inherits(res, "DMFA") &  !inherits(res, "FAMD")) 
         stop("non convenient data")
     if (inherits(res, "CA")) {
         result <- structure(vector(mode = "list", length = length(axes)), names = colnames(res$row$coord)[axes])

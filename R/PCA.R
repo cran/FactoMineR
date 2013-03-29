@@ -11,6 +11,7 @@ PCA <- function (X, scale.unit = TRUE, ncp = 5, ind.sup = NULL, quanti.sup = NUL
     fct.eta2 <- function(vec,x,weights) {
       res <- summary(lm(x~vec,weights=weights))$r.squared
     }
+
     X <- as.data.frame(X)
     if (any(is.na(X))) {
         warnings("Missing values are imputed by the mean of the variable: you should use the imputePCA function of the missMDA package")
@@ -55,7 +56,7 @@ dist2.ind <- apply(sweep(X,2,sqrt(col.w),FUN="*")^2,1,sum)
 dist2.var <- apply(sweep(X,1,sqrt(row.w),FUN="*")^2,2,sum)
     res.call <- list(row.w = (row.w/sum(row.w)), col.w = col.w, 
         scale.unit = scale.unit, ncp = ncp, centre = centre, 
-        ecart.type = ecart.type, X = Xtot, row.w.init = row.w.init)
+        ecart.type = ecart.type, X = Xtot, row.w.init = row.w.init,call=sys.calls()[[1]])
     tmp <- svd.triplet(X, row.w = row.w, col.w = col.w,ncp=ncp)
     eig <- tmp$vs^2
     vp <- as.data.frame(matrix(NA, length(eig), 3))
@@ -200,7 +201,7 @@ dist2 <- dist2.ind
     class(res) <- c("PCA", "list ")
     if (graph) {
         plot.PCA(res, choix = "ind", axes = axes,new.plot=TRUE)
-        plot.PCA(res, choix = "var", axes = axes,new.plot=TRUE)
+        plot.PCA(res, choix = "var", axes = axes,new.plot=TRUE,shadowtext=TRUE)
     }
     return(res)
 }

@@ -54,8 +54,8 @@ MFA (base, group, type = rep("s",length(group)), ind.sup = NULL,
   \item{partial.axes}{a list of matrices containing all the results for the partial axes (coordinates, correlation between variables and axes, correlation between partial axes)}
   \item{global.pca}{the result of the analysis when it is considered as a unique weighted PCA}
 
-Returns the individuals factor map, the variables factor map and the
-groups factor map.
+Returns the individuals factor map, the variables factor map and the groups factor map.\cr
+The plots may be improved using the argument autolab, modifying the size of the labels or selecting some elements thanks to the \code{\link{plot.MFA}} function.
 }
 
 \references{
@@ -65,13 +65,14 @@ Becue-Bertaut, M. and Pages, J. '2008) Multiple factor analysis and clustering o
 
 \author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}, J. Mazet}
 
-\seealso{ \code{\link{print.MFA}}, \code{\link{plot.MFA}}, \code{\link{dimdesc}}}
+\seealso{ \code{\link{print.MFA}}, \code{\link{summary.MFA}}, \code{\link{plot.MFA}}, \code{\link{dimdesc}}}
 
 \examples{
 data(wine)
-res = MFA(wine, group=c(2,5,3,10,9,2), type=c("n",rep("s",5)),
+res <- MFA(wine, group=c(2,5,3,10,9,2), type=c("n",rep("s",5)),
     ncp=5, name.group=c("orig","olf","vis","olfag","gust","ens"),
     num.group.sup=c(1,6))
+summary(res)
 barplot(res$eig[,1],main="Eigenvalues",names.arg=1:nrow(res$eig))
 
 \dontrun{
