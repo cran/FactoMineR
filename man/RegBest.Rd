@@ -9,7 +9,8 @@ Find an optimal submodel
 }
 
 \usage{
-RegBest(y,x, int = TRUE, wt=NULL, na.action = na.omit,method=c("r2","Cp", "adjr2"), nbest=1)
+RegBest(y,x, int = TRUE, wt=NULL, na.action = na.omit,
+    method=c("r2","Cp", "adjr2"), nbest=1)
 }
 
 \arguments{

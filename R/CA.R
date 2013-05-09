@@ -4,7 +4,8 @@ fct.eta2 <- function(vec,x,weights) {
   res <- summary(lm(x~vec,weights=weights))$r.squared
 }
 
-    X <- as.data.frame(X)
+    if (is.table(X)) X <- X[,]
+	X <- as.data.frame(X)
     if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
     if (is.null(colnames(X))) colnames(X) = paste("V",1:ncol(X),sep="")
     colnames(X)[colnames(X)==""] <- paste("V",1:sum(colnames(X)==""),sep="")

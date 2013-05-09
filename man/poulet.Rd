@@ -17,7 +17,8 @@ Donnees genomiques sur les poulets}
 data(poulet)
 res.pca = PCA(poulet,quali.sup=1, graph=FALSE)
 plot(res.pca)
-plot(res.pca,habillage=1,label="quali",palette=palette(c("black","red","blue","darkgreen","purple","orange")))
+plot(res.pca,habillage=1,label="quali",
+    palette=palette(c("black","red","blue","darkgreen","purple","orange")))
 dimdesc(res.pca)
 ## Dessine des ellipses autour des centres de gravite
 aa=cbind.data.frame(poulet[,1],res.pca$ind$coord)

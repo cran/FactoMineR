@@ -77,9 +77,9 @@ plotellipses(res.mca,keepvar=1:4)
 
 ## Example with missing values : use the missMDA package
 require(missMDA)
-data(vnf.example)
-completed <- imputeMCA(vnf.example,ncp=2)
-res.mca <- MCA(vnf.example,tab.disj=completed$tab.disj)
+data(vnf)
+completed <- imputeMCA(vnf,ncp=2)
+res.mca <- MCA(vnf,tab.disj=completed$tab.disj)
 }
 }
 \keyword{multivariate}

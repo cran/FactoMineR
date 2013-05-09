@@ -17,7 +17,6 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var"),
 	invisible <- match.arg(invisible,c("none","ind", "ind.sup", "quali","var", "quanti.sup"),several.ok=TRUE)
     if ("none"%in%invisible) invisible = NULL
     choix <- match.arg(choix,c("ind","var"))
-    if (is.null(palette)) palette(c("black","red","green3","blue",      "cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
     lab.ind <- lab.quali <- lab.var <- lab.quanti <- lab.ind.sup <- FALSE
     if(length(label)==1 && label=="all") lab.ind <- lab.quali <- lab.var <- lab.quanti <- lab.ind.sup <-TRUE
     if("ind" %in% label) lab.ind<-TRUE
@@ -111,6 +110,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var"),
 		  }
 		}
        if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new(width=min(14,8*(xmax-xmin)/(ymax-ymin)),height=8)
+       if (is.null(palette)) palette(c("black","red","green3","blue","cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
         if (habillage == "ind") {
             nb.prod <- nrow(coord.actif)
             if (length(col.hab) != nb.prod) color.ind <- c(1:nb.prod)
@@ -294,6 +294,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var"),
             ylim <- c(ymin, ymax) * 1.2
         }
         if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
+        if (is.null(palette)) palette(c("black","red","green3","blue","cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
         if (scale.unit) {
             plot(0, 0, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp=1, main=titre,...)
             x.cercle <- seq(-1, 1, by = 0.01)
