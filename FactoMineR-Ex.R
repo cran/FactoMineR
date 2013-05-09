@@ -4,7 +4,7 @@ options(warn = 1)
 options(pager = "console")
 library('FactoMineR')
 
-assign(".oldSearch", search(), pos = 'CheckExEnv')
+base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 cleanEx()
 nameEx("AovSum")
 ### * AovSum
@@ -89,7 +89,7 @@ flush(stderr()); flush(stdout())
 ## Not run: 
 ##D data(geomorphology)
 ##D res <- FAMD(geomorphology)
-##D summary(res.ca)
+##D summary(res)
 ##D 
 ##D data(wine)
 ##D res <- FAMD(wine[,c(1,2,30,31)])
@@ -200,9 +200,9 @@ flush(stderr()); flush(stdout())
 ##D 
 ##D ## Example with missing values : use the missMDA package
 ##D require(missMDA)
-##D data(vnf.example)
-##D completed <- imputeMCA(vnf.example,ncp=2)
-##D res.mca <- MCA(vnf.example,tab.disj=completed$tab.disj)
+##D data(vnf)
+##D completed <- imputeMCA(vnf,ncp=2)
+##D res.mca <- MCA(vnf,tab.disj=completed$tab.disj)
 ## End(Not run)
 
 
@@ -941,7 +941,8 @@ flush(stderr()); flush(stdout())
 ##D data(poulet)
 ##D res.pca = PCA(poulet,quali.sup=1, graph=FALSE)
 ##D plot(res.pca)
-##D plot(res.pca,habillage=1,label="quali",palette=palette(c("black","red","blue","darkgreen","purple","orange")))
+##D plot(res.pca,habillage=1,label="quali",
+##D     palette=palette(c("black","red","blue","darkgreen","purple","orange")))
 ##D dimdesc(res.pca)
 ##D ## Dessine des ellipses autour des centres de gravite
 ##D aa=cbind.data.frame(poulet[,1],res.pca$ind$coord)
@@ -1161,7 +1162,7 @@ flush(stderr()); flush(stdout())
 
 ### * <FOOTER>
 ###
-cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
+base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
 grDevices::dev.off()
 ###
 ### Local variables: ***

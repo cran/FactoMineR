@@ -70,7 +70,7 @@ print3 <- function(obj,file="",ncp,width.row=0,nbelements=nbelements){
   colnames(eige) <- paste("Dim",1:ncol(eige),sep=".")
   print2(eige,file=file)
   
-  ncp <- min(res$call$ncp,3)
+  ncp <- min(res$call$ncp,ncp)
   width.row <- 0
   if (align.names==TRUE){
     aux <- match.arg(names(res),c("ind","ind.sup","freq","freq.sup","var","quanti.var","quanti.var.sup","quali.var","quali.var.sup","quanti.sup","quali.sup","group","row","row.sup","col","col.sup"),several.ok = TRUE)

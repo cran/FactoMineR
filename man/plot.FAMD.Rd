@@ -12,8 +12,8 @@ It provides the graphical outputs associated with the principal component method
 \method{plot}{FAMD}(x, choix = c("ind","var","quanti","quali"), axes = c(1, 2), 
     lab.var = TRUE, lab.ind = TRUE, habillage = "none", col.lab = FALSE,
     col.hab = NULL, invisible = NULL, lim.cos2.var = 0., xlim = NULL,
-    ylim = NULL, title = NULL, palette=NULL, autoLab = c("auto","yes","no"), new.plot = FALSE,
-	select = NULL, unselect = 0.7, shadowtext = FALSE, \dots)
+    ylim = NULL, title = NULL, palette=NULL, autoLab = c("auto","yes","no"), 
+	new.plot = FALSE, select = NULL, unselect = 0.7, shadowtext = FALSE, \dots)
 }
 
 \arguments{

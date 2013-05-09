@@ -13,7 +13,7 @@ CA(X, ncp = 5, row.sup = NULL, col.sup = NULL, quanti.sup=NULL,
     quali.sup = NULL, graph = TRUE, axes = c(1,2), row.w = NULL)}
 
 \arguments{
-  \item{X}{a data frame with \emph{n} rows and \emph{p} columns, i.e. a contingency table}
+  \item{X}{a data frame or a table with \emph{n} rows and \emph{p} columns, i.e. a contingency table}
   \item{ncp}{number of dimensions kept in the results (by default 5)}
   \item{row.sup}{a vector indicating the indexes of the supplementary rows}
   \item{col.sup}{a vector indicating the indexes of the supplementary columns}

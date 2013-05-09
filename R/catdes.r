@@ -35,15 +35,19 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL){
     for (i in 1:nb.quali){
       Table <- xtabs(~donnee[,num.var]+donnee[,quali[i]])
       marge.col = xtabs(~donnee[,quali[i]])
-      Test <- chisq.test(Table, correct=FALSE)
+      Test <- chisq.test(Table,correct=FALSE)
       Test.chi[i,1] <- Test$p.value
       Test.chi[i,2] <- Test$parameter
       for (j in 1:nlevels(donnee[,num.var])) {
        for (k in 1:nlevels(donnee[,quali[i]])) {
         aux2 = Table[j,k]/marge.li[j]
         aux3 = marge.col[k]/sum(marge.col)
-        if (aux2 > aux3) aux4 = phyper(Table[j,k]-1,marge.li[j],sum(marge.li)-marge.li[j],marge.col[k],lower.tail=FALSE)*2
-        else aux4 = phyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k])*2
+#        if (aux2 > aux3) aux4 = phyper(Table[j,k]-1,marge.li[j],sum(marge.li)-marge.li[j],marge.col[k],lower.tail=FALSE)*2
+#        else aux4 = phyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k])*2
+# new
+#        if (aux2 < aux3) aux4 = phyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k])*2
+#        else aux4 = phyper(Table[j,k]+1,marge.li[j],sum(marge.li)-marge.li[j],marge.col[k],lower.tail=FALSE)*2
+		aux4 <- min(phyper(Table[j,k]-1,marge.li[j],sum(marge.li)-marge.li[j],marge.col[k])*2+dhyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k]),phyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k],lower.tail=FALSE)*2+dhyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k]))
         if (aux4<proba) {
           aux5 = (1-2*as.integer(aux2>aux3))*qnorm(aux4/2)
           aux1 = Table[j,k]/marge.col[k]

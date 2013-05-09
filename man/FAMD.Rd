@@ -49,7 +49,7 @@ Pages J. (2004). Analyse factorielle de donnees mixtes. Revue Statistique Appliq
 \dontrun{
 data(geomorphology)
 res <- FAMD(geomorphology)
-summary(res.ca)
+summary(res)
 
 data(wine)
 res <- FAMD(wine[,c(1,2,30,31)])

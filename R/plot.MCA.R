@@ -16,7 +16,6 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
 	res.mca <- x
     if (!inherits(res.mca, "MCA")) stop("non convenient data")
     if (is.numeric(unselect)) if ((unselect>1)|(unselect<0)) stop("unselect should be betwwen 0 and 1")
-    if (is.null(palette)) palette(c("black","red","green3","blue","cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
 
    lab.x <- paste("Dim ",axes[1]," (",format(res.mca$eig[axes[1],2],nsmall=2,digits=2),"%)",sep="")
    lab.y <- paste("Dim ",axes[2]," (",format(res.mca$eig[axes[2],2],nsmall=2,digits=2),"%)",sep="")
@@ -173,6 +172,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
     if (is.null(title)) titre <- "MCA factor map"
     if (is.na(test.invisible[1])|is.na(test.invisible[2])|is.na(test.invisible[4])|is.na(test.invisible[5])) {
       if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new(width=min(14,max(8,8*(xmax-xmin)/(ymax-ymin))),height=8)
+      if (is.null(palette)) palette(c("black","red","green3","blue","cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
       plot(0, 0, main = titre, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp=1, ...)
       abline(v=0,lty=2, ...)
       abline(h=0,lty=2, ...)
@@ -197,7 +197,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
 		coll2 <- col.var
 		if (!is.null(selectMod)) {
 		  if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selection2)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selection2)])),alpha=255*(1-unselect),maxColorValue=255) 
-		  coll2[!((1:length(coll2))%in%selection2)] = unselect
+		  else coll2[!((1:length(coll2))%in%selection2)] = unselect
 		  labe2[!((1:length(labe2))%in%selection2)] <- ""
 		}
 		coll <- c(coll,coll2)
@@ -260,6 +260,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
     if (choix == "quanti.sup") {
      if (!is.null(res.mca$quanti.sup)) {
       if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
+      if (is.null(palette)) palette(c("black","red","green3","blue","cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
 	  if (is.null(title)) title <- "Supplementary variables on the MCA factor map"
       plot(0, 0, main = title, xlab = lab.x, ylab = lab.y, xlim = c(-1.1,1.1), ylim = c(-1.1,1.1), col = "white", asp=1, ...)
       abline(v=0,lty=2, ...)
@@ -314,6 +315,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
       else  test.invisible <- rep(NA, 3)
 
       if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
+      if (is.null(palette)) palette(c("black","red","green3","blue","cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
 	  if (is.null(xlim)) xlim <- c(0,1)
 	  if (is.null(ylim)) ylim <- c(0,1)
       plot(0, 0, main = title, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp=1, ...)
