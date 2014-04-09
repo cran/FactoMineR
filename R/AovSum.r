@@ -3,7 +3,7 @@ AovSum <- function (formula, data, na.action = na.omit, ...){
   options(contrasts=c("contr.sum","contr.sum"))
   don = data
   modele <- aov(formula , data=don, na.action = na.action)
-  test.F = Anova(modele, type="III")[-1,]  # enleve la constante
+  test.F = car::Anova(modele, type="III")[-1,]  # enleve la constante
   test.F = test.F[c(1,2,2,3,4)]
   test.F[3]=test.F[1]/test.F[2]
   colnames(test.F)[1] = "SS"

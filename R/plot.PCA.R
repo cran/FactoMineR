@@ -82,7 +82,8 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var"),
 		  else {
 		    if (sum(rownames(res.pca$ind$coord)%in%select)+sum(rownames(res.pca$ind.sup$coord)%in%select)!=0) selection <- which(rownames(res.pca$ind$coord)%in%select)
 			else {
- 		    if (grepl("contrib",select)) selection <- (rev(order(apply(res.pca$ind$contrib[,axes],1,sum))))[1:min(nrow(res.pca$ind$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
+ 		    if (grepl("contrib",select)) selection <- (rev(order(res.pca$ind$contrib[,axes[1],drop=FALSE]*res.pca$eig[axes[1],1]+res.pca$ind$contrib[,axes[2],drop=FALSE]*res.pca$eig[axes[2],1])))[1:min(nrow(res.pca$ind$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
+# 		    if (grepl("contrib",select)) selection <- (rev(order(apply(res.pca$ind$contrib[,axes],1,sum))))[1:min(nrow(res.pca$ind$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
  		    if (grepl("dist",select)) selection <- (rev(order(res.pca$ind$dist)))[1:min(nrow(res.pca$ind$coord),sum(as.integer(unlist(strsplit(select,"dist"))),na.rm=T))]
  		    if (grepl("coord",select)) selection <- (rev(order(apply(res.pca$ind$coord[,axes]^2,1,sum))))[1:min(nrow(res.pca$ind$coord),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
  		    if (grepl("cos2",select)) {
@@ -248,7 +249,8 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var"),
 		  else {
 		    if (sum(rownames(res.pca$var$coord)%in%select)+sum(rownames(res.pca$quanti.sup$coord)%in%select)!=0) selection <- which(rownames(res.pca$var$coord)%in%select)
 			else {
- 		      if (grepl("contrib",select)) selection <- (rev(order(apply(res.pca$var$contrib[,axes],1,sum))))[1:min(nrow(res.pca$var$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
+ 		      if (grepl("contrib",select)) selection <- (rev(order(res.pca$var$contrib[,axes[1]]*res.pca$eig[axes[1],1]+res.pca$var$contrib[,axes[2]]*res.pca$eig[axes[2],1])))[1:min(nrow(res.pca$var$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
+## 		      if (grepl("contrib",select)) selection <- (rev(order(apply(res.pca$var$contrib[,axes],1,sum))))[1:min(nrow(res.pca$var$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
  		      if (grepl("coord",select)) selection <- (rev(order(apply(res.pca$var$coord[,axes]^2,1,sum))))[1:min(nrow(res.pca$var$coord),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
  		      if (grepl("cos2",select)) {
 			    if (sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T)>=1) selection <- (rev(order(apply(res.pca$var$cos2[,axes],1,sum))))[1:min(nrow(res.pca$var$coord),sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T))]

@@ -77,7 +77,7 @@ For example, you can use:\cr
 Returns the individuals factor map and the variables factor map.
 }
 
-\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr},Jeremy Mazet}
+\author{Francois Husson \email{husson@agrocampus-ouest.fr}, Jeremy Mazet}
 
 \seealso{ \code{\link{MFA}}}
 

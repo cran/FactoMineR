@@ -80,7 +80,8 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
 	  else {
 	    if (sum(rownames(res.mca$ind$coord)%in%select)!=0) selection <- which(rownames(res.mca$ind$coord)%in%select)
 		else {
- 	    if (grepl("contrib",select)) selection <- (rev(order(apply(res.mca$ind$contrib[,axes,drop=FALSE],1,sum))))[1:min(nrow(res.mca$ind$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
+ 	    if (grepl("contrib",select)) selection <- (rev(order(res.mca$ind$contrib[,axes[1],drop=FALSE]*res.mca$eig[axes[1],1]+res.mca$ind$contrib[,axes[2],drop=FALSE]*res.mca$eig[axes[2],1])))[1:min(nrow(res.mca$ind$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
+# 	    if (grepl("contrib",select)) selection <- (rev(order(apply(res.mca$ind$contrib[,axes,drop=FALSE],1,sum))))[1:min(nrow(res.mca$ind$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
  	    if (grepl("coord",select)) selection <- (rev(order(apply(res.mca$ind$coord[,axes,drop=FALSE]^2,1,sum))))[1:min(nrow(res.mca$ind$coord),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
  		if (grepl("cos2",select)) {
 		  if (sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T)>=1) selection <- (rev(order(apply(res.mca$ind$cos2[,axes,drop=FALSE],1,sum))))[1:min(nrow(res.mca$ind$coord),sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T))]
@@ -112,7 +113,8 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
 	  else {
 	    if (sum(rownames(res.mca$quali.sup$coord)%in%selectMod)+sum(rownames(res.mca$quali.sup$coord)%in%selectMod)!=0) selection2 <- which(rownames(res.mca$var$coord)%in%selectMod)
 		else {
- 	      if (grepl("contrib",selectMod)) selection2 <- (rev(order(apply(res.mca$var$contrib[,axes,drop=FALSE],1,sum))))[1:min(nrow(res.mca$var$coord),sum(as.integer(unlist(strsplit(selectMod,"contrib"))),na.rm=T))]
+ 	      if (grepl("contrib",selectMod)) selection2 <- (rev(order(res.mca$var$contrib[,axes[1],drop=FALSE]*res.mca$eig[axes[1],1]+res.mca$var$contrib[,axes[2],drop=FALSE]*res.mca$eig[axes[2],1])))[1:min(nrow(res.mca$var$coord),sum(as.integer(unlist(strsplit(selectMod,"contrib"))),na.rm=T))]
+# 	      if (grepl("contrib",selectMod)) selection2 <- (rev(order(apply(res.mca$var$contrib[,axes,drop=FALSE],1,sum))))[1:min(nrow(res.mca$var$coord),sum(as.integer(unlist(strsplit(selectMod,"contrib"))),na.rm=T))]
  	      if (grepl("coord",selectMod)) selection2 <- (rev(order(apply(res.mca$var$coord[,axes,drop=FALSE]^2,1,sum))))[1:min(nrow(res.mca$var$coord),sum(as.integer(unlist(strsplit(selectMod,"coord"))),na.rm=T))]
  		  if (grepl("cos2",selectMod)) {
 		    if (sum(as.numeric(unlist(strsplit(selectMod,"cos2"))),na.rm=T)>=1) selection2 <- (rev(order(apply(res.mca$var$cos2[,axes],1,sum))))[1:min(nrow(res.mca$var$coord),sum(as.numeric(unlist(strsplit(selectMod,"cos2"))),na.rm=T))]

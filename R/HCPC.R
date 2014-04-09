@@ -6,6 +6,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
     auto.cut.tree = function(res, min, max, metric, method, weight=NULL,cla=NULL,...) {
         if (order) {
 		    if (is.null(res$call$row.w)) res$call$row.w = rep(1/nrow(res$ind$coord),nrow(res$ind$coord))
+            if (is.null(res$call$row.w.init)) res$call$row.w.init <- res$call$row.w
             sss = cbind.data.frame(res$ind$coord, res$call$X, res$call$row.w, res$call$row.w.init)
 			if (!is.null(weight)) weight <- weight[order(sss[, 1], decreasing = FALSE)]
             sss = sss[order(sss[, 1], decreasing = FALSE), ]
@@ -92,6 +93,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
         if (length(ind.car) > default.size) ind.car = ind.car[1:default.size]
         else ind.car = ind.car
     }
+	
     if (is.vector(res)) {
         res = cbind.data.frame(res, res)
         res = PCA(res, scale.unit = FALSE, ncp = Inf, graph = FALSE)
@@ -121,7 +123,6 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
     max = min(max, nrow(res$ind$coord) - 1)
     if (inherits(res, "PCA") | inherits(res, "MCA") | inherits(res,"MFA") | inherits(res, "HMFA") | inherits(res, "FAMD")) {
         if (!is.null(res$call$ind.sup)) res$call$X = res$call$X[-res$call$ind.sup, ]
-        if (inherits(res, "MCA")) res$call$row.w.init <- res$call$row.w
         t = auto.cut.tree(res, min = min, max = max, metric = metric, method = method, weight = res$call$row.w.init,cla=cla,...)
     }
     else stop("res should be from PCA, MCA, FAMD, MFA, or HMFA class")
@@ -138,7 +139,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
             2]) + (t$tree$height[length(t$tree$height) - t$nb.clust + 
             1]))/2
         if (graph) {
-            dev.new()
+            if (!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
             par(mar = c(0.5, 2, 0.75, 0))
             lay = matrix(ncol = 5, nrow = 5, c(2, 4, 4, 4, 4, 
                 2, 4, 4, 4, 4, 2, 4, 4, 4, 4, 2, 4, 4, 4, 4, 
@@ -159,21 +160,26 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
             if (nb.clust == 0 | nb.clust == 1) nb.clust = -1
         }
         if ((nb.clust == 0) | (nb.clust == 1)) {
-            plot(t$tree, hang = -1, main = "Click to cut the tree",  xlab = "", sub = "")
-            abline(h = auto.haut, col = "black", lwd = 3)
-            coupe = locator(n = 1)
-            while (coupe$y < min(t$tree$height)) {
+            if (!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))){
+              plot(t$tree, hang = -1, main = "Click to cut the tree",  xlab = "", sub = "")
+              abline(h = auto.haut, col = "black", lwd = 3)
+			  coupe = locator(n = 1)
+              while (coupe$y < min(t$tree$height)) {
                 cat("No class \n")
                 coupe = locator(n = 1)
-            }
-            y = coupe$y
+              }
+              y = coupe$y
+			} else {
+              plot(t$tree, hang = -1, main = "Tree and suggested number of clusters",  xlab = "", sub = "")
+              abline(h = auto.haut, col = "black", lwd = 3)
+			  y <- auto.haut
+			}
         }
         else {
-            if (graph) 
+            if (graph)
                 plot(t$tree, hang = -1, main = "Hierarchical Classification", 
                   xlab = "", sub = "")
-            if (nb.clust < 0) 
-                y = auto.haut
+            if (nb.clust < 0) y = auto.haut
             else y = (t$tree$height[length(t$tree$height) - nb.clust + 
                 2] + t$tree$height[length(t$tree$height) - nb.clust + 
                 1])/2
@@ -183,7 +189,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
     clust = cutree(as.hclust(t$tree), h = y)
     nb.clust = max(clust)
     X = as.data.frame(t$res$ind$coord)
-    if (graph) {
+    if ((graph)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) {
         rect = rect.hclust(t$tree, h = y, border = seq(1, nb.clust, 1))
         clust = NULL
         for (j in 1:nb.clust) clust = c(clust, rep(j, length(rect[[j]])))
@@ -220,7 +226,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
     call = list(t = t, min = min, max = max, X = X, vec = vec,call=sys.calls()[[1]])
     res.HCPC = list(data.clust = data.clust, desc.var = desc.var, 
         desc.axes = desc.axe, call = call, desc.ind = desc.ind)
-    if (graph) {
+    if ((graph)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) {
         if (vec) 
             plot.HCPC(res.HCPC, choice = "3D.map", t.level = "all", 
                 angle = 0, ind.names = FALSE,new.plot=TRUE)

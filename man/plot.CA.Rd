@@ -62,7 +62,7 @@ For example, you can use:\cr
 \code{select = "dist 8"} and then the 8 rows (8 actives and 8 supplementaries) that have the highest distance to the center of gravity are drawn.\cr 
 }
 
-\author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{husson@agrocampus-ouest.fr}, Jeremy Mazet}
 
 \seealso{ \code{\link{CA}}}
 

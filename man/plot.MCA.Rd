@@ -65,7 +65,7 @@ The \code{selectMod} argument can be used in order to select the categories that
 Returns the individuals factor map and the variables factor map.
 }
 
-\author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{husson@agrocampus-ouest.fr}, Jeremy Mazet}
 
 \seealso{ \code{\link{MCA}}}
 
@@ -75,6 +75,8 @@ res.mca = MCA (poison, quali.sup = 3:4, quanti.sup = 1:2, graph=FALSE)
 plot.MCA(res.mca,invisible=c("var","quali.sup"))
 plot.MCA(res.mca,invisible="ind")
 plot.MCA(res.mca,choix="var")
+plot(res.mca,invisible=c("ind"),autoLab="yes", selectMod="cos2 10")
+plot(res.mca,autoLab="yes", selectMod="cos2 5", select="cos2 5")
 }
 
 \keyword{dplot}

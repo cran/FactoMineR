@@ -26,7 +26,8 @@ PCA <- function (X, scale.unit = TRUE, ncp = 5, ind.sup = NULL, quanti.sup = NUL
     Xtot <- X
     if (!is.null(quali.sup)) 
         X <- X[, -quali.sup]
-    if (!any(apply(X, 2, is.numeric))) {
+    if (any(!sapply(X, is.numeric))) {
+#    if (!any(apply(X, 2, is.numeric))) {
         auxi = NULL
         for (j in 1:ncol(X)) if (!is.numeric(X[, j])) 
             auxi = c(auxi, colnames(X)[j])

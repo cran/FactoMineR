@@ -13,7 +13,8 @@ fct.eta2 <- function(vec,x,weights) {
 #    for (j in 1:ncol(X)) if (colnames(X)[j]=="") colnames(X)[j] = paste("V",j,sep="")
 #    for (j in 1:nrow(X)) if (is.null(rownames(X)[j])) rownames(X)[j] = paste("row",j,sep="")
     Xtot <- X
-    if (!any(apply(X,2,is.numeric))){
+    if (any(!sapply(X, is.numeric))) {
+#    if (!any(apply(X,2,is.numeric))){
       auxi = NULL
       for (j in (1:ncol(X))[!((1:ncol(X))%in%quali.sup)]) if (!is.numeric(X[,j])) auxi = c(auxi,colnames(X)[j])
       if (!is.null(auxi)) stop(paste("\nThe following variables are not quantitative: ", auxi))

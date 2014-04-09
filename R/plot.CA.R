@@ -86,7 +86,8 @@ if (choix=="ca"){
 		else {
 		  if (sum(rownames(res.ca$row$coord)%in%selectRow)+sum(rownames(res.ca$row.sup$coord)%in%selectRow)!=0) selection <- which(rownames(res.ca$row$coord)%in%selectRow)
 		  else {
- 		    if (grepl("contrib",selectRow)) selection <- (rev(order(apply(res.ca$row$contrib[,axes],1,sum))))[1:min(nrow(res.ca$row$coord),sum(as.integer(unlist(strsplit(selectRow,"contrib"))),na.rm=T))]
+ 		    if (grepl("contrib",selectRow)) selection <- (rev(order(res.ca$row$contrib[,axes[1],drop=FALSE]*res.ca$eig[axes[1],1]+res.ca$row$contrib[,axes[2],drop=FALSE]*res.ca$eig[axes[2],1])))[1:min(nrow(res.ca$row$coord),sum(as.integer(unlist(strsplit(selectRow,"contrib"))),na.rm=T))]
+# 		    if (grepl("contrib",selectRow)) selection <- (rev(order(apply(res.ca$row$contrib[,axes],1,sum))))[1:min(nrow(res.ca$row$coord),sum(as.integer(unlist(strsplit(selectRow,"contrib"))),na.rm=T))]
  		    if (grepl("inertia",selectRow)) selection <- (rev(order(res.ca$row$inertia)))[1:min(nrow(res.ca$row$coord),sum(as.integer(unlist(strsplit(selectRow,"inertia"))),na.rm=T))]
  		    if (grepl("coord",selectRow)) selection <- (rev(order(apply(res.ca$row$coord[,axes,drop=FALSE]^2,1,sum))))[1:min(nrow(res.ca$row$coord),sum(as.integer(unlist(strsplit(selectRow,"coord"))),na.rm=T))]
  		    if (grepl("cos2",selectRow)) {
@@ -119,7 +120,8 @@ if (choix=="ca"){
 		else {
 		  if (sum(rownames(res.ca$col.sup$coord)%in%selectCol)+sum(rownames(res.ca$col$coord)%in%selectCol)!=0) selectionC <- which(rownames(res.ca$col$coord)%in%selectCol)
 		  else {
- 		    if (grepl("contrib",selectCol)) selectionC <- (rev(order(apply(res.ca$col$contrib[,axes,drop=FALSE],1,sum))))[1:min(nrow(res.ca$col$coord),sum(as.integer(unlist(strsplit(selectCol,"contrib"))),na.rm=T))]
+ 		    if (grepl("contrib",selectCol)) selectionC <- (rev(order(res.ca$col$contrib[,axes[1],drop=FALSE]*res.ca$eig[axes[1],1]+res.ca$col$contrib[,axes[2],drop=FALSE]*res.ca$eig[axes[2],1])))[1:min(nrow(res.ca$col$coord),sum(as.integer(unlist(strsplit(selectCol,"contrib"))),na.rm=T))]
+# 		    if (grepl("contrib",selectCol)) selectionC <- (rev(order(apply(res.ca$col$contrib[,axes,drop=FALSE],1,sum))))[1:min(nrow(res.ca$col$coord),sum(as.integer(unlist(strsplit(selectCol,"contrib"))),na.rm=T))]
  		    if (grepl("inertia",selectCol)) selectionC <- (rev(order(res.ca$col$inertia)))[1:min(nrow(res.ca$col$coord),sum(as.integer(unlist(strsplit(selectCol,"inertia"))),na.rm=T))]
  		    if (grepl("coord",selectCol)) selectionC <- (rev(order(apply(res.ca$col$coord[,axes,drop=FALSE]^2,1,sum))))[1:min(nrow(res.ca$col$coord),sum(as.integer(unlist(strsplit(selectCol,"coord"))),na.rm=T))]
  		    if (grepl("cos2",selectCol)) {

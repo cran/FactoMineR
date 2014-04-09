@@ -7,7 +7,7 @@ MFA <- function (base, group, type = rep("s",length(group)), ind.sup = NULL, ncp
         res <- sqrt(sum(V^2 * poids,na.rm=TRUE)/sum(poids[!is.na(V)]))
     }
 if (!is.null(tab.comp)){
-  if (!is.null(weight.col.mfa)) stop("Weigthings on the variables are not allowed with the tab.comp argument")
+  if (!is.null(weight.col.mfa)) stop("Weightings on the variables are not allowed with the tab.comp argument")
   if (!is.null(ind.sup)) stop("Supplementary individuals are not allowed with tab.comp")
   if (!is.null(num.group.sup)) stop("Supplementary groups are not allowed with tab.comp")
 }

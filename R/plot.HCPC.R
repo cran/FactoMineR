@@ -39,7 +39,7 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
         xlab=" "
       }
       scale.y=((max(y)-min(y))/(max(x)-min(x)))
-      s=scatterplot3d(x, y, z, zlim=c(0,max(height)),
+      s=scatterplot3d::scatterplot3d(x, y, z, zlim=c(0,max(height)),
         xlab=xlab, ylab=ylab, zlab="height", box=FALSE,
         color=X$clust, pch=20,
         scale.y=scale.y, y.ticklabs=y.ticklabs,...)

@@ -44,7 +44,7 @@ if you click on a point for which the partial points are yet drawn, the partial 
 To stop the interactive plot, click on the title (or in the top of the graph)
 }
 
-\author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{husson@agrocampus-ouest.fr}, Jeremy Mazet}
 
 \seealso{ \code{\link{MFA}}, \code{\link{plot.MFA}}}
 

@@ -1,4 +1,4 @@
-summary.MCA <- function(object,nb.dec=3,nbelements=10,ncp=3,align.names=TRUE,file="",...){
+summary.MCA <- function(object,nb.dec=3,nbelements=10,nbind=nbelements,ncp=3,align.names=TRUE,file="",...){
 
   print2 <- function(mat,file=""){
 	if (file=="") print(mat, quote = FALSE, right = TRUE)
@@ -78,18 +78,20 @@ print3 <- function(obj,file="",ncp,width.row=0,nbelements=nbelements){
 	for (k in 1:length(aux)) width.row = max(width.row,nchar(rownames(res[aux[k]][[1]]$coord)[1:min(nrow(res[aux[k]][[1]]$coord),nbelements)]))
   }
 
-   if (nrow(res$ind$coord) <= nbelements) cat("\nIndividuals\n",file=file,append=TRUE)
-   else cat(paste("\nIndividuals (the ",nbelements," first)\n",sep=""),file=file,append=TRUE)
-  print3(res$ind,file=file,ncp=ncp,width.row=width.row,nbelements=nbelements)
+   if (nbind>0){
+   if (nrow(res$ind$coord) <= nbind) cat("\nIndividuals\n",file=file,append=TRUE)
+   else cat(paste("\nIndividuals (the ",nbind," first)\n",sep=""),file=file,append=TRUE)
+  print3(res$ind,file=file,ncp=ncp,width.row=width.row,nbelements=nbind)
 
   if (!is.null(res$ind.sup)){
    cat("\nSupplementary individual",file=file,append=TRUE)
    if (nrow(res$ind.sup$coord)>1) cat("s",file=file,append=TRUE)
-   if (nrow(res$ind.sup$coord) > nbelements) cat(paste(" (the ",nbelements," first)",sep=""),file=file,append=TRUE)
+   if (nrow(res$ind.sup$coord) > nbind) cat(paste(" (the ",nbind," first)",sep=""),file=file,append=TRUE)
    cat("\n",file=file,append=TRUE)
-   print3(res$ind.sup,file=file,ncp=ncp,width.row=width.row,nbelements=nbelements)
+   print3(res$ind.sup,file=file,ncp=ncp,width.row=width.row,nbelements=nbind)
   }
-  
+ }
+ 
    cat("\nCategories",file=file,append=TRUE)
    if (nrow(res$var$coord) > nbelements) cat(paste(" (the ",nbelements," first)",sep=""),file=file,append=TRUE)
    cat("\n",file=file,append=TRUE)
@@ -99,7 +101,7 @@ print3 <- function(obj,file="",ncp,width.row=0,nbelements=nbelements){
   res$var$eta2 <- cbind("|",format(round(res$var$eta2[1:min(nrow(res$quali.sup$eta2),nbelements),1:ncp,drop=FALSE],nb.dec),justify="right"),"|")
   rownames(res$var$eta2) <- format(rownames(res$var$eta2),width=width.row)
   colnames(res$var$eta2) <- c("",format(paste("Dim",1:ncp,sep="."),width=nb.dec+2)," ")
-  print2(res$var$eta2,file=file)
+  print2(as.matrix(res$var$eta2),file=file)
 
   if (!is.null(res$quali.sup)){
    cat("\nSupplementary categories",file=file,append=TRUE)
@@ -113,7 +115,7 @@ print3 <- function(obj,file="",ncp,width.row=0,nbelements=nbelements){
   res$quali.sup$eta2 <- cbind("|",format(round(res$quali.sup$eta2[1:min(nrow(res$quali.sup$eta2),nbelements),1:ncp,drop=FALSE],nb.dec),justify="right"),"|")
   rownames(res$quali.sup$eta2) <- format(rownames(res$quali.sup$eta2),width=width.row)
   colnames(res$quali.sup$eta2) <- c("",format(paste("Dim",1:ncp,sep="."),width=nb.dec+2)," ")
-  print2(res$quali.sup$eta2,file=file)
+  print2(as.matrix(res$quali.sup$eta2),file=file)
   }
 
   if (!is.null(res$quanti.sup)){

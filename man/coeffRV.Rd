@@ -36,7 +36,8 @@ A list containing the following components:
 
 \references{
 Escouffier, Y. (1973) \emph{Le traitement des variables vectorielles}. Biometrics \bold{29} 751--760.\cr
-Josse, J., Husson, F., Pag\`es, J. (2007) \emph{Testing the significance of the RV coefficient}. Aveiro, Portugal\cr
+Josse, J., Husson, F., Pag\`es, J. (2007) \emph{Testing the significance of the RV coefficient}. 
+  Computational Statististics and Data Analysis. \bold{53} 82--91.\cr
 Kazi-Aoual, F., Hitier, S., Sabatier, R., Lebreton, J.-D., (1995) Refined approximations to permutations tests 
 for multivariate inference. Computational Statistics and Data Analysis, \bold{20}, 643--656 \cr
 }

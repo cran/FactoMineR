@@ -89,7 +89,7 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE, ax
         data.partiel <- vector(mode = "list", length = nbgroup)
         group.mod <- Xdes[[h]]
         for (g in 1:nbgroup) {
-            data.partiel[[g]] <- as.data.frame(matrix(0, nrow(X), ncol(X), byrow = TRUE, dimnames = dimnames(data)))
+            data.partiel[[g]] <- as.data.frame(matrix(0, nrow(X), ncol(X), byrow = TRUE, dimnames = dimnames(X)))
             data.partiel[[g]][, (ind.col + 1):(ind.col + Xdes[[h]][g])] <- X[,(ind.col + 1):(ind.col + Xdes[[h]][g])]
             ind.col <- ind.col + group.mod[g]
         }

@@ -44,7 +44,8 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 		  else {
 		    if (sum(rownames(res.mfa$partial.axes$coord)%in%select)!=0) selection <- which(rownames(res.mfa$partial.axes$coord)%in%select)
 			else {
- 		    if (grepl("contrib",select)) selection <- (rev(order(apply(res.mfa$partial.axes$contrib[,axes],1,sum))))[1:min(nrow(res.mfa$partial.axes$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
+ 		    if (grepl("contrib",select)) selection <- (rev(order(res.mfa$partial.axes$contrib[,axes[1],drop=FALSE]*res.mfa$eig[axes[1],1]+res.mfa$partial.axes$contrib[,axes[2],drop=FALSE]*res.mfa$eig[axes[2],1])))[1:min(nrow(res.mfa$partial.axes$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
+# 		    if (grepl("contrib",select)) selection <- (rev(order(apply(res.mfa$partial.axes$contrib[,axes],1,sum))))[1:min(nrow(res.mfa$partial.axes$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
  		    if (grepl("coord",select)) selection <- (rev(order(apply(res.mfa$partial.axes$coord[,axes]^2,1,sum))))[1:min(nrow(res.mfa$partial.axes$coord),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
 			if (is.integer(select)) selection <- select
 			}  
@@ -177,7 +178,8 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 		  else {
 		    if (sum(rownames(res.mfa$quanti.var$coord)%in%select)+sum(rownames(res.mfa$quanti.var.sup$coord)%in%select)!=0) selection <- which(rownames(res.mfa$quanti.var$coord)%in%select)
 			else {
- 		      if (grepl("contrib",select)) selection <- (rev(order(apply(res.mfa$quanti.var$contrib[,axes],1,sum))))[1:min(nrow(res.mfa$quanti.var$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
+ 		      if (grepl("contrib",select)) selection <- (rev(order(res.mfa$quanti.var$contrib[,axes[1],drop=FALSE]*res.mfa$eig[axes[1],1]+res.mfa$quanti.var$contrib[,axes[2],drop=FALSE]*res.mfa$eig[axes[2],1])))[1:min(nrow(res.mfa$quanti.var$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
+# 		      if (grepl("contrib",select)) selection <- (rev(order(apply(res.mfa$quanti.var$contrib[,axes],1,sum))))[1:min(nrow(res.mfa$quanti.var$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
  		      if (grepl("coord",select)) selection <- (rev(order(apply(res.mfa$quanti.var$coord[,axes]^2,1,sum))))[1:min(nrow(res.mfa$quanti.var$coord),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
  		      if (grepl("cos2",select)) {
 			    if (sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T)>=1) selection <- (rev(order(apply(res.mfa$quanti.var$cos2[,axes],1,sum))))[1:min(nrow(res.mfa$quanti.var$coord),sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T))]
@@ -247,7 +249,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 		
         if ((!is.null(res.mfa["quanti.var"]$quanti.var))&(is.na(test.invisible[1]))){
         if (length(apply(res.mfa["quanti.var"]$quanti.var$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) >= lim.cos2.var)>0){
-		  coord.var <- res.mfa$quanti.var$cor[ which(apply(res.mfa$quanti.var$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) >= lim.cos2.var),axes,drop=FALSE]
+		  coord.var <- res.mfa$quanti.var$cor[which(apply(res.mfa$quanti.var$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) >= lim.cos2.var),axes,drop=FALSE]
           coo <- coord.var
           nrow.coord.var <- nrow.coord.var + nrow(coord.var)
 		  for (v in 1:nrow(coord.var)) {
@@ -366,7 +368,9 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 		else {
 		  if (sum(rownames(res.mfa$quanti.sup$coord)%in%select)+sum(rownames(res.mfa$freq$coord)%in%select)+sum(rownames(res.mfa$ind$coord)%in%select)+sum(rownames(res.mfa$ind.sup$coord)%in%select)!=0) selection <- which(rownames(res.mfa$ind$coord)%in%select)
 		  else {
- 		    if (grepl("contrib",select)) selection <- (rev(order(apply(res.mfa$ind$contrib[,axes],1,sum))))[1:min(nrow(res.mfa$ind$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
+ 		    if (grepl("contrib",select)) selection <- (rev(order(res.mfa$ind$contrib[,axes[1],drop=FALSE]*res.mfa$eig[axes[1],1]+res.mfa$ind$contrib[,axes[2],drop=FALSE]*res.mfa$eig[axes[2],1])))[1:min(nrow(res.mfa$ind$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
+print(select)
+# 		    if (grepl("contrib",select)) selection <- (rev(order(apply(res.mfa$ind$contrib[,axes],1,sum))))[1:min(nrow(res.mfa$ind$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
  		    if (grepl("inertia",select)) selection <- (rev(order(apply(res.mfa$ind$within.inertia[,axes],1,sum))))[1:min(nrow(res.mfa$ind$coord),sum(as.integer(unlist(strsplit(select,"inertia"))),na.rm=T))]
  		    if (grepl("coord",select)) selection <- (rev(order(apply(res.mfa$ind$coord[,axes]^2,1,sum))))[1:min(nrow(res.mfa$ind$coord),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
  		    if (grepl("cos2",select)) {
@@ -398,7 +402,8 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 		 else {
 		  if (sum(rownames(res.mfa$quanti.sup$coord)%in%select)+sum(rownames(res.mfa$freq$coord)%in%select)+sum(rownames(res.mfa$ind$coord)%in%select)+sum(rownames(res.mfa$ind.sup$coord)%in%select)!=0) selectionC <- which(rownames(res.mfa$freq$coord)%in%select)
 		  else {
- 		    if (grepl("contrib",select)) selectionC <- (rev(order(apply(res.mfa$freq$contrib[,axes],1,sum))))[1:min(nrow(res.mfa$freq$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
+ 		    if (grepl("contrib",select)) selectionC <- (rev(order(res.mfa$freq$contrib[,axes[1],drop=FALSE]*res.mfa$eig[axes[1],1]+res.mfa$freq$contrib[,axes[2],drop=FALSE]*res.mfa$eig[axes[2],1])))[1:min(nrow(res.mfa$freq$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
+# 		    if (grepl("contrib",select)) selectionC <- (rev(order(apply(res.mfa$freq$contrib[,axes],1,sum))))[1:min(nrow(res.mfa$freq$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
  		    if (grepl("coord",select)) selectionC <- (rev(order(apply(res.mfa$freq$coord[,axes]^2,1,sum))))[1:min(nrow(res.mfa$freq$coord),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
  		    if (grepl("cos2",select)) {
 			  if (sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T)>=1) selectionC <- (rev(order(apply(res.mfa$freq$cos2[,axes],1,sum))))[1:min(nrow(res.mfa$freq$coord),sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T))]
@@ -694,7 +699,8 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 		  else {
 		    if (sum(rownames(res.mfa$ind$coord)%in%select)!=0) selection <- which(rownames(res.mfa$ind$coord)%in%select)
 			else {
- 		    if (grepl("contrib",select)) selection <- (rev(order(apply(res.mfa$ind$contrib[,axes],1,sum))))[1:min(nrow(res.mfa$ind$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
+ 		    if (grepl("contrib",select)) selection <- (rev(order(res.mfa$ind$contrib[,axes[1],drop=FALSE]*res.mfa$eig[axes[1],1]+res.mfa$ind$contrib[,axes[2],drop=FALSE]*res.mfa$eig[axes[2],1])))[1:min(nrow(res.mfa$ind$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
+# 		    if (grepl("contrib",select)) selection <- (rev(order(apply(res.mfa$ind$contrib[,axes],1,sum))))[1:min(nrow(res.mfa$ind$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
  		    if (grepl("dist",select)) selection <- (rev(order(res.mfa$ind$dist)))[1:min(nrow(res.mfa$ind$coord),sum(as.integer(unlist(strsplit(select,"dist"))),na.rm=T))]
  		    if (grepl("coord",select)) selection <- (rev(order(apply(res.mfa$ind$coord[,axes]^2,1,sum))))[1:min(nrow(res.mfa$ind$coord),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
  		    if (grepl("cos2",select)) {

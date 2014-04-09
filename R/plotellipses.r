@@ -6,7 +6,7 @@ plotellipses <- function (model, keepvar = "all", axis = c(1, 2), means = TRUE,
 {
     monpanel <- function(x, y, level, means, nommod, magnify = magnify,
         pchmeans = pchmeans, ...) {
-        panel.xyplot(x, y, ...)
+        lattice::panel.xyplot(x, y, ...)
         panel.superpose2(x, y, level = level, means = means,
             nommod = nommod, pchmeans = pchmeans, magnify = magnify,
             panel.groups = "monpanel.ellipse", ...)
@@ -26,13 +26,13 @@ plotellipses <- function (model, keepvar = "all", axis = c(1, 2), means = TRUE,
             }
             coord.ellipse <- ellipse::ellipse(variance, centre = cdg,
                 level = level)
-            llines(coord.ellipse[, 1], coord.ellipse[, 2], col = col.line,
+            lattice::llines(coord.ellipse[, 1], coord.ellipse[, 2], col = col.line,
                 lty = lty, lwd = lwd)
         }
         else cdg <- c(x, y)
-        ltext(cdg[1], cdg[2], unique(nommod), cex = cex * magnify,
+        lattice::ltext(cdg[1], cdg[2], unique(nommod), cex = cex * magnify,
             col = col.line, pos = 3, offset = 0.4 * cex * magnify)
-        lpoints(cdg[1], cdg[2], pch = pchmeans[group.number], col = col.line, 
+        lattice::lpoints(cdg[1], cdg[2], pch = pchmeans[group.number], col = col.line, 
             cex = cex * magnify)
     }
     panel.superpose2 <- function(x, y = NULL, subscripts, groups,
@@ -50,7 +50,7 @@ plotellipses <- function (model, keepvar = "all", axis = c(1, 2), means = TRUE,
             type <- unique(type)
             wg <- match("g", type, nomatch = NA)
             if (!is.na(wg)) {
-                panel.grid(h = -1, v = -1)
+                lattice::panel.grid(h = -1, v = -1)
                 type <- type[-wg]
             }
             type <- list(type)
@@ -65,8 +65,8 @@ plotellipses <- function (model, keepvar = "all", axis = c(1, 2), means = TRUE,
                 if (missing(col.symbol))
                   col.symbol <- col
             }
-            superpose.symbol <- trellis.par.get("superpose.symbol")
-            superpose.line <- trellis.par.get("superpose.line")
+            superpose.symbol <- lattice::trellis.par.get("superpose.symbol")
+            superpose.line <- lattice::trellis.par.get("superpose.line")
             vals <- if (is.factor(groups))
                 levels(groups)
             else sort(unique(groups))
@@ -257,7 +257,7 @@ if (nbevar==1) {
 #            " (", round(model$eig[axis[2], 2], 1), "%)", sep = ""), ylim=ylim, xlim=xlim)
 
     if ( length(pch.means) < max(modalite2)) pch.means <- rep(pch.means,length=max(modalite2))
-    xyplot(y ~ x | var, data = don, groups = modalite, panel = monpanel, 
+    lattice::xyplot(y ~ x | var, data = don, groups = modalite, panel = monpanel, 
         level = level, means = means, magnify = magnify, cex = cex, 
         pch = pch, pchmeans = pch.means, nommod = nommod, type = type, 
         xlab = paste("Dim ", axis[1], " (", round(model$eig[axis[1], 

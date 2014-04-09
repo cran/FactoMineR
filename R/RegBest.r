@@ -7,7 +7,7 @@ RegBest = function(y,x, int = TRUE, wt=NULL, na.action = na.omit,method=c("r2","
   if (is.null(colnames(x))) colnames(x) = paste("v",1:ncol(x),sep="")
   colnames(x) = chartr(" ",".",colnames(x))
   method <- method[1]
-  aa = leaps(x=x, y=y, wt=wt, int=int, method=method, nbest=nbest, names=colnames(x))
+  aa = leaps::leaps(x=x, y=y, wt=wt, int=int, method=method, nbest=nbest, names=colnames(x))
   result = vector(mode = "list", length = nrow(aa$which))
   best.p = 1
   mat = matrix(NA,nrow(aa$which),2)

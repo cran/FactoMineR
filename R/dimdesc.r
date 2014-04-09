@@ -5,14 +5,14 @@ dimdesc=function (res, axes = 1:3, proba = 0.05)
         stop("non convenient data")
     if (inherits(res, "CA")) {
         result <- structure(vector(mode = "list", length = length(axes)), names = colnames(res$row$coord)[axes])
-		tableau <- res$row$coord[,axes]
-        if (!is.null(res$call$row.sup))  tableau = rbind.data.frame(tableau,res$row.sup$coord[,axes])	
+		tableau <- res$row$coord[,axes,drop=FALSE]
+        if (!is.null(res$call$row.sup))  tableau = rbind.data.frame(tableau,res$row.sup$coord[,axes,drop=FALSE])	
 		tableaucol <- res$col$coord[, axes]
-        if (!is.null(res$call$col.sup))  tableaucol = rbind.data.frame(tableaucol,res$col.sup$coord[,axes])	
+        if (!is.null(res$call$col.sup))  tableaucol = rbind.data.frame(tableaucol,res$col.sup$coord[,axes,drop=FALSE])	
         for (k in 1:length(axes)) {
-		  tab <- tableau[order(tableau[,k]),k,drop=FALSE]
+		  tab <- tableau[order(tableau[,k,drop=FALSE]),k,drop=FALSE]
 		  colnames(tab)="coord"
-		  tabcol <- tableaucol[order(tableaucol[,k]),k,drop=FALSE]
+		  tabcol <- tableaucol[order(tableaucol[,k,drop=FALSE]),k,drop=FALSE]
 		  colnames(tabcol)="coord"
 		  result[[k]] = list(row=tab,col=tabcol)
 		}
@@ -21,9 +21,9 @@ dimdesc=function (res, axes = 1:3, proba = 0.05)
         ind.supp = res$call$ind.sup
         result = structure(vector(mode = "list", length = length(axes)), names = colnames(res$ind$coord)[axes])
         for (k in 1:length(axes)) {
-            if (!is.null(ind.supp)) tableau = cbind.data.frame(res$ind$coord[, axes[k]], res$call$X[-ind.supp, ])
-            else tableau = cbind.data.frame(res$ind$coord[, axes[k]], res$call$X)
-            result[[k]] = condes(tableau, 1, proba = proba)
+            if (!is.null(ind.supp)) tableau = cbind.data.frame(res$ind$coord[, axes[k],drop=FALSE], res$call$X[-ind.supp, ])
+            else tableau = cbind.data.frame(res$ind$coord[, axes[k],drop=FALSE], res$call$X)
+            result[[k]] <- condes(tableau, 1, proba = proba)
         }
     }
     return(result)

@@ -1,4 +1,4 @@
-summary.FAMD <- function(object,nb.dec=3,nbelements=10,ncp=3,align.names=TRUE,file="",...){
+summary.FAMD <- function(object,nb.dec=3,nbelements=10,nbind=nbelements,ncp=3,align.names=TRUE,file="",...){
 
   print2 <- function(mat,file=""){
 	if (file=="") print(mat, quote = FALSE, right = TRUE)
@@ -78,18 +78,19 @@ print3 <- function(obj,file="",ncp,width.row=0,nbelements=nbelements){
 	for (k in 1:length(aux)) width.row = max(width.row,nchar(rownames(res[aux[k]][[1]]$coord)[1:min(nrow(res[aux[k]][[1]]$coord),nbelements)]))
   }
 
-   if (nrow(res$ind$coord) <= nbelements) cat("\nIndividuals\n",file=file,append=TRUE)
-   else cat(paste("\nIndividuals (the ",nbelements," first)\n",sep=""),file=file,append=TRUE)
-   print3(res$ind,file=file,ncp=ncp,width.row=width.row,nbelements=nbelements)
+if (nbind>0){
+   if (nrow(res$ind$coord) <= nbind) cat("\nIndividuals\n",file=file,append=TRUE)
+   else cat(paste("\nIndividuals (the ",nbind," first)\n",sep=""),file=file,append=TRUE)
+   print3(res$ind,file=file,ncp=ncp,width.row=width.row,nbelements=nbind)
  
    if (!is.null(res$ind.sup)){
    cat("\nSupplementary individual",file=file,append=TRUE)
    if (nrow(res$ind.sup$coord)>1) cat("s",file=file,append=TRUE)
-   if (nrow(res$ind.sup$coord) > nbelements) cat(paste(" (the ",nbelements," first)",sep=""),file=file,append=TRUE)
+   if (nrow(res$ind.sup$coord) > nbind) cat(paste(" (the ",nbind," first)",sep=""),file=file,append=TRUE)
    cat("\n",file=file,append=TRUE)
-   print3(res$ind.sup,file=file,ncp=ncp,width.row=width.row,nbelements=nbelements)
+   print3(res$ind.sup,file=file,ncp=ncp,width.row=width.row,nbelements=nbind)
   }
-
+}
   if (!is.null(res["quanti.var"]$quanti.var)) {
   cat("\nContinuous variable",file=file,append=TRUE)
   if (nrow(res["quanti.var"]$quanti.var$coord)>1) cat("s",file=file,append=TRUE)
