@@ -18,7 +18,7 @@ Draw the Correspondence Analysis (CA) graphs.
 	label = c("all","none","row","row.sup","col","col.sup","quali.sup"), 
     title = NULL, palette = NULL, autoLab = c("auto","yes","no"), 
 	new.plot=FALSE, selectRow = NULL, selectCol = NULL,
-	unselect = 0.7, shadowtext = FALSE, \dots)
+	unselect = 0.7, shadowtext = FALSE, habillage = "none", \dots)
 }
 
 \arguments{
@@ -43,11 +43,12 @@ Draw the Correspondence Analysis (CA) graphs.
   \item{selectCol}{a selection of the columns that are drawn; see the details section}
   \item{unselect}{may be either a value between 0 and 1 that gives the transparency of the unselected objects (if \code{unselect=1} the transparceny is total and the elements are not drawn, if \code{unselect=0} the elements are drawn as usual but without any label) or may be a color (for example \code{unselect="grey60"})}
   \item{shadowtext}{boolean; if true put a shadow on the labels (rectangles are written under the labels which may lead to difficulties to modify the graph with another program)}
+  \item{habillage}{color the individuals among a categorical variable (give the number of the categorical supplementary variable or its name)}
   \item{\dots}{further arguments passed to or from other methods, such as cex, cex.main, ...}
 }
 
 \value{
-Returns the individuals factor map and the variables factor map.
+Returns the factor map with the joint plot of CA.
 }
 
 \details{

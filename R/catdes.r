@@ -1,10 +1,33 @@
 catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL){
 
-  if (!is.null(row.w)) {
-    row.w=as.vector(row.w)
-	if (!any(row.w>=1)) stop("Argument row.w must be a vector of integers")
-    else donnee = donnee[rep(1:nrow(donnee),row.w),]
-  }
+#  if (!is.null(row.w)) {
+#    row.w=as.vector(row.w)
+#	if (!any(row.w>=1)) stop("Argument row.w must be a vector of integers")
+#    else donnee = donnee[rep(1:nrow(donnee),row.w),]
+#  }
+    moy.p <- function(V, fac=NULL, poids, na.rm=TRUE) {
+        if (is.null(fac)) {
+		  res <- sum(V * poids,na.rm=na.rm)/sum(poids)
+		} else {
+		  res=NULL
+		  for (i in 1:nlevels(fac)) res = c(res, sum(V[fac==levels(fac)[i]] * poids[fac==levels(fac)[i]],na.rm=na.rm)/sum(poids[fac==levels(fac)[i]]))
+		}
+		return(res)
+    }
+    ec <- function(V, fac=NULL, poids, na.rm=TRUE) {
+        if (is.null(fac)){
+  		  V <- V-moy.p(V,fac=NULL,poids,na.rm)
+		  res <- sum(V^2 * poids,na.rm=na.rm)/sum(poids)
+        } else {
+		  moy.par.mod = moy.p(V,fac=fac,poids,na.rm)
+		  res=NULL
+		  for (i in 1:nlevels(fac)) {
+		   res = c(res, sum((V[fac==levels(fac)[i]]-moy.par.mod[i])^2 * poids[fac==levels(fac)[i]],na.rm=na.rm)/sum(poids[fac==levels(fac)[i]]))
+		}}
+		return(sqrt(res))
+    }
+
+	if (is.null(row.w)) row.w=rep(1,nrow(donnee))
   lab.sauv <- lab <- colnames(donnee)
   quali=NULL
   for (i in 1:length(lab)){
@@ -23,31 +46,29 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL){
   colnames(donnee) = lab
   res = list()
 
-  nb.modalite <- length(levels(donnee[,num.var]))
+  nb.modalite <- nlevels(donnee[,num.var])
   nb.quali=length(quali)
   old.warn = options("warn")
   if (nb.quali>0){
     options(warn = -1)
     Test.chi = matrix(NA,nrow=nb.quali,ncol=2)
-    marge.li = xtabs(~donnee[,num.var])
+    ## marge.li = xtabs(~donnee[,num.var])
+	marge.li = apply(sweep(tab.disjonctif(donnee[,num.var]),1,row.w,FUN="*"),2,sum)
     nom = tri = structure(vector(mode = "list", length = nb.modalite), names = levels(donnee[,num.var]))
     indicateur.quali <- 0
     for (i in 1:nb.quali){
-      Table <- xtabs(~donnee[,num.var]+donnee[,quali[i]])
-      marge.col = xtabs(~donnee[,quali[i]])
-      Test <- chisq.test(Table,correct=FALSE)
+      # Table <- xtabs(~donnee[,num.var]+donnee[,quali[i]])
+	  Table <- t(tab.disjonctif(donnee[,num.var]))%*%sweep(tab.disjonctif(donnee[,quali[i]]),1,row.w,FUN="*")
+	  marge.col = apply(Table,2,sum)
+	  Test <- chisq.test(Table,correct=FALSE)
       Test.chi[i,1] <- Test$p.value
       Test.chi[i,2] <- Test$parameter
       for (j in 1:nlevels(donnee[,num.var])) {
        for (k in 1:nlevels(donnee[,quali[i]])) {
         aux2 = Table[j,k]/marge.li[j]
         aux3 = marge.col[k]/sum(marge.col)
-#        if (aux2 > aux3) aux4 = phyper(Table[j,k]-1,marge.li[j],sum(marge.li)-marge.li[j],marge.col[k],lower.tail=FALSE)*2
-#        else aux4 = phyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k])*2
-# new
-#        if (aux2 < aux3) aux4 = phyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k])*2
-#        else aux4 = phyper(Table[j,k]+1,marge.li[j],sum(marge.li)-marge.li[j],marge.col[k],lower.tail=FALSE)*2
-		aux4 <- min(phyper(Table[j,k]-1,marge.li[j],sum(marge.li)-marge.li[j],marge.col[k])*2+dhyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k]),phyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k],lower.tail=FALSE)*2+dhyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k]))
+#		aux4 <- min(phyper(Table[j,k]-1,marge.li[j],sum(marge.li)-marge.li[j],marge.col[k])*2+dhyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k]),phyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k],lower.tail=FALSE)*2+dhyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k]))
+        aux4 <- min(phyper(round(Table[j,k],0)-1,round(marge.li[j],0),round(sum(marge.li),0)-round(marge.li[j],0),round(marge.col[k],0))*2+dhyper(round(Table[j,k],0),round(marge.li[j],0),round(sum(marge.li),0)-round(marge.li[j],0),round(marge.col[k],0)),phyper(round(Table[j,k],0),round(marge.li[j],0),round(sum(marge.li),0)-round(marge.li[j],0),round(marge.col[k],0),lower.tail=FALSE)*2+dhyper(round(Table[j,k],0),round(marge.li[j],0),round(sum(marge.li),0)-round(marge.li[j],0),round(marge.col[k],0)))
         if (aux4<proba) {
           aux5 = (1-2*as.integer(aux2>aux3))*qnorm(aux4/2)
           aux1 = Table[j,k]/marge.col[k]
@@ -96,15 +117,14 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL){
     nom = result = structure(vector(mode = "list", length = nb.modalite), names = levels(donnee[,num.var]))
 	tabF <- matrix(0, length(quanti), 2)
     for (i in 1:length(quanti)){	
-      res.aov <- summary(aov(donnee[,quanti[i]]~donnee[,num.var], na.action = na.exclude))[[1]]
+      res.aov <- summary(aov(donnee[,quanti[i]]~donnee[,num.var], na.action = na.exclude,weights=row.w))[[1]]
       tabF[i, 1] <- res.aov[1,2]/sum(res.aov[,2])
       tabF[i, 2] <- res.aov[1,5]
-      moy.mod = by(donnee[,quanti[i]],donnee[,num.var],mean,na.rm=TRUE)
-      n.mod = summary(donnee[,num.var])
-      sd.mod = by(donnee[,quanti[i]],donnee[,num.var],sd,na.rm=TRUE)
-      sd.mod = sd.mod*sqrt((n.mod-rep(1,nb.modalite))/n.mod)
-      moy = mean(donnee[,quanti[i]],na.rm=TRUE)
-      et = sd(donnee[,quanti[i]],na.rm=TRUE)*sqrt(1-1/sum(n.mod))
+      moy.mod = moy.p(donnee[,quanti[i]],fac=donnee[,num.var],poids=row.w)
+	  n.mod = apply(sweep(tab.disjonctif(donnee[,num.var]),1,row.w,FUN="*"),2,sum)
+      sd.mod = ec(donnee[,quanti[i]],fac=donnee[,num.var],poids=row.w)
+      moy = moy.p(donnee[,quanti[i]],poids=row.w)
+      et = ec(donnee[,quanti[i]],poids=row.w)
       for (j in 1:nb.modalite){
         v.test = (moy.mod[j]-moy)/et*sqrt(n.mod[j])/sqrt((sum(n.mod)-n.mod[j])/(sum(n.mod)-1))
         p.value = pnorm(abs(v.test),lower.tail = FALSE)*2

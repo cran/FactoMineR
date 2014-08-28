@@ -21,7 +21,7 @@ CA(X, ncp = 5, row.sup = NULL, col.sup = NULL, quanti.sup=NULL,
   \item{quali.sup}{a vector indicating the indexes of the categorical supplementary variables}
   \item{graph}{boolean, if TRUE a graph is displayed}
   \item{axes}{a length 2 vector specifying the components to plot}
-  \item{row.w}{an optional row weights (by default, uniform row weights)}
+  \item{row.w}{an optional row weights (by default, a vector of 1 and each row has a weight equals to its margin)}
 }
 
 \value{
@@ -49,12 +49,18 @@ Husson, F., Le, S. and Pages, J. (2010). Exploratory Multivariate Analysis by Ex
 
 \author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr},Jeremy Mazet}
 
-\seealso{ \code{\link{print.CA}}, \code{\link{summary.CA}}, \code{\link{plot.CA}}, \code{\link{dimdesc}}}
+\seealso{ \code{\link{print.CA}}, \code{\link{summary.CA}}, \code{\link{ellipseCA}}, \code{\link{plot.CA}}, \code{\link{dimdesc}},\cr
+\href{https://www.youtube.com/watch?v=Y-bXsUNX5hA&list=PLnZgp6epRBbTsZEFXi_p6W48HhNyqwxIu&index=4}{Video showing how to perform CA with FactoMineR}}
 
 \examples{
 data(children)
-res.ca <- CA (children, col.sup = 6:8, row.sup = 15:18)
+res.ca <- CA (children, row.sup = 15:18, col.sup = 6:8)
 summary(res.ca)
+## Ellipses for all the active elements
+ellipseCA(res.ca)
+## Ellipses around some columns only
+ellipseCA(res.ca,ellipse="col",col.col.ell=c(rep("blue",2),rep("transparent",3)),
+     invisible=c("row.sup","col.sup"))
 }
 
 \keyword{multivariate}

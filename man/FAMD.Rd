@@ -43,7 +43,9 @@ Pages J. (2004). Analyse factorielle de donnees mixtes. Revue Statistique Appliq
 
 \author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}, Jeremy Mazet}
 
-\seealso{ \code{\link{print.FAMD}}, \code{\link{summary.FAMD}}, \code{\link{plot.FAMD}}}
+\seealso{ \code{\link{print.FAMD}}, \code{\link{summary.FAMD}}, \code{\link{plot.FAMD}},\cr
+\href{https://www.youtube.com/watch?v=FKB96VGUgUE&list=PLnZgp6epRBbTsZEFXi_p6W48HhNyqwxIu&index=8}{Video showing how to perform FAMD with FactoMineR}}
+
 
 \examples{
 \dontrun{

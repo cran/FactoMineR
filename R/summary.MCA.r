@@ -98,7 +98,7 @@ print3 <- function(obj,file="",ncp,width.row=0,nbelements=nbelements){
   print3(res$var,file=file,ncp=ncp,width.row=width.row,nbelements=nbelements)
 
   cat("\nCategorical variables (eta2)\n",file=file,append=TRUE)
-  res$var$eta2 <- cbind("|",format(round(res$var$eta2[1:min(nrow(res$quali.sup$eta2),nbelements),1:ncp,drop=FALSE],nb.dec),justify="right"),"|")
+  res$var$eta2 <- cbind("|",format(round(res$var$eta2[1:min(nrow(res$var$eta2),nbelements),1:ncp,drop=FALSE],nb.dec),justify="right"),"|")
   rownames(res$var$eta2) <- format(rownames(res$var$eta2),width=width.row)
   colnames(res$var$eta2) <- c("",format(paste("Dim",1:ncp,sep="."),width=nb.dec+2)," ")
   print2(as.matrix(res$var$eta2),file=file)

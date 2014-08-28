@@ -27,7 +27,7 @@ Traitements Statistiques des Enquêtes (D. Grangé, L.Lebart, eds.) Dunod, 1993
 
 \examples{
 data(children)
-res.ca <- CA (children, col.sup = 6:8, row.sup = 15:18)
+res.ca <- CA (children, row.sup = 15:18, col.sup = 6:8)
 }
 
 \keyword{datasets}

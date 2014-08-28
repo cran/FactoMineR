@@ -67,7 +67,7 @@ dist2.row <- apply(sweep(Tc^2,2,marge.col,FUN="*"),1,sum)
     names(inertia.col) <- rownames(coord.col)
     names(inertia.row) <- rownames(coord.row)
     
-    res.call <- list(X = X, marge.col = marge.col, marge.row = marge.row, ncp = ncp, row.w=row.w,call=sys.calls()[[1]])
+    res.call <- list(X = X, marge.col = marge.col, marge.row = marge.row, ncp = ncp, row.w=row.w,call=sys.calls()[[1]],Xtot=Xtot,N=sum(row.w*apply(X,1,sum)))
     res.col <- list(coord = as.matrix(coord.col[, 1:ncp]), contrib = as.matrix(contrib.col[, 1:ncp] * 100), cos2 = as.matrix(cos2.col[, 1:ncp]), inertia=inertia.col)
     res.row <- list(coord = coord.row[, 1:ncp], contrib = contrib.row[, 1:ncp] * 100, cos2 = cos2.row[, 1:ncp], inertia=inertia.row)
     res <- list(eig = vp, call = res.call, row = res.row, col = res.col, svd = tmp)

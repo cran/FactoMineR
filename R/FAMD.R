@@ -21,7 +21,7 @@ FAMD <- function (base, ncp = 5, graph = TRUE,sup.var=NULL, ind.sup = NULL, axes
     if (!is.null(ind.sup)) res$ind.sup <- resultats$ind.sup
     if (!is.null(resultats["quali.var"]$quali.var)) res$quali.var <- list(coord = resultats$quali.var$coord, contrib = resultats$quali.var$contrib, cos2 = resultats$quali.var$cos2, v.test = resultats$quali.var$v.test)
     if (!is.null(resultats["quanti.var"]$quanti.var)) res$quanti.var <- resultats$quanti.var
-    if (!is.null(resultats$quali.var.sup)) res$quali.var.sup <- list(coord = resultats$quali.var.sup$coord, contrib = resultats$quali.var.sup$contrib, cos2 = resultats$quali.var.sup$cos2, v.test = resultats$quali.var.sup$v.test)
+    if (!is.null(resultats$quali.var.sup)) res$quali.var.sup <- list(coord = resultats$quali.var.sup$coord, cos2 = resultats$quali.var.sup$cos2, v.test = resultats$quali.var.sup$v.test)
     if (!is.null(resultats$quanti.var.sup)) res$quanti.var.sup <- resultats$quanti.var.sup
     res$call <- resultats$call
 	res$call$call <- sys.calls()[[1]]

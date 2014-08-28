@@ -46,7 +46,8 @@ Husson, F., Le, S. and Pages, J. (2010). Exploratory Multivariate Analysis by Ex
 }
 \author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}, Jeremy Mazet}
 
-\seealso{ \code{\link{print.PCA}}, \code{\link{summary.PCA}}, \code{\link{plot.PCA}}, \code{\link{dimdesc}}}
+\seealso{ \code{\link{print.PCA}}, \code{\link{summary.PCA}}, \code{\link{plot.PCA}}, \code{\link{dimdesc}},\cr
+\href{https://www.youtube.com/watch?v=CTSbxU6KLbM&list=PLnZgp6epRBbTsZEFXi_p6W48HhNyqwxIu&index=3}{Video showing how to perform PCA with FactoMineR}}
 
 \examples{
 data(decathlon)

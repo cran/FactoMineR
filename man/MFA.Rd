@@ -20,7 +20,7 @@ MFA (base, group, type = rep("s",length(group)), ind.sup = NULL,
 
 \arguments{
   \item{base}{a data frame with \emph{n} rows (individuals) and \emph{p} columns (variables)}
-  \item{group}{a list indicating the number of variables in each group}
+  \item{group}{a vector with the number of variables in each group}
   \item{type}{the type of variables in each group; four possibilities: "c" or "s" for quantitative variables
   (the difference is that for "s" variables are scaled to unit variance), "n" for categorical variables and
   "f" for frequencies (from a contingency tables); by default,
@@ -65,7 +65,9 @@ Becue-Bertaut, M. and Pages, J. '2008) Multiple factor analysis and clustering o
 
 \author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}, J. Mazet}
 
-\seealso{ \code{\link{print.MFA}}, \code{\link{summary.MFA}}, \code{\link{plot.MFA}}, \code{\link{dimdesc}}}
+\seealso{ \code{\link{print.MFA}}, \code{\link{summary.MFA}}, \code{\link{plot.MFA}}, \code{\link{dimdesc}},\cr
+\href{https://www.youtube.com/watch?v=g5_hM93e8HM&list=PLnZgp6epRBbTsZEFXi_p6W48HhNyqwxIu&index=6}{Video showing how to perform MFA with FactoMineR}}
+
 
 \examples{
 data(wine)

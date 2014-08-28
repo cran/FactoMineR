@@ -21,7 +21,7 @@ HCPC(res, nb.clust=0, consol=TRUE, iter.max=10, min=3,
   \item{nb.clust}{an integer. If 0, the tree is cut at the level the user clicks
   on. If -1, the tree is automatically cut at the suggested level (see
   details). If a (positive) integer, the tree is cut with nb.cluters clusters.}
-  \item{consol}{a boolean. If TRUE, a k-means consolidation is performed.}
+  \item{consol}{a boolean. If TRUE, a k-means consolidation is performed (consolidation cannot be performed if kk is used and equals a number).}
   \item{iter.max}{An integer. The maximum number of iterations for the consolidation.}
   \item{min}{an integer. The least possible number of clusters suggested.}
   \item{max}{an integer. The higher possible number of clusters suggested; by default the minimum between 10 and the number of individuals divided by 2.}
@@ -35,9 +35,14 @@ HCPC(res, nb.clust=0, consol=TRUE, iter.max=10, min=3,
   \item{graph}{If TRUE, graphics are displayed. If FALSE, no graph are displayed.}
   \item{proba}{The probability used to select axes and variables in
   catdes (see \code{\link{catdes}} for details.}
-  \item{cluster.CA}{A string equals to "rows" or "columns" for the clustering of Correspondence Analysis results.}
-  \item{kk}{An integer; if this integer is greater than 0, a Kmeans is performed with kk clusters and the top of the hierarchical tree 
-  is constructed from this partition. This is very useful if the number of individuals is high. Inf can be used to construct all the tree.}
+  \item{cluster.CA}{A string equals to "rows" or "columns" for the clustering 
+  of Correspondence Analysis results.}
+  \item{kk}{An integer corresponding to the number of clusters used in a Kmeans 
+  preprocessing before the hierarchical clustering;   the top of the hierarchical 
+  tree is then constructed from this partition. This is very useful if the number 
+  of individuals is high. Note that consolidation cannot be performed if kk is different 
+  from Inf and some graphics are not drawn. Inf is used by default and 
+  no preprocessing is done, all the graphical outputs are then given.}
   \item{\dots}{Other arguments from other methods.}
 }
 
@@ -47,7 +52,7 @@ HCPC(res, nb.clust=0, consol=TRUE, iter.max=10, min=3,
   partition is the one with the higher relative loss of inertia
   (i(clusters n+1)/i(cluster n)).
   
-  The absolut loss of inertia (i(cluster n)-i(cluster n+1)) is ploted
+  The absolute loss of inertia (i(cluster n)-i(cluster n+1)) is plotted
   with the tree.  
   
   If the ascending clustering is constructed from a data-frame with a lot of 
@@ -59,22 +64,26 @@ HCPC(res, nb.clust=0, consol=TRUE, iter.max=10, min=3,
   Returns a list including:
   \item{data.clust}{The original data with a supplementary row called
     class containing the partition.}
+  \item{desc.var}{The description of the classes by the variables.
+     See \code{\link{catdes}} for details or \code{\link{descfreq}} if clustering
+	 is performed on CA results.}
   \item{desc.axes}{The description of the classes by the factors (axes). 
      See \code{\link{catdes}} for details.}
-  \item{desc.fact}{The description of the classes by the variables.
-     See \code{\link{catdes}} for details.}
-  \item{call}{A list or parameters and internal objects.}
+  \item{call}{A list or parameters and internal objects. \code{call$t} gives the results for the hierarchical tree; 
+  \code{call$bw.before.consol} and \code{call$bw.after.consol} give the between inertia before consolidation (i.e. for the clustering obtained
+  from the hierarchical tree) and after the consolidation with Kmeans.}
   \item{ind.desc}{The paragons (para) and the more typical individuals
     of each cluster. See details.}
   
   Returns the tree and a barplot of the inertia gains, the individual
-  factor map with the tree (3D), the factor map with individuals colored
+  factor map with the tree (3D), the factor map with individuals coloured
   by cluster (2D).
 }
 
-\author{Guillaume Le Ray, Quentin Molto, Francois Husson \email{husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{husson@agrocampus-ouest.fr}, Guillaume Le Ray, Quentin Molto}
 
-\seealso{ \code{\link{plot.HCPC}}, \code{\link{catdes}}}
+\seealso{ \code{\link{plot.HCPC}}, \code{\link{catdes}},\cr
+\href{https://www.youtube.com/watch?v=4XrgWmN9erg&list=PLnZgp6epRBbTsZEFXi_p6W48HhNyqwxIu&index=7}{Video showing how to perform clustering with FactoMineR}}
 
 \examples{
 \dontrun{

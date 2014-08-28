@@ -2,9 +2,8 @@ plot.CA <- function (x, axes = c(1, 2),
     xlim = NULL, ylim = NULL, invisible = c("none","row", "col", "row.sup", "col.sup","quali.sup"), choix = c("CA","quanti.sup"), col.row = "blue",
     col.col = "red", col.row.sup = "darkblue", col.col.sup = "darkred",col.quali.sup ="magenta",
     col.quanti.sup="blue",label = c("all","none","row", "row.sup", "col","col.sup", "quali.sup"), title = NULL, palette=NULL, 
-	autoLab = c("auto","yes","no"),
-	new.plot=FALSE, selectRow = NULL, selectCol = NULL,
-    unselect = 0.7,shadowtext = FALSE,...) {
+	autoLab = c("auto","yes","no"),new.plot=FALSE, selectRow = NULL, selectCol = NULL,
+    unselect = 0.7,shadowtext = FALSE, habillage = "none",...) {
 	
     res.ca <- x
     if (is.null(palette)) palette(c("black","red","green3","blue","cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
@@ -151,18 +150,35 @@ if (choix=="ca"){
 
     if (is.null(title)) titre <- "CA factor map"
     else titre <- title
+    if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
     plot(0, 0, main = titre, xlab = paste("Dim ",axes[1]," (",format(res.ca$eig[axes[1],2],nsmall=2,digits=2),"%)",sep=""), ylab = paste("Dim ",axes[2]," (",format(res.ca$eig[axes[2],2],nsmall=2,digits=2),"%)",sep=""), xlim = xlim, ylim = ylim, col = "white", asp=1, ...)
     abline(h=0,lty=2,...)
     abline(v=0,lty=2,...)
 	
+	if (habillage != "none"){
+	    liste.quali <- colnames(res.ca$call$Xtot)[res.ca$call$quali.sup]
+        if (is.numeric(habillage)) nom.quali <- colnames(res.ca$call$Xtot)[habillage]
+		else nom.quali <- habillage
+        if (!(nom.quali %in% liste.quali)) stop("The variable ", habillage, " is not qualitative")
+        if (is.null(res.ca$row.sup)) col.row <- 1+as.integer(res.ca$call$Xtot[,nom.quali])
+		else col.row <- 1+as.integer(res.ca$call$Xtot[-res.ca$call$row.sup,nom.quali])
+		col.quali.sup <- rep(1,nrow(res.ca$quali.sup$coord))
+		col.quali.sup[which(rownames(res.ca$quali.sup$coord)%in%paste(colnames(res.ca$call$Xtot[,nom.quali,drop=FALSE]),levels(res.ca$call$Xtot[,nom.quali]),sep="."))] <- 2:(nlevels(res.ca$call$Xtot[,nom.quali])+1)
+    } 
+	if (length(col.row)==1) col.row <- rep(col.row,nrow(coord.row))
+	if (length(col.col)==1) col.col  <- rep(col.col,nrow(coord.col))
+	if ((!is.null(res.ca$row.sup))&(length(col.row.sup)==1)) col.row.sup  <- rep(col.row.sup,nrow(coord.row.sup))
+	if ((!is.null(res.ca$col.sup))&(length(col.col.sup)==1)) col.col.sup <- rep(col.col.sup,nrow(coord.col.sup))
+	if ((!is.null(res.ca$quali.sup))&(length(col.quali.sup)==1)) col.quali.sup <- rep(col.quali.sup,nrow(coord.quali.sup))
 	coo <- ipch <- labe <- coll <- fonte <- NULL
 	
     if (is.na(test.invisible[1])) {
       coo <- coord.row
       ipch <- rep(20,nrow(coord.row))
-      coll <- rep(col.row,nrow(coord.row))
+      coll <- col.row
       fonte <- rep(1,nrow(coord.row))
-      labe <- rownames(coord.row)
+      if (lab.row==TRUE) labe <- rownames(coord.row)
+	  else labe <- rep("",nrow(coord.row))
 	  if (!is.null(selection)){
 	    if (is.numeric(unselect)) coll[!((1:length(coll))%in%selection)] = rgb(t(col2rgb(coll[!((1:length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255)
 	    else coll[!((1:length(coll))%in%selection)] = unselect
@@ -173,8 +189,9 @@ if (choix=="ca"){
       coo <- rbind(coo,coord.col)
       ipch <- c(ipch,rep(17,nrow(coord.col)))
       fonte <- c(fonte,rep(1,nrow(coord.col)))
-      coll2 <- rep(col.col,nrow(coord.col))
-      labe2 <- rownames(coord.col)
+      coll2 <- col.col
+      if (lab.col==TRUE) labe2 <- rownames(coord.col)
+	  else labe2 <- rep("",nrow(coord.col))
 	  if (!is.null(selectionC)){
 	    if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionC)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionC)])),alpha=255*(1-unselect),maxColorValue=255)
 	    else coll2[!((1:length(coll2))%in%selectionC)] = unselect
@@ -187,8 +204,9 @@ if (choix=="ca"){
       coo <- rbind(coo,coord.col.sup)
       ipch <- c(ipch,rep(17,nrow(coord.col.sup)))
       fonte <- c(fonte,rep(3,nrow(coord.col.sup)))
-      coll2 <- rep(col.col.sup,nrow(coord.col.sup))
-      labe2 <- rownames(coord.col.sup)
+      coll2 <- col.col.sup
+      if (lab.col.sup==TRUE) labe2 <- rownames(coord.col.sup)
+	  else labe2 <- rep("",nrow(coord.col.sup))
 	  if (!is.null(selectionC2)){
 	    if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionC2)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionC2)])),alpha=255*(1-unselect),maxColorValue=255)
 	    else coll2[!((1:length(coll2))%in%selectionC2)] = unselect
@@ -207,8 +225,9 @@ if (choix=="ca"){
       coo <- rbind(coo,coord.row.sup)
       ipch <- c(ipch,rep(20,nrow(coord.row.sup)))
       fonte <- c(fonte,rep(3,nrow(coord.row.sup)))
-      coll2 <- rep(col.row.sup,nrow(coord.row.sup))
-      labe2 <- rownames(coord.row.sup)
+      coll2 <- col.row.sup
+      if (lab.row.sup==TRUE) labe2 <- rownames(coord.row.sup)
+	  else labe2 <- rep("",nrow(coord.row.sup))
 	  if (!is.null(selectionR2)){
 	    if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionR2)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionR2)])),alpha=255*(1-unselect),maxColorValue=255)
 	    else coll2[!((1:length(coll2))%in%selectionR2)] = unselect
@@ -226,7 +245,7 @@ if (choix=="ca"){
     if (!is.null(res.ca$quali.sup) & is.na(test.invisible[5])) {
       coo <- rbind(coo,coord.quali.sup)
       ipch <- c(ipch,rep(22,nrow(coord.quali.sup)))
-      coll <- c(coll,rep(col.quali.sup,nrow(coord.quali.sup)))
+      coll <- c(coll,col.quali.sup)
       fonte <- c(fonte,rep(2,nrow(coord.quali.sup)))
       labe <- c(labe,rownames(coord.quali.sup))
     }

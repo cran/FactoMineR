@@ -15,7 +15,7 @@ catdes(donnee,num.var,proba = 0.05, row.w = NULL)}
   \item{donnee}{a data frame made up of at least one categorical variables and a set of quantitative variables and/or categorical variables}
   \item{num.var}{the indice of the variable to characterized}
   \item{proba}{the significance threshold considered to characterized the category (by default 0.05)}
-  \item{row.w}{a vector of integer corresponding to an optional row weights (by default, a vector of 1 for uniform row weights)}
+  \item{row.w}{a vector of integers corresponding to an optional row weights (by default, a vector of 1 for uniform row weights)}
 }
 
 \value{

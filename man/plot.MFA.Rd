@@ -14,7 +14,7 @@ Draw the Multiple Factor Analysis (MFA) graphs.
     lab.grpe=TRUE, lab.var=TRUE, lab.ind=TRUE, 
     lab.par=FALSE, lab.col=TRUE, habillage="ind", col.hab=NULL, 
     invisible = c("none","ind","ind.sup","quanti","quanti.sup",
-	"quali","row","row.sup","col","col.sup"), 
+	"quali","quali.sup","row","row.sup","col","col.sup"), 
 	partial = NULL, lim.cos2.var = 0., 
     chrono = FALSE, xlim = NULL, ylim = NULL, 
     title = NULL, palette = NULL, 
@@ -40,8 +40,9 @@ Draw the Multiple Factor Analysis (MFA) graphs.
   according to the different categories of this variable}
   \item{col.hab}{the colors to use. By default, colors are chosen}
   \item{invisible}{list of string; for choix ="ind", the individuals can be omit (invisible = "ind"),
-  or supplementary individuals (invisible="ind.sup") or the centerg of gravity of the categorical variables 
-  (invisible= "quali"); if invisible = c("ind","ind.sup"), just the centers of gravity are drawn; if choix="var", invisible="quanti" suppress the
+  or supplementary individuals (invisible="ind.sup") or the center of gravity of the categorical variables 
+  (invisible= "quali" or "quali.sup" for the supplementary categories); 
+  if invisible = c("ind","ind.sup"), just the centers of gravity are drawn; if choix="var", invisible="quanti" suppress the
   active variable and invisible = "quanti.sup" suppress the supplementary variables}
   \item{partial}{list of the individuals or of the center of gravity for which the partial points should be drawn (by
   default, partial = NULL and no partial points are drawn)}
@@ -89,7 +90,7 @@ res <- MFA(wine,group=c(2,5,3,10,9,2),type=c("n",rep("s",5)),ncp=5,
     num.group.sup=c(1,6),graph=FALSE)
 plot(res, choix = "ind")
 plot(res, choix = "ind", partial="all")
-plot(res, choix = "Terroir")
+plot(res, choix = "ind", habillage="Label")
 plot(res, choix = "var", habillage="group")
 plot(res, choix = "axes")
 }

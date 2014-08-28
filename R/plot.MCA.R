@@ -183,7 +183,8 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
 		coo <- rbind(coo,coord.ind)
 		if (lab.ind){ labe <- c(labe,rownames(coord.ind))
 		} else  labe <- c(labe,rep("",nrow(coord.ind)))
-		coll <- c(coll,rep(col.ind,nrow(coord.ind)))
+		if (length(col.ind)==1) coll <- c(coll,rep(col.ind,nrow(coord.ind)))
+		else coll <- c(coll,col.ind)
 		if (!is.null(select)) {
 		  if (is.numeric(unselect)) coll[!((1:length(coll))%in%selection)] <- rgb(t(col2rgb(coll[!((1:length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255) 
 		  else coll[!((1:length(coll))%in%selection)] <- unselect

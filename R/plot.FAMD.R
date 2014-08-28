@@ -4,13 +4,14 @@ plot.FAMD <- function (x, choix = c("ind","var","quanti","quali"), axes = c(1, 2
     ylim = NULL, title = NULL, palette=NULL, autoLab = c("auto","yes","no"), new.plot = FALSE, 
 	select = NULL, unselect = 0.7, shadowtext=FALSE,...) {
 
-    autoLab <- match.arg(autoLab,c("auto","yes","no"))
-	if (autoLab=="yes") autoLab=TRUE
-	if (autoLab=="no") autoLab=FALSE
-    choix <- match.arg(choix,c("ind","var","quanti","quali"))
+autoLab <- match.arg(autoLab,c("auto","yes","no"))
+if (autoLab=="yes") autoLab=TRUE
+if (autoLab=="no") autoLab=FALSE
+choix <- match.arg(choix,c("ind","var","quanti","quali"))
 if (choix=="var") {
   choix="group"
   x$group$coord <- x$var$coord
+  if (!is.null(x$var$coord.sup)) x$group$coord.sup <- x$var$coord.sup
 }
 if (choix=="quanti")  choix="var"
 if (choix=="quali"){
@@ -20,7 +21,7 @@ if (choix=="quali"){
 class(x) <- c("MFA", "list")
 if ((choix=="ind") & (is.numeric(habillage))) {
   x$separate.analyses=vector(mode = "list", length = ncol(x$call$X))
-  for (i in 1:ncol(x$call$X)) x$separate.analyses[[i]]$call$X <- matrix(x$call$X[,i],ncol=1)
+  for (i in 1:ncol(x$call$X)) x$separate.analyses[[i]]$call$X <- x$call$X[,i,drop=FALSE]
  }
 plot.MFA (x, axes = axes, choix = choix, lab.var = lab.var,
     lab.ind = lab.ind, lab.par = FALSE, habillage = habillage,

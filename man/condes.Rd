@@ -9,11 +9,12 @@ Description continuous by quantitative variables and/or by categorical variables
 }
 
 \usage{
-condes(donnee,num.var,proba = 0.05)}
+condes(donnee,num.var,weights=NULL,proba = 0.05)}
 
 \arguments{
   \item{donnee}{a data frame made up of at least one quantitative variable and a set of quantitative variables and/or categorical variables}
   \item{num.var}{the number of the variable to characterized}
+  \item{weights}{weights for the individuals; if NULL, all individuals has a weight equals to 1; the sum of the weights can be equal to 1 and then the weights will be multiplied by the number of individuals, the sum can be greater than the number of individuals}
   \item{proba}{the significance threshold considered to characterized the category (by default 0.05)}
 }
 

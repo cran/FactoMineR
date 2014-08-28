@@ -115,10 +115,11 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
     if((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
     if(is.null(title)) title="Hierarchical clustering"
     if(tree.barplot){
+      def.par <- par(no.readonly = TRUE)
       par(mar=c(0.5,2,0.75,0))
       lay=matrix(ncol=5,nrow=5,c(2,4,4,4,4,2,4,4,4,4,2,4,4,4,4,2,4,4,4,4,1,3,3,3,3))
       layout(lay,respect=TRUE)
-      layout.show(n=4)
+#      layout.show(n=4)
       vec=res$call$t$inert.gain[1:max.plot]
       barplot(height=vec, col=c(rep("black", nb.clust-1), rep("grey", max(max, 15)-nb.clust+1)), space=0.9)
       plot(x=1,xlab="",ylab="",main="",col="white",axes=FALSE)
@@ -161,11 +162,12 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
 #      res2$eig=res$call$t$res$eig
 
       res2 = PCA(Y, quali.sup = ncol(Y), scale.unit = FALSE, row.w = res$call$t$res$call$row.w ,ncp = Inf, graph = FALSE)
-res2$eig <- res$call$t$res$eig
+      res2$eig <- res$call$t$res$eig
       if(ind.names) plot.PCA(res2, title=title, habillage=ncol(Y), cex=0.8,  axes=axes,new.plot=new.plot,palette=palette(),...)
       else plot.PCA(res2, title=title, habillage=ncol(Y), cex=0.8, axes=axes, label="none",new.plot=new.plot,palette=palette(),...)
       if(draw.tree) f.draw.tree(X, merge=res$call$t$tree$merge, height=res$call$t$tree$height, dimens=2, t.level=t.level, axes=axes,...)
     }
   }
+  if(choice=="tree") par(def.par)
   invisible()
 }

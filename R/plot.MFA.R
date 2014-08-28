@@ -1,6 +1,6 @@
 plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq"), ellipse = NULL, ellipse.par = NULL, 
     lab.grpe = TRUE, lab.var = TRUE, lab.ind = TRUE, lab.par = FALSE, lab.col = TRUE,
-    habillage = "ind", col.hab = NULL, invisible = c("none","ind", "ind.sup", "quanti","quanti.sup","quali","row", "row.sup","col", "col.sup"), partial = NULL, 
+    habillage = "ind", col.hab = NULL, invisible = c("none","ind", "ind.sup", "quanti","quanti.sup","quali","quali.sup","row", "row.sup","col", "col.sup"), partial = NULL, 
     lim.cos2.var = 0., chrono = FALSE, xlim = NULL, ylim = NULL, 
     title = NULL, palette = NULL, autoLab = c("auto","yes","no"),new.plot = FALSE, select = NULL,
 	unselect = 0.7,shadowtext=FALSE,...) 
@@ -20,7 +20,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     nbre.grpe <- length(group)
     type <- res.mfa$call$type
     num.group.sup = NULL
-    if (!is.null(res.mfa$group$coord.sup)) {
+    if (!is.null(res.mfa$call$num.group.sup)) {
         num.group.sup <- res.mfa$call$num.group.sup
         nbre.grpe.sup <- length(num.group.sup)
         type.sup <- type[num.group.sup]
@@ -206,24 +206,24 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 		}
 		
 		labe <- labe2 <- coll <- coll2 <- NULL
-		if (!is.null(res.mfa["quanti.var"]$quanti.var)){
+		if (!is.null(res.mfa["quanti.var"]$quanti.var)&is.na(test.invisible[1])){
 		  coll <- col[1:nrow(res.mfa["quanti.var"]$quanti.var$coord)]
 		  if (lab.var) labe <- rownames(res.mfa["quanti.var"]$quanti.var$coord)
 		   else  labe <- rep("",nrow(res.mfa["quanti.var"]$quanti.var$coord))
 		}
-		if (!is.null(res.mfa$quanti.var.sup)){
+		if (!is.null(res.mfa$quanti.var.sup)&is.na(test.invisible[2])){
 		  if (lab.var) labe2 <- rownames(res.mfa$quanti.var.sup$coord)
 		  else  labe2 <- rep("",nrow(res.mfa$quanti.var.sup$coord))
 		  coll2 <- col[(length(coll)+1):length(col)]
 		}
 
 	    if (!is.null(select)){
-   		    if (!is.null(res.mfa["quanti.var"]$quanti.var)){			
+   		    if (!is.null(res.mfa["quanti.var"]$quanti.var)&is.na(test.invisible[1])){			
 		      if (is.numeric(unselect)) coll[!((1:length(coll))%in%selection)] = rgb(t(col2rgb(coll[!((1:length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255) 
 	          else coll[!((1:length(coll))%in%selection)] = unselect
 			  labe[!((1:length(coll))%in%selection)] <- ""
 	        }
- 		    if (!is.null(res.mfa$quanti.var.sup)){
+ 		    if (!is.null(res.mfa$quanti.var.sup)&is.na(test.invisible[2])){
 		      if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionS)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionS)])),alpha=255*(1-unselect),maxColorValue=255) 
 	          else coll2[!((1:length(coll2))%in%selectionS)] = unselect
 			  labe2[!((1:length(coll2))%in%selectionS)] <- ""
@@ -294,6 +294,8 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 	if (choix=="freq"){
       if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
       if (is.null(palette)) palette(c("black", "red", "green3", "blue", "cyan", "magenta","darkgray", "darkgoldenrod", "darkgreen", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon"))
+      col.col = "blue"
+      col.col.sup = "lightblue"
       col.row = "black"
 	  col.row.sup = "grey60"
       coord.col <- res.mfa$freq$coord[, axes, drop = FALSE]
@@ -302,26 +304,22 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       if (!is.null(res.mfa$ind.sup)) coord.row.sup <- res.mfa$ind.sup$coord[, axes, drop = FALSE]
       if (!is.null(res.mfa$freq.sup)) coord.col.sup <- res.mfa$freq.sup$coord[, axes, drop = FALSE]
 
-      test.invisible <- vector(length = 4)
+ 	  test.invisible <- vector(length = 4)
       if (!is.null(invisible)) {
           test.invisible[1] <- match("row", invisible)
-		  if (is.na(test.invisible[1])) test.invisible[1] <- match("ind", invisible)
           test.invisible[2] <- match("col", invisible)
-		  if (is.na(test.invisible[2])) test.invisible[2] <- match("var", invisible)
           test.invisible[3] <- match("row.sup", invisible)
-		  if (is.na(test.invisible[3])) test.invisible[3] <- match("ind.sup", invisible)
           test.invisible[4] <- match("col.sup", invisible)
-		  if (is.na(test.invisible[4])) test.invisible[4] <- match("var.sup", invisible)
       }
       else  test.invisible <- rep(NA, 4)
       if (is.null(xlim)) {
         xmin <- xmax <- 0
         if(is.na(test.invisible[1])) xmin <- min(xmin, coord.row[,1])
         if(is.na(test.invisible[1])) xmax <- max(xmax, coord.row[,1])
-        if(is.na(test.invisible[3])) xmin <- min(xmin, coord.row.sup[, 1])
-        if(is.na(test.invisible[3])) xmax <- max(xmax, coord.row.sup[, 1])
         if(is.na(test.invisible[2])) xmin <- min(xmin, coord.col[,1])
         if(is.na(test.invisible[2])) xmax <- max(xmax, coord.col[,1])
+        if(is.na(test.invisible[3])) xmin <- min(xmin, coord.row.sup[, 1])
+        if(is.na(test.invisible[3])) xmax <- max(xmax, coord.row.sup[, 1])
         if(is.na(test.invisible[4])) xmin <- min(xmin, coord.col.sup[, 1])
         if(is.na(test.invisible[4])) xmax <- max(xmax, coord.col.sup[, 1])
           xlim <- c(xmin, xmax) * 1.2
@@ -334,10 +332,10 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         ymin <- ymax <- 0
         if(is.na(test.invisible[1])) ymin <- min(ymin, coord.row[,2])
         if(is.na(test.invisible[1])) ymax <- max(ymax, coord.row[,2])
-        if(is.na(test.invisible[3])) ymin <- min(ymin, coord.row.sup[,2])
-        if(is.na(test.invisible[3])) ymax <- max(ymax, coord.row.sup[,2])
         if(is.na(test.invisible[2])) ymin <- min(ymin, coord.col[,2])
         if(is.na(test.invisible[2])) ymax <- max(ymax, coord.col[,2])
+        if(is.na(test.invisible[3])) ymin <- min(ymin, coord.row.sup[,2])
+        if(is.na(test.invisible[3])) ymax <- max(ymax, coord.row.sup[,2])
         if(is.na(test.invisible[4])) ymin <- min(ymin, coord.col.sup[,2])
         if(is.na(test.invisible[4])) ymax <- max(ymax, coord.col.sup[,2])
         ylim <- c(ymin, ymax) * 1.2
@@ -366,10 +364,9 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 	  if (!is.null(select)) {
 		if (mode(select)=="numeric") selection <- select
 		else {
-		  if (sum(rownames(res.mfa$quanti.sup$coord)%in%select)+sum(rownames(res.mfa$freq$coord)%in%select)+sum(rownames(res.mfa$ind$coord)%in%select)+sum(rownames(res.mfa$ind.sup$coord)%in%select)!=0) selection <- which(rownames(res.mfa$ind$coord)%in%select)
+		  if (sum(rownames(res.mfa$freq.sup$coord)%in%select)+sum(rownames(res.mfa$freq$coord)%in%select)+sum(rownames(res.mfa$ind$coord)%in%select)+sum(rownames(res.mfa$ind.sup$coord)%in%select)!=0) selection <- which(rownames(res.mfa$ind$coord)%in%select)
 		  else {
  		    if (grepl("contrib",select)) selection <- (rev(order(res.mfa$ind$contrib[,axes[1],drop=FALSE]*res.mfa$eig[axes[1],1]+res.mfa$ind$contrib[,axes[2],drop=FALSE]*res.mfa$eig[axes[2],1])))[1:min(nrow(res.mfa$ind$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
-print(select)
 # 		    if (grepl("contrib",select)) selection <- (rev(order(apply(res.mfa$ind$contrib[,axes],1,sum))))[1:min(nrow(res.mfa$ind$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
  		    if (grepl("inertia",select)) selection <- (rev(order(apply(res.mfa$ind$within.inertia[,axes],1,sum))))[1:min(nrow(res.mfa$ind$coord),sum(as.integer(unlist(strsplit(select,"inertia"))),na.rm=T))]
  		    if (grepl("coord",select)) selection <- (rev(order(apply(res.mfa$ind$coord[,axes]^2,1,sum))))[1:min(nrow(res.mfa$ind$coord),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
@@ -384,7 +381,7 @@ print(select)
 	  if ((!is.null(select))&(!is.null(res.mfa$ind.sup$coord))) {
 		if (mode(select)=="numeric") selectionS <- select
 		else {
-		  if (sum(rownames(res.mfa$quanti.sup$coord)%in%select)+sum(rownames(res.mfa$freq$coord)%in%select)+sum(rownames(res.mfa$ind$coord)%in%select)+sum(rownames(res.mfa$ind.sup$coord)%in%select)!=0) selectionS <- which(rownames(res.mfa$ind.sup$coord)%in%select)
+		  if (sum(rownames(res.mfa$freq.sup$coord)%in%select)+sum(rownames(res.mfa$freq$coord)%in%select)+sum(rownames(res.mfa$ind$coord)%in%select)+sum(rownames(res.mfa$ind.sup$coord)%in%select)!=0) selectionS <- which(rownames(res.mfa$ind.sup$coord)%in%select)
 		  else {
  		    if (grepl("contrib",select)) selectionS <- NULL
  		    if (grepl("inertia",select)) selectionS <- (rev(order(apply(res.mfa$ind.sup$within.inertia[,axes]^2,1,sum))))[1:min(nrow(res.mfa$ind.sup$coord),sum(as.integer(unlist(strsplit(select,"inertia"))),na.rm=T))]
@@ -400,7 +397,7 @@ print(select)
 	  if ((!is.null(select))&(!is.null(res.mfa$freq$coord))) {
 		 if (mode(select)=="numeric") selectionC <- select
 		 else {
-		  if (sum(rownames(res.mfa$quanti.sup$coord)%in%select)+sum(rownames(res.mfa$freq$coord)%in%select)+sum(rownames(res.mfa$ind$coord)%in%select)+sum(rownames(res.mfa$ind.sup$coord)%in%select)!=0) selectionC <- which(rownames(res.mfa$freq$coord)%in%select)
+		  if (sum(rownames(res.mfa$freq.sup$coord)%in%select)+sum(rownames(res.mfa$freq$coord)%in%select)+sum(rownames(res.mfa$ind$coord)%in%select)+sum(rownames(res.mfa$ind.sup$coord)%in%select)!=0) selectionC <- which(rownames(res.mfa$freq$coord)%in%select)
 		  else {
  		    if (grepl("contrib",select)) selectionC <- (rev(order(res.mfa$freq$contrib[,axes[1],drop=FALSE]*res.mfa$eig[axes[1],1]+res.mfa$freq$contrib[,axes[2],drop=FALSE]*res.mfa$eig[axes[2],1])))[1:min(nrow(res.mfa$freq$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
 # 		    if (grepl("contrib",select)) selectionC <- (rev(order(apply(res.mfa$freq$contrib[,axes],1,sum))))[1:min(nrow(res.mfa$freq$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
@@ -413,16 +410,16 @@ print(select)
 		  }  
 		 }
 	  }
-	  if ((!is.null(select))&(!is.null(res.mfa$quanti.sup$coord))) {
+	  if ((!is.null(select))&(!is.null(res.mfa$freq.sup$coord))) {
 		if (mode(select)=="numeric") selectionCS <- select
 		else {
-		  if (sum(rownames(res.mfa$quanti.sup$coord)%in%select)+sum(rownames(res.mfa$freq$coord)%in%select)+sum(rownames(res.mfa$ind$coord)%in%select)+sum(rownames(res.mfa$ind.sup$coord)%in%select)!=0) selectionCS <- which(rownames(res.mfa$quanti.sup$coord)%in%select)
+		  if (sum(rownames(res.mfa$freq.sup$coord)%in%select)+sum(rownames(res.mfa$freq$coord)%in%select)+sum(rownames(res.mfa$ind$coord)%in%select)+sum(rownames(res.mfa$ind.sup$coord)%in%select)!=0) selectionCS <- which(rownames(res.mfa$freq.sup$coord)%in%select)
 		  else {
  		    if (grepl("contrib",select)) selectionCS <- NULL
- 		    if (grepl("coord",select)) selectionCS <- (rev(order(apply(res.mfa$quanti.sup$coord[,axes]^2,1,sum))))[1:min(nrow(res.mfa$quanti.sup$coord),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
+ 		    if (grepl("coord",select)) selectionCS <- (rev(order(apply(res.mfa$freq.sup$coord[,axes]^2,1,sum))))[1:min(nrow(res.mfa$freq.sup$coord),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
  		    if (grepl("cos2",select)) {
-			  if (sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T)>=1) selectionCS <- (rev(order(apply(res.mfa$quanti.sup$cos2[,axes],1,sum))))[1:min(nrow(res.mfa$quanti.sup$coord),sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T))]
-			  else selectionCS <- which(apply(res.mfa$quanti.sup$cos2[,axes],1,sum)>sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T))
+			  if (sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T)>=1) selectionCS <- (rev(order(apply(res.mfa$freq.sup$cos2[,axes],1,sum))))[1:min(nrow(res.mfa$freq.sup$coord),sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T))]
+			  else selectionCS <- which(apply(res.mfa$freq.sup$cos2[,axes],1,sum)>sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T))
 			}
 			if (is.integer(select)) selectionCS <- select
 		  }  
@@ -448,7 +445,7 @@ print(select)
 		coo <- rbind(coo,coord.col)
 		if (lab.ind){ labe2 <- rownames(coord.col)
 		} else  labe2 <- rep("",nrow(coord.col))
-		coll2 <- col[1:nrow(coord.col)]
+		coll2 <- rep(col.col,nrow(coord.col))
 		ipch <- c(ipch,rep(17,nrow(coord.col)))
 		fonte <- c(fonte,rep(1,nrow(coord.col)))
 	    if (!is.null(selectionC)){
@@ -459,11 +456,11 @@ print(select)
 		coll <- c(coll,coll2)
 		labe <- c(labe,labe2)
       }
-      if (!is.null(res.mfa$quanti.sup) & is.na(test.invisible[4])) {
+      if (!is.null(res.mfa$freq.sup) & is.na(test.invisible[4])) {
 		coo <- rbind(coo,coord.col.sup)
 		if (lab.ind){ labe2 <- rownames(coord.col.sup)
 		} else  labe2 <- rep("",nrow(coord.col.sup))
-		coll2 <- col[1:nrow(coord.col.sup)]
+		coll2 <- rep(col.col.sup,nrow(coord.col.sup))
 		ipch <- c(ipch,rep(17,nrow(coord.col.sup)))
 		fonte <- c(fonte,rep(1,nrow(coord.col.sup)))
 	    if (!is.null(selectionCS)){
@@ -471,6 +468,8 @@ print(select)
 	      else coll2[!((1:length(coll2))%in%selectionCS)] = unselect
 		  labe2[!((1:length(coll2))%in%selectionCS)] <- ""
 	    }
+		coll <- c(coll,coll2)
+		labe <- c(labe,labe2)
       }
       if (!is.null(res.mfa$ind.sup) & is.na(test.invisible[3])) {
 		coo <- rbind(coo,coord.row.sup)
@@ -490,6 +489,8 @@ print(select)
 		  else coll2[1:length(coll2)] = unselect
 		  labe2[1:length(coll2)] <- ""
     	}}
+		coll <- c(coll,coll2)
+		labe <- c(labe,labe2)
       }
 	  if (shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
       if (any(labe!="")){
@@ -713,76 +714,46 @@ print(select)
 		}
 
         if (habillage == "group") {
-            if (is.null(col.hab) | length(col.hab) != (nbre.grpe)) 
-                col.hab <- 2:(nbre.grpe + 1)
+            if (is.null(col.hab) | length(col.hab) != (nbre.grpe)) col.hab <- 2:(nbre.grpe + 1)
             col.ind <- c(rep(1, nb.ind.actif), rep(col.hab, nb.ind.actif))
-            if (!is.null(res.mfa$ind.sup)) 
-                col.ind.sup <- c(rep(1, nb.ind - nb.ind.actif), 
-                  rep(col.hab, nb.ind - nb.ind.actif))
-            if (length(group[type == "n"]) != 0) 
-                col.quali <- c(rep(1, sum(res.mfa$call$group.mod[type == 
-                  "n"])), rep(col.hab, sum(res.mfa$call$group.mod[type == 
-                  "n"])))
-            if (!is.null(res.mfa$quali.var.sup)) 
-                col.quali.sup <- c(rep(1, sum(res.mfa$call$group.mod[num.group.sup][type.sup == 
-                  "n"])), rep(col.hab, sum(res.mfa$call$group.mod[num.group.sup][type.sup == 
-                  "n"])))
-            if (!is.null(ellipse)) 
-                col.ellipse <- rep(1, nb.ind.actif)
-            if (!is.null(ellipse.par)) 
-                col.ellipse.par <- rep(col.hab, nb.ind.actif)
+            if (!is.null(res.mfa$ind.sup)) col.ind.sup <- c(rep(1, nb.ind - nb.ind.actif), rep(col.hab, nb.ind - nb.ind.actif))
+            if (length(group[type == "n"]) != 0) col.quali <- c(rep(1, sum(res.mfa$call$group.mod[type == "n"])), rep(col.hab, sum(res.mfa$call$group.mod[type == "n"])))
+            if (!is.null(res.mfa$quali.var.sup)) col.quali.sup <- c(rep(1, sum(res.mfa$call$group.mod[num.group.sup][type.sup == "n"])), rep(col.hab, sum(res.mfa$call$group.mod[num.group.sup][type.sup == "n"])))
+            if (!is.null(ellipse)) col.ellipse <- rep(1, nb.ind.actif)
+            if (!is.null(ellipse.par)) col.ellipse.par <- rep(col.hab, nb.ind.actif)
         }
         if (habillage == "ind") {
-            if (is.null(col.hab) | length(col.hab) != nb.ind) {
-                col.hab <- 1:nb.ind
-            }
-            col.ind <- c(col.hab[1:nb.ind.actif], rep(col.hab[1:nb.ind.actif], 
-                each = nbre.grpe))
-            if (!is.null(res.mfa$ind.sup)) 
-                col.ind.sup <- c(col.hab[(nb.ind.actif + 1):nb.ind], 
-                  rep(col.hab[(nb.ind.actif + 1):nb.ind], each = nbre.grpe))
-            if (length(group[type == "n"]) != 0) 
-                col.quali <- col.quali.sup <- rep("black", (1 + 
-                  nbre.grpe) * sum(res.mfa$call$group.mod[type == 
-                  "n"]))
-            if (!is.null(ellipse)) 
-                col.ellipse <- col.hab[1:nb.ind.actif]
-            if (!is.null(ellipse.par)) 
-                col.ellipse.par <- rep(col.hab[1:nb.ind.actif], 
-                  each = nbre.grpe)
+            if (is.null(col.hab) | length(col.hab) != nb.ind) col.hab <- 1:nb.ind
+            col.ind <- c(col.hab[1:nb.ind.actif], rep(col.hab[1:nb.ind.actif], each = nbre.grpe))
+            if (!is.null(res.mfa$ind.sup)) col.ind.sup <- c(col.hab[(nb.ind.actif + 1):nb.ind], rep(col.hab[(nb.ind.actif + 1):nb.ind], each = nbre.grpe))
+            if (length(group[type == "n"]) != 0) col.quali <- col.quali.sup <- rep("black", (1 + nbre.grpe) * sum(res.mfa$call$group.mod[type == "n"]))
+            if (!is.null(ellipse)) col.ellipse <- col.hab[1:nb.ind.actif]
+            if (!is.null(ellipse.par)) col.ellipse.par <- rep(col.hab[1:nb.ind.actif], each = nbre.grpe)
         }
         if ((habillage != "none") & (habillage != "ind") & (habillage != "group")) {
 			group.act <- (1:length(group))
             if (!is.null(num.group.sup))  group.act <- group.act[-num.group.sup]
-            nbre.modalite <- NULL
-            liste.quali <- NULL
+            nbre.modalite <- nbre.modalite.sup <- NULL
+            liste.quali <- liste.quali.sup <- NULL
             for (i in group.act) {
                 if (type[i] == "n") {
-                  for (k in 1:ncol(res.mfa$separate.analyses[[i]]$call$X)) nbre.modalite <- c(nbre.modalite, 
-                    nlevels(res.mfa$separate.analyses[[i]]$call$X[, 
-                      k]))
-                  if (i == 1) 
-                    liste.quali <- c(liste.quali, colnames(res.mfa$call$X[1:group[1]]))
-                  else liste.quali <- c(liste.quali, colnames(res.mfa$call$X[(sum(group[1:(i - 
-                    1)]) + 1):sum(group[1:i])]))
+                  for (k in 1:ncol(res.mfa$separate.analyses[[i]]$call$X)) nbre.modalite <- c(nbre.modalite, nlevels(res.mfa$separate.analyses[[i]]$call$X[, k]))
+                  if (i == 1) liste.quali <- c(liste.quali, colnames(res.mfa$call$X[1:group[1]]))
+                  else liste.quali <- c(liste.quali, colnames(res.mfa$call$X[(sum(group[1:(i - 1)]) + 1):sum(group[1:i])]))
                 }
             }
             if (!is.null(num.group.sup)) {
                 for (i in num.group.sup) {
                   if (type[i] == "n") {
-                    if (i == 1) 
-                      liste.quali <- c(liste.quali, colnames(res.mfa$call$X[1:group[1]]))
-                    else liste.quali <- c(liste.quali, colnames(res.mfa$call$X[(sum(group[1:(i - 
-                      1)]) + 1):sum(group[1:i])]))
-                    for (k in 1:ncol(res.mfa$separate.analyses[[i]]$call$X)) nbre.modalite <- c(nbre.modalite, 
-                      nlevels(res.mfa$separate.analyses[[i]]$call$X[, 
-                        k]))
+                    if (i == 1) liste.quali.sup <- c(liste.quali.sup, colnames(res.mfa$call$X[1:group[1]]))
+                    else liste.quali.sup <- c(liste.quali.sup, colnames(res.mfa$call$X[(sum(group[1:(i - 1)]) + 1):sum(group[1:i])]))
+                    for (k in 1:ncol(res.mfa$separate.analyses[[i]]$call$X)) nbre.modalite.sup <- c(nbre.modalite.sup, nlevels(res.mfa$separate.analyses[[i]]$call$X[, k]))
                   }
                 }
             }
             if (is.double(habillage)) nom.quali <- colnames(res.mfa$call$X)[habillage]
             else nom.quali = habillage
-            if (!(nom.quali %in% liste.quali)) stop("The variable ", habillage, " is not qualitative")
+            if (!(nom.quali %in% c(liste.quali,liste.quali.sup))) stop("The variable ", habillage, " is not qualitative")
             modalite <- levels(as.factor(res.mfa$call$X[, nom.quali]))
             col.ind <- as.numeric(as.factor(res.mfa$call$X[, nom.quali]))
             if (is.null(col.hab) | length(col.hab) != length(modalite))  col.hab <- 2:(1 + length(modalite))
@@ -795,20 +766,30 @@ print(select)
             col.ind <- c(col.ind, rep(col.ind, each = nbre.grpe))
             col.ellipse <- col.ind[1:nb.ind.actif]
             col.ellipse.par <- col.ind[-c(1:nb.ind.actif)]
-            indice.inf <- sum(nbre.modalite[0:(match(nom.quali, liste.quali) - 1)]) + 1
-            indice.sup <- indice.inf + length(modalite) - 1
             col.quali <- rep("black", sum(res.mfa$call$group.mod[type == "n"]))
-            if (length(group[type == "n"]) != 0) {
+            if (nom.quali %in% liste.quali){
+              indice.inf <- sum(nbre.modalite[0:(match(nom.quali, liste.quali) - 1)]) + 1
+              indice.sup <- indice.inf + length(modalite) - 1
+			  if (length(group[type == "n"]) != 0) {
                 for (i in 1:length(liste.quali)) {
                   if (liste.quali[i] == nom.quali) col.quali[indice.inf:indice.sup] <- col.hab
                 }
+              }
             }
             col.quali <- c(col.quali, rep(col.quali, each = nbre.grpe))
-            col.quali.sup <- col.quali
+            col.quali.sup <- rep("black", sum(res.mfa$call$group.mod[(type == "n")%in%num.group.sup]))
+            if (nom.quali %in% liste.quali.sup){
+			  indice.inf.sup <- sum(nbre.modalite.sup[0:(match(nom.quali, liste.quali.sup) - 1)]) + 1
+              indice.sup.sup <- indice.inf.sup + length(modalite) - 1
+              if (length(group[type == "n"]) != 0) {
+                for (i in 1:length(liste.quali.sup)) {
+                  if (liste.quali.sup[i] == nom.quali) col.quali.sup[indice.inf.sup:indice.sup.sup] <- col.hab
+                }
+              }
+            }
+            col.quali.sup <- c(col.quali.sup, rep(col.quali.sup, each = nbre.grpe))
         }
-        if (habillage == "none") 
-            col.ind <- col.ind.sup <- col.quali.sup <- col.quali <- col.ellipse <- col.ellipse.par <- rep("black", 
-                nb.ind * (nbre.grpe + 1))
+        if (habillage == "none") col.ind <- col.ind.sup <- col.quali.sup <- col.quali <- col.ellipse <- col.ellipse.par <- rep("black", nb.ind * (nbre.grpe + 1))
         if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY")))  dev.new(width = min(14, max(8, 8 * (xmax - xmin)/(ymax - ymin))), height = 8)
         if (is.null(palette)) palette(c("black", "red", "green3", "blue", "cyan", "magenta","darkgray", "darkgoldenrod", "darkgreen", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon"))
         if (is.null(title))  title <- "Individual factor map"
