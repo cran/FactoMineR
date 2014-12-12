@@ -1,12 +1,13 @@
 DMFA = function(don, num.fact = ncol(data), scale.unit=TRUE, ncp=5,quanti.sup=NULL,quali.sup=NULL, graph=TRUE, axes=c(1,2)){
 
   don <- as.data.frame(don)
+  don <- droplevels(don)
   if (is.null(rownames(don))) rownames(don) = 1:nrow(don)
   if (is.null(colnames(don))) colnames(don) = paste("V",1:ncol(don),sep="")
   for (j in 1:ncol(don)) if (colnames(don)[j]=="") colnames(don)[j] = paste("V",j,sep="")
   for (j in 1:nrow(don)) if (is.null(rownames(don)[j])) rownames(don)[j] = paste("row",j,sep="")
-  don = don[,c(num.fact,quali.sup,(1:ncol(don))[-c(num.fact,quali.sup,quanti.sup)],quanti.sup)]
-  num.fact=1
+  don <- don[,c(num.fact,quali.sup,(1:ncol(don))[-c(num.fact,quali.sup,quanti.sup)],quanti.sup)]
+  num.fact <- 1
   if (!is.null(quali.sup)) quali.sup = (2:(1+length(quali.sup)))
   don[,num.fact] = as.factor(don[,num.fact])
   lev <- levels(don[,num.fact])

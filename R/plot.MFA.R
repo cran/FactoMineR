@@ -294,10 +294,11 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 	if (choix=="freq"){
       if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
       if (is.null(palette)) palette(c("black", "red", "green3", "blue", "cyan", "magenta","darkgray", "darkgoldenrod", "darkgreen", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon"))
-      col.col = "blue"
-      col.col.sup = "lightblue"
-      col.row = "black"
-	  col.row.sup = "grey60"
+      if (is.null(col.hab)) col.hab=c("black","grey60","darkblue","blue")
+	  col.row = col.hab[1]
+	  col.row.sup = col.hab[2]
+      col.col = col.hab[3]
+      col.col.sup = col.hab[4]
       coord.col <- res.mfa$freq$coord[, axes, drop = FALSE]
       coord.row <- res.mfa$ind$coord[, axes]
       coord.row.sup <- coord.col.sup <- NULL

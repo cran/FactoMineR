@@ -27,7 +27,8 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL){
 		return(sqrt(res))
     }
 
-	if (is.null(row.w)) row.w=rep(1,nrow(donnee))
+  donnee <- droplevels(donnee)
+  if (is.null(row.w)) row.w=rep(1,nrow(donnee))
   lab.sauv <- lab <- colnames(donnee)
   quali=NULL
   for (i in 1:length(lab)){

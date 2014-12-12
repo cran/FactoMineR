@@ -9,10 +9,11 @@ PCA <- function (X, scale.unit = TRUE, ncp = 5, ind.sup = NULL, quanti.sup = NUL
         res <- sqrt(sum(V^2 * poids)/sum(poids))
     }
     fct.eta2 <- function(vec,x,weights) {
-      res <- summary(lm(x~vec,weights=weights))$r.squared
+      res <- summary(lm(x~vec,weights=weights,na.action=na.omit))$r.squared
     }
 
     X <- as.data.frame(X)
+	X <- droplevels(X)
     if (any(is.na(X))) {
         warnings("Missing values are imputed by the mean of the variable: you should use the imputePCA function of the missMDA package")
         if (is.null(quali.sup)) 
@@ -93,8 +94,8 @@ dist2 <- dist2.ind
     rownames(coord.ind) <- rownames(cos2.ind) <- rownames(contrib.ind) <- names(dist2) <- rownames(X)
     colnames(coord.ind) <- colnames(cos2.ind) <- colnames(contrib.ind) <- paste("Dim", 
         c(1:ncol(U)), sep = ".")
-    res.ind <- list(coord = coord.ind[, 1:ncp], cos2 = cos2.ind[, 
-        1:ncp], contrib = contrib.ind[, 1:ncp] * 100, dist = sqrt(dist2))
+    res.ind <- list(coord = coord.ind[, 1:ncp,drop=FALSE], cos2 = cos2.ind[, 
+        1:ncp,drop=FALSE], contrib = contrib.ind[, 1:ncp,drop=FALSE] * 100, dist = sqrt(dist2))
     res <- list(eig = vp, var = res.var, ind = res.ind, svd = tmp)
     if (!is.null(ind.sup)) {
         if (is.null(ecart.type)) 
@@ -148,16 +149,18 @@ dist2 <- dist2.ind
         res$quanti.sup = res.quanti.sup
     }
     if (!is.null(quali.sup)) {
-        X.quali.sup <- as.data.frame(Xtot[, quali.sup])
-        if (!is.null(ind.sup)) 
-            X.quali.sup <- as.data.frame(X.quali.sup[-ind.sup, ])
+        X.quali.sup <- as.data.frame(Xtot[, quali.sup,drop=FALSE])
+        if (!is.null(ind.sup)) X.quali.sup <- as.data.frame(X.quali.sup[-ind.sup,,drop=FALSE])
         colnames(X.quali.sup) <- colnames(Xtot)[quali.sup]
         nombre <- modalite <- NULL
 
        eta2 = matrix(NA, length(quali.sup), ncp)
+        if (ncp>1){
+ 		  for (i in 1:ncp)  eta2[, i] <- unlist(lapply(X.quali.sup,fct.eta2,res$ind$coord[,i,drop=FALSE],weights=row.w))
+		} else eta2 <- unlist(lapply(X.quali.sup,fct.eta2,res$ind$coord,weights=row.w))
+		eta2 <- as.matrix(eta2,ncol=ncp)
         colnames(eta2) = paste("Dim", 1:ncp)
         rownames(eta2) = colnames(X.quali.sup)
-        for (i in 1:ncp)  eta2[, i] <- unlist(lapply(X.quali.sup,fct.eta2,res$ind$coord[,i],weights=row.w))
 
         for (i in 1:ncol(X.quali.sup)) {
             var <- as.factor(X.quali.sup[, i])
@@ -200,7 +203,7 @@ dist2 <- dist2.ind
     }
     res$call = res.call
     class(res) <- c("PCA", "list ")
-    if (graph) {
+    if (graph & (ncp>1)) {
         plot.PCA(res, choix = "ind", axes = axes,new.plot=TRUE)
         plot.PCA(res, choix = "var", axes = axes,new.plot=TRUE,shadowtext=TRUE)
     }

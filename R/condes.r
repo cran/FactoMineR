@@ -30,7 +30,8 @@ test.aov.w <- function(y,x,w=NULL){
   resT <- cbind(Estimate,p.value)
   return(list(tabF = tabF, resT = resT))  
 }
-    lab.sauv <- lab <- colnames(donnee)
+    donnee <- droplevels(donnee)
+	lab.sauv <- lab <- colnames(donnee)
     quali = NULL
 	if (is.null(weights)) weights <- rep(1,nrow(donnee))
 	if (sum(weights)<3) weights <- weights*nrow(donnee)
@@ -79,6 +80,7 @@ test.aov.w <- function(y,x,w=NULL){
         tabT = tabT[-1, ]
         resF = resT = NULL
         if (sum(tabF[,2] < proba) > 0)  resF <- tabF[tabF[,2] < proba,,drop=FALSE]
+        if (!is.null(resF)) resF <- resF[order(resF[,2]),,drop=FALSE]
         tabT <- tabT[rev(order(sign(tabT[, 1])/tabT[, 2])), ]
         if (sum(tabT[, 2] < proba) >= 1) resT <- tabT[tabT[, 2] < proba, ,drop=FALSE]
         result$quali = resF

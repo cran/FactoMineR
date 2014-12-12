@@ -26,12 +26,11 @@ Print the Correspondence Analysis on Generalised Aggregated Lexical Table (CaGal
 
 \examples{
 
-## Not run: 
+\dontrun{
 data(health)
-res.cagalt<-CaGalt(health[,1:126],health[,127:129],type="n")
-print(res.cagalt, file="health.csv", sep = ";")
-
-## End(Not run)
+res.cagalt<-CaGalt(Y=health[,1:115],X=health[,116:118],type="n")
+print(res.cagalt)
+}
 }
 
 \keyword{multivariate}

@@ -10,7 +10,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
             sss = cbind.data.frame(res$ind$coord, res$call$X, res$call$row.w, res$call$row.w.init)
 			if (!is.null(weight)) weight <- weight[order(sss[, 1], decreasing = FALSE)]
             sss = sss[order(sss[, 1], decreasing = FALSE), ]
-            res$ind$coord = sss[, 1:ncol(res$ind$coord)]
+            res$ind$coord = sss[, 1:ncol(res$ind$coord),drop=FALSE]
             res$call$X = sss[, (ncol(res$ind$coord) + 1):(ncol(sss)-2)]
             res$call$row.w = sss[,ncol(sss)-1]
             res$call$row.w.init = sss[,ncol(sss)]
@@ -40,7 +40,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
     }
     select <- function(Y, default.size, method, coord.centers) {
         clust <- Y[1, ncol(Y)]
-        Y <- Y[, -ncol(Y)]
+        Y <- Y[, -ncol(Y),drop=FALSE]
         Z <- rbind(Y, coord.centers)
         if (nrow(Y) == 1) {
             distance <- data.frame(0, row.names = "")
@@ -58,7 +58,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
     }
     distinctivness = function(Y, default.size, method, coord.centers) {
         clust <- as.numeric(Y[1, ncol(Y)])
-        Y <- Y[, -ncol(Y)]
+        Y <- Y[, -ncol(Y),drop=FALSE]
         Z <- rbind(Y, coord.centers)
         if (nrow(Y) == 1) {
             distance <- as.matrix(dist(Z, method = method))
@@ -105,7 +105,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
 	  }
     }
     if (is.data.frame(res)){
-	  res <-  res[,unlist(lapply(res,is.numeric))]
+	  res <-  res[,unlist(lapply(res,is.numeric)),drop=FALSE]
 ### AJOUT K-means
 	  if (kk<nrow(res)){
 	    cla <- kmeans(res,centers=kk,iter.max = 100, nstart = 4)
@@ -260,6 +260,7 @@ if (kk<Inf){
   X <- cbind.data.frame(X,clust)
   if (inherits(res.sauv, "PCA") | inherits(res.sauv, "MCA") | inherits(res.sauv,"MFA") | inherits(res.sauv, "HMFA") | inherits(res.sauv, "FAMD")) data.clust <- cbind.data.frame(res.sauv$call$X[rownames(t$res$call$X),], clust)
   if (inherits(res.sauv, "data.frame")) data.clust <- X
+  if (inherits(res.sauv, "numeric")) data.clust <- X
   if (inherits(res.sauv, "CA")) {
     if (cluster.CA=="rows") data.clust <- cbind.data.frame(res.sauv$call$Xtot[rownames(t$res$call$X),],clust)
 	if (cluster.CA=="columns") data.clust <- cbind.data.frame(t(res.sauv$call$Xtot[,rownames(t$res$call$X)]),clust)
@@ -269,29 +270,30 @@ if (kk<Inf){
   if (inherits(res.sauv, "CA")&(cluster.CA=="row")) data.clust <- data.clust[rownames(res.sauv$row$coord),]
   if (inherits(res.sauv, "CA")&(cluster.CA=="columns")) data.clust <- data.clust[rownames(res.sauv$col$coord),]
   if (inherits(res.sauv, "data.frame")) data.clust <- data.clust[rownames(res.sauv),]
-    if (vec) data.clust <- as.data.frame(data.clust[, -2])
-    if (!inherits(res.sauv, "CA")) desc.var <- catdes(data.clust, ncol(data.clust), proba = proba)
-    else desc.var <- descfreq(data.clust[,-ncol(data.clust)], data.clust[,ncol(data.clust)], proba = proba)
-	if (kk==Inf) desc.axe <- catdes(X, ncol(X), proba = proba)
-    if (inherits(res.sauv, "data.frame")) tabInd <- cbind.data.frame(res.sauv,data.clust[,ncol(data.clust)])
-    if (inherits(res.sauv, "PCA") | inherits(res.sauv, "MCA") | inherits(res.sauv,"MFA") | inherits(res.sauv, "HMFA") | inherits(res.sauv, "FAMD")) tabInd <- cbind.data.frame(res.sauv$ind$coord,data.clust[,ncol(data.clust)])
-    if (inherits(res.sauv, "CA")&(cluster.CA=="rows")) tabInd <- cbind.data.frame(res.sauv$row$coord,data.clust[,ncol(data.clust)])
-    if (inherits(res.sauv, "CA")&(cluster.CA=="columns")) tabInd <- cbind.data.frame(res.sauv$col$coord,data.clust[,ncol(data.clust)])
+  if (vec) data.clust <- as.data.frame(data.clust[, -2])
+  if (!inherits(res.sauv, "CA")&!(vec)) desc.var <- catdes(data.clust, ncol(data.clust), proba = proba)
+  else desc.var <- descfreq(data.clust[,-which(sapply(data.clust,is.factor))], data.clust[,ncol(data.clust)], proba = proba)
+  if (kk==Inf) desc.axe <- catdes(X, ncol(X), proba = proba)
+  if (inherits(res.sauv, "data.frame")) tabInd <- cbind.data.frame(res.sauv,data.clust[,ncol(data.clust)])
+  if (inherits(res.sauv, "PCA") | inherits(res.sauv, "MCA") | inherits(res.sauv,"MFA") | inherits(res.sauv, "HMFA") | inherits(res.sauv, "FAMD")) tabInd <- cbind.data.frame(res.sauv$ind$coord,data.clust[,ncol(data.clust)])
+  if (inherits(res.sauv, "CA")&(cluster.CA=="rows")) tabInd <- cbind.data.frame(res.sauv$row$coord,data.clust[,ncol(data.clust)])
+  if (inherits(res.sauv, "CA")&(cluster.CA=="columns")) tabInd <- cbind.data.frame(res.sauv$col$coord,data.clust[,ncol(data.clust)])
 
-list.centers <- by(tabInd[,-ncol(tabInd)], tabInd[,ncol(tabInd)], colMeans)
+list.centers <- by(tabInd[,-ncol(tabInd),drop=FALSE], tabInd[,ncol(tabInd)], colMeans)
 centers <- matrix(unlist(list.centers), ncol = ncol(tabInd)-1,byrow = TRUE)
-colnames(centers) = colnames(tabInd[,-ncol(tabInd)])
-cluster <- tabInd[,ncol(tabInd)]
+colnames(centers) = colnames(tabInd)[-ncol(tabInd)]
+cluster <- tabInd[,ncol(tabInd),drop=FALSE]
 para <- by(tabInd, cluster, simplify = FALSE, select, default.size = nb.par, method = metric, coord.centers = centers)
 dist <- by(tabInd, cluster, simplify = FALSE, distinctivness, default.size = nb.par, method = metric, coord.centers = centers)
 desc.ind <- list(para = para, dist = dist)
 
-    call <- list(t = t, min = min, max = max, X = X, bw.before.consol=sum(rev(t$tree$height)[1:(nb.clust-1)]),bw.after.consol=res.consol$betweenss,vec = vec,call=sys.calls()[[1]])
+    if (consol) call <- list(t = t, min = min, max = max, X = X, bw.before.consol=sum(rev(t$tree$height)[1:(nb.clust-1)]),bw.after.consol=res.consol$betweenss,vec = vec,call=sys.calls()[[1]])
+	else call <- list(t = t, min = min, max = max, X = X, bw.before.consol=sum(rev(t$tree$height)[1:(nb.clust-1)]),vec = vec,call=sys.calls()[[1]])
 #    call <- list(t = t, min = min, max = max, X = data.clust, vec = vec,call=sys.calls()[[1]])
     if (kk!=Inf) res.HCPC <- list(data.clust = data.clust, desc.var = desc.var, call = call, desc.ind = desc.ind)
     else res.HCPC <- list(data.clust = data.clust, desc.var = desc.var, desc.axes = desc.axe, call = call, desc.ind = desc.ind)
     if ((kk==Inf)&(graph)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) {
-        if (vec) 
+        if (vec || (ncol(tabInd)==2)) 
             plot.HCPC(res.HCPC, choice = "3D.map", t.level = "all", angle = 0, ind.names = FALSE,new.plot=TRUE)
         else {
           plot.HCPC(res.HCPC, choice = "3D.map", t.level = "all", ind.names = TRUE,new.plot=TRUE)

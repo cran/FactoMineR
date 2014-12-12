@@ -89,6 +89,7 @@ fct.eta2 <- function(vec,x,weights) {
 #############
 
   X <- as.data.frame(X)
+  X <- droplevels(X)
   if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
   if (is.null(colnames(X))) colnames(X) = paste("V", 1:ncol(X), sep = "")
   ind.act <- (1:nrow(X))[!(1:nrow(X))%in%ind.sup]
@@ -96,10 +97,6 @@ fct.eta2 <- function(vec,x,weights) {
   if (!is.null(which(lapply(X,class)=="logical"))){
     for (k in which(lapply(X,class)=="logical")) X[,k] <- as.factor(X[,k])
   }
-  ## avoid problem when a category has 0 individuals
-    for (j in 1:ncol(X)) {
-      if (!is.numeric(X[,j])) levels(X[,j])[which(table(X[ind.act,j])==0)] <- levels(X[,j])[which(table(X[ind.act,j])!=0)[1]]
-    }
 
     if (level.ventil > 0) X <- ventil.tab(X,level.ventil=level.ventil,row.w=row.w,ind.sup=ind.sup,quali.sup=quali.sup,quanti.sup=quanti.sup)
 
@@ -248,7 +245,7 @@ if (!is.null(quanti.sup)){
     }
 
     class(res.mca) <- c("MCA", "list")
-    if (graph) {
+    if (graph & (ncp>1)) {
         plot.MCA(res.mca, choix = "ind", invisible="ind", axes = axes,new.plot=TRUE)
         if (method=="Indicator") plot.MCA(res.mca, choix = "ind", invisible=c("var","quali.sup","quanti.sup"), axes = axes,new.plot=TRUE,cex=0.8)
 		plot.MCA(res.mca, choix = "var", axes = axes,new.plot=TRUE)

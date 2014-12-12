@@ -17,7 +17,7 @@ HCPC(res, nb.clust=0, consol=TRUE, iter.max=10, min=3,
   cluster.CA="rows",kk=Inf,\dots)}
 
 \arguments{
-  \item{res}{Either the result of a factor analysis, a dataframe, or a vector.}
+  \item{res}{Either the result of a factor analysis or a dataframe.}
   \item{nb.clust}{an integer. If 0, the tree is cut at the level the user clicks
   on. If -1, the tree is automatically cut at the suggested level (see
   details). If a (positive) integer, the tree is cut with nb.cluters clusters.}

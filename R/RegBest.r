@@ -22,8 +22,8 @@ RegBest = function(y,x, int = TRUE, wt=NULL, na.action = na.omit,method=c("r2","
     if (ncol(don)>2) for (j in 3:ncol(don)) formul = paste(formul,colnames(don)[j],sep="+")
     resu = summary(lm(as.formula(as.character(formul)),data=don))
 
+   resu$pvalue =  pf(resu$fstatistic[1],resu$fstatistic[2],resu$fstatistic[3],lower.tail=F)
    if (method=="r2"){
-    resu$pvalue =  pf(resu$fstatistic[1],resu$fstatistic[2],resu$fstatistic[3],lower.tail=F)
     if (resu$pvalue<best.p) {
       best.p = resu$pvalue
       best.i = i

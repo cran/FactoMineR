@@ -35,10 +35,7 @@ for (i in 1:length(group)){
 }
 ## End add
     base <- as.data.frame(base)
-  ## avoid problem when a category has 0 individuals
-    for (j in 1:ncol(base)) {
-      if (!is.numeric(base[,j])) levels(base[,j])[which(table(base[!(1:nrow(base))%in%ind.sup,j])==0)] <- levels(base[,j])[which(table(base[!(1:nrow(base))%in%ind.sup,j])!=0)[1]]
-    }
+	base <- droplevels(base)
     if (!is.null(ind.sup)) {
       base <- rbind.data.frame(base[-ind.sup,],base[ind.sup,,drop=FALSE])
       ind.sup <- (nrow(base)-length(ind.sup)+1) : nrow(base)
@@ -511,14 +508,14 @@ tmp <- sweep(tmp,1,row.w,FUN="*")
     coord.ind.partiel <- as.data.frame(matrix(NA, (nbre.ind * length(group.actif)), ncp))
     rownames(coord.ind.partiel) <- nom.ligne
     colnames(coord.ind.partiel) <- paste("Dim", c(1:ncp), sep = ".")
-    coord.ind <- rbind(res.globale$ind$coord[, 1:ncp],res.globale$ind.sup$coord[, 1:ncp,drop=FALSE])
-    cos2.ind <- rbind(res.globale$ind$cos2[, 1:ncp],res.globale$ind.sup$cos2[, 1:ncp,drop=FALSE])
-    contrib.ind <- res.globale$ind$contrib[, 1:ncp]
+    coord.ind <- rbind(res.globale$ind$coord[, 1:ncp,drop=FALSE],res.globale$ind.sup$coord[, 1:ncp,drop=FALSE])
+    cos2.ind <- rbind(res.globale$ind$cos2[, 1:ncp,drop=FALSE],res.globale$ind.sup$cos2[, 1:ncp,drop=FALSE])
+    contrib.ind <- res.globale$ind$contrib[, 1:ncp,drop=FALSE]
     liste.ligne <- seq(1, nbre.ind * length(group.actif), by = length(group.actif))
     for (g in 1:length(group.actif)) coord.ind.partiel[liste.ligne+g-1, ] <- res.ind.partiel[[group.actif[g]]]$coord.sup[, 1:ncp,drop=FALSE]
     if (!is.null(ind.sup)) {
       res.ind.sup <- list(coord = coord.ind[(nb.actif+1):nrow(coord.ind),,drop=FALSE], cos2 = cos2.ind[(nb.actif+1):nrow(coord.ind),,drop=FALSE], coord.partiel = coord.ind.partiel[(length(group.actif)*nb.actif+1):nrow(coord.ind.partiel),,drop=FALSE])
-      res.ind <- list(coord = coord.ind[1:nb.actif,], contrib = contrib.ind, cos2 = cos2.ind[1:nb.actif,], within.inertia = inertie.intra.ind[1:nb.actif,1:ncp,drop=FALSE], coord.partiel = coord.ind.partiel[1:(length(group.actif)*nb.actif),], within.partial.inertia = inertie.intra.ind.partiel[1:(length(group.actif)*nb.actif),1:ncp,drop=FALSE] )
+      res.ind <- list(coord = coord.ind[1:nb.actif,], contrib = contrib.ind, cos2 = cos2.ind[1:nb.actif,drop=FALSE], within.inertia = inertie.intra.ind[1:nb.actif,1:ncp,drop=FALSE], coord.partiel = coord.ind.partiel[1:(length(group.actif)*nb.actif),,drop=FALSE], within.partial.inertia = inertie.intra.ind.partiel[1:(length(group.actif)*nb.actif),1:ncp,drop=FALSE] )
     }
     else res.ind <- list(coord = coord.ind, contrib = contrib.ind, cos2 = cos2.ind, within.inertia = inertie.intra.ind[,1:ncp,drop=FALSE], coord.partiel = coord.ind.partiel, within.partial.inertia = inertie.intra.ind.partiel[,1:ncp,drop=FALSE])
 
@@ -706,7 +703,7 @@ cor.partial.axes <- cov.wt(aux,wt=row.w/sum(row.w),method="ML",cor=TRUE)$cor
     resultats$global.pca = res.globale
     class(resultats) <- c("MFA", "list")
 
-    if (graph){
+    if (graph & (ncp>1)){
       if (bool.act | bool.sup){
         cg.plot.partial <- NULL
         if (!is.null(resultats["quali.var"]$quali.var)){

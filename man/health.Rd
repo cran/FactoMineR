@@ -13,16 +13,13 @@ data(health)
 }
 
 \format{
-A data frame with 392 rows and 129 columns. Rows represent the individuals (respondents), columns represent the words used at least 10 times to answer the open-ended question (columns 1 to 126) and respondents' characteristics (age, health condition and gender)
+A data frame with 392 rows and 118 columns. Rows represent the individuals (respondents), columns represent the words used at least 10 times to answer the open-ended question (columns 1 to 115) and respondents' characteristics (age, health condition and gender)
 }
 
 \examples{
 
-## Not run: 
 data(health)
-res.cagalt<-CaGalt(health[,1:126],health[,127:129],type="n",conf.ellip=TRUE)
-
-## End(Not run)
+res.cagalt<-CaGalt(Y=health[,1:115],X=health[,116:118],type="n")
 }
 
-\keyword{multivariate}
+\keyword{datasets}

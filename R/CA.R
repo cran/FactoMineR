@@ -6,6 +6,7 @@ fct.eta2 <- function(vec,x,weights) {
 
     if (is.table(X)) X <- X[,]
 	X <- as.data.frame(X)
+	X <- droplevels(X)
     if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
     if (is.null(colnames(X))) colnames(X) = paste("V",1:ncol(X),sep="")
     colnames(X)[colnames(X)==""] <- paste("V",1:sum(colnames(X)==""),sep="")
@@ -150,7 +151,7 @@ dist2.col <- apply(sweep(sweep(X.col.sup,1,marge.row,FUN="-")^2,1,1/marge.row,FU
     }
 
     class(res) <- c("CA", "list")
-    if (graph) {
+    if (graph & (ncp>1)) {
 	  plot(res,axes=axes)
 	  if (!is.null(quanti.sup)) plot(res, choix="quanti.sup",axes=axes,new.plot=TRUE)
 	}

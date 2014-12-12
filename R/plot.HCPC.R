@@ -22,9 +22,17 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
     if (dimens==2){main=NULL}
     if (dimens==3){
       if((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
-      if(vec) X[,ax1]=res$data.clust[,1]
-      x=X[,ax1]
-      if(vec) X[,ax2]=seq(min(x)/1000, max(x)/1000, length.out=length(x))
+      if(vec) {
+	    X[,ax1]=res$data.clust[,1]
+        x=X[,ax1]
+        X[,ax2]=seq(min(x)/1000, max(x)/1000, length.out=length(x))
+	  } else{ 
+         if(ncol(X)==2) {
+           X = X[,c(1,1,2)]
+           x=X[,1]
+           X[,2]=seq(min(x)/1000, max(x)/1000, length.out=length(x))
+	     } else x = X[,ax1]
+	  }
       y=X[,ax2]
       z=rep(0,nrow(X))
       X$clust=as.factor(X$clust)
@@ -58,8 +66,7 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
         y1=X[-merge[i,1],ax2]
         h1=0
         w1=1
-      }
-      else{
+      } else{
         x1=aa[merge[i,1],1]
         y1=aa[merge[i,1],2]
         w1=aa[merge[i,1],4]
@@ -70,8 +77,7 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
         y2=X[-merge[i,2],ax2]
         h2=0
         w2=1
-      }
-      else{
+      } else{
         x2=aa[merge[i,2],1]
         y2=aa[merge[i,2],2]
         w2=aa[merge[i,2],4]
@@ -89,7 +95,7 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
       }
     }
     if(dimens==3){
-      list.centers=by(X[,-ncol(X)], X$clust, colMeans)
+      list.centers=by(X[,-ncol(X),drop=FALSE], X$clust, colMeans)
       centers=matrix(unlist(list.centers), ncol=ncol(X)-1, byrow=TRUE)
       for(l in 1:nb.clust){
         if(centers.plot){
