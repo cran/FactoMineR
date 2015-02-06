@@ -17,9 +17,9 @@ A data frame with 392 rows and 118 columns. Rows represent the individuals (resp
 }
 
 \examples{
-
+\dontrun{
 data(health)
 res.cagalt<-CaGalt(Y=health[,1:115],X=health[,116:118],type="n")
 }
-
+}
 \keyword{datasets}

@@ -64,6 +64,13 @@ print3 <- function(obj,file="",ncp,width.row=0,nbelements=nbelements){
   cat(paste("\nCall:\n"),file=file)
   cat(paste(deparse(res$call$call),"\n"),file=file,append=TRUE)
   cat("\n",file=file,append=TRUE)
+
+  IT <- sum(res$eig[, 1] )* sum(res$call$X) 
+  df <- (nrow(res$call$X) - 1) * (ncol(res$call$X) - 1)
+  pc <- pchisq(IT, df = df,lower.tail = FALSE)
+  cat("The chi square of independence between the two variables is equal to", IT, 
+      "(p-value = ", pc, ").\n",file=file,append=TRUE)
+
   cat("\nEigenvalues\n",file=file,append=TRUE)
   eige <- format(t(round(res$eig[,1:3],nb.dec)),justify="right")
   rownames(eige) <- c("Variance","% of var.","Cumulative % of var.")

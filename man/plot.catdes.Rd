@@ -32,7 +32,7 @@
 \dontrun{
 data(wine)
 res.c=catdes(wine, num.var=2)
-plot.catdes(res.c)
+plot(res.c)
 }
 }
 

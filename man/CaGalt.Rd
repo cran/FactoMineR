@@ -51,8 +51,10 @@ Ca-galt on principal components.\emph{Advances in Data Analysis and Classificati
 
 \examples{
 
+\dontrun{
 ###Example with categorical variables
 data(health)
 res.cagalt<-CaGalt(Y=health[,1:115],X=health[,116:118],type="n")
+}
 }
 \keyword{multivariate}

@@ -21,6 +21,7 @@ are supplementary categorical variables.
 }
 
 \examples{
+\dontrun{
 data(tea)
 res.mca=MCA(tea,quanti.sup=19,quali.sup=20:36)
 plot(res.mca,invisible=c("var","quali.sup","quanti.sup"),cex=0.7)
@@ -31,6 +32,7 @@ plotellipses(res.mca,keepvar=1:4)
 
 ## make a hierarchical clustering: click on the tree to define the number of clusters
 ## HCPC(res.mca)
+}
 }
 
 \keyword{datasets}

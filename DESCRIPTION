@@ -1,17 +1,18 @@
 Package: FactoMineR
-Version: 1.28
-Date: 2014-08-27
-Title: Multivariate Exploratory Data Analysis and Data Mining with R
+Version: 1.29
+Date: 2015-02-06
+Title: Multivariate Exploratory Data Analysis and Data Mining
 Author: Francois Husson, Julie Josse, Sebastien Le, Jeremy Mazet
 Maintainer: Francois Husson <francois.husson@agrocampus-ouest.fr>
 Depends: R (>= 2.12.0)
-Imports: car,MASS,ellipse,lattice,cluster,scatterplot3d,leaps
-Suggests: missMDA,flashClust
+Imports:
+        car,MASS,ellipse,lattice,cluster,scatterplot3d,leaps,flashClust
+Suggests: missMDA
 Description: Exploratory data analysis methods such as principal component methods and clustering
 License: GPL (>= 2)
 URL: http://factominer.free.fr
 Encoding: latin1
-Packaged: 2014-12-12 07:55:39 UTC; husson
+Packaged: 2015-02-06 09:26:29 UTC; husson
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2014-12-12 10:56:34
+Date/Publication: 2015-02-06 11:10:14

@@ -16,13 +16,13 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
             res$call$row.w.init = sss[,ncol(sss)]
         }
         X = as.data.frame(res$ind$coord)	
-		
-		if("flashClust"%in%rownames(installed.packages())) require(flashClust, quietly = TRUE)
+
+#		if("flashClust"%in%rownames(installed.packages())) require(flashClust,quiet=TRUE)
         do <- dist(X,method=metric)^2
         if (is.null(weight)) weight=rep(1,nrow(X))
         eff <- outer(weight,weight,FUN=function(x,y,n) {x*y/n/(x+y)},n=sum(weight))
         dissi <- do*eff[lower.tri(eff)]
-        hc <- hclust(dissi, method = method, members = weight)
+        hc <- flashClust::hclust(dissi, method = method, members = weight)
 		inert.gain <- rev(hc$height)
 		if (!is.null(cla)) inert.gain <- c(inert.gain,cla$tot.withinss/sum(cla$size))
 		intra <- rev(cumsum(rev(inert.gain)))
@@ -77,6 +77,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
         else ind.car = ind.car
     }
 #### Main program
+#   if((method=="ward")&(!("flashClust"%in%rownames(installed.packages())))) method="ward.D" ### use of ward.D because I transform the distance to have the results obtained by ward.D2 
    res.sauv <- res	
    if ((kk!=Inf)&(consol==TRUE)){
      warning("No consolidation has been done after the hierarchical clustering since kk is different from Inf (see help for more details)")
@@ -181,8 +182,12 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
     clust <- cutree(as.hclust(t$tree), h = y)
     nb.clust <- max(clust)
 	X = as.data.frame(t$res$ind$coord)
+	ordColo = unique(clust[t$tree$order])
+
+
     if ((graph)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) {
-        rect <- rect.hclust(t$tree, h = y, border = seq(1, nb.clust, 1))
+#        rect <- rect.hclust(t$tree, h = y, border = seq(1, nb.clust, 1))
+        rect <- rect.hclust(t$tree, h = y, border = ordColo)
         clust <- NULL
         for (j in 1:nb.clust) clust <- c(clust, rep(j, length(rect[[j]])))
         clust <- as.factor(clust)
@@ -275,9 +280,12 @@ if (kk<Inf){
   else desc.var <- descfreq(data.clust[,-which(sapply(data.clust,is.factor))], data.clust[,ncol(data.clust)], proba = proba)
   if (kk==Inf) desc.axe <- catdes(X, ncol(X), proba = proba)
   if (inherits(res.sauv, "data.frame")) tabInd <- cbind.data.frame(res.sauv,data.clust[,ncol(data.clust)])
-  if (inherits(res.sauv, "PCA") | inherits(res.sauv, "MCA") | inherits(res.sauv,"MFA") | inherits(res.sauv, "HMFA") | inherits(res.sauv, "FAMD")) tabInd <- cbind.data.frame(res.sauv$ind$coord,data.clust[,ncol(data.clust)])
-  if (inherits(res.sauv, "CA")&(cluster.CA=="rows")) tabInd <- cbind.data.frame(res.sauv$row$coord,data.clust[,ncol(data.clust)])
-  if (inherits(res.sauv, "CA")&(cluster.CA=="columns")) tabInd <- cbind.data.frame(res.sauv$col$coord,data.clust[,ncol(data.clust)])
+  if (inherits(res.sauv, "PCA") | inherits(res.sauv, "MCA") | inherits(res.sauv,"MFA") | inherits(res.sauv, "HMFA") | inherits(res.sauv, "FAMD")) tabInd <- cbind.data.frame(res.sauv$ind$coord,data.clust[rownames(res.sauv$ind$coord),ncol(data.clust)])
+#  if (inherits(res.sauv, "CA")&(cluster.CA=="rows")) tabInd <- cbind.data.frame(res.sauv$row$coord,data.clust[,ncol(data.clust)])
+#  if (inherits(res.sauv, "CA")&(cluster.CA=="columns")) tabInd <- cbind.data.frame(res.sauv$col$coord,data.clust[,ncol(data.clust)])
+  if (inherits(res.sauv, "CA")&(cluster.CA=="rows")) tabInd <- cbind.data.frame(res.sauv$row$coord,data.clust[rownames(res.sauv$row$coord),ncol(data.clust)])
+  if (inherits(res.sauv, "CA")&(cluster.CA=="columns")) tabInd <- cbind.data.frame(res.sauv$col$coord,data.clust[rownames(res.sauv$col$coord),ncol(data.clust)])
+colnames(tabInd)[ncol(tabInd)]="Cluster"
 
 list.centers <- by(tabInd[,-ncol(tabInd),drop=FALSE], tabInd[,ncol(tabInd)], colMeans)
 centers <- matrix(unlist(list.centers), ncol = ncol(tabInd)-1,byrow = TRUE)
@@ -293,7 +301,8 @@ desc.ind <- list(para = para, dist = dist)
     if (kk!=Inf) res.HCPC <- list(data.clust = data.clust, desc.var = desc.var, call = call, desc.ind = desc.ind)
     else res.HCPC <- list(data.clust = data.clust, desc.var = desc.var, desc.axes = desc.axe, call = call, desc.ind = desc.ind)
     if ((kk==Inf)&(graph)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) {
-        if (vec || (ncol(tabInd)==2)) 
+#       plot.HCPC(res.HCPC,choice="tree",new.plot=FALSE)
+    	if (vec || (ncol(tabInd)==2)) 
             plot.HCPC(res.HCPC, choice = "3D.map", t.level = "all", angle = 0, ind.names = FALSE,new.plot=TRUE)
         else {
           plot.HCPC(res.HCPC, choice = "3D.map", t.level = "all", ind.names = TRUE,new.plot=TRUE)

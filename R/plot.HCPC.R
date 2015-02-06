@@ -137,7 +137,7 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
     
     if(rect){
       y=(res$call$t$tree$height[length(res$call$t$tree$height)-nb.clust+2]+res$call$t$tree$height[length(res$call$t$tree$height)-nb.clust+1])/2
-			ordColo <- unique(res$data.clust$clust[res$call$t$tree$order])
+			ordColo <- unique(res$call$X$clust[res$call$t$tree$order])
 			rect = rect.hclust(res$call$t$tree, h = y, border = ordColo)
     }
   }

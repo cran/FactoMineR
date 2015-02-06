@@ -81,8 +81,8 @@ plotellipses <- function (model, keepvar = "all", axis = c(1, 2), means = TRUE,
             alpha <- rep(alpha, length = nvals)
             cex <- rep(cex, length = nvals)
             font <- rep(font, length = nvals)
-            fontface <- rep(fontface, length = nvals)
-            fontfamily <- rep(fontfamily, length = nvals)
+            if (!is.null(fontface)) fontface <- rep(fontface, length = nvals)
+            if (!is.null(fontfamily)) fontfamily <- rep(fontfamily, length = nvals)
             type <- rep(type, length = nvals)
             panel.groups <- if (is.function(panel.groups))
                 panel.groups
