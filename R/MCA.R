@@ -80,9 +80,20 @@ ventilation.ordonnee <- function(Xqual,level.ventil=0.05,ind.sup=NULL,row.w=NULL
  return(Xqual)
 }
 
-fct.eta2 <- function(vec,x,weights) {
-  res <- summary(lm(x~vec,weights=weights))$r.squared
+  # fct.eta2 <- function(vec,x,weights) {
+     # res <- summary(lm(x~vec,weights=weights))$r.squared
+  # }
+  
+
+fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
+  VB <- function(xx) {
+	return(sum((colSums((tt*xx)*weights)^2)/ni))
+  }
+  tt <- tab.disjonctif(vec)
+  ni <- colSums(tt*weights)
+  unlist(lapply(as.data.frame(x),VB))/colSums(x^2*weights)
 }
+
 
 #############
 ## Main program    
@@ -90,8 +101,10 @@ fct.eta2 <- function(vec,x,weights) {
 
   X <- as.data.frame(X)
   X <- droplevels(X)
-  if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
-  if (is.null(colnames(X))) colnames(X) = paste("V", 1:ncol(X), sep = "")
+  if (is.null(attributes(X)$row.names)) rownames(X) <- 1:nrow(X)
+  if (is.null(attributes(X)$names)) colnames(X) <- colnames(X, do.NULL = FALSE,prefix="V")
+  # if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
+  # if (is.null(colnames(X))) colnames(X) = paste("V", 1:ncol(X), sep = "")
   ind.act <- (1:nrow(X))[!(1:nrow(X))%in%ind.sup]
 
   if (!is.null(which(lapply(X,class)=="logical"))){
@@ -103,13 +116,13 @@ fct.eta2 <- function(vec,x,weights) {
   niveau <- NULL
   for (j in 1:ncol(X)) niveau = c(niveau, levels(X[, j]))
   for (j in 1:ncol(X)) {
-      if (sum(niveau %in% levels(X[, j])) != nlevels(X[, j])) levels(X[, j]) = paste(colnames(X)[j], levels(X[, j]), sep = "_")
+      if (sum(niveau %in% levels(X[, j])) != nlevels(X[, j])) levels(X[, j]) = paste(attributes(X)$names[j], levels(X[, j]), sep = "_")
   }
 
 nonact <- c(quanti.sup,quali.sup)
 if (!is.null(nonact)) act <- (1:ncol(X))[-nonact]
 else act <- (1:ncol(X))
-Z <- tab.disjonctif(X[, act])
+Z <- tab.disjonctif(X[, act,drop=FALSE])
 if (any(is.na(X[,act]))){
  if (is.null(tab.disj)){
   if (na.method=="Average") {
@@ -118,7 +131,7 @@ if (any(is.na(X[,act]))){
   }
   if (na.method=="NA"){
     warnings('Missing values for one variable are considered as a new category; you can use method="Average" or use the imputeMCA function of the missMDA package')
-    for (j in act) X[,j] <- as.factor(replace(as.character(X[,j]),is.na(X[,j]),paste(colnames(X)[j],".NA",sep="")))
+    for (j in act) X[,j] <- as.factor(replace(as.character(X[,j]),is.na(X[,j]),paste(attributes(X)$names[j],".NA",sep="")))
     Z <- tab.disjonctif(X[, act])
   }
  } else Z[ind.act,] <- tab.disj
@@ -128,7 +141,7 @@ Ztot <- Z
 col.sup <- NULL
 if (!is.null(quali.sup)){
      if (any(is.na(X[,quali.sup,drop=FALSE]))){
-       for (j in quali.sup) X[,j] <- as.factor(replace(as.character(X[,j]),is.na(X[,j]),paste(colnames(X)[j],".NA",sep="")))
+       for (j in quali.sup) X[,j] <- as.factor(replace(as.character(X[,j]),is.na(X[,j]),paste(attributes(X)$names[j],".NA",sep="")))
      }
      X[,quali.sup] <- ventil.tab(X[,quali.sup,drop=FALSE],level.ventil=level.ventil,row.w=row.w,ind.sup=ind.sup)
      Zqs <- tab.disjonctif(X[, quali.sup])
@@ -143,21 +156,22 @@ if (!is.null(quanti.sup)){
      }
      X.quanti.sup <- as.matrix(X[, quanti.sup])
      if (!is.null(ind.sup)) X.quanti.sup <- X.quanti.sup[ind.act, ,drop=FALSE]
-     colnames(X.quanti.sup) = colnames(X)[quanti.sup]
+     colnames(X.quanti.sup) = attributes(X)$names[quanti.sup]
 }
 
     if (is.null(row.w)) row.w = rep(1, nrow(X) - length(ind.sup))
     if (length(row.w) != nrow(X) - length(ind.sup)) stop("length of vector row.w should be the number of active rows")
     if (tolower(method)=="burt") {  ## boucle utile pour calculer la distance au cdg et pour calculer les cos2
       res.mca <- CA(Ztot, ncp = ncol(Z)-length(act), row.sup = ind.sup, col.sup = col.sup, graph = FALSE, row.w = row.w) 
-      res.mca$col$coord <- sweep(res.mca$col$coord,2,sqrt(res.mca$eig[1:ncol(res.mca$col$coord),1]),FUN="*")
-      auxil <- apply(res.mca$col$coord^2,1,sum)
+      res.mca$col$coord <- t(t(res.mca$col$coord)*sqrt(res.mca$eig[1:ncol(res.mca$col$coord),1]))
+      auxil <- rowSums(res.mca$col$coord^2)
       if (!is.null(col.sup)){ 
-	    res.mca$col.sup$coord <- sweep(res.mca$col.sup$coord,2,sqrt(res.mca$eig[1:ncol(res.mca$col.sup$coord),1]),FUN="*")
-        auxil2 <- apply(res.mca$col.sup$coord^2,1,sum)
+	    res.mca$col.sup$coord <- t(t(res.mca$col.sup$coord)*sqrt(res.mca$eig[1:ncol(res.mca$col.sup$coord),1]))
+        auxil2 <- rowSums(res.mca$col.sup$coord^2)
 	  }
     }
-    res.mca <- CA(Ztot, ncp = ncp, row.sup = ind.sup, col.sup = col.sup, graph = FALSE, row.w = row.w)
+#    res.mca <- CA(Ztot, ncp = ncol(Z)-length(act), row.sup = ind.sup, col.sup = col.sup, graph = FALSE, row.w = row.w)
+    res.mca <- CA(Ztot, ncp = min(ncp,ncol(Z)-length(act)), row.sup = ind.sup, col.sup = col.sup, graph = FALSE, row.w = row.w)
     if (is.null(ncol(res.mca$row$coord))) res.mca$row$coord = matrix(res.mca$row$coord,ncol=1) 
     ncp <- ncol(res.mca$row$coord)
     res.mca$call$X <- X
@@ -168,15 +182,15 @@ if (!is.null(quanti.sup)){
     res.mca$call$quanti.sup = quanti.sup
     res.mca$call$row.w = row.w
 	res.mca$call$call <- sys.calls()[[1]]
-    if (length(act)>1) res.mca$eig <- res.mca$eig[1:min(length(ind.act)-1,sum(unlist(lapply(Xact,nlevels)))-ncol(Xact)),]
+    if (length(act)>1) res.mca$eig <- res.mca$eig[1:min(length(ind.act)-1,sum(sapply(Xact,nlevels))-length(act)),]
     else res.mca$eig <- res.mca$eig[1:(nlevels(Xact)-1),]
     names(res.mca)[3] <- "ind"
     res.mca$ind <- res.mca$ind[1:3]
     names(res.mca$ind) <- c("coord", "contrib", "cos2")
     names(res.mca)[4] <- "var"
     if (tolower(method)=="burt"){
-      res.mca$var$coord <- sweep(res.mca$var$coord,2,sqrt(res.mca$eig[1:ncol(res.mca$var$coord),1]),FUN="*")
-      res.mca$var$cos2 <- sweep(res.mca$var$coord^2,1,auxil,FUN="/")
+      res.mca$var$coord <- t(t(res.mca$var$coord)*sqrt(res.mca$eig[1:ncol(res.mca$var$coord),1]))
+      res.mca$var$cos2 <- res.mca$var$coord^2/auxil
     }
     res.mca$var <- res.mca$var[1:3]
     names(res.mca$var) <- c("coord", "contrib", "cos2")
@@ -191,41 +205,50 @@ if (!is.null(quanti.sup)){
         names(res.mca)[indice] <- "quali.sup"
         names(res.mca$quali.sup) <- c("coord", "cos2")
         if (tolower(method)=="burt"){
-          res.mca$quali.sup$coord <- sweep(res.mca$quali.sup$coord,2,sqrt(res.mca$eig[1:ncol(res.mca$quali.sup$coord),1]),FUN="*")
-          res.mca$quali.sup$cos2 <- sweep(res.mca$quali.sup$coord^2,1,auxil2,FUN="/")
+          res.mca$quali.sup$coord <- t(t(res.mca$quali.sup$coord)*sqrt(res.mca$eig[1:ncol(res.mca$quali.sup$coord),1]))
+          res.mca$quali.sup$cos2 <- res.mca$quali.sup$coord^2/auxil2
         }
     }
 
     if (!is.null(ind.sup)) Z = Z[ind.act, ]
-    Nj <- apply(Z * row.w, 2, sum)
+    Nj <- colSums(Z * row.w)
     N <- sum(Nj)/(ncol(X) - length(quali.sup) - length(quanti.sup))
     if (N>1) coef <- sqrt(Nj * ((N - 1)/(N - Nj)))
 	else coef <- sqrt(Nj)
-    vtest <- sweep(as.data.frame(res.mca$var$coord), 1, coef, "*")
-    res.mca$var$v.test <- as.matrix(vtest)
-    variable <- rep(colnames(Xact),unlist(lapply(Xact,nlevels)))
+    res.mca$var$v.test <- as.matrix(res.mca$var$coord*coef)
+
+	# if (ncp>1) eta2 <- t(sapply(Xact,fct.eta2,res.mca$ind$coord,weights=row.w))
+	# else {
+	  # eta2 <- as.matrix(sapply(Xact,fct.eta2,res.mca$ind$coord,weights=row.w),ncol=ncp)
+      # colnames(eta2) = paste("Dim", 1:ncp)
+      # rownames(eta2) = colnames(Xact)
+	# }
+
+    variable <- rep(attributes(Xact)$names,unlist(lapply(Xact,nlevels)))
     if (length(act)>1){
       CTR <- aggregate(res.mca$var$contrib/100,by=list(factor(variable)),FUN=sum)
       rownames(CTR) <- CTR[,1]
-      CTR <- sweep(CTR[,-1,drop=FALSE],2,res.mca$eig[1:ncp,1],FUN="*")*ncol(Xact)
-      eta2 <- CTR[colnames(Xact),,drop=FALSE]
+      CTR <- t(t(CTR[,-1,drop=FALSE])*res.mca$eig[1:ncp,1])*ncol(Xact)
+      eta2 <- CTR[attributes(Xact)$names,,drop=FALSE]
       res.mca$var$eta2 <- eta2
     }
-
+	
     if (!is.null(quali.sup)) {
         if (!is.null(ind.sup)) Zqs = Zqs[ind.act, ]
-        Nj <- apply(Zqs * row.w, 2, sum)
+        Nj <- colSums(Zqs * row.w)
         if (N>1) coef <- sqrt(Nj * ((N - 1)/(N - Nj)))
 		else coef <- sqrt(Nj)
-        res.mca$quali.sup$v.test <- as.matrix(sweep(res.mca$quali.sup$coord, 1, coef, "*"))
+        res.mca$quali.sup$v.test <- as.matrix(res.mca$quali.sup$coord*coef)
 
         eta2 = matrix(NA, length(quali.sup), ncp)
         colnames(eta2) = paste("Dim", 1:ncp)
-        rownames(eta2) = colnames(X[, quali.sup, drop = FALSE])
-#        for (k in 1:length(quali.sup)) {
-#            for (i in 1:ncp)  eta2[k, i] <- summary(lm(res.mca$ind$coord[, i] ~ X[rownames(Xact), quali.sup[k]]))$r.squared
-#        }
-        for (i in 1:ncp)  eta2[, i] <- unlist(lapply(as.data.frame(X[rownames(Xact), quali.sup]),fct.eta2,res.mca$ind$coord[,i],weights=row.w))
+        rownames(eta2) = attributes(X)$names[quali.sup]
+#        for (i in 1:ncp)  eta2[, i] <- unlist(lapply(as.data.frame(X[rownames(Xact), quali.sup]),fct.eta2,res.mca$ind$coord[,i],weights=row.w))
+		 if (ncp>1) eta2 <- t(sapply(as.data.frame(X[attributes(Xact)$row.names, quali.sup,drop=FALSE]),fct.eta2,res.mca$ind$coord,weights=row.w))
+		 else {
+		   eta2 <- as.matrix(sapply(as.data.frame(X[attributes(Xact)$row.names, quali.sup,drop=FALSE]),fct.eta2,res.mca$ind$coord,weights=row.w),ncol=ncp)
+		 }
+		
         res.mca$quali.sup$eta2 <- eta2
     }
 

@@ -111,10 +111,9 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
 	if (!is.null(selectMod)) {
 	  if (mode(selectMod)=="numeric") selection2 <- selectMod
 	  else {
-	    if (sum(rownames(res.mca$quali.sup$coord)%in%selectMod)+sum(rownames(res.mca$quali.sup$coord)%in%selectMod)!=0) selection2 <- which(rownames(res.mca$var$coord)%in%selectMod)
+	    if (sum(rownames(res.mca$var$coord)%in%selectMod)+sum(rownames(res.mca$quali.sup$coord)%in%selectMod)!=0) selection2 <- which(rownames(res.mca$var$coord)%in%selectMod)
 		else {
  	      if (grepl("contrib",selectMod)) selection2 <- (rev(order(res.mca$var$contrib[,axes[1],drop=FALSE]*res.mca$eig[axes[1],1]+res.mca$var$contrib[,axes[2],drop=FALSE]*res.mca$eig[axes[2],1])))[1:min(nrow(res.mca$var$coord),sum(as.integer(unlist(strsplit(selectMod,"contrib"))),na.rm=T))]
-# 	      if (grepl("contrib",selectMod)) selection2 <- (rev(order(apply(res.mca$var$contrib[,axes,drop=FALSE],1,sum))))[1:min(nrow(res.mca$var$coord),sum(as.integer(unlist(strsplit(selectMod,"contrib"))),na.rm=T))]
  	      if (grepl("coord",selectMod)) selection2 <- (rev(order(apply(res.mca$var$coord[,axes,drop=FALSE]^2,1,sum))))[1:min(nrow(res.mca$var$coord),sum(as.integer(unlist(strsplit(selectMod,"coord"))),na.rm=T))]
  		  if (grepl("cos2",selectMod)) {
 		    if (sum(as.numeric(unlist(strsplit(selectMod,"cos2"))),na.rm=T)>=1) selection2 <- (rev(order(apply(res.mca$var$cos2[,axes],1,sum))))[1:min(nrow(res.mca$var$coord),sum(as.numeric(unlist(strsplit(selectMod,"cos2"))),na.rm=T))]
@@ -129,7 +128,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
 	if ((!is.null(selectMod))&(!is.null(res.mca$call$quali.sup))) {
 	  if (mode(selectMod)=="numeric") selection3 <- selectMod
 	  else {
-	    if (sum(rownames(res.mca$quali.sup$coord)%in%selectMod)+sum(rownames(res.mca$quali.sup$coord)%in%selectMod)!=0) selection3 <- which(rownames(res.mca$quali.sup$coord)%in%selectMod)
+	    if (sum(rownames(res.mca$var$coord)%in%selectMod)+sum(rownames(res.mca$quali.sup$coord)%in%selectMod)!=0) selection3 <- which(rownames(res.mca$quali.sup$coord)%in%selectMod)
 		else {
  	      if (grepl("contrib",selectMod)) selection3 <- NULL
  	      if (grepl("coord",selectMod)) selection3 <- (rev(order(apply(res.mca$quali.sup$coord[,axes,drop=FALSE]^2,1,sum))))[1:min(nrow(res.mca$quali.sup$coord),sum(as.integer(unlist(strsplit(selectMod,"coord"))),na.rm=T))]

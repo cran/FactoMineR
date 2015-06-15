@@ -76,7 +76,14 @@ for (i in 1:length(group)){
         if (type[1]!="n") for (j in 1:group[1]) base[,j] <- replace(base[,j],is.na(base[,j]),mean(base[,j],na.rm=TRUE))
         for (g in 2:nbre.group){
          if (type[g]!="n") for (j in (sum(group[1:(g-1)])+1):sum(group[1:g])) base[,j] <- replace(base[,j],is.na(base[,j]),mean(base[,j],na.rm=TRUE))
-      }}
+        }
+		if (is.null(tab.comp)){
+		  if (type[1]=="n") for (j in 1:group[1]) base[,j] <- as.factor(replace(as.character(base[,j]),is.na(base[,j]),paste(colnames(base)[j],".NA",sep="")))
+          for (g in 2:nbre.group){
+            if (type[g]=="n") for (j in (sum(group[1:(g-1)])+1):sum(group[1:g])) base[,j] <- as.factor(replace(as.character(base[,j]),is.na(base[,j]),paste(colnames(base)[j],".NA",sep="")))
+          }
+		}
+	  }
     }
 
     if (is.null(row.w)) row.w <- rep(1,nb.actif)
@@ -188,10 +195,10 @@ if (!is.null(tab.comp)){
         colnames(aux.base) <- colnames(base)[(ind.grpe + 1):(ind.grpe + group[g])]
         if (type[g] == "s") {
           centre.aux.base <- apply(as.data.frame(aux.base), 2, moy.p, row.w.moy.ec)
-          aux.base <- as.matrix(sweep(as.data.frame(aux.base), 2, centre.aux.base, FUN = "-"))
+          aux.base <- t(t(as.matrix(aux.base))-centre.aux.base)
           ecart.type.aux.base <- apply(as.data.frame(aux.base), 2, ec, row.w.moy.ec)
           ecart.type.aux.base[ecart.type.aux.base <= 1e-08] <- 1
-          aux.base <- as.matrix(sweep(as.data.frame(aux.base), 2, ecart.type.aux.base, FUN = "/"))
+          aux.base <- t(t(aux.base)/ecart.type.aux.base)
           type[g]="c"
         }
         if (type[g] == "c") {
@@ -216,24 +223,24 @@ if (!is.null(tab.comp)){
               if (g==1) tmp <- tab.comp[,1:group.mod[1]]
               else tmp <- tab.comp[,(cumsum(group.mod)[g-1]+1):cumsum(group.mod)[g],drop=FALSE]
             } else {
-              tmp <- tab.disjonctif(aux.base)
+			  tmp <- tab.disjonctif(aux.base)
               group.mod[g] <- ncol(tmp)
 			}
 ###  End handle missing values
             centre.tmp <- apply(tmp, 2, moy.p, row.w.moy.ec)
             centre.tmp <- centre.tmp/sum(row.w.moy.ec)
-            tmp2 <- sweep(tmp,1,row.w.moy.ec/sum(row.w.moy.ec),FUN="*")
-            poids.bary <- c(poids.bary,apply(tmp2,2,sum))
+            tmp2 <- tmp*(row.w.moy.ec/sum(row.w.moy.ec))
+            poids.bary <- c(poids.bary,colSums(tmp2))
             poids.tmp <- 1-apply(tmp2, 2, sum)
             ponderation[(ind.grpe.mod + 1):(ind.grpe.mod + group.mod[g])] <- poids.tmp/(res.separe[[g]]$eig[1,1] * group[g])
             tmp <- tmp/sum(row.w.moy.ec)
-            tmp <- as.matrix(sweep(tmp, 2, centre.tmp, FUN = "-"))
+            tmp <- t(t(as.matrix(tmp))-centre.tmp)
             ecart.type.tmp <- apply(tmp, 2, ec, row.w.moy.ec)
 ### Pb if the disjunctive table doesn't have only 0 and 1
 			if (!is.null(tab.comp)) ecart.type.tmp <- sqrt(centre.tmp*sum(row.w.moy.ec) * (1-centre.tmp*sum(row.w.moy.ec) ))/sum(row.w.moy.ec)
 ### End pb if the disjunctive table doesn't have only 0 and 1
             ecart.type.tmp[ecart.type.tmp <= 1e-08] <- 1
-            tmp <- as.matrix(sweep(tmp, 2, ecart.type.tmp, FUN = "/"))
+            tmp <- t(t(as.matrix(tmp))/ecart.type.tmp)
             data <- cbind.data.frame(data, as.data.frame(tmp))
         }
 ## Fin modif
@@ -276,7 +283,7 @@ if (!is.null(tab.comp)){
     }
     aux.quali.sup.indice <- aux.quali.sup <- data.sup <- NULL
     if (!is.null(ind.quali)){
-      aux.quali.sup <- as.data.frame(base[, ind.quali])
+      aux.quali.sup <- as.data.frame(base[, ind.quali,drop=FALSE])
       if (is.null(data.group.sup)) aux.quali.sup.indice <- (ncol(data)+1):(ncol(data)+ncol(aux.quali.sup))
       else aux.quali.sup.indice <- (ncol(data)+ncol(data.group.sup)+1):(ncol(data)+ncol(data.group.sup)+ncol(aux.quali.sup))
       data.pca <- cbind.data.frame(data.pca,aux.quali.sup)
@@ -320,8 +327,8 @@ if ((!is.null(tab.comp))&(any("n"%in%type))){
       ind.var <- ind.var + group.mod[group.actif[g]]
       dist2.group[g] <- sum((res.separe[[group.actif[g]]]$eig[1:min(ncol(contrib.group),nrow(res.separe[[group.actif[g]]]$eig)),1]/res.separe[[group.actif[g]]]$eig[1,1])^2)
     }
-    coord.group <- sweep(contrib.group, 2, res.globale$eig[1:ncol(contrib.group),1], "*")
-    cos2.group <- sweep(coord.group^2, 1, dist2.group, "/")
+    coord.group <- t(t(contrib.group)*res.globale$eig[1:ncol(contrib.group),1])
+    cos2.group <- coord.group^2/dist2.group
 
     if (!is.null(num.group.sup)){
       coord.group.sup <- matrix(NA, length(num.group.sup), ncp.tmp)
@@ -332,8 +339,8 @@ if ((!is.null(tab.comp))&(any("n"%in%type))){
 #        else tab <- (cov.wt(cbind.data.frame(res.globale$ind$coord,data.group.sup[-ind.sup, ]),wt=row.w,method="ML")$cov)^2
 #tab <- cov(cbind.data.frame(res.globale$ind$coord,data.group.sup))^2*((nb.actif-1)/nb.actif)^2
 #      else tab <- cov(cbind.data.frame(res.globale$ind$coord,data.group.sup[-ind.sup,]))^2*((nb.actif-1)/nb.actif)^2
-      tab <- sweep(tab, 2, c(1/res.globale$eig[1:ncol(res.globale$ind$coord),1],ponderation.group.sup), "*")
-      tab <- sweep(tab, 1, c(1/res.globale$eig[1:ncol(res.globale$ind$coord),1],ponderation.group.sup), "*")
+      tab <- t(t(tab)*c(1/res.globale$eig[1:ncol(res.globale$ind$coord),1],ponderation.group.sup))
+      tab <- tab*c(1/res.globale$eig[1:ncol(res.globale$ind$coord),1],ponderation.group.sup)
       ind.gc <- 0
       for (gc in 1:length(num.group.sup)) {
         if (group.mod[num.group.sup[gc]]!=1) coord.group.sup[gc,] <- apply(tab[1:ncp.tmp,  (ncp.tmp+ind.gc+1):(ncp.tmp+ind.gc+group.mod[num.group.sup[gc]])],1,sum)
@@ -348,8 +355,8 @@ if ((!is.null(tab.comp))&(any("n"%in%type))){
 #        else tab <- (cov.wt(data[-ind.sup, ],wt=row.w,method="ML")$cov)^2
 #tab <- cov(data)^2*((nb.actif-1)/nb.actif)^2
 #      else tab <- cov(data[-ind.sup,])^2*((nb.actif-1)/nb.actif)^2
-      tab <- sweep(tab, 2, ponderation, "*")
-      tab <- sweep(tab, 1, ponderation, "*")
+      tab <- t(t(tab)*ponderation)
+      tab <- tab*ponderation
     }
     else{
       if (is.null(ind.sup)) tab <- (cov.wt(cbind.data.frame(data, data.group.sup),wt=row.w/sum(row.w),method="ML")$cov)^2
@@ -358,8 +365,8 @@ if ((!is.null(tab.comp))&(any("n"%in%type))){
 #        else tab <- (cov.wt(cbind.data.frame(data[-ind.sup, ], data.group.sup[-ind.sup,]),wt=row.w,method="ML")$cov)^2
 #tab <- cov(cbind.data.frame(data,data.group.sup))^2*((nb.actif-1)/nb.actif)^2
 #      else tab <- cov(cbind.data.frame(data[-ind.sup,],data.group.sup[-ind.sup,]))^2*((nb.actif-1)/nb.actif)^2
-      tab <- sweep(tab, 2, c(ponderation,ponderation.group.sup), "*")
-      tab <- sweep(tab, 1, c(ponderation,ponderation.group.sup), "*")
+      tab <- t(t(tab)*c(ponderation,ponderation.group.sup))
+      tab <- tab*c(ponderation,ponderation.group.sup)
     }
     Lg <- matrix(0, nbre.group+1, nbre.group+1)
     ind.gl <- 0
@@ -395,11 +402,11 @@ if ((!is.null(tab.comp))&(any("n"%in%type))){
     names(res.ind.partiel) <- name.group
 
     for (g in group.actif){
-      Xis <- as.matrix(sweep(data.partiel[[g]], 2, res.globale$call$centre, FUN = "-")) 
-      Xis <- as.matrix(sweep(Xis, 2, res.globale$call$ecart.type, FUN = "/"))
+      Xis <- t(t(as.matrix(data.partiel[[g]]))-res.globale$call$centre) 
+      Xis <- t(t(Xis)/res.globale$call$ecart.type)
 ##      coord.ind.sup <- length(group.actif) * as.matrix(Xis)%*%diag((res.globale$call$col.w))%*%res.globale$svd$V
       coord.ind.sup <- length(group.actif) * as.matrix(Xis)
-      coord.ind.sup <- sweep(coord.ind.sup,2,res.globale$call$col.w,FUN="*")
+      coord.ind.sup <- t(t(coord.ind.sup)*res.globale$call$col.w)
       coord.ind.sup <- crossprod(t(coord.ind.sup),res.globale$svd$V)
       res.ind.partiel[[g]]$coord.sup <- coord.ind.sup
     }
@@ -418,8 +425,8 @@ if ((!is.null(tab.comp))&(any("n"%in%type))){
     res.groupes <- list(Lg = Lg, RV = RV, coord = coord.group[, 1:ncp], contrib = contrib.group[, 1:ncp] * 100,  cos2 = cos2.group[, 1:ncp], dist2 = dist2.group[-length(dist2.group)], correlation = cor.grpe.fact[, 1:ncp])
     if (!is.null(num.group.sup)){
       res.groupes$coord.sup <- coord.group.sup[,1:ncp,drop=FALSE]
-      res.groupes$contrib.sup <- sweep(coord.group.sup[,1:ncp,drop=FALSE], 2, res.globale$eig[1:ncp,1], "/")*100
-      res.groupes$cos2.sup <- sweep(coord.group.sup[,1:ncp,drop=FALSE]^2, 1, dist2.group.sup, "/")
+#      res.groupes$contrib.sup <- sweep(coord.group.sup[,1:ncp,drop=FALSE], 2, res.globale$eig[1:ncp,1], "/")*100
+      res.groupes$cos2.sup <- coord.group.sup[,1:ncp,drop=FALSE]^2/dist2.group.sup
       res.groupes$dist2.sup <- dist2.group.sup
     }
     inertie.intra.ind.partiel <- as.data.frame(matrix(NA, (nb.actif * length(group.actif) ), ncp.tmp))
@@ -428,9 +435,9 @@ if ((!is.null(tab.comp))&(any("n"%in%type))){
     tmp <- array(0,dim=c(dim(res.globale$ind$coord),length(group.actif)))
     for (g in 1:length(group.actif)) tmp[,,g] <- (res.ind.partiel[[group.actif[g]]]$coord.sup[1:nb.actif,]-res.globale$ind$coord)^2/length(group.actif)
 ## Ajour Avril 2011
-tmp <- sweep(tmp,1,row.w,FUN="*")
-    variab.auxil <- apply(tmp,2,sum)
-    tmp <- sweep(tmp,2,variab.auxil,FUN="/") * 100
+tmp <- tmp*row.w
+    variab.auxil <- apply(tmp,2,sum)   ## attention, array
+    tmp <- sweep(tmp,2,variab.auxil,FUN="/") * 100  ## attention, array
     inertie.intra.ind <- apply(tmp,c(1,2),sum)
     for (i in 1:nb.actif) inertie.intra.ind.partiel[((i - 1) * length(group.actif)  + 1):(i * length(group.actif)), ] <- t(tmp[i,1:ncp.tmp,])
     rownames(inertie.intra.ind) <- rownames(res.globale$ind$coord)
@@ -444,30 +451,30 @@ tmp <- sweep(tmp,1,row.w,FUN="*")
     for (g in 1:nbre.group) {
         nom.col <- c(nom.col, paste(nom.axes, name.group[g],sep="."))
         nbcol <- min(ncp, ncol(res.separe[[g]]$ind$coord))
-        tab.partial.axes[, (debut + 1):(debut + nbcol)] <- res.separe[[g]]$ind$coord
+        tab.partial.axes[, (debut + 1):(debut + nbcol)] <- res.separe[[g]]$ind$coord[,1:nbcol]
         debut <- debut + ncp
     }
-    colnames(tab.partial.axes) <- nom.col
+   colnames(tab.partial.axes) <- nom.col
     indice.col.NA <- which(!is.na(tab.partial.axes[1, ]))
     tab.partial.axes <- tab.partial.axes[, indice.col.NA]
     centre <- apply(tab.partial.axes, 2, moy.p, res.globale$call$row.w)
-    tab.partial.axes <- as.matrix(sweep(tab.partial.axes, 2, centre, FUN = "-"))
+    tab.partial.axes <- t(t(tab.partial.axes)-centre)
     ecart.type <- apply(tab.partial.axes, 2, ec, res.globale$call$row.w)
     ecart.type[ecart.type <= 1e-08] <- 1
-    tab.partial.axes <- as.matrix(sweep(tab.partial.axes, 2, ecart.type, FUN = "/"))
+    tab.partial.axes <- t(t(tab.partial.axes)/ecart.type)
 ##    coord.res.partial.axes <- t(tab.partial.axes) %*% diag(res.globale$call$row.w) %*% res.globale$svd$U
-    coord.res.partial.axes <- sweep( t(tab.partial.axes) ,2, res.globale$call$row.w,FUN="*")
+    coord.res.partial.axes <- t(tab.partial.axes*res.globale$call$row.w)
     coord.res.partial.axes <- crossprod(t(coord.res.partial.axes),res.globale$svd$U[,1:ncp])
-		contrib.res.partial.axes <- sweep(coord.res.partial.axes^2,2,res.globale$eig[1:ncp,1],FUN="/") *100
+		contrib.res.partial.axes <- t(t(coord.res.partial.axes^2)/res.globale$eig[1:ncp,1]) *100
     sigma <- apply(tab.partial.axes, 2, ec, res.globale$call$row.w)
-    cor.res.partial.axes <- sweep(coord.res.partial.axes,1,sigma,FUN="/")
+    cor.res.partial.axes <- coord.res.partial.axes/sigma
     colnames(coord.res.partial.axes) <- paste("Dim", c(1:ncol(coord.res.partial.axes)), sep = ".")
     dimnames(contrib.res.partial.axes) <- dimnames(cor.res.partial.axes) <- dimnames (coord.res.partial.axes)
     summary.n <- as.data.frame(matrix(NA, 0, 4))
     colnames(summary.n) <- c("group", "variable", "modalite", "effectif")
     summary.c <- as.data.frame(matrix(NA, 0, 6))
     colnames(summary.c) <- c("group", "variable", "moyenne", "ecart.type", "minimum", "maximum")
-    for (g in 1:nbre.group) {
+   for (g in 1:nbre.group) {
         if ((type[g] == "c")||(type[g]=="f")) {
             statg <- as.data.frame(matrix(NA, ncol(res.separe[[g]]$call$X), 6))
             colnames(statg) <- c("group", "variable", "moyenne", "ecart.type", "minimum", "maximum")
@@ -499,7 +506,7 @@ tmp <- sweep(tmp,1,row.w,FUN="*")
             summary.n <- rbind(summary.n, statg)
         }
     }
-    eig <- res.globale$eig
+   eig <- res.globale$eig
     nom.ligne <- NULL
     for (i in 1:nbre.ind) {
         ind.tmp <- rownames(base)[i]
@@ -515,7 +522,7 @@ tmp <- sweep(tmp,1,row.w,FUN="*")
     for (g in 1:length(group.actif)) coord.ind.partiel[liste.ligne+g-1, ] <- res.ind.partiel[[group.actif[g]]]$coord.sup[, 1:ncp,drop=FALSE]
     if (!is.null(ind.sup)) {
       res.ind.sup <- list(coord = coord.ind[(nb.actif+1):nrow(coord.ind),,drop=FALSE], cos2 = cos2.ind[(nb.actif+1):nrow(coord.ind),,drop=FALSE], coord.partiel = coord.ind.partiel[(length(group.actif)*nb.actif+1):nrow(coord.ind.partiel),,drop=FALSE])
-      res.ind <- list(coord = coord.ind[1:nb.actif,], contrib = contrib.ind, cos2 = cos2.ind[1:nb.actif,drop=FALSE], within.inertia = inertie.intra.ind[1:nb.actif,1:ncp,drop=FALSE], coord.partiel = coord.ind.partiel[1:(length(group.actif)*nb.actif),,drop=FALSE], within.partial.inertia = inertie.intra.ind.partiel[1:(length(group.actif)*nb.actif),1:ncp,drop=FALSE] )
+      res.ind <- list(coord = coord.ind[1:nb.actif,,drop=FALSE], contrib = contrib.ind, cos2 = cos2.ind[1:nb.actif,,drop=FALSE], within.inertia = inertie.intra.ind[1:nb.actif,1:ncp,drop=FALSE], coord.partiel = coord.ind.partiel[1:(length(group.actif)*nb.actif),,drop=FALSE], within.partial.inertia = inertie.intra.ind.partiel[1:(length(group.actif)*nb.actif),1:ncp,drop=FALSE] )
     }
     else res.ind <- list(coord = coord.ind, contrib = contrib.ind, cos2 = cos2.ind, within.inertia = inertie.intra.ind[,1:ncp,drop=FALSE], coord.partiel = coord.ind.partiel, within.partial.inertia = inertie.intra.ind.partiel[,1:ncp,drop=FALSE])
 
@@ -549,20 +556,19 @@ tmp <- sweep(tmp,1,row.w,FUN="*")
         cg.partiel <- as.data.frame(matrix(res.globale$call$centre, nrow(barycentre), ncol(barycentre), byrow = TRUE, dimnames = dimnames(barycentre)))
         cg.partiel[, (ind.col + 1):(ind.col + group.mod[group.actif[g]])] <- barycentre[, (ind.col + 1):(ind.col + group.mod[group.actif[g]])]
         ind.col <- ind.col + group.mod[group.actif[g]]
-        Xis <- as.matrix(sweep(cg.partiel, 2, res.globale$call$centre, FUN = "-"))
-        Xis <- as.matrix(sweep(Xis, 2, res.globale$call$ecart.type, FUN = "/"))
+        Xis <- t((t(cg.partiel)-res.globale$call$centre)/res.globale$call$ecart.type)
 ##        coord.quali.sup <- length(group.actif) * as.matrix(Xis)%*%diag((res.globale$call$col.w))%*%res.globale$svd$V
         coord.quali.sup <- length(group.actif) * as.matrix(Xis)
-        coord.quali.sup <- sweep(coord.quali.sup ,2,res.globale$call$col.w,FUN="*")
+        coord.quali.sup <- t(t(coord.quali.sup)*res.globale$call$col.w)
         coord.quali.sup <- crossprod(t(coord.quali.sup),res.globale$svd$V)
         coord.quali.partiel[liste.ligne + g - 1, ] <- coord.quali.sup[,1:ncp]
         tmp[,,g] <- (coord.quali.sup - res.globale$quali.sup$coord)^2 / length(group.actif) 
       }
       colnames(coord.quali.partiel) <-  paste("Dim", 1:ncp, sep = ".")
-      tmp <- sweep(tmp,2,variab.auxil,FUN="/") * 100
+      tmp <- sweep(tmp,2,variab.auxil,FUN="/") * 100   ### attention array
 ### modif mais attention, si changement dans PCA, remettre ?
 ##      tmp <- sweep(tmp,1,res.globale$call$quali.sup$nombre,FUN="*")
-      tmp <- sweep(tmp,1,poids.bary*sum(row.w),FUN="*")
+      tmp <- sweep(tmp,1,poids.bary*sum(row.w),FUN="*")  ### attention array
       inertie.intra.cg <- apply(tmp,c(1,2),sum)
       for (i in 1:nrow(barycentre)) inertie.intra.cg.partiel[((i - 1) * length(group.actif)  + 1):(i * length(group.actif)), ] <- t(tmp[i,1:ncp.tmp,])
       rownames(inertie.intra.cg) <- rownames(res.globale$quali.sup$coord)

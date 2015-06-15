@@ -22,7 +22,7 @@ columns represent the different categories (education, age) people belong to.
 }
 
 \source{
-Traitements Statistiques des Enquêtes (D. Grangé, L.Lebart, eds.) Dunod, 1993
+Traitements Statistiques des Enquêtes (D. Grangé, L. Lebart, eds.) Dunod, 1993
 }
 
 \examples{

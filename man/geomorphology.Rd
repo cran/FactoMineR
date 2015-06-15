@@ -19,9 +19,10 @@ The dataset is analysed in: http://www.sciencedirect.com/science/article/pii/S01
 }
 
 \examples{
+\dontrun{
 data(geomorphology)
 res <- FAMD(geomorphology)
 plot(res,choix="ind",habillage=4)
 }
-
+}
 \keyword{datasets}

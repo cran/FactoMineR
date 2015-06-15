@@ -268,7 +268,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var"),
  		      if (grepl("contrib",select)) selectionS <- NULL
  		      if (grepl("coord",select)) selectionS <- (rev(order(apply(res.pca$quanti.sup$coord[,axes]^2,1,sum))))[1:min(nrow(res.pca$quanti.sup$coord),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
  		      if (grepl("cos2",select)) {
-			    if (sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T)>=1) selectionS <- (rev(order(apply(res.pca$quanti.sup$cos2[,axes],1,sum))))[1:min(nrow(res.pca$var$coord),sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T))]
+			    if (sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T)>=1) selectionS <- (rev(order(apply(res.pca$quanti.sup$cos2[,axes],1,sum))))[1:min(nrow(res.pca$quanti.sup$coord),sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T))]
 				else selectionS <- which(apply(res.pca$quanti.sup$cos2[,axes],1,sum)>sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T))
 			  }
 			  if (is.integer(select)) selectionS <- select

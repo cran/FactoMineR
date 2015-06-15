@@ -2,40 +2,62 @@ PCA <- function (X, scale.unit = TRUE, ncp = 5, ind.sup = NULL, quanti.sup = NUL
     quali.sup = NULL, row.w = NULL, col.w = NULL, graph = TRUE, 
     axes = c(1, 2)) 
 {
-    moy.p <- function(V, poids) {
-        res <- sum(V * poids)/sum(poids)
+#    moy.p <- function(V, poids) {
+#        res <- sum(V * poids)/sum(poids)
+#    }
+    moy.ptab <- function(V, poids) {
+#        res <- colSums(V * (poids/sum(poids)))
+        as.vector(crossprod(poids/sum(poids),as.matrix(V)))
     }
-    ec <- function(V, poids) {
-        res <- sqrt(sum(V^2 * poids)/sum(poids))
+#    ec <- function(V, poids) {
+#        res <- sqrt(sum(V^2 * poids)/sum(poids))
+#    }
+	
+    ec.tab <- function(V, poids) {
+#        res <- sqrt(colSums(V^2 * poids)/sum(poids))
+        ecart.type <- sqrt(as.vector(crossprod(poids/sum(poids),as.matrix(V^2))))
+		ecart.type[ecart.type <= 1e-16] <- 1
+        return(ecart.type)
     }
-    fct.eta2 <- function(vec,x,weights) {
-      res <- summary(lm(x~vec,weights=weights,na.action=na.omit))$r.squared
-    }
+    # fct.eta2 <- function(vec,x,weights) {
+      # res <- summary(lm(x~vec,weights=weights))$r.squared
+    # }
+
+fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
+  VB <- function(xx) {
+	return(sum((colSums((tt*xx)*weights)^2)/ni))
+  }
+  tt <- tab.disjonctif(vec)
+  ni <- colSums(tt*weights)
+  unlist(lapply(as.data.frame(x),VB))/colSums(x^2*weights)
+}
 
     X <- as.data.frame(X)
 	X <- droplevels(X)
     if (any(is.na(X))) {
         warnings("Missing values are imputed by the mean of the variable: you should use the imputePCA function of the missMDA package")
         if (is.null(quali.sup)) 
-          X[is.na(X)] = matrix(apply(X,2,mean,na.rm=TRUE),ncol=ncol(X),nrow=nrow(X),byrow=TRUE)[is.na(X)]
+          X[is.na(X)] = matrix(colMeans(X,na.rm=TRUE),ncol=ncol(X),nrow=nrow(X),byrow=TRUE)[is.na(X)]
         else for (j in (1:ncol(X))[-quali.sup]) X[, j] <- replace(X[, j], is.na(X[, j]), mean(X[, j], na.rm = TRUE))
     }
-    if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
-    if (is.null(colnames(X))) colnames(X) = paste("V", 1:ncol(X), sep = "")
-    colnames(X)[colnames(X)==""] <- paste("V",1:sum(colnames(X)==""),sep="")
-    rownames(X)[is.null(rownames(X))] <- paste("row",1:sum(rownames(X)==""),sep="")
+#    if (is.null(rownames(X))) rownames(X) <- rownames(X, do.NULL = FALSE,prefix="")
+    if (is.null(attributes(X)$row.names)) rownames(X) <- 1:nrow(X)
+    if (is.null(attributes(X)$names)) colnames(X) <- colnames(X, do.NULL = FALSE,prefix="V")
+#    if (is.null(rownames(X))) rownames(X) <- 1:nrow(X)
+#    else rownames(X)[is.null(rownames(X))] <- paste("row",1:sum(rownames(X)==""),sep="")
+#    if (is.null(colnames(X))) colnames(X) <- paste("V", 1:ncol(X), sep = "")
+#    else colnames(X)[colnames(X)==""] <- paste("V",1:sum(colnames(X)==""),sep="")
     Xtot <- X
     if (!is.null(quali.sup)) 
         X <- X[, -quali.sup]
     if (any(!sapply(X, is.numeric))) {
-#    if (!any(apply(X, 2, is.numeric))) {
         auxi = NULL
         for (j in 1:ncol(X)) if (!is.numeric(X[, j])) 
             auxi = c(auxi, colnames(X)[j])
         stop(paste("\nThe following variables are not quantitative: ", auxi))
     }
     todelete <- c(quali.sup, quanti.sup)
-    if (!is.null(todelete)) X <- Xtot[, -todelete]
+    if (!is.null(todelete)) X <- Xtot[, -todelete,drop=FALSE]
     if (!is.null(ind.sup)) {
         X.ind.sup <- X[ind.sup, , drop = FALSE]
         X <- X[-ind.sup, , drop = FALSE]
@@ -45,17 +67,17 @@ PCA <- function (X, scale.unit = TRUE, ncp = 5, ind.sup = NULL, quanti.sup = NUL
     row.w.init <- row.w
     row.w <- row.w/sum(row.w)
     if (is.null(col.w)) col.w <- rep(1, ncol(X))
-    centre <- apply(X, 2, moy.p, row.w)
+    centre <- moy.ptab(X,row.w)
     data <- X
-    X <- as.matrix(sweep(as.matrix(X), 2, centre, FUN = "-"))
+    X <- t(t(as.matrix(X))-centre)
     if (scale.unit) {
-        ecart.type <- apply(X, 2, ec, row.w)
-        ecart.type[ecart.type <= 1e-16] <- 1
-        X <- sweep(as.matrix(X), 2, ecart.type, FUN = "/")
+        ecart.type <- ec.tab(X,row.w)
+        X <- t(t(X)/ecart.type)
     }
     else ecart.type <- rep(1, length(centre))
-dist2.ind <- apply(sweep(X,2,sqrt(col.w),FUN="*")^2,1,sum)
-dist2.var <- apply(sweep(X,1,sqrt(row.w),FUN="*")^2,2,sum)
+    dist2.ind <- rowSums(X^2*sqrt(col.w))
+	dist2.ind <- as.vector(tcrossprod(as.matrix(X^2*sqrt(col.w)),t(rep(1,ncol(X)))))
+    dist2.var <- as.vector(crossprod(rep(1,nrow(X)),as.matrix(X^2*row.w)))
     res.call <- list(row.w = (row.w/sum(row.w)), col.w = col.w, 
         scale.unit = scale.unit, ncp = ncp, centre = centre, 
         ecart.type = ecart.type, X = Xtot, row.w.init = row.w.init,call=sys.calls()[[1]])
@@ -71,13 +93,11 @@ dist2.var <- apply(sweep(X,1,sqrt(row.w),FUN="*")^2,2,sum)
     V <- tmp$V
     U <- tmp$U
 	eig <- eig[1:ncp]
-    coord.ind <- sweep(as.matrix(U), 2, sqrt(eig), FUN = "*")
-    coord.var <- sweep(as.matrix(V), 2, sqrt(eig), FUN = "*")
-    contrib.var <- sweep(as.matrix(coord.var^2), 2, eig, "/")
-    contrib.var <- sweep(as.matrix(contrib.var), 1, col.w, "*")
-##    dist2 <- apply(coord.var^2, 1, sum)
-dist2 <- dist2.var
-    cor.var <- sweep(as.matrix(coord.var), 1, sqrt(dist2), FUN = "/")
+    coord.ind <- t(t(as.matrix(U))*sqrt(eig))
+    coord.var <- t(t(as.matrix(V))*sqrt(eig))
+    contrib.var <- t(t(coord.var^2)/eig)*col.w
+    dist2 <- dist2.var
+    cor.var <- coord.var/sqrt(dist2)
     cos2.var <- cor.var^2
     rownames(coord.var) <- rownames(cos2.var) <- rownames(cor.var) <- rownames(contrib.var) <- colnames(X)
     colnames(coord.var) <- colnames(cos2.var) <- colnames(cor.var) <- colnames(contrib.var) <- paste("Dim", 
@@ -85,12 +105,9 @@ dist2 <- dist2.var
     res.var <- list(coord = coord.var[, 1:ncp], cor = cor.var[, 
         1:ncp], cos2 = cos2.var[, 1:ncp], contrib = contrib.var[, 
         1:ncp] * 100)
-##    dist2 <- apply(coord.ind^2, 1, sum)
-dist2 <- dist2.ind
-    cos2.ind <- sweep(as.matrix(coord.ind^2), 1, dist2, FUN = "/")
-    contrib.ind <- sweep(as.matrix(coord.ind^2), 1, row.w/sum(row.w), 
-        FUN = "*")
-    contrib.ind <- sweep(as.matrix(contrib.ind), 2, eig, FUN = "/")
+    dist2 <- dist2.ind
+    cos2.ind <- coord.ind^2/dist2
+    contrib.ind <- t(t(coord.ind^2*row.w/sum(row.w))/eig)
     rownames(coord.ind) <- rownames(cos2.ind) <- rownames(contrib.ind) <- names(dist2) <- rownames(X)
     colnames(coord.ind) <- colnames(cos2.ind) <- colnames(contrib.ind) <- paste("Dim", 
         c(1:ncol(U)), sep = ".")
@@ -98,18 +115,13 @@ dist2 <- dist2.ind
         1:ncp,drop=FALSE], contrib = contrib.ind[, 1:ncp,drop=FALSE] * 100, dist = sqrt(dist2))
     res <- list(eig = vp, var = res.var, ind = res.ind, svd = tmp)
     if (!is.null(ind.sup)) {
-        if (is.null(ecart.type)) 
-            ecart.type <- rep(1, length(centre))
-        X.ind.sup <- as.matrix(sweep(as.matrix(X.ind.sup), 2, 
-            centre, FUN = "-"))
-        X.ind.sup <- as.matrix(sweep(as.matrix(X.ind.sup), 2, 
-            ecart.type, FUN = "/"))
-        coord.ind.sup <- sweep(as.matrix(X.ind.sup), 2, col.w, 
-            FUN = "*")
-##        coord.ind.sup <- coord.ind.sup %*% tmp$V
+        if (is.null(ecart.type)) ecart.type <- rep(1, length(centre))
+        X.ind.sup <- t(t(as.matrix(X.ind.sup))-centre)
+        X.ind.sup <- t(t(X.ind.sup)/ecart.type)
+        coord.ind.sup <- t(t(X.ind.sup)*col.w)
         coord.ind.sup <- crossprod(t(coord.ind.sup),tmp$V)
-        dist2 <- apply(sweep(X.ind.sup,2,sqrt(col.w),FUN="*")^2,1,sum)
-        cos2.ind.sup <- sweep(as.matrix(coord.ind.sup^2), 1, dist2, FUN = "/")
+        dist2 <- rowSums(t(t(X.ind.sup^2)*col.w))
+        cos2.ind.sup <- coord.ind.sup^2/dist2
         coord.ind.sup <- coord.ind.sup[, 1:ncp, drop = F]
         cos2.ind.sup <- cos2.ind.sup[, 1:ncp, drop = F]
         colnames(coord.ind.sup) <- colnames(cos2.ind.sup) <- paste("Dim",  c(1:ncp), sep = ".")
@@ -119,30 +131,23 @@ dist2 <- dist2.ind
         res.call$ind.sup = ind.sup
     }
     if (!is.null(quanti.sup)) {
-        X.quanti.sup <- as.data.frame(Xtot[, quanti.sup])
-        if (!is.null(ind.sup)) X.quanti.sup <- as.data.frame(X.quanti.sup[-ind.sup, ])
+        X.quanti.sup <- as.data.frame(Xtot[, quanti.sup,drop=FALSE])
+        if (!is.null(ind.sup)) X.quanti.sup <- as.data.frame(X.quanti.sup[-ind.sup, ,drop=FALSE])
         colnames(X.quanti.sup) <- colnames(Xtot)[quanti.sup]        
         res.call$quanti.sup = X.quanti.sup
-        centre.sup <- apply(X.quanti.sup, 2, moy.p, row.w)
-        X.quanti.sup <- as.matrix(sweep(as.matrix(X.quanti.sup), 2, centre.sup, FUN = "-"))
+        centre.sup <- moy.ptab(X.quanti.sup,row.w)
+        X.quanti.sup <- t(t(as.matrix(X.quanti.sup))-centre.sup)
         if (scale.unit) {
-            ecart.type.sup <- apply(X.quanti.sup, 2, ec, row.w)
-            ecart.type.sup[ecart.type.sup <= 1e-16] <- 1
-            X.quanti.sup <- as.matrix(sweep(as.matrix(X.quanti.sup), 2, ecart.type.sup, FUN = "/"))
+            ecart.type.sup <- ec.tab(X.quanti.sup, row.w)
+            X.quanti.sup <- t(t(X.quanti.sup)/ecart.type.sup)
         }
-        coord.vcs <- sweep(as.matrix(t(X.quanti.sup)), 2, row.w, FUN = "*")
-##        coord.vcs <- coord.vcs %*% tmp$U
+        coord.vcs <- t(X.quanti.sup*row.w)
         coord.vcs <- crossprod(t(coord.vcs),tmp$U)
         col.w.vcs <- rep(1, ncol(coord.vcs))
         cor.vcs <- matrix(NA, ncol(X.quanti.sup), ncol(tmp$U))
-        sigma <- apply(X.quanti.sup, 2, ec, row.w)
-        dist2 <- apply(sweep(X.quanti.sup,1,sqrt(row.w),FUN="*")^2,2,sum)
-##        cor.vcs <- sweep(as.matrix(coord.vcs), 1, sigma, FUN = "/")
-        cor.vcs <- sweep(as.matrix(coord.vcs), 1, sqrt(dist2), FUN = "/")
+		dist2 <- as.vector(crossprod(rep(1,nrow(X.quanti.sup)),as.matrix(X.quanti.sup^2*row.w)))
+        cor.vcs <- coord.vcs/sqrt(dist2)
         cos2.vcs <- cor.vcs^2
-        # cos2.vcs <- as.data.frame(cor.vcs^2)
-        # coord.vcs <- as.data.frame(coord.vcs)
-        # cor.vcs <- as.data.frame(cor.vcs)
         colnames(coord.vcs) <- colnames(cor.vcs) <- colnames(cos2.vcs) <- paste("Dim", c(1:ncol(cor.vcs)), sep = ".")
         rownames(coord.vcs) <- rownames(cor.vcs) <- rownames(cos2.vcs) <- colnames(Xtot)[quanti.sup]
         res.quanti.sup <- list(coord = coord.vcs[, 1:ncp, drop=FALSE], cor = cor.vcs[, 1:ncp, drop=FALSE], cos2 = cos2.vcs[, 1:ncp, drop=FALSE])
@@ -154,14 +159,21 @@ dist2 <- dist2.ind
         colnames(X.quali.sup) <- colnames(Xtot)[quali.sup]
         nombre <- modalite <- NULL
 
-       eta2 = matrix(NA, length(quali.sup), ncp)
-        if (ncp>1){
- 		  for (i in 1:ncp)  eta2[, i] <- unlist(lapply(X.quali.sup,fct.eta2,res$ind$coord[,i,drop=FALSE],weights=row.w))
-		} else eta2 <- unlist(lapply(X.quali.sup,fct.eta2,res$ind$coord,weights=row.w))
-		eta2 <- as.matrix(eta2,ncol=ncp)
-        colnames(eta2) = paste("Dim", 1:ncp)
-        rownames(eta2) = colnames(X.quali.sup)
+       # eta2 <- matrix(NA, length(quali.sup), ncp)
+        # if (ncp>1){
+ 		  # for (i in 1:ncp)  eta2[, i] <- unlist(lapply(X.quali.sup,fct.eta2,res$ind$coord[,i,drop=FALSE],weights=row.w))
+		# } else eta2 <- unlist(lapply(X.quali.sup,fct.eta2,res$ind$coord,weights=row.w))
+		# eta2 <- as.matrix(eta2,ncol=ncp)
+        # colnames(eta2) = paste("Dim", 1:ncp)
+        # rownames(eta2) = colnames(X.quali.sup)
 
+		if (ncp>1) eta2 <- t(sapply(X.quali.sup,fct.eta2,res$ind$coord,weights=row.w))
+		else {
+		  eta2 <- as.matrix(sapply(X.quali.sup,fct.eta2,res$ind$coord,weights=row.w),ncol=ncp)
+          colnames(eta2) = paste("Dim", 1:ncp)
+          rownames(eta2) = colnames(X.quali.sup)
+		}
+		
         for (i in 1:ncol(X.quali.sup)) {
             var <- as.factor(X.quali.sup[, i])
             n.mod <- nlevels(var)
@@ -169,7 +181,8 @@ dist2 <- dist2.ind
             bary <- matrix(NA, n.mod, ncol(X))
             for (j in 1:n.mod) {
                 ind <- levels(var)[j]
-                bary[j, ] <- apply(data[which(var == ind), ], 2, moy.p, row.w[which(var == ind)])
+#                bary[j, ] <- apply(data[which(var == ind), ], 2, moy.p, row.w[which(var == ind)])
+                bary[j, ] <- moy.ptab(data[which(var == ind), ], row.w[which(var == ind)])
 ### modif Avril 2011
 ##                nombre <- c(nombre, length(var[which(var == ind)]))
                 nombre <- c(nombre, sum(row.w.init[which(var == ind)]))
@@ -180,17 +193,18 @@ dist2 <- dist2.ind
             if (i == 1)  barycentre <- as.data.frame(bary)
             else barycentre <- rbind(barycentre, as.data.frame(bary))
         }
-        bary <- as.matrix(sweep(as.matrix(barycentre), 2, centre, FUN = "-"))
-        if (!is.null(ecart.type)) bary <- as.matrix(sweep(as.matrix(bary), 2, ecart.type, FUN = "/"))
-        dist2 <- apply(sweep(as.matrix(bary)^2,2,col.w,FUN="*"),1,sum)
-        coord.barycentre <- sweep(as.matrix(bary), 2, col.w, FUN = "*")
+        bary <- t(t(as.matrix(barycentre))-centre)
+        if (!is.null(ecart.type)) bary <- t(t(bary)/ecart.type)
+#        bary <- as.matrix(sweep(as.matrix(barycentre), 2, centre, FUN = "-"))
+#        if (!is.null(ecart.type)) bary <- as.matrix(sweep(as.matrix(bary), 2, ecart.type, FUN = "/"))
+        dist2 <- rowSums(t(t(bary^2)*col.w))
+        coord.barycentre <- t(t(bary)*col.w)
         coord.barycentre <- crossprod(t(coord.barycentre),tmp$V)
         colnames(coord.barycentre) <- paste("Dim", 1:ncol(coord.barycentre), sep = ".")
-##        dist2 <- apply(coord.barycentre^2, 1, sum)
-        cos2.bary.sup <- sweep(as.matrix(coord.barycentre^2), 1, dist2, FUN = "/")
-        vtest <- sweep(as.matrix(coord.barycentre), 2, sqrt(eig), FUN = "/")
-        if (sum(row.w.init)>1) vtest <- sweep(as.matrix(vtest), 1, sqrt(nombre/((sum(row.w.init) - nombre)/(sum(row.w.init) - 1))), FUN = "*")
-		else vtest <- sweep(as.matrix(vtest), 1, sqrt(nombre), FUN = "*")
+        cos2.bary.sup <- coord.barycentre^2/dist2
+        vtest <- t(t(coord.barycentre)/sqrt(eig))
+        if (sum(row.w.init)>1) vtest <- vtest*sqrt(nombre/((sum(row.w.init) - nombre)/(sum(row.w.init) - 1)))
+		else vtest <- vtest*sqrt(nombre)
         cos2.bary.sup <- cos2.bary.sup[, 1:ncp, drop=FALSE]
         coord.barycentre <- coord.barycentre[, 1:ncp, drop=FALSE]
         vtest <- vtest[, 1:ncp, drop=FALSE]

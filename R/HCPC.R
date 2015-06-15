@@ -116,8 +116,10 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
 ##      res <- PCA(res, scale.unit = FALSE, ncp = Inf, graph = FALSE)
     }
     if(inherits(res,"CA")){
+	  aux <- res$eig
 	  if(cluster.CA=="rows") res <- PCA(res$row$coord, scale.unit = FALSE, ncp = Inf, graph = FALSE,row.w=res$call$marge.row*sum(res$call$X))
 	  if(cluster.CA=="columns") res <- PCA(res$col$coord, scale.unit = FALSE, ncp = Inf, graph = FALSE,row.w=res$call$marge.col*sum(res$call$X))
+	  res$eig <- aux
     }
     if (is.null(max)) max <- min(10, round(nrow(res$ind$coord)/2))
     max <- min(max, nrow(res$ind$coord) - 1)
@@ -264,7 +266,8 @@ if (kk<Inf){
 } else {
   X <- cbind.data.frame(X,clust)
   if (inherits(res.sauv, "PCA") | inherits(res.sauv, "MCA") | inherits(res.sauv,"MFA") | inherits(res.sauv, "HMFA") | inherits(res.sauv, "FAMD")) data.clust <- cbind.data.frame(res.sauv$call$X[rownames(t$res$call$X),], clust)
-  if (inherits(res.sauv, "data.frame")) data.clust <- X
+  if (inherits(res.sauv, "data.frame")) data.clust <- cbind.data.frame(res.sauv[rownames(X),], clust)
+#  if (inherits(res.sauv, "data.frame")) data.clust <- X cbind.data.frame(res.sauv$call$X[rownames(t$res$call$X),], clust)
   if (inherits(res.sauv, "numeric")) data.clust <- X
   if (inherits(res.sauv, "CA")) {
     if (cluster.CA=="rows") data.clust <- cbind.data.frame(res.sauv$call$Xtot[rownames(t$res$call$X),],clust)
@@ -295,7 +298,7 @@ para <- by(tabInd, cluster, simplify = FALSE, select, default.size = nb.par, met
 dist <- by(tabInd, cluster, simplify = FALSE, distinctivness, default.size = nb.par, method = metric, coord.centers = centers)
 desc.ind <- list(para = para, dist = dist)
 
-    if (consol) call <- list(t = t, min = min, max = max, X = X, bw.before.consol=sum(rev(t$tree$height)[1:(nb.clust-1)]),bw.after.consol=res.consol$betweenss,vec = vec,call=sys.calls()[[1]])
+    if (consol) call <- list(t = t, min = min, max = max, X = X, bw.before.consol=sum(rev(t$tree$height)[1:(nb.clust-1)]),bw.after.consol=res.consol$betweenss/nrow(data.clust),vec = vec,call=sys.calls()[[1]])
 	else call <- list(t = t, min = min, max = max, X = X, bw.before.consol=sum(rev(t$tree$height)[1:(nb.clust-1)]),vec = vec,call=sys.calls()[[1]])
 #    call <- list(t = t, min = min, max = max, X = data.clust, vec = vec,call=sys.calls()[[1]])
     if (kk!=Inf) res.HCPC <- list(data.clust = data.clust, desc.var = desc.var, call = call, desc.ind = desc.ind)

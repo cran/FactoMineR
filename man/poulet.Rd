@@ -1,16 +1,13 @@
 \name{poulet}
 \alias{poulet}
 \docType{data}
-\title{Donnees genomiques sur les poulets}
-\description{
-Donnees genomiques sur les poulets}
+\title{Genomic data for chicken}
+\description{Genomic data for chicken}
 \usage{data(poulet)}
 \format{
-  Un data frame avec 43 observations sur 7407 variables.
-  \describe{
-    \item{\code{Régime}}{a factor with levels \code{J16} \code{J16R16} \code{J16R5} \code{J48} \code{J48R24} \code{N}}
-    \item{Autre variable}{variable quantitative correspondant a l'expression d'un gene}
-  }
+A data frame with 43 chickens and 7407 variables.  
+A factor with levels J16 J16R16 J16R5 J48 J48R24 N\cr
+And many continuous variables corresponding to the gene expression
 }
 \examples{
 \dontrun{
@@ -21,9 +18,6 @@ plot(res.pca,habillage=1,label="quali",
     palette=palette(c("black","red","blue","darkgreen","purple","orange")))
 dimdesc(res.pca)
 ## Dessine des ellipses autour des centres de gravite
-aa=cbind.data.frame(poulet[,1],res.pca$ind$coord)
-bb=coord.ellipse(aa,bary=TRUE)
-plot.PCA(res.pca,habillage=1,ellipse=bb)
-}
+plotellipses(res.pca)}
 }
 \keyword{datasets}

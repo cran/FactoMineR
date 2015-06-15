@@ -100,6 +100,41 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     if (choix == "group") {
         coord.actif <- res.mfa$group$coord[, axes, drop = FALSE]
         if (!is.null(res.mfa$group$coord.sup))  coord.illu <- res.mfa$group$coord.sup[, axes, drop = FALSE]
+
+## Début ajout 2015/04/23
+        selection <- selectionS <- NULL
+		if (!is.null(select)) {
+		  if (mode(select)=="numeric") selection <- select
+		  else {
+		    if (sum(rownames(res.mfa$group$coord)%in%select)+sum(rownames(res.mfa$group$coord.sup)%in%select)!=0) selection <- which(rownames(res.mfa$group$coord)%in%select)
+			else {
+ 		      if (grepl("contrib",select)) selection <- (rev(order(res.mfa$group$contrib[,axes[1]]*res.mfa$eig[axes[1],1]+res.mfa$group$contrib[,axes[2]]*res.mfa$eig[axes[2],1])))[1:min(nrow(res.mfa$group$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
+ 		      if (grepl("coord",select)) selection <- (rev(order(apply(res.mfa$group$coord[,axes]^2,1,sum))))[1:min(nrow(res.mfa$group$coord),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
+ 		      if (grepl("cos2",select)) {
+			    if (sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T)>=1) selection <- (rev(order(apply(res.mfa$group$cos2[,axes],1,sum))))[1:min(nrow(res.mfa$group$coord),sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T))]
+				else selection <- which(apply(res.mfa$group$cos2[,axes],1,sum)>sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T))
+			  }
+			  if (is.integer(select)) selection <- select
+			}  
+		  }
+		}
+		if ((!is.null(select))&(!is.null(res.mfa$group$coord.sup))) {
+		  if (mode(select)=="numeric") selectionS <- select
+		  else {
+		    if (sum(rownames(res.mfa$group$coord)%in%select)+sum(rownames(res.mfa$group$coord.sup)%in%select)!=0) selectionS <- which(rownames(res.mfa$group$coord.sup)%in%select)
+			else {
+ 		      if (grepl("contrib",select)) selectionS <- NULL
+ 		      if (grepl("coord",select)) selectionS <- (rev(order(apply(res.mfa$group$coord.sup[,axes]^2,1,sum))))[1:min(nrow(res.mfa$group$coord.sup),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
+ 		      if (grepl("cos2",select)) {
+			    if (sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T)>=1) selectionS <- (rev(order(apply(res.mfa$group$cos2.sup[,axes],1,sum))))[1:min(nrow(res.mfa$group$coord.sup),sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T))]
+				else selectionS <- which(apply(res.mfa$group$cos2.sup[,axes],1,sum)>sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T))
+			  }
+			  if (is.integer(select)) selectionS <- select
+			}  
+		  }
+		}
+## Fin ajout 2015/04/23
+
 		if (length(col.hab)==1) col.hab=rep(col.hab,length(group))
         if (is.null(col.hab)) {
             col.hab = rep("darkred", nrow(coord.actif))
@@ -122,14 +157,39 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 		coll <- c(coll,col.hab[1:nrow(coord.actif)])
 		ipch <- c(ipch,rep(17,nrow(coord.actif)))
 		fonte <- c(fonte,rep(1,nrow(coord.actif)))
-	  
+	  	if (!is.null(selection)){
+		    if (is.numeric(unselect)) coll[!((1:length(coll))%in%selection)] = rgb(t(col2rgb(coll[!((1:length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255) 
+	        else coll[!((1:length(coll))%in%selection)] = unselect
+			labe[!((1:length(coll))%in%selection)] <- ""
+	      }
+
       if (!is.null(res.mfa$group$coord.sup)) {
  	    coo <- rbind(coo,coord.illu)
-	    if (lab.grpe){ labe <- c(labe,rownames(coord.illu))
-	    } else  labe <- c(labe,rep("",nrow(coord.illu)))
-	    coll <- c(coll,col.hab[(nrow(coord.actif) + 1):(nrow(coord.actif) + nrow(coord.illu))])
-	    ipch <- c(ipch,rep(2,nrow(coord.illu)))
-	    fonte <- c(fonte,rep(3,nrow(coord.illu)))
+	    if (lab.grpe){ labe2 <- rownames(coord.illu)
+	    } else  labe2 <- rep("",nrow(coord.illu))
+	    coll2 <- col.hab[(nrow(coord.actif) + 1):(nrow(coord.actif) + nrow(coord.illu))]
+	    ipch2 <- rep(2,nrow(coord.illu))
+	    fonte2 <- rep(3,nrow(coord.illu))
+#	    if (lab.grpe){ labe <- c(labe,rownames(coord.illu))
+#	    } else  labe <- c(labe,rep("",nrow(coord.illu)))
+#	    coll <- c(coll,col.hab[(nrow(coord.actif) + 1):(nrow(coord.actif) + nrow(coord.illu))])
+#	    ipch <- c(ipch,rep(2,nrow(coord.illu)))
+#	    fonte <- c(fonte,rep(3,nrow(coord.illu)))
+		if (length(select)==1){
+		  if (grepl("contrib",select)){
+			if (is.numeric(unselect)) coll2[1:length(coll2)] = rgb(t(col2rgb(coll2[1:length(coll2)])),alpha=255*(1-unselect),maxColorValue=255) 
+			else coll2[1:length(coll2)] = unselect
+			labe2[1:length(coll2)] <- ""
+		}}
+	      if (!is.null(selectionS)){
+		    if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionS)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionS)])),alpha=255*(1-unselect),maxColorValue=255) 
+	        else coll2[!((1:length(coll2))%in%selectionS)] = unselect
+			labe2[!((1:length(coll2))%in%selectionS)] <- ""
+	      }
+		  coll=c(coll,coll2)
+		  labe=c(labe,labe2)
+		  fonte=c(fonte,fonte2)
+		  ipch=c(ipch,ipch2)
       }
 	  if (shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
 	  if (autoLab=="auto") autoLab = (length(labe)<50)

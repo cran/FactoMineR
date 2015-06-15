@@ -94,7 +94,6 @@ if (nbind>0){
    if (nrow(res$ind$coord) <= nbind) cat("\nIndividuals\n",file=file,append=TRUE)
    else cat(paste("\nIndividuals (the ",nbind," first)\n",sep=""),file=file,append=TRUE)
   print3(res$ind,file=file,ncp=ncp,width.row=width.row,nbelements=nbind)
- 
    if (!is.null(res$ind.sup)){
    cat("\nSupplementary individual",file=file,append=TRUE)
    if (nrow(res$ind.sup$coord)>1) cat("s",file=file,append=TRUE)

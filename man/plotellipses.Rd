@@ -11,7 +11,7 @@ Draw confidence ellipses around the categories.
 \usage{
 plotellipses(model, keepvar = "all", axis = c(1, 2), means=TRUE, level = 0.95, 
     magnify = 2, cex = 0.5, pch = 20, pch.means=15, type = c("g","p"), 
-    keepnames = TRUE, namescat = NULL, xlim=xlim, ylim=ylim, lwd=1, 
+    keepnames = TRUE, namescat = NULL, xlim=NULL, ylim=NULL, lwd=1, 
     label="all", autoLab=c("auto","yes","no"),\dots)}
 \arguments{
   \item{model}{an object of class MCA or PCA or MFA}

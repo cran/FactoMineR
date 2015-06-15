@@ -12,16 +12,26 @@ dimdesc=function (res, axes = 1:3, proba = 0.05)
           for (k in 1:length(axes)) {
 		    tab <- tableau[order(tableau[,k,drop=FALSE]),k,drop=FALSE]
 		    colnames(tab)="coord"
-            quali <- NULL
-		    if (!is.null(res$call$quali.sup)) {
-## Faut il mettre un poids ou pas pour le test ?
+            sup <- NULL
+		    if (!is.null(c(res$call$quanti.sup,res$call$quali.sup))) {
 			  w=res$call$marge.row*length(res$call$marge.row)
-			  quali <- condes(cbind.data.frame(res$row$coord[,axes[k],drop=FALSE],res$call$Xtot[,res$call$quali.sup,drop=FALSE]),1,weights=w,proba=proba)
+			  sup <- condes(cbind.data.frame(res$row$coord[,axes[k],drop=FALSE],res$call$Xtot[,c(res$call$quali.sup,res$call$quanti.sup),drop=FALSE]),1,weights=w,proba=proba)
 			}
 		    tabcol <- tableaucol[order(tableaucol[,k,drop=FALSE]),k,drop=FALSE]
 		    colnames(tabcol)="coord"
-		    if (!is.null(quali)) result[[k]] = list(row=tab,col=tabcol,quali=quali$quali,category=quali$category)
-		    else result[[k]] = list(row=tab,col=tabcol)
+			result[[k]] = list(row=tab,col=tabcol)
+		    if (!is.null(sup$quanti)) {
+			  result[[k]][[length(result[[k]])+1]] =sup$quanti
+			  names(result[[k]])[length(result[[k]])]="quanti"   ## attention, c'est bien k ici car la list s'est allongee avant
+			}
+		    if (!is.null(sup$quali)) {
+			  result[[k]][[length(result[[k]])+1]] =sup$quali
+			  names(result[[k]])[length(result[[k]])]="quali"   ## attention, c'est bien k ici car la list s'est allongee avant
+			}
+		    if (!is.null(sup$category)) {
+			  result[[k]][[length(result[[k]])+1]] =sup$category
+			  names(result[[k]])[length(result[[k]])]="category"   ## attention, c'est bien k ici car la list s'est allongee avant
+			}
 		  }
       }
      # if (inherits(res, "CA")) {

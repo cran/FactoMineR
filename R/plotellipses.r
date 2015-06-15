@@ -1,6 +1,6 @@
 plotellipses <- function (model, keepvar = "all", axis = c(1, 2), means = TRUE,
     level = 0.95, magnify = 2, cex = 0.5, pch = 20, pch.means = 15,
-    type = c("g", "p"), keepnames = TRUE, namescat = NULL, xlim=xlim, ylim=ylim, lwd=1, label="all",
+    type = c("g", "p"), keepnames = TRUE, namescat = NULL, xlim=NULL, ylim=NULL, lwd=1, label="all",
 	autoLab=c("auto","yes","no"),...)
 
 {
@@ -219,19 +219,19 @@ if (nbevar==1) {
   else aux <- cbind.data.frame(model$call$X[,var],model$ind$coord[,axis])
   if (class(model)[1]=="PCA"){
     coord.ell <- coord.ellipse(aux,bary=means,level.conf=level)
-    plot.PCA(model,habillage=var,ellipse=coord.ell, label=label,axes=axis,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
+    plot.PCA(model,habillage=var,ellipse=coord.ell, label=label,axes=axis,xlim=xlim,ylim=ylim,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
   }
   if (class(model)[1]=="MCA"){
     res.pca <- PCA(aux,quali.sup=1,scale.unit=FALSE,graph=FALSE)
     res.pca$eig[axis,]=model$eig[axis,]
     coord.ell <- coord.ellipse(aux,bary=means,level.conf=level)
-    plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
+    plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,xlim=xlim,ylim=ylim,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
   }
   if (class(model)[1]=="MFA"){
     res.pca <- PCA(aux,quali.sup=1,scale.unit=FALSE,graph=FALSE)
     res.pca$eig[axis,]=model$eig[axis,]
     coord.ell <- coord.ellipse(aux,bary=means,level.conf=level)
-    plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
+    plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,xlim=xlim,ylim=ylim,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
   }
 } else{
     don <- apply(model$ind$coord[, axis], 2, FUN = function(x, k) rep(x, k), k = nbevar)
@@ -257,11 +257,21 @@ if (nbevar==1) {
 #            " (", round(model$eig[axis[2], 2], 1), "%)", sep = ""), ylim=ylim, xlim=xlim)
 
     if ( length(pch.means) < max(modalite2)) pch.means <- rep(pch.means,length=max(modalite2))
-    lattice::xyplot(y ~ x | var, data = don, groups = modalite, panel = monpanel, 
+    if (is.null(xlim)&is.null(ylim)) lattice::xyplot(y ~ x | var, data = don, groups = modalite, panel = monpanel, 
         level = level, means = means, magnify = magnify, cex = cex, 
         pch = pch, pchmeans = pch.means, nommod = nommod, type = type, 
         xlab = paste("Dim ", axis[1], " (", round(model$eig[axis[1], 
             2], 2), "%)", sep = ""), ylab = paste("Dim ", axis[2], 
             " (", round(model$eig[axis[2], 2], 2), "%)", sep = ""))
+    else {
+	  if (is.null(xlim)) xlim <- ylim
+	  else {if (is.null(ylim)) ylim <- xlim}
+	  lattice::xyplot(y ~ x | var, data = don, groups = modalite, panel = monpanel, 
+        level = level, means = means, magnify = magnify, cex = cex, 
+        pch = pch, pchmeans = pch.means, nommod = nommod, type = type, 
+        xlab = paste("Dim ", axis[1], " (", round(model$eig[axis[1], 
+            2], 2), "%)", sep = ""), ylab = paste("Dim ", axis[2], 
+            " (", round(model$eig[axis[2], 2], 2), "%)", sep = ""),xlim=xlim,ylim=ylim)
+	}
 }
 }

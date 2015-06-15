@@ -59,7 +59,8 @@ test.aov.w <- function(y,x,w=NULL){
         resQ = NULL
         if (NROW(aux) > 1) aux <- aux[rev(order(aux[, 1])), ]
         resQ <- aux[aux[, 2] < proba, , drop = FALSE]
-        if (!is.null(resQ)) colnames(resQ) = c("correlation", "p.value")
+        colnames(resQ) = c("correlation", "p.value")
+		if (nrow(resQ)==0) resQ=NULL
         result$quanti <- resQ
     }
     if (!is.null(quali)) {
