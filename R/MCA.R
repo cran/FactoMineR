@@ -244,9 +244,9 @@ if (!is.null(quanti.sup)){
         colnames(eta2) = paste("Dim", 1:ncp)
         rownames(eta2) = attributes(X)$names[quali.sup]
 #        for (i in 1:ncp)  eta2[, i] <- unlist(lapply(as.data.frame(X[rownames(Xact), quali.sup]),fct.eta2,res.mca$ind$coord[,i],weights=row.w))
-		 if (ncp>1) eta2 <- t(sapply(as.data.frame(X[attributes(Xact)$row.names, quali.sup,drop=FALSE]),fct.eta2,res.mca$ind$coord,weights=row.w))
+		 if (ncp>1) eta2 <- t(sapply(as.data.frame(X[rownames(Xact), quali.sup,drop=FALSE]),fct.eta2,res.mca$ind$coord,weights=row.w))
 		 else {
-		   eta2 <- as.matrix(sapply(as.data.frame(X[attributes(Xact)$row.names, quali.sup,drop=FALSE]),fct.eta2,res.mca$ind$coord,weights=row.w),ncol=ncp)
+		   eta2 <- as.matrix(sapply(as.data.frame(X[rownames(Xact), quali.sup,drop=FALSE]),fct.eta2,res.mca$ind$coord,weights=row.w),ncol=ncp)
 		 }
 		
         res.mca$quali.sup$eta2 <- eta2

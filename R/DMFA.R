@@ -1,4 +1,4 @@
-DMFA = function(don, num.fact = ncol(data), scale.unit=TRUE, ncp=5,quanti.sup=NULL,quali.sup=NULL, graph=TRUE, axes=c(1,2)){
+DMFA = function(don, num.fact = ncol(don), scale.unit=TRUE, ncp=5,quanti.sup=NULL,quali.sup=NULL, graph=TRUE, axes=c(1,2)){
 
   don <- as.data.frame(don)
   don <- droplevels(don)

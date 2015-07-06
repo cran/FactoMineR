@@ -1,4 +1,7 @@
 export(FAMD,AovSum,autoLab,CA,CaGalt,catdes,coeffRV,condes,coord.ellipse,descfreq,dimdesc,DMFA,ellipseCA,estim_ncp,GPA,graph.var,HCPC,HMFA,MCA,MFA,PCA,plot.CA,plot.CaGalt,plot.catdes,plot.DMFA,plot.FAMD,plot.GPA,plot.HCPC,plot.HMFA,plot.MCA,plot.MFA,plot.PCA,plot.spMCA,plotellipses,plotGPApartial,plotMFApartial,prefpls,print.CA,print.CaGalt,print.FAMD,print.GPA,print.HCPC,print.HMFA,print.MCA,print.MFA,print.PCA,print.spMCA,reconst,RegBest,simule,svd.triplet,spMCA,summary.CA,summary.CaGalt,summary.FAMD,summary.MCA,summary.MFA,summary.PCA,tab.disjonctif,tab.disjonctif.prop,textual,write.infile)
+importFrom(stats,aggregate,aov,as.formula,as.hclust,chisq.test,cor,cov,cov.wt,cutree,dhyper,fitted.values,kmeans,lm,na.exclude,na.omit,pchisq,pgamma,pf,phyper,pnorm,pt,qchisq,qnorm,rect.hclust,rmultinom,rnorm,runif,sd,summary.lm,vcov)
+importFrom(graphics,abline,arrows,barplot,contour,image,layout,legend,lines,locator,par,points,plot,strheight,strwidth,text)
+importFrom(grDevices,dev.new,dev.off,rgb,col2rgb,xy.coords,palette,terrain.colors)
 importFrom(leaps,leaps)
 importFrom(car,Anova)
 importFrom(MASS,ginv)

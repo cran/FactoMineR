@@ -1,4 +1,7 @@
 spMCA <- function(X,excl=NULL,ncp=5,quali.sup=NULL,graph=TRUE) {
+    moy.p <- function(V, poids) {
+        res <- sum(V * poids)/sum(poids)
+    }
     X <- as.data.frame(X)
 	X <- droplevels(X)
 	if (is.null(excl)) {
@@ -57,7 +60,7 @@ spMCA <- function(X,excl=NULL,ncp=5,quali.sup=NULL,graph=TRUE) {
     eta2 <- matrix(nrow=Q,ncol=ncp)
     for(j in 1:Q) {
       vrc <- aggregate(ind$coord,list(X[,j]),var)[,-1]
-      wi <- apply(vrc,2,weighted.mean,w=as.numeric(table(X[,j])))
+      wi <- apply(vrc,2,moy.p,poids=as.numeric(table(X[,j])))
       be <- eig[[1]][1:ncp]-wi
       eta2[j,] <- be/eig[[1]][1:ncp]
       }

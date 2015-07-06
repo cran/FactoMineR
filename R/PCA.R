@@ -35,7 +35,7 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
     X <- as.data.frame(X)
 	X <- droplevels(X)
     if (any(is.na(X))) {
-        warnings("Missing values are imputed by the mean of the variable: you should use the imputePCA function of the missMDA package")
+        warning("Missing values are imputed by the mean of the variable: you should use the imputePCA function of the missMDA package")
         if (is.null(quali.sup)) 
           X[is.na(X)] = matrix(colMeans(X,na.rm=TRUE),ncol=ncol(X),nrow=nrow(X),byrow=TRUE)[is.na(X)]
         else for (j in (1:ncol(X))[-quali.sup]) X[, j] <- replace(X[, j], is.na(X[, j]), mean(X[, j], na.rm = TRUE))
