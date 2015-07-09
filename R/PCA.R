@@ -40,16 +40,9 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
           X[is.na(X)] = matrix(colMeans(X,na.rm=TRUE),ncol=ncol(X),nrow=nrow(X),byrow=TRUE)[is.na(X)]
         else for (j in (1:ncol(X))[-quali.sup]) X[, j] <- replace(X[, j], is.na(X[, j]), mean(X[, j], na.rm = TRUE))
     }
-#    if (is.null(rownames(X))) rownames(X) <- rownames(X, do.NULL = FALSE,prefix="")
-    if (is.null(attributes(X)$row.names)) rownames(X) <- 1:nrow(X)
-    if (is.null(attributes(X)$names)) colnames(X) <- colnames(X, do.NULL = FALSE,prefix="V")
-#    if (is.null(rownames(X))) rownames(X) <- 1:nrow(X)
-#    else rownames(X)[is.null(rownames(X))] <- paste("row",1:sum(rownames(X)==""),sep="")
-#    if (is.null(colnames(X))) colnames(X) <- paste("V", 1:ncol(X), sep = "")
-#    else colnames(X)[colnames(X)==""] <- paste("V",1:sum(colnames(X)==""),sep="")
     Xtot <- X
     if (!is.null(quali.sup)) 
-        X <- X[, -quali.sup]
+        X <- X[, -quali.sup,drop=FALSE]
     if (any(!sapply(X, is.numeric))) {
         auxi = NULL
         for (j in 1:ncol(X)) if (!is.numeric(X[, j])) 
@@ -68,8 +61,10 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
     row.w <- row.w/sum(row.w)
     if (is.null(col.w)) col.w <- rep(1, ncol(X))
     centre <- moy.ptab(X,row.w)
-    data <- X
+	data <- X
     X <- t(t(as.matrix(X))-centre)
+    if (is.null(attributes(X)$row.names)) rownames(X) <- rownames(data)
+    if (is.null(attributes(X)$names)) colnames(X) <- colnames(data)
     if (scale.unit) {
         ecart.type <- ec.tab(X,row.w)
         X <- t(t(X)/ecart.type)

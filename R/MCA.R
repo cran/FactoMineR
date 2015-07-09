@@ -99,12 +99,10 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
 ## Main program    
 #############
 
-  X <- as.data.frame(X)
-  X <- droplevels(X)
   if (is.null(attributes(X)$row.names)) rownames(X) <- 1:nrow(X)
   if (is.null(attributes(X)$names)) colnames(X) <- colnames(X, do.NULL = FALSE,prefix="V")
-  # if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
-  # if (is.null(colnames(X))) colnames(X) = paste("V", 1:ncol(X), sep = "")
+  X <- as.data.frame(X)
+  X <- droplevels(X)
   ind.act <- (1:nrow(X))[!(1:nrow(X))%in%ind.sup]
 
   if (!is.null(which(lapply(X,class)=="logical"))){

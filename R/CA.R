@@ -13,14 +13,10 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
 }
 
     if (is.table(X)) X <- X[,]
-	X <- as.data.frame(X)
-	X <- droplevels(X)
     if (is.null(attributes(X)$row.names)) rownames(X) <- 1:nrow(X)
     if (is.null(attributes(X)$names)) colnames(X) <- colnames(X, do.NULL = FALSE,prefix="V")
-    # if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
-    # if (is.null(colnames(X))) colnames(X) = paste("V",1:ncol(X),sep="")
-    # colnames(X)[colnames(X)==""] <- paste("V",1:sum(colnames(X)==""),sep="")
-    # rownames(X)[is.null(rownames(X))] <- paste("row",1:sum(rownames(X)==""),sep="")
+	X <- as.data.frame(X)
+	X <- droplevels(X)
 #    for (j in 1:ncol(X)) if (colnames(X)[j]=="") colnames(X)[j] = paste("V",j,sep="")
 #    for (j in 1:nrow(X)) if (is.null(rownames(X)[j])) rownames(X)[j] = paste("row",j,sep="")
     Xtot <- X

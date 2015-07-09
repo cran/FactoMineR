@@ -32,22 +32,22 @@ print3 <- function(obj,file="",ncp,width.row=0,nbelements=nbelements){
 	indice <- indice + 1
   }
   if ("coord"%in%list.obj){
-    mat[,indice+nb.col*(0:(ncp-1))] <- obj$coord[1:nbelements,1:ncp,drop=FALSE]
+    if (!is.null(obj$coord)) mat[,indice+nb.col*(0:(ncp-1))] <- obj$coord[1:nbelements,1:ncp,drop=FALSE]
 	colnames(mat)[indice+nb.col*(0:(ncp-1))] <- paste("Dim.",1:ncp,sep="")
     indice <- indice +1
   }
   if ("contrib"%in%list.obj){
-    mat[,indice+nb.col*(0:(ncp-1))] <- obj$contrib[1:nbelements,1:ncp,drop=FALSE]
+    if (!is.null(obj$contrib)) mat[,indice+nb.col*(0:(ncp-1))] <- obj$contrib[1:nbelements,1:ncp,drop=FALSE]
 	colnames(mat)[indice+nb.col*(0:(ncp-1))] <- "ctr"
     indice <- indice +1
   }
   if ("cos2"%in%list.obj){
-    mat[,indice+nb.col*(0:(ncp-1))] <- obj$cos2[1:nbelements,1:ncp,drop=FALSE]
+    if (!is.null(obj$cos2)) mat[,indice+nb.col*(0:(ncp-1))] <- obj$cos2[1:nbelements,1:ncp,drop=FALSE]
 	colnames(mat)[indice+nb.col*(0:(ncp-1))] <- "cos2"
     indice <- indice +1
   }
   if ("v.test"%in%list.obj){
-    mat[,indice+nb.col*(0:(ncp-1))] <- obj$v.test[1:nbelements,1:ncp,drop=FALSE]
+    if (!is.null(obj$v.test)) mat[,indice+nb.col*(0:(ncp-1))] <- obj$v.test[1:nbelements,1:ncp,drop=FALSE]
 	colnames(mat)[indice+nb.col*(0:(ncp-1))] <- "v.test"
     indice <- indice +1
   }

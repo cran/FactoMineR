@@ -19,6 +19,8 @@
       unlist(lapply(as.data.frame(x),VB))/colSums(x^2*weights)
     }
 
+    if (is.null(rownames(base))) rownames(base) = 1:nrow(base)
+    if (is.null(colnames(base))) colnames(base) = paste("V",1:ncol(base),sep="")
 	base <- as.data.frame(base)
 	base <- droplevels(base)
 	row.w.init <- row.w

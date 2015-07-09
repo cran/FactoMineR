@@ -34,16 +34,16 @@ for (i in 1:length(group)){
   if (((type[i] == "f")||(type[i] == "f2")||(type[i] == "f3"))&&(i%in%num.group.sup)) type.var <- c(type.var,rep(paste(type[i],"sup",sep="_"),group[i]))
 }
 ## End add
+    if (is.null(rownames(base))) rownames(base) = 1:nrow(base)
+    if (is.null(colnames(base))) colnames(base) = paste("V",1:ncol(base),sep="")
+#    for (j in 1:ncol(base)) if (colnames(base)[j]=="") colnames(base)[j] = paste("V",j,sep="")
+#    for (j in 1:nrow(base)) if (is.null(rownames(base)[j])) rownames(base)[j] = paste("row",j,sep="")
     base <- as.data.frame(base)
 	base <- droplevels(base)
     if (!is.null(ind.sup)) {
       base <- rbind.data.frame(base[-ind.sup,],base[ind.sup,,drop=FALSE])
       ind.sup <- (nrow(base)-length(ind.sup)+1) : nrow(base)
     }
-    if (is.null(rownames(base))) rownames(base) = 1:nrow(base)
-    if (is.null(colnames(base))) colnames(base) = paste("V",1:ncol(base),sep="")
-    for (j in 1:ncol(base)) if (colnames(base)[j]=="") colnames(base)[j] = paste("V",j,sep="")
-    for (j in 1:nrow(base)) if (is.null(rownames(base)[j])) rownames(base)[j] = paste("row",j,sep="")
     nbre.var <- ncol(base)
     nbre.group <- length(group)
     group.actif <- NULL
@@ -597,8 +597,13 @@ tmp <- tmp*row.w
        if (!is.null(ind.col.act)) {
             coord.quali.act <- coord.quali[ind.col.act,,drop=FALSE]
             contrib.quali.act <- contrib.quali[ind.col.act,,drop=FALSE]
-            cos2.quali.act <- cos2.quali[ind.col.act,,drop=FALSE]
-            val.test.quali.act <- val.test.quali[ind.col.act,,drop=FALSE]
+			val.test.quali.act <- NULL
+            if (is.null(tab.comp)){
+			  cos2.quali.act <- cos2.quali[ind.col.act,,drop=FALSE]
+              val.test.quali.act <- val.test.quali[ind.col.act,,drop=FALSE]
+			} else {
+			  cos2.quali.act <- res.globale$quali.var$cos2
+			}
             coord.quali.partiel.act <- coord.quali.partiel[unlist(lapply(ind.col.act, function(k) seq(length(group.actif)*(k-1)+1,length=length(group.actif)))),]
             inertie.intra.cg.act <- inertie.intra.cg[ind.col.act,1:ncp]
             inertie.intra.cg.partiel.act <- inertie.intra.cg.partiel[unlist(lapply(ind.col.act, function(k) seq(length(group.actif)*(k-1)+1,length=length(group.actif)))),1:ncp]

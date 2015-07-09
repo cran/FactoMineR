@@ -1,11 +1,11 @@
 DMFA = function(don, num.fact = ncol(don), scale.unit=TRUE, ncp=5,quanti.sup=NULL,quali.sup=NULL, graph=TRUE, axes=c(1,2)){
 
-  don <- as.data.frame(don)
-  don <- droplevels(don)
   if (is.null(rownames(don))) rownames(don) = 1:nrow(don)
   if (is.null(colnames(don))) colnames(don) = paste("V",1:ncol(don),sep="")
   for (j in 1:ncol(don)) if (colnames(don)[j]=="") colnames(don)[j] = paste("V",j,sep="")
   for (j in 1:nrow(don)) if (is.null(rownames(don)[j])) rownames(don)[j] = paste("row",j,sep="")
+  don <- as.data.frame(don)
+  don <- droplevels(don)
   don <- don[,c(num.fact,quali.sup,(1:ncol(don))[-c(num.fact,quali.sup,quanti.sup)],quanti.sup)]
   num.fact <- 1
   if (!is.null(quali.sup)) quali.sup = (2:(1+length(quali.sup)))
@@ -33,11 +33,11 @@ DMFA = function(don, num.fact = ncol(don), scale.unit=TRUE, ncp=5,quanti.sup=NUL
     else X = rbind.data.frame(X, Xc[[i]])
   }
 
-  X <- cbind.data.frame(don[,num.fact],X)
-  if (is.null(quali.sup)) res.pca = PCA(X,quali.sup=1,graph=FALSE,ncp=ncp,quanti.sup=quanti.sup)
+  X <- cbind.data.frame(don[,num.fact,drop=FALSE],X)
+  if (is.null(quali.sup)) res.pca <- PCA(X,quali.sup=1,graph=FALSE,ncp=ncp,quanti.sup=quanti.sup)
   else {
-    X.quali = don[,quali.sup]
-    for (i in 1:length(quali.sup)) X.quali = cbind.data.frame(X.quali,as.factor(paste(don[,quali.sup[i]],don[,num.fact],sep="")))
+    X.quali <- don[,quali.sup]
+    for (i in 1:length(quali.sup)) X.quali <- cbind.data.frame(X.quali,as.factor(paste(don[,quali.sup[i]],don[,num.fact],sep="")))
     X <- cbind.data.frame(don[,num.fact],X.quali,X[,-1])
     res.pca = PCA(X,quali.sup=1:(1+2*length(quali.sup)),graph=FALSE,ncp=ncp,quanti.sup=quanti.sup)
   }
