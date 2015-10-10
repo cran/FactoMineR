@@ -298,8 +298,8 @@ para <- by(tabInd, cluster, simplify = FALSE, select, default.size = nb.par, met
 dist <- by(tabInd, cluster, simplify = FALSE, distinctivness, default.size = nb.par, method = metric, coord.centers = centers)
 desc.ind <- list(para = para, dist = dist)
 
-    if (consol) call <- list(t = t, min = min, max = max, X = X, bw.before.consol=sum(rev(t$tree$height)[1:(nb.clust-1)]),bw.after.consol=res.consol$betweenss/nrow(data.clust),vec = vec,call=sys.calls()[[1]])
-	else call <- list(t = t, min = min, max = max, X = X, bw.before.consol=sum(rev(t$tree$height)[1:(nb.clust-1)]),vec = vec,call=sys.calls()[[1]])
+    if (consol) call <- list(t = t, min = min, max = max, X = X, bw.before.consol=sum(rev(t$tree$height)[1:(nb.clust-1)]),bw.after.consol=res.consol$betweenss/nrow(data.clust),vec = vec,call=match.call())
+	else call <- list(t = t, min = min, max = max, X = X, bw.before.consol=sum(rev(t$tree$height)[1:(nb.clust-1)]),vec = vec,call=match.call())
 #    call <- list(t = t, min = min, max = max, X = data.clust, vec = vec,call=sys.calls()[[1]])
     if (kk!=Inf) res.HCPC <- list(data.clust = data.clust, desc.var = desc.var, call = call, desc.ind = desc.ind)
     else res.HCPC <- list(data.clust = data.clust, desc.var = desc.var, desc.axes = desc.axe, call = call, desc.ind = desc.ind)

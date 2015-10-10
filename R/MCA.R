@@ -99,8 +99,8 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
 ## Main program    
 #############
 
-  if (is.null(attributes(X)$row.names)) rownames(X) <- 1:nrow(X)
-  if (is.null(attributes(X)$names)) colnames(X) <- colnames(X, do.NULL = FALSE,prefix="V")
+  if (is.null(rownames(X))) rownames(X) <- 1:nrow(X)
+  if (is.null(colnames(X))) colnames(X) <- colnames(X, do.NULL = FALSE,prefix="V")
   X <- as.data.frame(X)
   X <- droplevels(X)
   ind.act <- (1:nrow(X))[!(1:nrow(X))%in%ind.sup]
@@ -179,7 +179,8 @@ if (!is.null(quanti.sup)){
     res.mca$call$quali.sup = quali.sup
     res.mca$call$quanti.sup = quanti.sup
     res.mca$call$row.w = row.w
-	res.mca$call$call <- sys.calls()[[1]]
+	res.mca$call$call <- match.call()
+#	res.mca$call$call <- sys.calls()[[1]]
     if (length(act)>1) res.mca$eig <- res.mca$eig[1:min(length(ind.act)-1,sum(sapply(Xact,nlevels))-length(act)),]
     else res.mca$eig <- res.mca$eig[1:(nlevels(Xact)-1),]
     names(res.mca)[3] <- "ind"

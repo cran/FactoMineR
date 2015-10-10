@@ -219,19 +219,22 @@ if (nbevar==1) {
   else aux <- cbind.data.frame(model$call$X[,var],model$ind$coord[,axis])
   if (class(model)[1]=="PCA"){
     coord.ell <- coord.ellipse(aux,bary=means,level.conf=level)
-    plot.PCA(model,habillage=var,ellipse=coord.ell, label=label,axes=axis,xlim=xlim,ylim=ylim,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
+    if (means==TRUE) plot.PCA(model,habillage=var,ellipse=coord.ell, label=label,axes=axis,xlim=xlim,ylim=ylim,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
+    else plot.PCA(model,habillage=var,ellipse=coord.ell, label=label,axes=axis,xlim=xlim,ylim=ylim,title=paste("Concentration ellipses for the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
   }
   if (class(model)[1]=="MCA"){
     res.pca <- PCA(aux,quali.sup=1,scale.unit=FALSE,graph=FALSE)
     res.pca$eig[axis,]=model$eig[axis,]
     coord.ell <- coord.ellipse(aux,bary=means,level.conf=level)
-    plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,xlim=xlim,ylim=ylim,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
+    if (means==TRUE) plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,xlim=xlim,ylim=ylim,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
+    else plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,xlim=xlim,ylim=ylim,title=paste("Concentration ellipses for the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
   }
   if (class(model)[1]=="MFA"){
     res.pca <- PCA(aux,quali.sup=1,scale.unit=FALSE,graph=FALSE)
     res.pca$eig[axis,]=model$eig[axis,]
     coord.ell <- coord.ellipse(aux,bary=means,level.conf=level)
-    plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,xlim=xlim,ylim=ylim,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
+    if (means==TRUE) plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,xlim=xlim,ylim=ylim,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
+    else plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,xlim=xlim,ylim=ylim,title=paste("Concentration ellipses for the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
   }
 } else{
     don <- apply(model$ind$coord[, axis], 2, FUN = function(x, k) rep(x, k), k = nbevar)

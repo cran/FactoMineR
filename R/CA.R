@@ -12,9 +12,9 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
   unlist(lapply(as.data.frame(x),VB))/colSums(x^2*weights)
 }
 
-    if (is.table(X)) X <- X[,]
-    if (is.null(attributes(X)$row.names)) rownames(X) <- 1:nrow(X)
-    if (is.null(attributes(X)$names)) colnames(X) <- colnames(X, do.NULL = FALSE,prefix="V")
+    if (is.table(X)) X <- as.data.frame.matrix(X)
+    if (is.null(rownames(X))) rownames(X) <- 1:nrow(X)
+    if (is.null(colnames(X))) colnames(X) <- colnames(X, do.NULL = FALSE,prefix="V")
 	X <- as.data.frame(X)
 	X <- droplevels(X)
 #    for (j in 1:ncol(X)) if (colnames(X)[j]=="") colnames(X)[j] = paste("V",j,sep="")
@@ -66,7 +66,8 @@ dist2.row <- rowSums(t(t(Tc^2)*marge.col))
     names(inertia.col) <- attributes(coord.col)$row.names
     names(inertia.row) <- attributes(coord.row)$row.names
     
-    res.call <- list(X = X, marge.col = marge.col, marge.row = marge.row, ncp = ncp, row.w=row.w,call=sys.calls()[[1]],Xtot=Xtot,N=sum(row.w*rowSums(X)))
+#    res.call <- list(X = X, marge.col = marge.col, marge.row = marge.row, ncp = ncp, row.w=row.w,call=sys.calls()[[1]],Xtot=Xtot,N=sum(row.w*rowSums(X)))
+    res.call <- list(X = X, marge.col = marge.col, marge.row = marge.row, ncp = ncp, row.w=row.w,call=match.call(),Xtot=Xtot,N=sum(row.w*rowSums(X)))
     res.col <- list(coord = as.matrix(coord.col[, 1:ncp]), contrib = as.matrix(contrib.col[, 1:ncp] * 100), cos2 = as.matrix(cos2.col[, 1:ncp]), inertia=inertia.col)
     res.row <- list(coord = coord.row[, 1:ncp], contrib = contrib.row[, 1:ncp] * 100, cos2 = cos2.row[, 1:ncp], inertia=inertia.row)
     res <- list(eig = vp, call = res.call, row = res.row, col = res.col, svd = tmp)

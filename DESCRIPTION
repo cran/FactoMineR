@@ -1,6 +1,6 @@
 Package: FactoMineR
-Version: 1.31.3
-Date: 2015-07-09
+Version: 1.31.4
+Date: 2015-10-09
 Title: Multivariate Exploratory Data Analysis and Data Mining
 Author: Francois Husson, Julie Josse, Sebastien Le, Jeremy Mazet
 Maintainer: Francois Husson <francois.husson@agrocampus-ouest.fr>
@@ -13,6 +13,6 @@ License: GPL (>= 2)
 URL: http://factominer.free.fr
 Encoding: latin1
 NeedsCompilation: no
-Packaged: 2015-07-09 11:34:54 UTC; husson
+Packaged: 2015-10-09 12:24:48 UTC; husson
 Repository: CRAN
-Date/Publication: 2015-07-09 14:29:39
+Date/Publication: 2015-10-10 00:21:19

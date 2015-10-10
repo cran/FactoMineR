@@ -149,7 +149,8 @@
 	res$call$quali.sup$quali.sup <- base[,c(facAct,facIllu),drop=FALSE]
 	res$call$type <- rep("s",ncol(base))
 	res$call$type[c(facAct,facIllu)] <- "n"
-	res$call$call <- sys.calls()[[1]]
+	res$call$call <- match.call()
+#	res$call$call <- sys.calls()[[1]]
     class(res) <- c("FAMD", "list")
 	 if (graph & (ncp>1)){
        plot.FAMD(res,choix="ind", axes=axes,habillage="none")

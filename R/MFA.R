@@ -129,7 +129,7 @@ for (i in 1:length(group)){
 		F..t<-numeric()
 		for (j in grfrec)	F..t[j]<-sum(Fi.t[[j]][1:nb.actif])
 	
-		for(t in grfrec){
+		for (t in grfrec){
 			if (t==1) {
 			    base[,1:group[t]]<-sweep(base[,1:group[t]],2,F.jt[[t]],FUN="/")
 			    base[,1:group[t]]=sweep(base[,1:group[t]],1,Fi.t[[t]]/F..t[t],FUN="-")
@@ -710,7 +710,8 @@ cor.partial.axes <- cov.wt(aux,wt=row.w/sum(row.w),method="ML",cor=TRUE)$cor
     if (bool.sup) resultats$quali.var.sup = res.quali.var.sup
     resultats$partial.axes = res.partial.axes
     resultats$call = call
-	resultats$call$call <- sys.calls()[[1]]
+	resultats$call$call <- match.call()
+#	resultats$call$call <- sys.calls()[[1]]
     resultats$global.pca = res.globale
     class(resultats) <- c("MFA", "list")
 

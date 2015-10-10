@@ -32,7 +32,7 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
   unlist(lapply(as.data.frame(x),VB))/colSums(x^2*weights)
 }
 
-    X <- as.data.frame(X)
+	X <- as.data.frame(X)
 	X <- droplevels(X)
     if (any(is.na(X))) {
         warning("Missing values are imputed by the mean of the variable: you should use the imputePCA function of the missMDA package")
@@ -75,7 +75,7 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
     dist2.var <- as.vector(crossprod(rep(1,nrow(X)),as.matrix(X^2*row.w)))
     res.call <- list(row.w = (row.w/sum(row.w)), col.w = col.w, 
         scale.unit = scale.unit, ncp = ncp, centre = centre, 
-        ecart.type = ecart.type, X = Xtot, row.w.init = row.w.init,call=sys.calls()[[1]])
+        ecart.type = ecart.type, X = Xtot, row.w.init = row.w.init,call=match.call())
     tmp <- svd.triplet(X, row.w = row.w, col.w = col.w,ncp=ncp)
     eig <- tmp$vs^2
     vp <- as.data.frame(matrix(NA, length(eig), 3))
