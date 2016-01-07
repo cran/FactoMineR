@@ -17,8 +17,10 @@ if (choix=="quanti") {
 	else label="none"
 	col.var <- "black"
 	col.quanti.sup <- "blue"
+	x$var <- x$quanti.var
+	if (is.null(title)) title <- "Graph of the quantitative variables"
 
-plot.PCA (x, axes = axes, choix = choix, label=label,
+plot.PCA(x, axes = axes, choix = choix, label=label,
     habillage = habillage, col.hab=col.hab,
     col.var = col.var, col.quanti.sup = col.quanti.sup, invisible = invisible, lim.cos2.var = lim.cos2.var, 
     xlim = xlim, ylim = ylim, title = title, palette=palette, new.plot=new.plot,
@@ -40,6 +42,7 @@ plot.PCA (x, axes = axes, choix = choix, label=label,
     choix <- "ind"
 	invisible <- c(invisible, "ind","ind.sup")
   }
+	if ((choix=="group")&is.null(title)) title <- "Graph of the variables"
 plot.MFA (x, axes = axes, choix = choix, lab.var = lab.var,
     lab.ind = lab.ind, lab.par = FALSE, habillage = habillage,
     col.hab = col.hab, invisible = invisible, lim.cos2.var = lim.cos2.var, 

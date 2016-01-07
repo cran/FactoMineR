@@ -157,7 +157,7 @@
        plot.FAMD(res,choix="ind", invisible=c("quali","quali.sup"),axes=axes,habillage="none",new.plot=TRUE)
        plot.FAMD(res,choix="var",axes=axes,new.plot=TRUE)
        plot.FAMD(res,choix="quali", axes=axes,habillage="none",new.plot=TRUE)
-       plot.FAMD(res,choix="quanti",title="Variables representation",axes=axes,new.plot=TRUE)
+       plot.FAMD(res,choix="quanti",axes=axes,new.plot=TRUE)
      }
 	return(res)
 }

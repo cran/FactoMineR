@@ -36,7 +36,7 @@ test.aov.w <- function(y,x,w=NULL){
 	if (is.null(weights)) weights <- rep(1,nrow(donnee))
 	if (sum(weights)<3) weights <- weights*nrow(donnee)
     for (i in 1:length(lab)) {
-        lab[i] = gsub(" ", ".", lab[i])
+#        lab[i] = gsub(" ", ".", lab[i])
         if (is.factor(donnee[, i])) {
             if (any(is.na(donnee[, i]))) {
                 levels(donnee[, i]) <- c(levels(donnee[, i]),"NA")
@@ -53,7 +53,7 @@ test.aov.w <- function(y,x,w=NULL){
     if (!is.null(quanti)) {
         if (length(quanti)>1){
 		  tab.quanti=apply(donnee[,quanti],2,cor.calc,donnee[,num.var],w=weights)
-          aux = matrix(as.numeric(sapply(tab.quanti,unlist)),byrow=T,ncol=2)
+          aux = matrix(as.numeric(sapply(tab.quanti,unlist)),byrow=TRUE,ncol=2)
 		} else aux <- matrix(unlist(cor.calc(donnee[, quanti], donnee[, num.var],w=weights)),ncol=2)
         rownames(aux) = colnames(donnee)[quanti]
         resQ = NULL

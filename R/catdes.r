@@ -6,6 +6,7 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL){
 #    else donnee = donnee[rep(1:nrow(donnee),row.w),]
 #  }
     moy.p <- function(V, fac=NULL, poids, na.rm=TRUE) {
+		poids[is.na(V)] <- 0
         if (is.null(fac)) {
 		  res <- sum(V * poids,na.rm=na.rm)/sum(poids)
 		} else {
@@ -15,6 +16,7 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL){
 		return(res)
     }
     ec <- function(V, fac=NULL, poids, na.rm=TRUE) {
+		poids[is.na(V)] <- 0
         if (is.null(fac)){
   		  V <- V-moy.p(V,fac=NULL,poids,na.rm)
 		  res <- sum(V^2 * poids,na.rm=na.rm)/sum(poids)

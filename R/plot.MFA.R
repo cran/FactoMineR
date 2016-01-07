@@ -1,6 +1,6 @@
 plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq"), ellipse = NULL, ellipse.par = NULL, 
     lab.grpe = TRUE, lab.var = TRUE, lab.ind = TRUE, lab.par = FALSE, lab.col = TRUE,
-    habillage = "ind", col.hab = NULL, invisible = c("none","ind", "ind.sup", "quanti","quanti.sup","quali","quali.sup","row", "row.sup","col", "col.sup"), partial = NULL, 
+    habillage = "group", col.hab = NULL, invisible = c("none","ind", "ind.sup", "quanti","quanti.sup","quali","quali.sup","row", "row.sup","col", "col.sup"), partial = NULL, 
     lim.cos2.var = 0., chrono = FALSE, xlim = NULL, ylim = NULL, 
     title = NULL, palette = NULL, autoLab = c("auto","yes","no"),new.plot = FALSE, select = NULL,
 	unselect = 0.7,shadowtext=FALSE,...) 
@@ -29,7 +29,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     }
     if (choix == "axes") {
         if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
-        if (is.null(palette)) palette(c("black", "red", "green3", "blue", "cyan", "magenta","darkgray", "darkgoldenrod", "darkgreen", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon"))
+        if (is.null(palette)) palette(c("black", "red", "green3", "blue", "magenta", "darkgoldenrod", "darkgreen","darkgray", "cyan", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon"))
         if (is.null(title)) title <- "Partial axes"
         plot(0, 0, xlab = lab.x, ylab = lab.y, xlim = c(-1.1, 1.1), ylim = c(-1.1, 1.1), col = "white", asp = 1, main = title,...)
         x.cercle <- seq(-1, 1, by = 0.01)
@@ -96,11 +96,9 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         if (autoLab==TRUE) autoLab(coord.axes[, 1], y = coord.axes[, 2], labels = labe, col=couleur.axes, shadotext=shadowtext,...)
         if (habillage == "group") legend("topleft", legend = rownames(res.mfa$group$Lg)[-length(rownames(res.mfa$group$Lg))], text.col = unique(couleur.axes), ...)
     }
-	
     if (choix == "group") {
         coord.actif <- res.mfa$group$coord[, axes, drop = FALSE]
         if (!is.null(res.mfa$group$coord.sup))  coord.illu <- res.mfa$group$coord.sup[, axes, drop = FALSE]
-
 ## Début ajout 2015/04/23
         selection <- selectionS <- NULL
 		if (!is.null(select)) {
@@ -143,7 +141,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         if (habillage == "group") col.hab <- (2:(length(group) + 1))
 
 	  if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
-      if (is.null(palette)) palette(c("black", "red", "green3", "blue", "cyan", "magenta","darkgray", "darkgoldenrod", "darkgreen", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon"))
+        if (is.null(palette)) palette(c("black", "red", "green3", "blue", "magenta", "darkgoldenrod", "darkgreen","darkgray", "cyan", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon"))
 	  coo <- labe <- coll <- ipch <- fonte <- NULL
 	  if (is.null(xlim)) xlim <- c(0,1)
 	  if (is.null(ylim)) ylim <- c(0,1)
@@ -199,7 +197,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 	}
     if (choix == "var") {
         if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
-        if (is.null(palette)) palette(c("black", "red", "green3", "blue", "cyan", "magenta","darkgray", "darkgoldenrod", "darkgreen", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon"))
+        if (is.null(palette)) palette(c("black", "red", "green3", "blue", "magenta", "darkgoldenrod", "darkgreen","darkgray", "cyan", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon"))
         test.invisible <- vector(length = 2)
         if (!is.null(invisible)) {
             test.invisible[1] <- match("quanti", invisible)
@@ -353,7 +351,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     }
 	if (choix=="freq"){
       if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
-      if (is.null(palette)) palette(c("black", "red", "green3", "blue", "cyan", "magenta","darkgray", "darkgoldenrod", "darkgreen", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon"))
+        if (is.null(palette)) palette(c("black", "red", "green3", "blue", "magenta", "darkgoldenrod", "darkgreen","darkgray", "cyan", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon"))
       if (is.null(col.hab)) col.hab=c("black","grey60","darkblue","blue")
 	  col.row = col.hab[1]
 	  col.row.sup = col.hab[2]
@@ -852,7 +850,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         }
         if (habillage == "none") col.ind <- col.ind.sup <- col.quali.sup <- col.quali <- col.ellipse <- col.ellipse.par <- rep("black", nb.ind * (nbre.grpe + 1))
         if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY")))  dev.new(width = min(14, max(8, 8 * (xmax - xmin)/(ymax - ymin))), height = 8)
-        if (is.null(palette)) palette(c("black", "red", "green3", "blue", "cyan", "magenta","darkgray", "darkgoldenrod", "darkgreen", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon"))
+        if (is.null(palette)) palette(c("black", "red", "green3", "blue", "magenta", "darkgoldenrod", "darkgreen","darkgray", "cyan", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon"))
         if (is.null(title))  title <- "Individual factor map"
         plot(0, 0, main = title, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp = 1, ...)
         abline(v = 0, lty = 2, ...)

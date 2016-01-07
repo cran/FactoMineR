@@ -9,8 +9,8 @@ Draw confidence ellipses around the categories.
 }
 
 \usage{
-plotellipses(model, keepvar = "all", axis = c(1, 2), means=TRUE, level = 0.95, 
-    magnify = 2, cex = 0.5, pch = 20, pch.means=15, type = c("g","p"), 
+plotellipses(model, keepvar = "all", axes = c(1, 2), means=TRUE, level = 0.95, 
+    magnify = 2, cex = 1, pch = 20, pch.means=15, type = c("g","p"), 
     keepnames = TRUE, namescat = NULL, xlim=NULL, ylim=NULL, lwd=1, 
     label="all", autoLab=c("auto","yes","no"),\dots)}
 \arguments{
@@ -22,7 +22,7 @@ plotellipses(model, keepvar = "all", axis = c(1, 2), means=TRUE, level = 0.95,
   compute the dimensions (active variables) or only the supplementary
   categorical variables. If keepvar is a numeric vector of indexes or a
   character vector of names of variables, only relevant variables are plotted.}
-\item{axis}{a length 2 vector specifying the components to plot}
+\item{axes}{a length 2 vector specifying the components to plot}
 \item{means}{boolean which indicates if the confidence ellipses are
     for (the coordinates of) the means of the
     categories (the empirical variance is divided  by the number of

@@ -52,7 +52,7 @@ print3 <- function(obj,file="",ncp,width.row=0,nbelements=nbelements){
     indice <- indice +1
   }
   mat <- format(round(mat,nb.dec))
-  if ("dist"%in%list.obj) mat2 <- cbind("|", mat[1:nbelements,1,drop=FALSE],"|")
+  if (sum(c("dist","inertia")%in%list.obj)) mat2 <- cbind("|", mat[1:nbelements,1,drop=FALSE],"|")
   else mat2 <- "|"
   for (k in 1:ncp) mat2 <- cbind(mat2, mat[,(1+sum(c("dist","inertia")%in%list.obj)+nb.col*(k-1)):(sum(c("dist","inertia")%in%list.obj)+nb.col*k),drop=FALSE],"|")
   colnames(mat2)[1] <- ""

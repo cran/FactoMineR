@@ -70,7 +70,7 @@ dist2.row <- rowSums(t(t(Tc^2)*marge.col))
     res.call <- list(X = X, marge.col = marge.col, marge.row = marge.row, ncp = ncp, row.w=row.w,call=match.call(),Xtot=Xtot,N=sum(row.w*rowSums(X)))
     res.col <- list(coord = as.matrix(coord.col[, 1:ncp]), contrib = as.matrix(contrib.col[, 1:ncp] * 100), cos2 = as.matrix(cos2.col[, 1:ncp]), inertia=inertia.col)
     res.row <- list(coord = coord.row[, 1:ncp], contrib = contrib.row[, 1:ncp] * 100, cos2 = cos2.row[, 1:ncp], inertia=inertia.row)
-    res <- list(eig = vp, call = res.call, row = res.row, col = res.col, svd = tmp)
+    res <- list(eig = vp[1:min(nrow(X) - 1, ncol(X) - 1),,drop=FALSE], call = res.call, row = res.row, col = res.col, svd = tmp)
   if (!is.null(row.sup)){
     X.row.sup <- as.data.frame(Xtot[row.sup,])
     if ((!is.null(col.sup))||(!is.null(quanti.sup))||(!is.null(quali.sup))) X.row.sup <- as.data.frame(X.row.sup[,-c(col.sup,quanti.sup,quali.sup)])

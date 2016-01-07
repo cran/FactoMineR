@@ -1,5 +1,5 @@
-plotellipses <- function (model, keepvar = "all", axis = c(1, 2), means = TRUE,
-    level = 0.95, magnify = 2, cex = 0.5, pch = 20, pch.means = 15,
+plotellipses <- function (model, keepvar = "all", axes = c(1, 2), means = TRUE,
+    level = 0.95, magnify = 2, cex = 1, pch = 20, pch.means = 15,
     type = c("g", "p"), keepnames = TRUE, namescat = NULL, xlim=NULL, ylim=NULL, lwd=1, label="all",
 	autoLab=c("auto","yes","no"),...)
 
@@ -215,29 +215,29 @@ if (nbevar==1) {
     if (is.numeric(keepvar)) var <- keepvar
     else var <- which(keepvar==colnames(model$call$X))
   }
-  if (!is.null(model$call$ind.sup)) aux <- cbind.data.frame(model$call$X[-model$call$ind.sup,var],model$ind$coord[,axis])
-  else aux <- cbind.data.frame(model$call$X[,var],model$ind$coord[,axis])
+  if (!is.null(model$call$ind.sup)) aux <- cbind.data.frame(model$call$X[-model$call$ind.sup,var],model$ind$coord[,axes])
+  else aux <- cbind.data.frame(model$call$X[,var],model$ind$coord[,axes])
   if (class(model)[1]=="PCA"){
     coord.ell <- coord.ellipse(aux,bary=means,level.conf=level)
-    if (means==TRUE) plot.PCA(model,habillage=var,ellipse=coord.ell, label=label,axes=axis,xlim=xlim,ylim=ylim,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
-    else plot.PCA(model,habillage=var,ellipse=coord.ell, label=label,axes=axis,xlim=xlim,ylim=ylim,title=paste("Concentration ellipses for the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
+    if (means==TRUE) plot.PCA(model,habillage=var,ellipse=coord.ell, cex=cex, label=label,axes=axes,xlim=xlim,ylim=ylim,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab,...)
+    else plot.PCA(model,habillage=var,ellipse=coord.ell, cex=cex, label=label,axes=axes,xlim=xlim,ylim=ylim,title=paste("Concentration ellipses for the categories of",colnames(model$call$X)[var]),autoLab=autoLab,...)
   }
   if (class(model)[1]=="MCA"){
     res.pca <- PCA(aux,quali.sup=1,scale.unit=FALSE,graph=FALSE)
-    res.pca$eig[axis,]=model$eig[axis,]
+    res.pca$eig[axes,]=model$eig[axes,]
     coord.ell <- coord.ellipse(aux,bary=means,level.conf=level)
-    if (means==TRUE) plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,xlim=xlim,ylim=ylim,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
-    else plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,xlim=xlim,ylim=ylim,title=paste("Concentration ellipses for the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
+    if (means==TRUE) plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=cex,label=label,axes=axes,xlim=xlim,ylim=ylim,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab,...)
+    else plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=cex,label=label,axes=axes,xlim=xlim,ylim=ylim,title=paste("Concentration ellipses for the categories of",colnames(model$call$X)[var]),autoLab=autoLab,...)
   }
   if (class(model)[1]=="MFA"){
     res.pca <- PCA(aux,quali.sup=1,scale.unit=FALSE,graph=FALSE)
-    res.pca$eig[axis,]=model$eig[axis,]
+    res.pca$eig[axes,]=model$eig[axes,]
     coord.ell <- coord.ellipse(aux,bary=means,level.conf=level)
-    if (means==TRUE) plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,xlim=xlim,ylim=ylim,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
-    else plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=0.8,label=label,axes=axis,xlim=xlim,ylim=ylim,title=paste("Concentration ellipses for the categories of",colnames(model$call$X)[var]),autoLab=autoLab)
+    if (means==TRUE) plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=cex,label=label,axes=axes,xlim=xlim,ylim=ylim,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab,...)
+    else plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=cex,label=label,axes=axes,xlim=xlim,ylim=ylim,title=paste("Concentration ellipses for the categories of",colnames(model$call$X)[var]),autoLab=autoLab,...)
   }
 } else{
-    don <- apply(model$ind$coord[, axis], 2, FUN = function(x, k) rep(x, k), k = nbevar)
+    don <- apply(model$ind$coord[, axes], 2, FUN = function(x, k) rep(x, k), k = nbevar)
 	nindiv <- nrow(donnees)
     rownames(don) <- NULL
     colnames(don) <- c("x", "y")
@@ -255,26 +255,26 @@ if (nbevar==1) {
 #    xyplot(y ~ x | var , data = don, groups = modalite, panel = monpanel,
 #        level = level, means = means, magnify = magnify, cex = cex,
 #        pch = pch, lwd=lwd, pchmeans = pch.means, nommod = nommod, type = type,
-#        xlab = paste("Dim ", axis[1], " (", round(model$eig[axis[1],
-#            2], 1), "%)", sep = ""), ylab = paste("Dim ", axis[2],
-#            " (", round(model$eig[axis[2], 2], 1), "%)", sep = ""), ylim=ylim, xlim=xlim)
+#        xlab = paste("Dim ", axes[1], " (", round(model$eig[axes[1],
+#            2], 1), "%)", sep = ""), ylab = paste("Dim ", axes[2],
+#            " (", round(model$eig[axes[2], 2], 1), "%)", sep = ""), ylim=ylim, xlim=xlim)
 
     if ( length(pch.means) < max(modalite2)) pch.means <- rep(pch.means,length=max(modalite2))
     if (is.null(xlim)&is.null(ylim)) lattice::xyplot(y ~ x | var, data = don, groups = modalite, panel = monpanel, 
-        level = level, means = means, magnify = magnify, cex = cex, 
+        level = level, means = means, magnify = magnify, cex = cex*0.5, 
         pch = pch, pchmeans = pch.means, nommod = nommod, type = type, 
-        xlab = paste("Dim ", axis[1], " (", round(model$eig[axis[1], 
-            2], 2), "%)", sep = ""), ylab = paste("Dim ", axis[2], 
-            " (", round(model$eig[axis[2], 2], 2), "%)", sep = ""))
+        xlab = paste("Dim ", axes[1], " (", round(model$eig[axes[1], 
+            2], 2), "%)", sep = ""), ylab = paste("Dim ", axes[2], 
+            " (", round(model$eig[axes[2], 2], 2), "%)", sep = ""))
     else {
 	  if (is.null(xlim)) xlim <- ylim
 	  else {if (is.null(ylim)) ylim <- xlim}
 	  lattice::xyplot(y ~ x | var, data = don, groups = modalite, panel = monpanel, 
-        level = level, means = means, magnify = magnify, cex = cex, 
+        level = level, means = means, magnify = magnify, cex = cex*0.5, 
         pch = pch, pchmeans = pch.means, nommod = nommod, type = type, 
-        xlab = paste("Dim ", axis[1], " (", round(model$eig[axis[1], 
-            2], 2), "%)", sep = ""), ylab = paste("Dim ", axis[2], 
-            " (", round(model$eig[axis[2], 2], 2), "%)", sep = ""),xlim=xlim,ylim=ylim)
+        xlab = paste("Dim ", axes[1], " (", round(model$eig[axes[1], 
+            2], 2), "%)", sep = ""), ylab = paste("Dim ", axes[2], 
+            " (", round(model$eig[axes[2], 2], 2), "%)", sep = ""),xlim=xlim,ylim=ylim)
 	}
 }
 }
