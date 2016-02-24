@@ -264,12 +264,12 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 		}
 		
 		labe <- labe2 <- coll <- coll2 <- NULL
-		if (!is.null(res.mfa["quanti.var"]$quanti.var)&is.na(test.invisible[1])){
+		if (!is.null(res.mfa["quanti.var"]$quanti.var)){
 		  coll <- col[1:nrow(res.mfa["quanti.var"]$quanti.var$coord)]
 		  if (lab.var) labe <- rownames(res.mfa["quanti.var"]$quanti.var$coord)
 		   else  labe <- rep("",nrow(res.mfa["quanti.var"]$quanti.var$coord))
 		}
-		if (!is.null(res.mfa$quanti.var.sup)&is.na(test.invisible[2])){
+		if (!is.null(res.mfa$quanti.var.sup)){
 		  if (lab.var) labe2 <- rownames(res.mfa$quanti.var.sup$coord)
 		  else  labe2 <- rep("",nrow(res.mfa$quanti.var.sup$coord))
 		  coll2 <- col[(length(coll)+1):length(col)]
@@ -289,27 +289,28 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 		}
         col <- c(coll,coll2)
 		labe <- c(labe,labe2)
-		
 		if (habillage == "group" & is.na(test.invisible[1]) & is.na(test.invisible[2])) 
-            legend("topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg), ])[type == "c"], text.col = col.hab[type == "c"], cex = 0.8*par("cex"))
+            legend("topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg),,drop=FALSE])[type == "c"], text.col = col.hab[type == "c"], cex = 0.8*par("cex"))
         if (habillage == "group" & is.na(test.invisible[1]) & !is.na(test.invisible[2])){
-            if ("quanti.sup"%in%res.mfa$call$nature.var) legend("topleft", legend = rownames(res.mfa$group$Lg[-c(num.group.sup, nrow(res.mfa$group$Lg)), ])[type.act == "c"], 
+            if ("quanti.sup"%in%res.mfa$call$nature.var) legend("topleft", legend = rownames(res.mfa$group$Lg[-c(num.group.sup, nrow(res.mfa$group$Lg)),,drop=FALSE])[type.act == "c"], 
                 text.col = col.hab[which(!((1:length(group))%in%res.mfa$call$num.group.sup))[type.act == "c"]], cex = 0.8*par("cex"))
             else legend("topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg), ])[type == "c"], 
                 text.col = col.hab[type == "c"], cex = 0.8*par("cex"))
         }
 		if (habillage == "group" & !is.na(test.invisible[1]) & is.na(test.invisible[2])){
-            if ("quanti"%in%res.mfa$call$nature.var) legend("topleft", legend = rownames(res.mfa$group$Lg[num.group.sup, ])[type.sup == "c"], text.col = col.hab[res.mfa$call$num.group.sup[type.sup == "c"]], cex = 0.8*par("cex"))
-			else legend("topleft", legend = rownames(res.mfa$group$Lg[num.group.sup, ])[type.sup == "c"], text.col = col.hab[res.mfa$call$num.group.sup[type.sup == "c"]], cex = 0.8*par("cex"))
+            if ("quanti"%in%res.mfa$call$nature.var) legend("topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[type.sup == "c"], text.col = col.hab[res.mfa$call$num.group.sup[type.sup == "c"]], cex = 0.8*par("cex"))
+			else legend("topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[type.sup == "c"], text.col = col.hab[res.mfa$call$num.group.sup[type.sup == "c"]], cex = 0.8*par("cex"))
 		}
         nrow.coord.var <- 0
         coo <- posi <- NULL
-		
-        if ((!is.null(res.mfa["quanti.var"]$quanti.var))&(is.na(test.invisible[1]))){
-        if (length(apply(res.mfa["quanti.var"]$quanti.var$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) >= lim.cos2.var)>0){
-		  coord.var <- res.mfa$quanti.var$cor[which(apply(res.mfa$quanti.var$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) >= lim.cos2.var),axes,drop=FALSE]
+        if ((!is.null(res.mfa["quanti.var"]$quanti.var))&(!is.na(test.invisible[1]))){
+		  col[1:nrow(res.mfa$quanti.var$cor[,axes,drop=FALSE])] <- "transparent"
+		}
+        if (!is.null(res.mfa["quanti.var"]$quanti.var)){
+### modif 2016-02-16
+		  coord.var <- res.mfa$quanti.var$cor[,axes,drop=FALSE]
           coo <- coord.var
-          nrow.coord.var <- nrow.coord.var + nrow(coord.var)
+		  if (length(which(apply(res.mfa$quanti.var$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) < lim.cos2.var))>0) col[which(apply(res.mfa$quanti.var$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) < lim.cos2.var)] <- "transparent"
 		  for (v in 1:nrow(coord.var)) {
                 arrows(0, 0, coord.var[v, 1], coord.var[v, 2], length = 0.1, angle = 15, code = 2, col = col[v])
                 if (lab.var) {
@@ -323,14 +324,17 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
                 }
                 }
           }
-        }}
+        }
         
-       if ((!is.null(res.mfa$quanti.var.sup$coord))& (is.na(test.invisible[2]))){
-        if (!is.null(res.mfa$quanti.var.sup$coord[ which(apply(res.mfa$quanti.var.sup$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) >= lim.cos2.var),])) {
-		  coord.quanti <- res.mfa$quanti.var.sup$cor[ which(apply(res.mfa$quanti.var.sup$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) >= lim.cos2.var),axes,drop=FALSE]
+        if ((!is.null(res.mfa$quanti.var.sup$coord))&(!is.na(test.invisible[2]))){
+		  col[nrow(coo)+(1:nrow(res.mfa$quanti.var.sup$cor[,axes,drop=FALSE]))] <- "transparent"
+		}
+       if (!is.null(res.mfa$quanti.var.sup$coord)){
+		  coord.quanti <- res.mfa$quanti.var.sup$cor[ ,axes,drop=FALSE]
           coo <- rbind(coo,coord.quanti)
+		  if (length(which(apply(res.mfa$quanti.var.sup$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) < lim.cos2.var))>0) col[nrow(coo)-nrow(coord.quanti)+which(apply(res.mfa$quanti.var.sup$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) < lim.cos2.var)]<-"transparent"
             for (q in 1:nrow(coord.quanti)) {
-                arrows(0, 0, coord.quanti[q, 1], coord.quanti[q, 2], length = 0.1, angle = 15, code = 2, lty = 2, col=col[nrow.coord.var+q],...)
+                arrows(0, 0, coord.quanti[q, 1], coord.quanti[q, 2], length = 0.1, angle = 15, code = 2, lty = 2, col=col[nrow(coo)-nrow(coord.quanti)+q],...)
                 if (lab.var) {
                 if (abs(coord.quanti[q,1])>abs(coord.quanti[q,2])){
                  if (coord.quanti[q,1]>=0) posi<-c(posi,4)
@@ -342,11 +346,10 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
                 }
                 }
             }
-		}
 	   }	
-	    if (autoLab=="auto") autoLab = (length(labe)<50)
+	    if (autoLab=="auto") autoLab = (length(labe)-sum(col=="transparent")<50)
         if (autoLab==FALSE) text(coo[, 1], y = coo[, 2], labels = labe, pos = posi, col = col,...)
-        if (autoLab==TRUE) autoLab(coo[, 1], y = coo[, 2], labels = labe, col=col, shadotext=shadowtext,...)
+        if (autoLab==TRUE) autoLab(coo[which(col!="transparent"), 1], y = coo[which(col!="transparent"), 2], labels = labe[which(col!="transparent")], col=col[which(col!="transparent")], shadotext=shadowtext,...)
         par(mar = c(5, 4, 4, 2) + 0.1)
     }
 	if (choix=="freq"){
@@ -459,7 +462,6 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 		  if (sum(rownames(res.mfa$freq.sup$coord)%in%select)+sum(rownames(res.mfa$freq$coord)%in%select)+sum(rownames(res.mfa$ind$coord)%in%select)+sum(rownames(res.mfa$ind.sup$coord)%in%select)!=0) selectionC <- which(rownames(res.mfa$freq$coord)%in%select)
 		  else {
  		    if (grepl("contrib",select)) selectionC <- (rev(order(res.mfa$freq$contrib[,axes[1],drop=FALSE]*res.mfa$eig[axes[1],1]+res.mfa$freq$contrib[,axes[2],drop=FALSE]*res.mfa$eig[axes[2],1])))[1:min(nrow(res.mfa$freq$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
-# 		    if (grepl("contrib",select)) selectionC <- (rev(order(apply(res.mfa$freq$contrib[,axes],1,sum))))[1:min(nrow(res.mfa$freq$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
  		    if (grepl("coord",select)) selectionC <- (rev(order(apply(res.mfa$freq$coord[,axes]^2,1,sum))))[1:min(nrow(res.mfa$freq$coord),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
  		    if (grepl("cos2",select)) {
 			  if (sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T)>=1) selectionC <- (rev(order(apply(res.mfa$freq$cos2[,axes],1,sum))))[1:min(nrow(res.mfa$freq$coord),sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T))]

@@ -159,7 +159,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
             if (nb.clust == 0 | nb.clust == 1) nb.clust <- -1
         }
         if ((nb.clust == 0) | (nb.clust == 1)) {
-            if (!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))){
+#            if (!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))){
               plot(t$tree, hang = -1, main = "Click to cut the tree",  xlab = "", sub = "")
               abline(h = auto.haut, col = "black", lwd = 3)
 			  coupe <- locator(n = 1)
@@ -168,11 +168,11 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
                 coupe <- locator(n = 1)
               }
               y <- coupe$y
-			} else {
-              plot(t$tree, hang = -1, main = "Tree and suggested number of clusters",  xlab = "", sub = "")
-              abline(h = auto.haut, col = "black", lwd = 3)
-			  y <- auto.haut
-			}
+#			} else {
+#              plot(t$tree, hang = -1, main = "Tree and suggested number of clusters",  xlab = "", sub = "")
+#              abline(h = auto.haut, col = "black", lwd = 3)
+#			  y <- auto.haut
+#			}
         } else {
             if (graph)
                 plot(t$tree, hang = -1, main = "Hierarchical Classification", xlab = "", sub = "")
@@ -187,7 +187,8 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
 	ordColo = unique(clust[t$tree$order])
 
 
-    if ((graph)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) {
+    if (graph) {
+#    if ((graph)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) {
 #        rect <- rect.hclust(t$tree, h = y, border = seq(1, nb.clust, 1))
         rect <- rect.hclust(t$tree, h = y, border = ordColo)
         clust <- NULL
@@ -196,6 +197,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
         belong <- cbind.data.frame(t$tree$order, clust)
         belong <- belong[do.call("order", belong), ]
         clust <- as.factor(belong$clust)
+        if (nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) layout(matrix(nrow=1,ncol=1,1),respect=TRUE)
     }
     if (consol) {
         res.consol <- consolidation(X, clust = clust, iter.max = iter.max, ...)
@@ -303,7 +305,7 @@ desc.ind <- list(para = para, dist = dist)
 #    call <- list(t = t, min = min, max = max, X = data.clust, vec = vec,call=sys.calls()[[1]])
     if (kk!=Inf) res.HCPC <- list(data.clust = data.clust, desc.var = desc.var, call = call, desc.ind = desc.ind)
     else res.HCPC <- list(data.clust = data.clust, desc.var = desc.var, desc.axes = desc.axe, call = call, desc.ind = desc.ind)
-    if ((kk==Inf)&(graph)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) {
+    if ((kk==Inf)&(graph)) {
 #       plot.HCPC(res.HCPC,choice="tree",new.plot=FALSE)
     	if (vec || (ncol(tabInd)==2)) 
             plot.HCPC(res.HCPC, choice = "3D.map", t.level = "all", angle = 0, ind.names = FALSE,new.plot=TRUE)
@@ -312,8 +314,8 @@ desc.ind <- list(para = para, dist = dist)
           plot.HCPC(res.HCPC, choice = "map", draw.tree = FALSE, label = "ind",new.plot=TRUE)
         }
     }
-    if ((kk!=Inf)&(graph)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) {
-            if (inherits(res.sauv, "PCA")) plot(res.sauv, col.ind=as.numeric(data.clust$clust),new.plot=TRUE,cex=0.8)
+    if ((kk!=Inf)&(graph)) {
+			if (inherits(res.sauv, "PCA")) plot(res.sauv, col.ind=as.numeric(data.clust$clust),new.plot=TRUE,cex=0.8)
             if (inherits(res.sauv, "MCA")) plot(res.sauv, col.ind=as.numeric(data.clust$clust),invisible=c("var","quali.sup"),new.plot=TRUE,cex=0.8)
             if (inherits(res.sauv, "MFA")) plot(res.sauv, col.ind=as.numeric(data.clust$clust),invisible=c("quali","quali.sup"),new.plot=TRUE,cex=0.8)
             if (inherits(res.sauv, "CA")&(cluster.CA=="rows")) plot(res.sauv, col.row=as.numeric(data.clust$clust),invisible=c("col","col.sup"),new.plot=TRUE,cex=0.8)

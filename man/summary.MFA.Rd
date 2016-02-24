@@ -2,7 +2,7 @@
 
 \alias{summary.MFA}
 
-\title{Printing summeries of MFA objects}
+\title{Printing summaries of MFA objects}
 \description{Printing summaries of multiple factor analysis objects}
 
 \usage{

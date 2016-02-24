@@ -199,47 +199,26 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var"),
 				  if (q == match(nom.quali, liste.quali)) coll <- c(coll,color.mod)
 				   else coll <- c(coll,rep(col.quali[1],modalite[q]))
 				  } else coll <- c(coll,rep(col.quali,modalite[q]))
-                  # if (q == match(nom.quali, liste.quali)) {
-                    # points(coord.quali[(num.li + 1):(num.li + modalite[q]), ], pch = 22, col = color.mod, ...)
-                    # if (lab.quali) {
-                      # text(coord.quali[(num.li + 1):(num.li + modalite[q]), 1], y = coord.quali[(num.li +
-                        # 1):(num.li + modalite[q]), 2], labels = rownames(coord.quali[(num.li +
-                        # 1):(num.li + modalite[q]), ]), pos = 3, col = color.mod, font=3,...)
-                    # }
-                  # }
-                # }
-                # else {
-                  # points(coord.quali[(num.li + 1):(num.li + modalite[q]), ], pch = 22, col = col.quali[q])
-                  # if (lab.quali) {
-                    # text(coord.quali[(num.li + 1):(num.li + modalite[q]), 1],
-                      # y = coord.quali[(num.li + 1):(num.li +
-                      # modalite[q]), 2], labels = rownames(coord.quali[(num.li +
-                      # 1):(num.li + modalite[q]), ]), pos = 3, col = col.quali[q], font=3,...)
-                  # }
-                # }
                 num.li <- num.li + modalite[q]
             }
         }
-### If shadowtext, write the points before and the labels after
-	if (shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
+	points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
     if (any(labe!="")){
 	  if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
 	  if (autoLab ==TRUE) autoLab(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],shadotext=shadowtext,...)
       if (autoLab ==FALSE) text(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],pos=3,...)
     }
-### If not shadowtext, write the points before and the labels after
-	if (!shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
 	
     if (!is.null(ellipse)) {
-          nbre.ellipse <- nlevels(coord.ellipse[, 1])
-          for (e in 1:nbre.ellipse) {
-            data.elli <- coord.ellipse[ellipse$res[, 1] == levels(coord.ellipse[, 1])[e], -1]
-            if ((habillage != "none")&(habillage != "ind")) lines(x=data.elli[, 1], y = data.elli[, 2], col = color.mod[e],...)
+      nbre.ellipse <- nlevels(coord.ellipse[, 1])
+      for (e in 1:nbre.ellipse) {
+        data.elli <- coord.ellipse[ellipse$res[, 1] == levels(coord.ellipse[, 1])[e], -1]
+        if ((habillage != "none")&(habillage != "ind")) lines(x=data.elli[, 1], y = data.elli[, 2], col = color.mod[e],...)
         else lines(x=data.elli[, 1], y = data.elli[, 2], col = col.quali,...)
-          }
-        }
-        if ((habillage != "none")&(habillage != "ind")) legend("topleft",legend= levels(res.pca$call$X[,habillage]),text.col= color.mod,cex=par("cex")*0.8)
+      }
     }
+    if ((habillage != "none")&(habillage != "ind")) legend("topleft",legend= levels(res.pca$call$X[,habillage]),text.col= color.mod,cex=par("cex")*0.8)
+  }
     if (choix == "var") {
         if (is.null(title)) titre <- "Variables factor map (PCA)"
         else titre <- title
@@ -250,7 +229,6 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var"),
 		    if (sum(rownames(res.pca$var$coord)%in%select)+sum(rownames(res.pca$quanti.sup$coord)%in%select)!=0) selection <- which(rownames(res.pca$var$coord)%in%select)
 			else {
  		      if (grepl("contrib",select)) selection <- (rev(order(res.pca$var$contrib[,axes[1]]*res.pca$eig[axes[1],1]+res.pca$var$contrib[,axes[2]]*res.pca$eig[axes[2],1])))[1:min(nrow(res.pca$var$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
-## 		      if (grepl("contrib",select)) selection <- (rev(order(apply(res.pca$var$contrib[,axes],1,sum))))[1:min(nrow(res.pca$var$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
  		      if (grepl("coord",select)) selection <- (rev(order(apply(res.pca$var$coord[,axes]^2,1,sum))))[1:min(nrow(res.pca$var$coord),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
  		      if (grepl("cos2",select)) {
 			    if (sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T)>=1) selection <- (rev(order(apply(res.pca$var$cos2[,axes],1,sum))))[1:min(nrow(res.pca$var$coord),sum(as.numeric(unlist(strsplit(select,"cos2"))),na.rm=T))]
@@ -303,14 +281,12 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var"),
             y.cercle <- sqrt(1 - x.cercle^2)
             lines(x.cercle, y = y.cercle,...)
             lines(x.cercle, y = -y.cercle,...)
-             abline(v=0,lty=2, ...)
-             abline(h=0,lty=2, ...)
         }
         else {
             plot(0, 0, main = titre, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp=1, ...)
-             abline(v=0,lty=2,...)
-             abline(h=0,lty=2,...)
         }
+        abline(v=0,lty=2,...)
+        abline(h=0,lty=2,...)
         coll <- coo <- labe <- posi <- NULL
         if (!is.null(coord.var[ which(apply(res.pca$var$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) >= lim.cos2.var),])&is.na(test.invisible[1])&(nrow(coord.var)>0)){
 		  coord.var <- coord.var[ which(apply(res.pca$var$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) >= lim.cos2.var),,drop=FALSE]
