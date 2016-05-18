@@ -6,9 +6,6 @@ tab.disjonctif<-function (tab){
         n <- length(moda)
         x <- matrix(0, n, nlevels(moda))
         x[(1:n) + n * (unclass(moda) - 1)] <- 1
-#        nom <- attributes(tab)$names[i]
-#        if((ncol(tab)!=1)&(levels(moda)[1]%in%c(1:nlevels(moda),"n","N","y","Y"))) dimnames(x) <- list(attributes(tab)$row.names, paste(nom, levels(moda),sep = "."))
-#        else dimnames(x) <- list(attributes(tab)$row.names, levels(moda))
         return(x)
     }
     # fin fonction interne
@@ -19,8 +16,8 @@ tab.disjonctif<-function (tab){
 	}
     else
     {
-	  variable <- rep(attributes(tab)$names,sapply(tab,nlevels))
-	  listModa <- unlist(sapply(tab,levels))
+	  variable <- rep(attributes(tab)$names,lapply(tab,nlevels))
+	  listModa <- unlist(lapply(tab,levels))
 	  wlistModa <- which((listModa)%in%c("y","n","Y","N"))
       if (!is.null(wlistModa)) listModa[wlistModa] <- paste(variable[wlistModa],listModa[wlistModa],sep = ".")
       numlistModa <- which(unlist(lapply(listModa,is.numeric)))

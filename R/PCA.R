@@ -43,12 +43,14 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
     Xtot <- X
     if (!is.null(quali.sup)) 
         X <- X[, -quali.sup,drop=FALSE]
-    if (any(!sapply(X, is.numeric))) {
-        auxi = NULL
-        for (j in 1:ncol(X)) if (!is.numeric(X[, j])) 
-            auxi = c(auxi, colnames(X)[j])
-        stop(paste("\nThe following variables are not quantitative: ", auxi))
-    }
+    auxi <- colnames(X)[!sapply(X, is.numeric)]
+	if (length(auxi)>0)  stop(paste("\nThe following variables are not quantitative: ", auxi))
+    # if (any(!sapply(X, is.numeric))) {
+        # auxi = NULL
+        # for (j in 1:ncol(X)) if (!is.numeric(X[, j])) 
+            # auxi = c(auxi, colnames(X)[j])
+        # stop(paste("\nThe following variables are not quantitative: ", auxi))
+    # }
     todelete <- c(quali.sup, quanti.sup)
     if (!is.null(todelete)) X <- Xtot[, -todelete,drop=FALSE]
     if (!is.null(ind.sup)) {
@@ -70,8 +72,9 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
         X <- t(t(X)/ecart.type)
     }
     else ecart.type <- rep(1, length(centre))
-    dist2.ind <- rowSums(X^2*sqrt(col.w))
-	dist2.ind <- as.vector(tcrossprod(as.matrix(X^2*sqrt(col.w)),t(rep(1,ncol(X)))))
+#    dist2.ind <- rowSums(X^2*sqrt(col.w))
+#	dist2.ind <- as.vector(tcrossprod(as.matrix(X^2*col.w),t(rep(1,ncol(X)))))
+    dist2.ind <- rowSums(t(t(X^2)*col.w))
     dist2.var <- as.vector(crossprod(rep(1,nrow(X)),as.matrix(X^2*row.w)))
     res.call <- list(row.w = (row.w/sum(row.w)), col.w = col.w, 
         scale.unit = scale.unit, ncp = ncp, centre = centre, 
@@ -185,10 +188,10 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
             colnames(bary) <- colnames(X)
             if ((levels(var)[1] %in% (1:nrow(X))) | (levels(var)[1] %in% c("y", "Y", "n", "N"))) row.names(bary) <- paste(colnames(X.quali.sup)[i], as.character(levels(var)))
             else row.names(bary) <- as.character(levels(var))
-            if (i == 1)  barycentre <- as.data.frame(bary)
-            else barycentre <- rbind(barycentre, as.data.frame(bary))
+            if (i == 1)  barycentre <- bary
+            else barycentre <- rbind(barycentre, bary)
         }
-        bary <- t(t(as.matrix(barycentre))-centre)
+        bary <- t(t(barycentre)-centre)
         if (!is.null(ecart.type)) bary <- t(t(bary)/ecart.type)
 #        bary <- as.matrix(sweep(as.matrix(barycentre), 2, centre, FUN = "-"))
 #        if (!is.null(ecart.type)) bary <- as.matrix(sweep(as.matrix(bary), 2, ecart.type, FUN = "/"))
@@ -206,7 +209,7 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
         dimnames(cos2.bary.sup) <- dimnames(vtest) <- dimnames(coord.barycentre)
         names(dist2) <- rownames(coord.barycentre)
         res.quali.sup <- list(coord = coord.barycentre, cos2 = cos2.bary.sup, v.test = vtest, dist = sqrt(dist2), eta2=eta2)
-        call.quali.sup <- list(quali.sup = X.quali.sup, modalite = modalite, nombre = nombre, barycentre = barycentre, numero = quali.sup)
+        call.quali.sup <- list(quali.sup = X.quali.sup, modalite = modalite, nombre = nombre, barycentre = as.data.frame(barycentre), numero = quali.sup)
         res$quali.sup = res.quali.sup
         res.call$quali.sup = call.quali.sup
     }

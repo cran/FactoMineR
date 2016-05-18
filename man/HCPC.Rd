@@ -62,8 +62,8 @@ HCPC(res, nb.clust=0, consol=TRUE, iter.max=10, min=3,
 
 \value{
   Returns a list including:
-  \item{data.clust}{The original data with a supplementary row called
-    class containing the partition.}
+  \item{data.clust}{The original data with a supplementary column called
+    clust containing the partition.}
   \item{desc.var}{The description of the classes by the variables.
      See \code{\link{catdes}} for details or \code{\link{descfreq}} if clustering
 	 is performed on CA results.}
@@ -72,7 +72,7 @@ HCPC(res, nb.clust=0, consol=TRUE, iter.max=10, min=3,
   \item{call}{A list or parameters and internal objects. \code{call$t} gives the results for the hierarchical tree; 
   \code{call$bw.before.consol} and \code{call$bw.after.consol} give the between inertia before consolidation (i.e. for the clustering obtained
   from the hierarchical tree) and after the consolidation with Kmeans.}
-  \item{ind.desc}{The paragons (para) and the more typical individuals
+  \item{desc.ind}{The paragons (para) and the more typical individuals
     of each cluster. See details.}
   
   Returns the tree and a barplot of the inertia gains, the individual

@@ -45,7 +45,7 @@
 }
 
 \value{
-  Returns choosen plot.
+  Returns the chosen plot.
 }
 
 \author{Guillaume Le Ray, Quentin Molto, Francois Husson \email{husson@agrocampus-ouest.fr}}

@@ -1,4 +1,4 @@
-MCA <- function (X, ncp = 5, ind.sup = NULL, quanti.sup = NULL, quali.sup = NULL,
+MCA <- function (X, ncp = 5, ind.sup = NULL, quanti.sup = NULL, quali.sup = NULL, excl=NULL,
     graph = TRUE, level.ventil = 0, axes = c(1, 2), row.w = NULL, 
     method="Indicator",na.method="NA",tab.disj=NULL){
     
@@ -94,6 +94,16 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
   unlist(lapply(as.data.frame(x),VB))/colSums(x^2*weights)
 }
 
+  modif.rate <- function(resmca) {
+    tab <- cbind.data.frame(resmca$eig,rep(0, nrow(resmca$eig)),rep(100, nrow(resmca$eig)))
+	nbvar <- nrow(resmca$var$eta)
+    nbeig <- resmca$eig[resmca$eig[,1]>=1/nbvar,1]
+    pseudo <- (nbvar/(nbvar-1)*(nbeig-1/nbvar))^2
+    tab[1:length(nbeig),4] <- round(pseudo/sum(pseudo)*100,2)
+    tab[,5] <- cumsum(tab[,4])
+    colnames(tab)[4:5] <- c("modified rates","cumulative modified rates")
+    return(tab)
+  }
 
 #############
 ## Main program    
@@ -160,7 +170,7 @@ if (!is.null(quanti.sup)){
     if (is.null(row.w)) row.w = rep(1, nrow(X) - length(ind.sup))
     if (length(row.w) != nrow(X) - length(ind.sup)) stop("length of vector row.w should be the number of active rows")
     if (tolower(method)=="burt") {  ## boucle utile pour calculer la distance au cdg et pour calculer les cos2
-      res.mca <- CA(Ztot, ncp = ncol(Z)-length(act), row.sup = ind.sup, col.sup = col.sup, graph = FALSE, row.w = row.w) 
+      res.mca <- CA(Ztot, ncp = ncol(Z)-length(act), row.sup = ind.sup, col.sup = col.sup, graph = FALSE, row.w = row.w, excl=excl) 
       res.mca$col$coord <- t(t(res.mca$col$coord)*sqrt(res.mca$eig[1:ncol(res.mca$col$coord),1]))
       auxil <- rowSums(res.mca$col$coord^2)
       if (!is.null(col.sup)){ 
@@ -169,7 +179,7 @@ if (!is.null(quanti.sup)){
 	  }
     }
 #    res.mca <- CA(Ztot, ncp = ncol(Z)-length(act), row.sup = ind.sup, col.sup = col.sup, graph = FALSE, row.w = row.w)
-    res.mca <- CA(Ztot, ncp = min(ncp,ncol(Z)-length(act)), row.sup = ind.sup, col.sup = col.sup, graph = FALSE, row.w = row.w)
+    res.mca <- CA(Ztot, ncp = min(ncp,ncol(Z)-length(act)), row.sup = ind.sup, excl=excl, col.sup = col.sup, graph = FALSE, row.w = row.w)
     if (is.null(ncol(res.mca$row$coord))) res.mca$row$coord = matrix(res.mca$row$coord,ncol=1) 
     ncp <- ncol(res.mca$row$coord)
     res.mca$call$X <- X
@@ -179,6 +189,7 @@ if (!is.null(quanti.sup)){
     res.mca$call$quali.sup = quali.sup
     res.mca$call$quanti.sup = quanti.sup
     res.mca$call$row.w = row.w
+  if (!is.null(excl)) res.mca$call$excl = excl
 	res.mca$call$call <- match.call()
 #	res.mca$call$call <- sys.calls()[[1]]
     if (length(act)>1) res.mca$eig <- res.mca$eig[1:min(length(ind.act)-1,sum(sapply(Xact,nlevels))-length(act)),]
@@ -266,6 +277,14 @@ if (!is.null(quanti.sup)){
       res.mca$eig[,3] <- cumsum(res.mca$eig[,2])      
     }
 
+	if (!is.null(excl)){
+	  res.mca$var$coord <- res.mca$var$coord[-excl,]
+      res.mca$var$contrib <- res.mca$var$contrib[-excl,]
+      res.mca$var$cos2 <- res.mca$var$cos2[-excl,]
+      res.mca$var$v.test <- res.mca$var$v.test[-excl,]
+      res.mca$eig <- modif.rate(res.mca)
+    }
+	
     class(res.mca) <- c("MCA", "list")
     if (graph & (ncp>1)) {
         plot.MCA(res.mca, choix = "ind", invisible="ind", axes = axes,new.plot=TRUE)

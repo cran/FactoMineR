@@ -38,7 +38,8 @@ coord.ellipse <- function (coord.simul, centre = NULL, axes = c(1, 2), level.con
         center <- as.numeric(centre[which(centre[, 1] == levels(centre[, 1])[f]), c(axes[1] + 1, axes[2] + 1)])
       }
       tab <- data.frame(x = x, y = y)
-      mat.cov <- cov(tab)
+      if (nrow(tab)>1) mat.cov <- cov(tab)
+	  else mat.cov <- matrix(0,4,ncol=2)
       if (bary) mat.cov = mat.cov/nrow(tab)
       elli.tmp <- ellipse::ellipse(mat.cov, centre = center, level = level.conf, npoints = npoint)
       res <- rbind(res, elli.tmp)

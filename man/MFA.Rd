@@ -7,15 +7,16 @@
 \description{
 Performs Multiple Factor Analysis in the sense of Escofier-Pages with supplementary individuals and supplementary groups of variables.
 Groups of variables can be quantitative, categorical or contingency tables.\cr
-Missing values in numeric variables are replaced by the column mean.
+Specific Multiple Fac tor Analysis can be performed using the argument excl.\cr
+Missing values in numeric variables are replaced by the column mean.\cr
 Missing values in categorical variables are treated as an additional level.
 }
 
 \usage{
-MFA (base, group, type = rep("s",length(group)), ind.sup = NULL, 
-    ncp = 5, name.group = NULL, num.group.sup = NULL, 
-    graph = TRUE, weight.col.mfa = NULL, row.w = NULL,
-    axes = c(1,2), tab.comp=NULL)
+MFA (base, group, type = rep("s",length(group)), excl = NULL, 
+    ind.sup = NULL, ncp = 5, name.group = NULL,  
+    num.group.sup = NULL, graph = TRUE, weight.col.mfa = NULL, 
+    row.w = NULL, axes = c(1,2), tab.comp=NULL)
 }
 
 \arguments{
@@ -25,6 +26,8 @@ MFA (base, group, type = rep("s",length(group)), ind.sup = NULL,
   (the difference is that for "s" variables are scaled to unit variance), "n" for categorical variables and
   "f" for frequencies (from a contingency tables); by default,
   all variables are quantitative and scaled to unit variance}
+  \item{excl}{an argument that may possible to exclude categories of active variables of categorical variable groups. 
+  NULL by default, it is a list with indexes of categories that are excluded per group}
   \item{ind.sup}{a vector indicating the indexes of the supplementary individuals}
   \item{ncp}{number of dimensions kept in the results (by default 5)}
   \item{name.group}{a vector containing the name of the groups (by default, NULL and the group are named group.1, group.2 and so on)}
@@ -60,7 +63,7 @@ The plots may be improved using the argument autolab, modifying the size of the 
 
 \references{
 Escofier, B. and Pages, J. (1994) Multiple Factor Analysis (AFMULT package). \emph{Computational Statistics and Data Analysis}, 18, 121-140.\cr
-Becue-Bertaut, M. and Pages, J. '2008) Multiple factor analysis and clustering of a mixture of quantitative, categorical and frequency data. \emph{Computational Statistice and Data Analysis}, 52, 3255-3268.
+Becue-Bertaut, M. and Pages, J. (2008) Multiple factor analysis and clustering of a mixture of quantitative, categorical and frequency data. \emph{Computational Statistice and Data Analysis}, 52, 3255-3268.
 }
 
 \author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}, J. Mazet}

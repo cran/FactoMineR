@@ -9,8 +9,9 @@ Performs Correspondence Analysis (CA) including supplementary row and/or column 
 }
 
 \usage{
-CA(X, ncp = 5, row.sup = NULL, col.sup = NULL, quanti.sup=NULL,
-    quali.sup = NULL, graph = TRUE, axes = c(1,2), row.w = NULL)}
+CA(X, ncp = 5, row.sup = NULL, col.sup = NULL, 
+    quanti.sup=NULL, quali.sup = NULL, graph = TRUE, 
+	axes = c(1,2), row.w = NULL, excl=NULL)}
 
 \arguments{
   \item{X}{a data frame or a table with \emph{n} rows and \emph{p} columns, i.e. a contingency table}
@@ -22,6 +23,7 @@ CA(X, ncp = 5, row.sup = NULL, col.sup = NULL, quanti.sup=NULL,
   \item{graph}{boolean, if TRUE a graph is displayed}
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{row.w}{an optional row weights (by default, a vector of 1 and each row has a weight equals to its margin)}
+  \item{excl}{numeric vector indicating the indexes of the "junk" columns (default is NULL). Useful for MCA with excl argument.}
 }
 
 \value{

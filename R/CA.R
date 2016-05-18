@@ -1,4 +1,4 @@
-CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, quanti.sup=NULL, quali.sup=NULL, graph = TRUE, axes=c(1,2), row.w=NULL){
+CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, quanti.sup=NULL, quali.sup=NULL, graph = TRUE, axes=c(1,2), row.w=NULL, excl=NULL){
 
  # fct.eta2 <- function(vec,x,weights) {
      # res <- summary(lm(x~vec,weights=weights,na.action=na.omit))$r.squared
@@ -38,7 +38,9 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
     marge.row <- rowSums(F)
     ncp <- min(ncp, (nrow(X) - 1), (ncol(X) - 1))
     Tc <- t(t(F/marge.row)/marge.col) - 1
+  if(!is.null(excl)) marge.col[excl] <- 1e-15
     tmp <- svd.triplet(Tc, row.w = marge.row, col.w = marge.col,ncp=ncp)
+  if(!is.null(excl)) marge.col[excl] <- 0
     eig <- tmp$vs^2
     vp <- as.data.frame(matrix(NA, length(eig), 3))
     rownames(vp) <- paste("dim", 1:length(eig))
@@ -67,7 +69,7 @@ dist2.row <- rowSums(t(t(Tc^2)*marge.col))
     names(inertia.row) <- attributes(coord.row)$row.names
     
 #    res.call <- list(X = X, marge.col = marge.col, marge.row = marge.row, ncp = ncp, row.w=row.w,call=sys.calls()[[1]],Xtot=Xtot,N=sum(row.w*rowSums(X)))
-    res.call <- list(X = X, marge.col = marge.col, marge.row = marge.row, ncp = ncp, row.w=row.w,call=match.call(),Xtot=Xtot,N=sum(row.w*rowSums(X)))
+    res.call <- list(X = X, marge.col = marge.col, marge.row = marge.row, ncp = ncp, row.w=row.w,excl=excl,call=match.call(),Xtot=Xtot,N=sum(row.w*rowSums(X)))
     res.col <- list(coord = as.matrix(coord.col[, 1:ncp]), contrib = as.matrix(contrib.col[, 1:ncp] * 100), cos2 = as.matrix(cos2.col[, 1:ncp]), inertia=inertia.col)
     res.row <- list(coord = coord.row[, 1:ncp], contrib = contrib.row[, 1:ncp] * 100, cos2 = cos2.row[, 1:ncp], inertia=inertia.row)
     res <- list(eig = vp[1:min(nrow(X) - 1, ncol(X) - 1),,drop=FALSE], call = res.call, row = res.row, col = res.col, svd = tmp)

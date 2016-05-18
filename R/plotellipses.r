@@ -161,8 +161,7 @@ plotellipses <- function (model, keepvar = "all", axes = c(1, 2), means = TRUE,
         if (is.numeric(keepvar)) eliminer <- unique(c(eliminer, (1:nbevartot)[-keepvar]))
         if (is.logical(keepvar)) eliminer <- unique(c(eliminer, (1:nbevartot)[!keepvar]))
     }
-
-    if (class(model)[1] == "MFA") {
+    if ((class(model)[1] == "MFA")||(class(model)[1] == "FAMD")) {
         eliminer <- which(unlist(lapply(model$call$X,is.numeric)))
         if (is.character(keepvar)) {
             if (length(keepvar) == 1) {
@@ -215,8 +214,8 @@ if (nbevar==1) {
     if (is.numeric(keepvar)) var <- keepvar
     else var <- which(keepvar==colnames(model$call$X))
   }
-  if (!is.null(model$call$ind.sup)) aux <- cbind.data.frame(model$call$X[-model$call$ind.sup,var],model$ind$coord[,axes])
-  else aux <- cbind.data.frame(model$call$X[,var],model$ind$coord[,axes])
+  if (!is.null(model$call$ind.sup)) aux <- cbind.data.frame(model$call$X[-model$call$ind.sup,var,drop=FALSE],model$ind$coord[,axes])
+  else aux <- cbind.data.frame(model$call$X[,var,drop=FALSE],model$ind$coord[,axes])
   if (class(model)[1]=="PCA"){
     coord.ell <- coord.ellipse(aux,bary=means,level.conf=level)
     if (means==TRUE) plot.PCA(model,habillage=var,ellipse=coord.ell, cex=cex, label=label,axes=axes,xlim=xlim,ylim=ylim,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab,...)
@@ -229,7 +228,7 @@ if (nbevar==1) {
     if (means==TRUE) plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=cex,label=label,axes=axes,xlim=xlim,ylim=ylim,title=paste("Confidence ellipses around the categories of",colnames(model$call$X)[var]),autoLab=autoLab,...)
     else plot.PCA(res.pca, habillage=1, ellipse=coord.ell, cex=cex,label=label,axes=axes,xlim=xlim,ylim=ylim,title=paste("Concentration ellipses for the categories of",colnames(model$call$X)[var]),autoLab=autoLab,...)
   }
-  if (class(model)[1]=="MFA"){
+  if ((class(model)[1]=="MFA")||(class(model)[1]=="FAMD")){
     res.pca <- PCA(aux,quali.sup=1,scale.unit=FALSE,graph=FALSE)
     res.pca$eig[axes,]=model$eig[axes,]
     coord.ell <- coord.ellipse(aux,bary=means,level.conf=level)

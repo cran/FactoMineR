@@ -26,8 +26,11 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
 		inert.gain <- rev(hc$height)
 		if (!is.null(cla)) inert.gain <- c(inert.gain,cla$tot.withinss/sum(cla$size))
 		intra <- rev(cumsum(rev(inert.gain)))
-        quot = intra[min:(max)]/intra[(min - 1):(max - 1)]
-        nb.clust = which.min(quot) + min - 1
+#        quot = intra[min:(max)]/intra[(min - 1):(max - 1)] 
+#		nb.clust = which.min(quot) + min -1
+# changement dans calcul 2016/04/12 (2 lignes changees)
+        quot = inert.gain[(min-1):(max-1)]/inert.gain[min:max] 
+		nb.clust = which.max(quot) + min - 1
         return(list(res = res, tree = hc, nb.clust = nb.clust, 
             within = intra, inert.gain = inert.gain, quot = quot))
     }

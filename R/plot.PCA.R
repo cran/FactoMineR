@@ -1,4 +1,4 @@
-plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var"),
+plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
     ellipse = NULL, xlim = NULL, ylim = NULL, habillage = "none", 
     col.hab = NULL, col.ind = "black", col.ind.sup = "blue", 
     col.quali = "magenta", col.quanti.sup = "blue", 
@@ -16,7 +16,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var"),
     label <- match.arg(label,c("all","none","ind", "ind.sup", "quali", "var", "quanti.sup"),several.ok=TRUE)
 	invisible <- match.arg(invisible,c("none","ind", "ind.sup", "quali","var", "quanti.sup"),several.ok=TRUE)
     if ("none"%in%invisible) invisible = NULL
-    choix <- match.arg(choix,c("ind","var"))
+    choix <- match.arg(choix,c("ind","var","varcor"))
     lab.ind <- lab.quali <- lab.var <- lab.quanti <- lab.ind.sup <- FALSE
     if(length(label)==1 && label=="all") lab.ind <- lab.quali <- lab.var <- lab.quanti <- lab.ind.sup <-TRUE
     if("ind" %in% label) lab.ind<-TRUE
@@ -219,7 +219,13 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var"),
     }
     if ((habillage != "none")&(habillage != "ind")) legend("topleft",legend= levels(res.pca$call$X[,habillage]),text.col= color.mod,cex=par("cex")*0.8)
   }
-    if (choix == "var") {
+    if (choix == "varcor") {
+	  sauv <- res.pca$var$coord
+	  res.pca$var$coord <- res.pca$var$cor
+	  if (!is.null(res.pca$quanti.sup)) res.pca$quanti.sup$coord <- res.pca$quanti.sup$cor
+	  res.pca$call$scale.unit <- TRUE
+	}
+    if ((choix == "var")||(choix == "varcor")) {
         if (is.null(title)) titre <- "Variables factor map (PCA)"
         else titre <- title
         selection <- selectionS <- NULL
@@ -293,6 +299,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var"),
           coo <- coord.var
 		  col.var <- rep(col.var,nrow(coord.var))
 		  coll <- c(coll,col.var)
+		  if (!is.null(col.hab)) coll <- col.hab[which(colnames(res.pca$call$X)%in%rownames(res.pca$var$coord))]
 		  if (lab.var){ labe <- c(labe,rownames(coord.var))
 		  } else  labe <- c(labe,rep("",nrow(coord.var)))
 	      if (!is.null(selection)){
@@ -319,7 +326,8 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var"),
 		  coord.quanti <- coord.quanti[ which(apply(res.pca$quanti.sup$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) >= lim.cos2.var),,drop=FALSE]
           coo <- rbind(coo,coord.quanti)
 		  col.quanti.sup<-rep(col.quanti.sup, nrow(coord.quanti))
-		  coll2 <- col.quanti.sup
+		  if (is.null(col.hab)) coll2 <- col.quanti.sup
+		  else coll2 <- col.hab[which(colnames(res.pca$call$X)%in%colnames(res.pca$call$quanti.sup))]
 		  if (lab.quanti){ labe2 <- rownames(coord.quanti)
 		  } else  labe2 <- rep("",nrow(coord.quanti))
 		    if (length(select)==1){

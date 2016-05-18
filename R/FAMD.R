@@ -50,8 +50,10 @@
 	  for  (i in 1:(length(aa)-1)) ll[[i]] <- (aa[i]+1):aa[i+1]
 	  QuantiAct <- tab.comp[,unlist(ll[which(sapply(ll,length)==1)])]
 	} else 	QuantiAct <- as.matrix(base[,numAct,drop=FALSE])
-	QuantiAct <- t(t(QuantiAct)-moy.ptab(QuantiAct,row.w))
-	QuantiAct <- t(t(QuantiAct)/ec.tab(QuantiAct,row.w))
+	centre <- moy.ptab(QuantiAct,row.w)
+	QuantiAct <- t(t(QuantiAct)-centre)
+	ecart.type <- ec.tab(QuantiAct,row.w)
+	QuantiAct <- t(t(QuantiAct)/ecart.type)
 	
 	if (!is.null(tab.comp)) {
 	  QualiAct <- tab.comp[,unlist(ll[which(sapply(ll,length)!=1)])]
@@ -144,12 +146,20 @@
 	res$quanti.var <- quanti.var
 	if (!is.null(pca$quali.sup)) res$quali.sup <- pca$quali.sup
     if (!is.null(pca$quanti.sup)) res$quanti.sup <- pca$quanti.sup
+	res$svd <- pca$svd
     res$call <- pca$call
 	res$call$X <- base
+	res$call$centre <- c(centre,prop)
+	res$call$ecart.type <- c(ecart.type,rep(0,length(prop)))
 	res$call$quali.sup$quali.sup <- base[,c(facAct,facIllu),drop=FALSE]
 	res$call$type <- rep("s",ncol(base))
 	res$call$type[c(facAct,facIllu)] <- "n"
+	res$call$nature.var <- rep("quanti",ncol(base))
+	res$call$nature.var[facAct] <- "quali"
+	if (!is.null(facIllu)) res$call$nature.var[facIllu] <- "quali.sup"
+	if (!is.null(numIllu)) res$call$nature.var[numIllu] <- "quanti.sup"
 	res$call$call <- match.call()
+	res$call$prop <- prop
 #	res$call$call <- sys.calls()[[1]]
     class(res) <- c("FAMD", "list")
 	 if (graph & (ncp>1)){

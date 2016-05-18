@@ -7,14 +7,15 @@
 \description{
 Performs Multiple Correspondence Analysis (MCA) with supplementary individuals, supplementary quantitative 
 variables and supplementary categorical variables.\cr
+Performs also Specific Multiple Correspondence Analysis with supplementary categories and supplementary categorical variables.\cr
 Missing values are treated as an additional level, categories which are rare can be ventilated
 }
 
 \usage{
 MCA(X, ncp = 5, ind.sup = NULL, quanti.sup = NULL, 
-    quali.sup = NULL, graph = TRUE, level.ventil = 0, 
-    axes = c(1,2), row.w = NULL, method="Indicator",
-    na.method="NA", tab.disj=NULL)}
+    quali.sup = NULL, excl=NULL, graph = TRUE, 
+	level.ventil = 0, axes = c(1,2), row.w = NULL, 
+	method="Indicator", na.method="NA", tab.disj=NULL)}
 
 \arguments{
   \item{X}{a data frame with \emph{n} rows (individuals) and \emph{p} columns (categorical variables)}
@@ -22,6 +23,7 @@ MCA(X, ncp = 5, ind.sup = NULL, quanti.sup = NULL,
   \item{ind.sup}{a vector indicating the indexes of the supplementary individuals}
   \item{quanti.sup}{a vector indicating the indexes of the quantitative supplementary variables}
   \item{quali.sup}{a vector indicating the indexes of the categorical supplementary variables}
+  \item{excl}{numeric vector indicating the indexes of the "junk" categories (default is NULL).}
   \item{graph}{boolean, if TRUE a graph is displayed}
   \item{level.ventil}{a proportion corresponding to the level under which the category is ventilated; by default, 0 and no ventilation is done}
   \item{axes}{a length 2 vector specifying the components to plot}
@@ -76,6 +78,10 @@ plot(res.mca,invisible=c("var","quali.sup"),cex=.5,label="none")
 plot(res.mca,invisible=c("ind","var"),hab="quali")
 dimdesc(res.mca)
 plotellipses(res.mca,keepvar=1:4)
+
+## Specific MCA: some categories are supplementary
+data (poison)
+res <- MCA (poison[,3:8],excl=c(1,3))
 
 ## Example with missing values : use the missMDA package
 require(missMDA)

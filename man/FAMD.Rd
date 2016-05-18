@@ -27,7 +27,7 @@ FAMD (base, ncp = 5, graph = TRUE, sup.var = NULL,
 \value{
 Returns a list including:
   \item{eig}{a matrix containing all the eigenvalues, the percentage of variance and the cumulative percentage of variance}
-  \item{var}{a list of matrices containing all the results for the variables considered as group (R2, coordinates, square cosine, contributions, distance to the origin, the R2 between each variable and each factor)}
+  \item{var}{a list of matrices containing all the results for the variables considered as group (coordinates, square cosine, contributions)}
   \item{ind}{a list of matrices with all the results for the individuals (coordinates, square cosine, contributions)}
   \item{quali.var}{a list of matrices with all the results for the categorical variables (coordinates, square cosine, contributions, v.test)}
   \item{quanti.var}{a list of matrices with all the results for the quantitative variables (coordinates, correlation, square cosine, contributions)}

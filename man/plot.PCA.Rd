@@ -10,7 +10,7 @@ variables and supplementary categorical variables.
 }
 
 \usage{
-\method{plot}{PCA}(x, axes = c(1, 2), choix = c("ind","var"),
+\method{plot}{PCA}(x, axes = c(1, 2), choix = c("ind","var","varcor"),
     ellipse = NULL, xlim = NULL, ylim = NULL, habillage="none", 
     col.hab = NULL, col.ind="black", col.ind.sup="blue", 
     col.quali="magenta", col.quanti.sup="blue", col.var="black",
@@ -24,7 +24,7 @@ variables and supplementary categorical variables.
 \arguments{
   \item{x}{an object of class PCA}
   \item{axes}{a length 2 vector specifying the components to plot}
-  \item{choix}{the graph to plot ("ind" for the individuals, "var" for the variables)}
+  \item{choix}{the graph to plot ("ind" for the individuals, "var" for the variables, "varcor" for a graph with the correlation circle when \code{scale.unit=FALSE})}
   \item{ellipse}{boolean (NULL by default), if not null, draw ellipses around the individuals, and use the results of \code{coord.ellipse}}
   \item{xlim}{range for the plotted 'x' values, defaulting to the range of the finite values of 'x'}
   \item{ylim}{range for the plotted 'y' values, defaulting to the range of the finite values of 'y'}
