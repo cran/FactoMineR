@@ -13,7 +13,8 @@ It provides the graphical outputs associated with the principal component method
     lab.var = TRUE, lab.ind = TRUE, habillage = "none", col.lab = FALSE,
     col.hab = NULL, invisible = NULL, lim.cos2.var = 0., xlim = NULL,
     ylim = NULL, title = NULL, palette=NULL, autoLab = c("auto","yes","no"), 
-	new.plot = FALSE, select = NULL, unselect = 0.7, shadowtext = FALSE, \dots)
+	new.plot = FALSE, select = NULL, unselect = 0.7, shadowtext = FALSE, 
+	legend = list(bty = "y", x = "topleft"), \dots)
 }
 
 \arguments{
@@ -41,6 +42,7 @@ It provides the graphical outputs associated with the principal component method
   \item{select}{a selection of the elements that are drawn; see the details section}
   \item{unselect}{may be either a value between 0 and 1 that gives the transparency of the unselected objects (if \code{unselect=1} the transparceny is total and the elements are not drawn, if \code{unselect=0} the elements are drawn as usual but without any label) or may be a color (for example \code{unselect="grey60"})}
   \item{shadowtext}{boolean; if true put a shadow on the labels (rectangles are written under the labels which may lead to difficulties to modify the graph with another program)}
+  \item{legend}{a list of arguments that defines the legend if needed (when individuals are drawn according to a variable); see the arguments of the function \code{legend}}
   \item{\dots}{further arguments passed to or from other methods, such as cex, cex.main, ...}
 }
 

@@ -57,7 +57,7 @@ res.pca$ind$dist <- res.pca$ind$dist[rownames(don)]
     cor.partiel[[j]] = cor(Xc[[j]],FS[[j]])
     correl[[j]] = cor(FS[[j]])
   }
-#### Graphe des groupes avec méthode de Seb
+#### Graphe des groupes avec methode de Seb
   coord.gr = coord.gr2 = cos2.gr = matrix(0,ng,ncp)
   for (s in 1:ncp) {
     if (is.null(quanti.sup)) for (j in 1:ng) coord.gr[j,s] = sum(diag(V[,s]%*%t(V[,s])%*%Cov[[j]]))/res.pca$eig[s,1]
@@ -76,7 +76,7 @@ res.pca$ind$dist <- res.pca$ind$dist[rownames(don)]
   }
   colnames(coord.gr) = colnames(coord.gr2) = colnames(cos2.gr) = colnames(res.pca$var$coord)
   rownames(coord.gr) = rownames(coord.gr2) = rownames(cos2.gr) = lev
-#### Fin graphe des groupes avec méthode de Seb
+#### Fin graphe des groupes avec methode de Seb
  
   res=list()
   if (nrow(res.pca$quali.sup$coord)>ng){ 

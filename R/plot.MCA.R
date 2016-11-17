@@ -3,7 +3,8 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
     col.ind = "blue", col.var = "red", col.quali.sup = "darkgreen",
     col.ind.sup = "darkblue", col.quanti.sup = "blue",
     label=c("all","none","ind", "var", "ind.sup", "quali.sup", "quanti.sup"), title = NULL, habillage = "none", palette=NULL, 
-	autoLab = c("auto","yes","no"),new.plot=FALSE,select=NULL,selectMod=NULL, unselect=0.7, shadowtext=FALSE,...){
+	autoLab = c("auto","yes","no"),new.plot=FALSE,select=NULL,selectMod=NULL, unselect=0.7, shadowtext=FALSE,
+	legend = list(bty = "y", x = "topleft"),...){
     
     label <- match.arg(label,c("all","none","ind", "var", "ind.sup", "quali.sup", "quanti.sup"),several.ok=TRUE)
     choix <- match.arg(choix,c("ind","var","quanti.sup"))
@@ -249,7 +250,12 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
 		ipch <- c(ipch,rep(16,nrow(coord.ind.sup)))
 		fonte <- c(fonte,rep(1,nrow(coord.ind.sup)))
       }
-      if ((habillage != "none")&(habillage != "quali")&(is.na(test.invisible[1])|is.na(test.invisible[2])))  legend("topleft",legend= levels(res.mca$call$X[,habillage]),text.col= 1:n.mod,cex=0.8)
+#      if ((habillage != "none")&(habillage != "quali")&(is.na(test.invisible[1])|is.na(test.invisible[2])))  legend("topleft",legend= levels(res.mca$call$X[,habillage]),text.col= 1:n.mod,cex=0.8)
+      if ((habillage != "none")&(habillage != "quali")&(is.na(test.invisible[1])|is.na(test.invisible[2]))) {
+        L <- list(x="topleft", legend = levels(res.mca$call$X[,habillage]), text.col = 1:n.mod, cex = par("cex") * 0.8)
+        L <- modifyList(L, legend)
+        do.call(graphics::legend, L)
+      }
     }
 	if (shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
     if (any(labe!="")){

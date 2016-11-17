@@ -28,7 +28,7 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
     if (!inherits(X, "data.frame")) stop("X is not a data.frame")
     if (!is.null(row.sup)) X <- as.data.frame(X[-row.sup,])
     if ((!is.null(col.sup))||(!is.null(quanti.sup))||(!is.null(quali.sup))) X <- as.data.frame(X[,-c(col.sup,quanti.sup,quali.sup)])
-### 3 lignes rajoutées
+### 3 lignes rajoutees
     if (is.null(row.w)) row.w = rep(1,nrow(X))
 	row.w.init <- row.w
     if (length(row.w)!=nrow(X)) stop("length of vector row.w should be the number of active rows")
@@ -94,7 +94,7 @@ dist2.row <- rowSums(t(t(Tc^2)*marge.col))
  if (!is.null(col.sup)){
     X.col.sup <- as.data.frame(Xtot[,col.sup])
     if (!is.null(row.sup)) X.col.sup <- as.data.frame(X.col.sup[-row.sup,])
-## 1 ligne rajoutée
+## 1 ligne rajoutee
     X.col.sup <- X.col.sup*row.w
     colnames(X.col.sup) <- colnames(Xtot)[col.sup]
     somme.col <- colSums(X.col.sup)

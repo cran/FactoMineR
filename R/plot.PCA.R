@@ -5,25 +5,25 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
     col.var = "black", label=c("all","none","ind", "ind.sup", "quali", "var", "quanti.sup"), 
 	invisible = c("none","ind", "ind.sup", "quali","var", "quanti.sup"), lim.cos2.var = 0.,
     title = NULL, palette=NULL, autoLab=c("auto","yes","no"),new.plot=FALSE, 
-	select=NULL, unselect = 0.7,shadowtext = FALSE,...){
+	select=NULL, unselect = 0.7,shadowtext = FALSE, legend = list(bty = "y", x = "topleft"),...){
     
     res.pca <- x
     if (!inherits(res.pca, "PCA")) stop("non convenient data")
     if (is.numeric(unselect)) if ((unselect>1)|(unselect<0)) stop("unselect should be betwwen 0 and 1")
 	autoLab <- match.arg(autoLab,c("auto","yes","no"))
-	if (autoLab=="yes") autoLab=TRUE
-	if (autoLab=="no") autoLab=FALSE
+	if (autoLab == "yes") autoLab=TRUE
+	if (autoLab == "no") autoLab=FALSE
     label <- match.arg(label,c("all","none","ind", "ind.sup", "quali", "var", "quanti.sup"),several.ok=TRUE)
 	invisible <- match.arg(invisible,c("none","ind", "ind.sup", "quali","var", "quanti.sup"),several.ok=TRUE)
     if ("none"%in%invisible) invisible = NULL
     choix <- match.arg(choix,c("ind","var","varcor"))
     lab.ind <- lab.quali <- lab.var <- lab.quanti <- lab.ind.sup <- FALSE
-    if(length(label)==1 && label=="all") lab.ind <- lab.quali <- lab.var <- lab.quanti <- lab.ind.sup <-TRUE
-    if("ind" %in% label) lab.ind<-TRUE
-    if("quali" %in% label) lab.quali<-TRUE
-    if("var" %in% label) lab.var<-TRUE
-    if("quanti.sup" %in% label) lab.quanti<-TRUE
-    if("ind.sup" %in% label) lab.ind.sup<-TRUE
+    if (length(label)==1 && label=="all") lab.ind <- lab.quali <- lab.var <- lab.quanti <- lab.ind.sup <-TRUE
+    if ("ind" %in% label) lab.ind<-TRUE
+    if ("quali" %in% label) lab.quali<-TRUE
+    if ("var" %in% label) lab.var<-TRUE
+    if ("quanti.sup" %in% label) lab.quanti<-TRUE
+    if ("ind.sup" %in% label) lab.ind.sup<-TRUE
     lab.x <- paste("Dim ",axes[1]," (",format(res.pca$eig[axes[1],2],nsmall=2,digits=2),"%)",sep="")
     lab.y <- paste("Dim ",axes[2]," (",format(res.pca$eig[axes[2],2],nsmall=2,digits=2),"%)",sep="")
 #    sub.titre <- NULL
@@ -95,7 +95,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
 		  }
 		}
         selectionS <- NULL
-		if ((!is.null(select))&(!is.null(res.pca$ind.sup$coord))) {
+		if ((!is.null(select))&(!is.null(res.pca$ind.sup$coord))&is.na(test.invisible[2])) {
 		  if (mode(select)=="numeric") selectionS <- select
 		  else {
 		    if (sum(rownames(res.pca$ind$coord)%in%select)+sum(rownames(res.pca$ind.sup$coord)%in%select)!=0) selectionS <- which(rownames(res.pca$ind.sup$coord)%in%select)
@@ -143,7 +143,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
         if (habillage == "none") {
             color.ind <- rep(col.ind,nrow(coord.actif))
             color.mod <- col.quali
-            if (!is.null(res.pca$ind.sup)) col.ind.sup <- rep(col.ind.sup,nrow(res.pca$ind.sup$coord))
+            if (!is.null(res.pca$ind.sup)&is.na(test.invisible[2])) col.ind.sup <- rep(col.ind.sup,nrow(res.pca$ind.sup$coord))
         }
         color.sup <- col.ind.sup
 		
@@ -217,7 +217,12 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
         else lines(x=data.elli[, 1], y = data.elli[, 2], col = col.quali,...)
       }
     }
-    if ((habillage != "none")&(habillage != "ind")) legend("topleft",legend= levels(res.pca$call$X[,habillage]),text.col= color.mod,cex=par("cex")*0.8)
+#    if ((habillage != "none")&(habillage != "ind")) legend("topleft",legend= levels(res.pca$call$X[,habillage]),text.col= color.mod,cex=par("cex")*0.8)
+    if ((habillage != "none") & (habillage != "ind")) {
+      L <- list(x="topleft", legend = levels(res.pca$call$X[, habillage]), text.col = color.mod, cex = par("cex") * 0.8)
+      L <- modifyList(L, legend)
+      do.call(graphics::legend, L)
+    }
   }
     if (choix == "varcor") {
 	  sauv <- res.pca$var$coord

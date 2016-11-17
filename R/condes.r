@@ -8,7 +8,7 @@ cor.calc <- function(y,x,w=NULL){
   Z <- Z[!missing,]
   w <- w[!missing]
   n=sum(w)
-  if (n<3) n <- sum(w)*length(x)  ### au cas ou les poids somment à 1, on multiplie par n
+  if (n<3) n <- sum(w)*length(x)  ### au cas ou les poids somment a 1, on multiplie par n
   r=cov.wt(Z,wt=w,method="ML",cor=TRUE)$cor[1,2]
   return( list(r=r,proba=pt(sqrt(n-2)*sqrt(r^2/(1-r^2)),n-2,lower.tail=FALSE)*2))
 }

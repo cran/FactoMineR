@@ -10,7 +10,6 @@ cont.textuel <- function(exp, maj.in.min = TRUE, accent = TRUE, sep.word=NULL){
   sep1 = substr(new.sep.word,1,1)
   for (i in 1:length(exp)){
     expression[[i]] <- chartr(sep.word,new.sep.word,exp[[i]])
-##    if (accent) expression[[i]] <- chartr("éèêâûòóôíîìàùç","eeeauoooiiiauc",expression[[i]])
     if (maj.in.min) expression[[i]] <- chartr("A-Z","a-z",expression[[i]])
     stopnow = FALSE
     aux.length = -1

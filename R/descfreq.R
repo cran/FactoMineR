@@ -19,7 +19,7 @@ descfreq <- function(donnee,by.quali=NULL,proba = 0.05){
     aux3 = marge.li[j]/sum(marge.li)
     if (aux2 > aux3) aux4 = phyper(donnee[j,k]-1,marge.col[k],sum(marge.col)-marge.col[k],marge.li[j],lower.tail=FALSE)*2
     else aux4 = phyper(donnee[j,k],marge.col[k],sum(marge.col)-marge.col[k],marge.li[j])*2
-	if (aux4>1) aux4 <- 2-aux4 ##sinon on peut avoir proba > à 1 
+	if (aux4>1) aux4 <- 2-aux4 ##sinon on peut avoir proba > a 1 
     if (aux4<proba) {
       aux5 = (1-2*as.integer(aux2>aux3))*qnorm(aux4/2)
       aux1 = donnee[j,k]/marge.li[j]

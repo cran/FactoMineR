@@ -3,14 +3,14 @@ predict.MCA <- function(object, newdata, ...){
     if (!is.null(colnames(newdata))) {
 	  if (any(!(rownames(object$var$eta)%in%colnames(newdata)))) warning("The names of the variables is not the same as the ones in the active variables of the MCA result")
 	}
-	object <- object$call$object[,rownames(object$var$eta)]
-	newdata <- newdata[,colnames(object)]
+	olddata <- object$call$X[,rownames(object$var$eta)]
+	newdata <- newdata[,colnames(olddata)]
 	pb = NULL
 	for (i in 1:ncol(newdata)) {
-	  if (sum(!levels(newdata[,i])%in%levels(object[,i]))>0) pb <- c(pb, levels(newdata[,i])[which(!levels(newdata[,i])%in%levels(object[,i]))])
+	  if (sum(!levels(newdata[,i])%in%levels(olddata[,i]))>0) pb <- c(pb, levels(newdata[,i])[which(!levels(newdata[,i])%in%levels(olddata[,i]))])
 	}
 	if (!is.null(pb)) stop("The following categories are not in the active dataset: ",pb)
-	newdata <- rbind(object,newdata)[-(1:nrow(object)),,drop=FALSE]
+	newdata <- rbind(olddata,newdata)[-(1:nrow(olddata)),,drop=FALSE]
 	tab.newdata=tab.disjonctif(newdata)
     marge.col <- object$call$marge.col
 	ncp <- ncol(object$ind$coord)

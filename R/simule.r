@@ -25,10 +25,3 @@ simule <- function (data, nb.simul = 500){
     class(resultats) <- c("sim", "list")
     return(resultats)
 }
-
-
-# ligne 17, unique() remplacé par la fonction levels(). Sinon, change l'ordre
-# des modalités dans le tableau de résultats et pose des problème lors de la
-# construction graphique avec plot.ACP
-
-# aussi en ligne 15

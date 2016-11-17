@@ -20,7 +20,7 @@ textual(tab, num.text, contingence.by=1:ncol(tab),
   table is calculated for all the variables (except the textual one). A contingence table can also be calculated for couple of variables.
   If \code{contingence.by} is equal to num.text, then the contingence table is calculated for each row of the data table}
   \item{maj.in.min}{boolean, if TRUE majuscule are transformed in minuscule}
-  \item{sep.word}{a string with all the characters which correspond to separator of words (by default \code{sep.word = "; (),?./:'!$§=+\n;{}<>[]@-"})}
+  \item{sep.word}{a string with all the characters which correspond to separator of words}
 }
 
 \value{

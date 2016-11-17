@@ -22,7 +22,7 @@ tryCatch.W.E <- function(expr){  ## function proposed by Maechler
     X <- t(t(X)*sqrt(col.w))*sqrt(row.w)
 if (ncol(X)<nrow(X)){
 ##    svd.usuelle <- svd(X,nu=ncp,nv=ncp)
-## lignes suivantes pour éviter qq pb de convergence de l'algo LINPACK de svd
+## lignes suivantes pour eviter qq pb de convergence de l'algo LINPACK de svd
 	svd.usuelle <- tryCatch.W.E(svd(X,nu=ncp,nv=ncp))$val
     if (names(svd.usuelle)[[1]]=="message"){
 	  svd.usuelle <- tryCatch.W.E(svd(t(X),nu=ncp,nv=ncp))$val

@@ -3,7 +3,7 @@ predict.FAMD <- function(object, newdata, ...){
     if (!is.null(colnames(newdata))) {
 	  if (any(!(rownames(object$var$coord)%in%colnames(newdata)))) warning("The names of the variables is not the same as the ones in the active variables of the FAMD result")
 	}
-	object <- object$call$object   ## ne pas utiliser les noms des variables comme dans les autres fonctions car les variables sont réordonnées
+	object <- object$call$object   ## ne pas utiliser les noms des variables comme dans les autres fonctions car les variables sont reordonnees
 
     ecart.type <- object$call$ecart.type
     centre <- object$call$centre

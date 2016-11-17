@@ -18,7 +18,8 @@ variables and supplementary categorical variables.
 	invisible = c("none","ind","ind.sup","quali","var","quanti.sup"), 
     lim.cos2.var = 0., title = NULL, palette=NULL,
     autoLab = c("auto","yes","no"), new.plot = FALSE, select = NULL, 
-	unselect = 0.7, shadowtext = FALSE, \dots)
+	unselect = 0.7, shadowtext = FALSE, legend = list(bty = "y", x = "topleft"),
+	\dots)
     }
 
 \arguments{
@@ -46,12 +47,13 @@ variables and supplementary categorical variables.
   \item{select}{a selection of the elements that are drawn; see the details section}
   \item{unselect}{may be either a value between 0 and 1 that gives the transparency of the unselected objects (if \code{unselect=1} the transparceny is total and the elements are not drawn, if \code{unselect=0} the elements are drawn as usual but without any label) or may be a color (for example \code{unselect="grey60"})}
   \item{shadowtext}{boolean; if true put a shadow on the labels (rectangles are written under the labels which may lead to difficulties to modify the graph with another program)}
+  \item{legend}{a list of arguments that defines the legend if needed (when individuals are drawn according to a variable); see the arguments of the function \code{legend}}
   \item{\dots}{further arguments passed to or from other methods, such as cex, cex.main, ...}
 }
 
 \details{
 The argument \code{autoLab = "yes"} is time-consuming if there are many labels that overlap. In this case, you can modify the size of the characters in order to have less overlapping, using for example cex=0.7.\cr
-The \code{select} argument can be used in order to select a part of the elements (individuals if you draw the graph of individuals, or variables if you draw the graph of variabless) that are drawn.
+The \code{select} argument can be used in order to select a part of the elements (individuals if you draw the graph of individuals, or variables if you draw the graph of variables) that are drawn.
 For example, you can use:\cr
 \code{select = 1:5} and then the elements 1:5 are drawn.\cr 
 \code{select = c("name1","name5")} and then the elements that have the names name1 and name5 are drawn.\cr 

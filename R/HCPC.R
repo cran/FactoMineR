@@ -250,6 +250,7 @@ centers = res.consol$centers
     }
     clust <- as.factor(clust)
 ## Add 2014-07-08
+  X <- cbind.data.frame(X,clust)
 if (kk<Inf){
   if (inherits(res.sauv, "PCA") | inherits(res.sauv, "MCA") | inherits(res.sauv,"MFA") | inherits(res.sauv, "HMFA") | inherits(res.sauv, "FAMD")){
     if (is.null(res.sauv$call$ind.sup)) data.clust <- cbind.data.frame(res.sauv$call$X, clust=cla$cluster)
@@ -269,7 +270,6 @@ if (kk<Inf){
 	}
   }
 } else {
-  X <- cbind.data.frame(X,clust)
   if (inherits(res.sauv, "PCA") | inherits(res.sauv, "MCA") | inherits(res.sauv,"MFA") | inherits(res.sauv, "HMFA") | inherits(res.sauv, "FAMD")) data.clust <- cbind.data.frame(res.sauv$call$X[rownames(t$res$call$X),], clust)
   if (inherits(res.sauv, "data.frame")) data.clust <- cbind.data.frame(res.sauv[rownames(X),], clust)
 #  if (inherits(res.sauv, "data.frame")) data.clust <- X cbind.data.frame(res.sauv$call$X[rownames(t$res$call$X),], clust)

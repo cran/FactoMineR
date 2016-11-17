@@ -1,6 +1,6 @@
 predict.MFA <- function(object, newdata, ...){
-## newdata : les données pour les individus supplémentaires
-## object : la sortie de l'AFM sur les données actives
+## newdata : les donnees pour les individus supplementaires
+## object : la sortie de l'AFM sur les donnees actives
  ec <- function(V, poids) {
         res <- sqrt(sum(V^2 * poids,na.rm=TRUE)/sum(poids[!is.na(V)]))
     }

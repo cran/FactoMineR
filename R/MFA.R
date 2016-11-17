@@ -467,7 +467,16 @@ tmp <- tmp*row.w
 ##    coord.res.partial.axes <- t(tab.partial.axes) %*% diag(res.globale$call$row.w) %*% res.globale$svd$U
     coord.res.partial.axes <- t(tab.partial.axes*res.globale$call$row.w)
     coord.res.partial.axes <- crossprod(t(coord.res.partial.axes),res.globale$svd$U[,1:ncp])
-		contrib.res.partial.axes <- t(t(coord.res.partial.axes^2)/res.globale$eig[1:ncp,1]) *100
+	contrib.res.partial.axes <- coord.res.partial.axes*0
+    debut <- 0
+	for (g in 1:nbre.group) {
+	  nbcol <- min(ncp, ncol(res.separe[[g]]$ind$coord))
+	  if (g %in% group.actif) contrib.res.partial.axes[(debut + 1):(debut + nbcol),] <- coord.res.partial.axes[(debut + 1):(debut + nbcol),]^2*res.separe[[g]]$eig[1:nbcol,1]/res.separe[[g]]$eig[1,1]
+	  debut <- debut + nbcol
+    }
+	contrib.res.partial.axes <- t(t(contrib.res.partial.axes)/apply(contrib.res.partial.axes,2,sum)) *100
+#	contrib.res.partial.axes <- t(t(coord.res.partial.axes^2)/res.globale$eig[1:ncp,1]) *100
+	
     sigma <- apply(tab.partial.axes, 2, ec, res.globale$call$row.w)
     cor.res.partial.axes <- coord.res.partial.axes/sigma
     colnames(coord.res.partial.axes) <- paste("Dim", c(1:ncol(coord.res.partial.axes)), sep = ".")

@@ -18,7 +18,7 @@ Draw the Multiple Correspondence Analysis (MCA) graphs.
     title = NULL, habillage = "none", 
     palette = NULL, autoLab = c("auto","yes","no"), new.plot = FALSE, 
     select = NULL, selectMod = NULL, unselect = 0.7, 
-	shadowtext = FALSE, \dots)
+	shadowtext = FALSE, legend = list(bty = "y", x = "topleft"), \dots)
 }
 
 \arguments{
@@ -45,7 +45,8 @@ Draw the Multiple Correspondence Analysis (MCA) graphs.
   \item{selectMod}{a selection of the categories that are drawn; see the details section}
   \item{unselect}{may be either a value between 0 and 1 that gives the transparency of the unselected objects (if \code{unselect=1} the transparceny is total and the elements are not drawn, if \code{unselect=0} the elements are drawn as usual but without any label) or may be a color (for example \code{unselect="grey60"})}
   \item{shadowtext}{boolean; if true put a shadow on the labels (rectangles are written under the labels which may lead to difficulties to modify the graph with another program)}
-  \item{\dots}{further arguments passed to or from other methods, such as cex, cex.main, ...}
+  \item{legend}{a list of arguments that defines the legend if needed (when individuals are drawn according to a variable); see the arguments of the function \code{legend}}
+\item{\dots}{further arguments passed to or from other methods, such as cex, cex.main, ...}
 }
 
 \details{

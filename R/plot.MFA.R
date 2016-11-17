@@ -3,7 +3,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     habillage = "group", col.hab = NULL, invisible = c("none","ind", "ind.sup", "quanti","quanti.sup","quali","quali.sup","row", "row.sup","col", "col.sup"), partial = NULL, 
     lim.cos2.var = 0., chrono = FALSE, xlim = NULL, ylim = NULL, 
     title = NULL, palette = NULL, autoLab = c("auto","yes","no"),new.plot = FALSE, select = NULL,
-	unselect = 0.7,shadowtext=FALSE,...) 
+	unselect = 0.7,shadowtext=FALSE, legend = list(bty = "y", x = "topleft"),...) 
 {
     res.mfa <- x
     if (!inherits(res.mfa, "MFA")) stop("non convenient data")
@@ -94,12 +94,17 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         if (autoLab=="auto") autoLab = (length(labe)<50)
 		if (autoLab==FALSE) text(coord.axes[, 1], y = coord.axes[, 2], labels = labe, pos = posi, col = couleur.axes,...)
         if (autoLab==TRUE) autoLab(coord.axes[, 1], y = coord.axes[, 2], labels = labe, col=couleur.axes, shadotext=shadowtext,...)
-        if (habillage == "group") legend("topleft", legend = rownames(res.mfa$group$Lg)[-length(rownames(res.mfa$group$Lg))], text.col = unique(couleur.axes), ...)
+#        if (habillage == "group") legend("topleft", legend = rownames(res.mfa$group$Lg)[-length(rownames(res.mfa$group$Lg))], text.col = unique(couleur.axes), ...)
+        if (habillage == "group") {
+          L <- list(x="topleft", legend = rownames(res.mfa$group$Lg)[-length(rownames(res.mfa$group$Lg))], text.col = unique(couleur.axes))
+          L <- modifyList(L, legend)
+          do.call(graphics::legend, L)
+        }
     }
     if (choix == "group") {
         coord.actif <- res.mfa$group$coord[, axes, drop = FALSE]
         if (!is.null(res.mfa$group$coord.sup))  coord.illu <- res.mfa$group$coord.sup[, axes, drop = FALSE]
-## Début ajout 2015/04/23
+## Debut ajout 2015/04/23
         selection <- selectionS <- NULL
 		if (!is.null(select)) {
 		  if (mode(select)=="numeric") selection <- select
@@ -289,17 +294,32 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 		}
         col <- c(coll,coll2)
 		labe <- c(labe,labe2)
-		if (habillage == "group" & is.na(test.invisible[1]) & is.na(test.invisible[2])) 
-            legend("topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg),,drop=FALSE])[type == "c"], text.col = col.hab[type == "c"], cex = 0.8*par("cex"))
-        if (habillage == "group" & is.na(test.invisible[1]) & !is.na(test.invisible[2])){
-            if ("quanti.sup"%in%res.mfa$call$nature.var) legend("topleft", legend = rownames(res.mfa$group$Lg[-c(num.group.sup, nrow(res.mfa$group$Lg)),,drop=FALSE])[type.act == "c"], 
-                text.col = col.hab[which(!((1:length(group))%in%res.mfa$call$num.group.sup))[type.act == "c"]], cex = 0.8*par("cex"))
-            else legend("topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg), ])[type == "c"], 
-                text.col = col.hab[type == "c"], cex = 0.8*par("cex"))
+#		if (habillage == "group" & is.na(test.invisible[1]) & is.na(test.invisible[2])) 
+#            legend("topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg),,drop=FALSE])[type == "c"], text.col = col.hab[type == "c"], cex = 0.8*par("cex"))
+        if (habillage == "group" & is.na(test.invisible[1]) & is.na(test.invisible[2])) {
+          L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg),,drop=FALSE])[type == "c"], text.col = col.hab[type == "c"], cex = 0.8*par("cex"))
+          L <- modifyList(L, legend)
+          do.call(graphics::legend, L)
+        }
+    	if (habillage == "group" & is.na(test.invisible[1]) & !is.na(test.invisible[2])){
+#            if ("quanti.sup"%in%res.mfa$call$nature.var) legend("topleft", legend = rownames(res.mfa$group$Lg[-c(num.group.sup, nrow(res.mfa$group$Lg)),,drop=FALSE])[type.act == "c"], 
+#                text.col = col.hab[which(!((1:length(group))%in%res.mfa$call$num.group.sup))[type.act == "c"]], cex = 0.8*par("cex"))
+          if ("quanti.sup"%in%res.mfa$call$nature.var) {
+            L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[-c(num.group.sup, nrow(res.mfa$group$Lg)),,drop=FALSE])[type.act == "c"], text.col = col.hab[which(!((1:length(group))%in%res.mfa$call$num.group.sup))[type.act == "c"]], cex = 0.8*par("cex"))
+          } else {
+#		    legend("topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg), ])[type == "c"], text.col = col.hab[type == "c"], cex = 0.8*par("cex"))
+            L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg), ])[type == "c"], text.col = col.hab[type == "c"], cex = 0.8*par("cex"))
+		  }
+          L <- modifyList(L, legend)
+          do.call(graphics::legend, L)
         }
 		if (habillage == "group" & !is.na(test.invisible[1]) & is.na(test.invisible[2])){
-            if ("quanti"%in%res.mfa$call$nature.var) legend("topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[type.sup == "c"], text.col = col.hab[res.mfa$call$num.group.sup[type.sup == "c"]], cex = 0.8*par("cex"))
-			else legend("topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[type.sup == "c"], text.col = col.hab[res.mfa$call$num.group.sup[type.sup == "c"]], cex = 0.8*par("cex"))
+#          if ("quanti"%in%res.mfa$call$nature.var) legend("topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[type.sup == "c"], text.col = col.hab[res.mfa$call$num.group.sup[type.sup == "c"]], cex = 0.8*par("cex"))
+#		  else legend("topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[type.sup == "c"], text.col = col.hab[res.mfa$call$num.group.sup[type.sup == "c"]], cex = 0.8*par("cex"))
+          if ("quanti"%in%res.mfa$call$nature.var) L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[type.sup == "c"], text.col = col.hab[res.mfa$call$num.group.sup[type.sup == "c"]], cex = 0.8*par("cex"))
+		  else L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[type.sup == "c"], text.col = col.hab[res.mfa$call$num.group.sup[type.sup == "c"]], cex = 0.8*par("cex"))
+          L <- modifyList(L, legend)
+          do.call(graphics::legend, L)
 		}
         nrow.coord.var <- 0
         coo <- posi <- NULL
@@ -560,9 +580,13 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         if (autoLab ==FALSE) text(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],pos=3,...)
 	  }
 	  if (!shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
-      if (habillage == "group") legend("topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg), ])[type == "f"], text.col = col.hab, cex = 0.8*par("cex"))
-	}
-
+#      if (habillage == "group") legend("topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg), ])[type == "f"], text.col = col.hab, cex = 0.8*par("cex"))
+       if (habillage == "group"){
+  	      L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg), ])[type == "f"], text.col = col.hab, cex = 0.8*par("cex"))
+          L <- modifyList(L, legend)
+          do.call(graphics::legend, L)	
+	   }
+}
     if (choix == "ind") {
         test.invisible <- vector(length = 3)
         if (!is.null(invisible)) {
@@ -1003,19 +1027,34 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
           if (autoLab ==FALSE) text(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],pos=3,...)		
 		}
 	    if (!shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
-        if ((!is.null(partial)) & (habillage == "group")) 
-            legend("topleft", legend = rownames(res.mfa$group$Lg)[-c(num.group.sup, 
+#        if ((!is.null(partial)) & (habillage == "group")) 
+#            legend("topleft", legend = rownames(res.mfa$group$Lg)[-c(num.group.sup, 
+#                length(rownames(res.mfa$group$Lg)))], lty = 1:length(rownames(res.mfa$group$Lg)[-c(num.group.sup, 
+#                length(rownames(res.mfa$group$Lg)))]), text.col = col.hab, 
+#                col = col.hab, cex = par("cex")*0.8)
+        if ((!is.null(partial)) & (habillage == "group")) {
+          L <- list(x="topleft", legend = rownames(res.mfa$group$Lg)[-c(num.group.sup, 
                 length(rownames(res.mfa$group$Lg)))], lty = 1:length(rownames(res.mfa$group$Lg)[-c(num.group.sup, 
                 length(rownames(res.mfa$group$Lg)))]), text.col = col.hab, 
                 col = col.hab, cex = par("cex")*0.8)
-        if ((!is.null(partial)) & (habillage != "group")) 
-            legend("topleft", legend = rownames(res.mfa$group$Lg)[-c(num.group.sup, 
-                length(rownames(res.mfa$group$Lg)))], lty = 1:length(rownames(res.mfa$group$Lg)[-c(num.group.sup, 
-                length(rownames(res.mfa$group$Lg)))]), cex = par("cex")*0.8)
-        if ((habillage != "none") & (habillage != "ind") & (habillage != 
-            "group")) 
-            legend("topleft", legend = levels(res.mfa$call$X[, 
-                habillage]), text.col = col.hab, cex = par("cex")*0.8)
+          L <- modifyList(L, legend)
+          do.call(graphics::legend, L)
+        }
+#        if ((!is.null(partial)) & (habillage != "group")) 
+#            legend("topleft", legend = rownames(res.mfa$group$Lg)[-c(num.group.sup, length(rownames(res.mfa$group$Lg)))], lty = 1:length(rownames(res.mfa$group$Lg)[-c(num.group.sup, length(rownames(res.mfa$group$Lg)))]), cex = par("cex")*0.8)
+        if ((!is.null(partial)) & (habillage != "group")) {
+          L <- list(x="topleft", legend = rownames(res.mfa$group$Lg)[-c(num.group.sup, length(rownames(res.mfa$group$Lg)))], 
+		    lty = 1:length(rownames(res.mfa$group$Lg)[-c(num.group.sup, length(rownames(res.mfa$group$Lg)))]), cex = par("cex")*0.8)
+          L <- modifyList(L, legend)
+          do.call(graphics::legend, L)
+        }
+#        if ((habillage != "none") & (habillage != "ind") & (habillage != "group")) 
+#            legend("topleft", legend = levels(res.mfa$call$X[, habillage]), text.col = col.hab, cex = par("cex")*0.8)
+        if ((habillage != "none") & (habillage != "ind") & (habillage != "group")) {
+          L <- list(x="topleft", legend = levels(res.mfa$call$X[, habillage]), text.col = col.hab, cex = par("cex")*0.8)
+          L <- modifyList(L, legend)
+          do.call(graphics::legend, L)
+        }
         if (!is.null(coord.ellipse) & is.na(test.invisible[2])) {
             for (e in 1:nb.ind.actif) {
                 debut <- ((nb.ind.actif - 1) * npoint.ellipse) + 1

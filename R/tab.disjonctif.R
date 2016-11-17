@@ -1,6 +1,6 @@
 tab.disjonctif<-function (tab){
     tab<-as.data.frame(tab)
-    #fonction interne permettant la réalisation d'un TDC pour un unique facteur
+    #fonction interne permettant la realisation d'un TDC pour un unique facteur
     modalite.disjonctif <- function(i){
         moda <- as.factor(tab[, i])
         n <- length(moda)
