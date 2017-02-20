@@ -3,7 +3,7 @@ plot.CA <- function (x, axes = c(1, 2),
     col.col = "red", col.row.sup = "darkblue", col.col.sup = "darkred",col.quali.sup ="magenta",
     col.quanti.sup="blue",label = c("all","none","row", "row.sup", "col","col.sup", "quali.sup"), title = NULL, palette=NULL, 
 	autoLab = c("auto","yes","no"),new.plot=FALSE, selectRow = NULL, selectCol = NULL,
-    unselect = 0.7,shadowtext = FALSE, habillage = "none",...) {
+    unselect = 0.7,shadowtext = FALSE, habillage = "none", legend = list(bty = "y", x = "topleft"),...) {
 	
     res.ca <- x
     if (is.null(palette)) palette(c("black","red","green3","blue","cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
@@ -256,6 +256,13 @@ if (choix=="ca"){
       if (autoLab ==FALSE) text(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],pos=3,...)
 	}
 	if (!shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll,...)
+
+### ajout legend
+    if (habillage != "none") {
+      L <- list(x="topleft", legend = levels(res.ca$call$Xtot[, habillage]), text.col = 1+(1:nlevels(res.ca$call$Xtot[, habillage])), cex = par("cex") * 0.8)
+      L <- modifyList(L, legend)
+      do.call(graphics::legend, L)
+    }
 }
 	
 	if (choix == "quanti.sup") {

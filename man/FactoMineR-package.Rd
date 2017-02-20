@@ -11,7 +11,7 @@ The method proposed in this package are exploratory mutlivariate methods such as
 \tabular{ll}{
 Package: \tab FactoMineR\cr
 Type: \tab Package\cr
-Version: \tab 1.28\cr
+Version: \tab 1.34\cr
 Date: \tab 2014-09-26\cr
 License: \tab GPL \cr
 LazyLoad: \tab yes\cr
