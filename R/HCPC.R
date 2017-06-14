@@ -1,7 +1,7 @@
 HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3, 
     max = NULL, metric = "euclidean", method = "ward", order = TRUE, 
     graph.scale = "inertia", nb.par = 5, graph = TRUE, proba = 0.05,cluster.CA="rows",
-    kk=Inf,...) 
+    kk=Inf,description=TRUE,...) 
 {
     auto.cut.tree = function(res, min, max, metric, method, weight=NULL,cla=NULL,...) {
         if (order) {
@@ -128,6 +128,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
     max <- min(max, nrow(res$ind$coord) - 1)
     if (inherits(res, "PCA") | inherits(res, "MCA") | inherits(res,"MFA") | inherits(res, "HMFA") | inherits(res, "FAMD")) {
     	if (!is.null(res$call$ind.sup)) res$call$X <- res$call$X[-res$call$ind.sup, ]
+        if (is.null(res$call$row.w.init)) res$call$row.w.init <- res$call$row.w
         t <- auto.cut.tree(res, min = min, max = max, metric = metric, method = method, weight = res$call$row.w.init,cla=cla,order=order,...)
     }
     else stop("res should be from data.frame, PCA, CA, MCA, FAMD, MFA, or HMFA class")
@@ -284,9 +285,18 @@ if (kk<Inf){
   if (inherits(res.sauv, "CA")&(cluster.CA=="columns")) data.clust <- data.clust[rownames(res.sauv$col$coord),]
   if (inherits(res.sauv, "data.frame")) data.clust <- data.clust[rownames(res.sauv),]
   if (vec) data.clust <- as.data.frame(data.clust[, -2])
-  if (!inherits(res.sauv, "CA")&!(vec)) desc.var <- catdes(data.clust, ncol(data.clust), proba = proba)
-  else desc.var <- descfreq(data.clust[,-which(sapply(data.clust,is.factor))], data.clust[,ncol(data.clust)], proba = proba)
-  if (kk==Inf) desc.axe <- catdes(X, ncol(X), proba = proba)
+if (description){
+     if (!inherits(res.sauv, "CA")&!(vec)) desc.var <- catdes(data.clust, ncol(data.clust), proba = proba, row.w = res$call$row.w.init)
+    else {
+      if ((vec) | (is.null(res.sauv$call$quanti.sup)& is.null(res.sauv$call$quali.sup))) desc.var <- descfreq(data.clust[,-which(sapply(data.clust,is.factor))], data.clust[,ncol(data.clust)], proba = proba)
+	  else { 
+	   desc.var <- catdes(data.clust[,c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))], length(c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))), proba = proba,row.w=apply(data.clust[,-c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))],1,sum))
+       desc.var$frequency <- descfreq(data.clust[,-c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))], data.clust[,ncol(data.clust)], proba = proba)
+	   desc.var <- desc.var[c(length(desc.var),1:(length(desc.var)-1))]   # frequency will appear first
+	  }
+    }
+    if (kk==Inf) desc.axe <- catdes(X, ncol(X), proba = proba, row.w = res$call$row.w.init)
+}
   if (inherits(res.sauv, "data.frame")) tabInd <- cbind.data.frame(res.sauv,data.clust[,ncol(data.clust)])
   if (inherits(res.sauv, "PCA") | inherits(res.sauv, "MCA") | inherits(res.sauv,"MFA") | inherits(res.sauv, "HMFA") | inherits(res.sauv, "FAMD")) tabInd <- cbind.data.frame(res.sauv$ind$coord,data.clust[rownames(res.sauv$ind$coord),ncol(data.clust)])
 #  if (inherits(res.sauv, "CA")&(cluster.CA=="rows")) tabInd <- cbind.data.frame(res.sauv$row$coord,data.clust[,ncol(data.clust)])
@@ -302,12 +312,16 @@ cluster <- tabInd[,ncol(tabInd),drop=FALSE]
 para <- by(tabInd, cluster, simplify = FALSE, select, default.size = nb.par, method = metric, coord.centers = centers)
 dist <- by(tabInd, cluster, simplify = FALSE, distinctivness, default.size = nb.par, method = metric, coord.centers = centers)
 desc.ind <- list(para = para, dist = dist)
-
     if (consol) call <- list(t = t, min = min, max = max, X = X, bw.before.consol=sum(rev(t$tree$height)[1:(nb.clust-1)]),bw.after.consol=res.consol$betweenss/nrow(data.clust),vec = vec,call=match.call())
 	else call <- list(t = t, min = min, max = max, X = X, bw.before.consol=sum(rev(t$tree$height)[1:(nb.clust-1)]),vec = vec,call=match.call())
 #    call <- list(t = t, min = min, max = max, X = data.clust, vec = vec,call=sys.calls()[[1]])
-    if (kk!=Inf) res.HCPC <- list(data.clust = data.clust, desc.var = desc.var, call = call, desc.ind = desc.ind)
-    else res.HCPC <- list(data.clust = data.clust, desc.var = desc.var, desc.axes = desc.axe, call = call, desc.ind = desc.ind)
+	if (description){
+	  if (kk!=Inf) res.HCPC <- list(data.clust = data.clust, desc.var = desc.var, call = call, desc.ind = desc.ind)
+      else res.HCPC <- list(data.clust = data.clust, desc.var = desc.var, desc.axes = desc.axe, call = call, desc.ind = desc.ind)
+	} else {
+	  if (kk!=Inf) res.HCPC <- list(data.clust = data.clust, call = call, desc.ind = desc.ind)
+      else res.HCPC <- list(data.clust = data.clust, call = call, desc.ind = desc.ind)
+	}
     if ((kk==Inf)&(graph)) {
 #       plot.HCPC(res.HCPC,choice="tree",new.plot=FALSE)
     	if (vec || (ncol(tabInd)==2)) 

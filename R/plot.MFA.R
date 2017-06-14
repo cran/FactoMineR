@@ -45,7 +45,6 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 		    if (sum(rownames(res.mfa$partial.axes$coord)%in%select)!=0) selection <- which(rownames(res.mfa$partial.axes$coord)%in%select)
 			else {
  		    if (grepl("contrib",select)) selection <- (rev(order(res.mfa$partial.axes$contrib[,axes[1],drop=FALSE]*res.mfa$eig[axes[1],1]+res.mfa$partial.axes$contrib[,axes[2],drop=FALSE]*res.mfa$eig[axes[2],1])))[1:min(nrow(res.mfa$partial.axes$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
-# 		    if (grepl("contrib",select)) selection <- (rev(order(apply(res.mfa$partial.axes$contrib[,axes],1,sum))))[1:min(nrow(res.mfa$partial.axes$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
  		    if (grepl("coord",select)) selection <- (rev(order(apply(res.mfa$partial.axes$coord[,axes]^2,1,sum))))[1:min(nrow(res.mfa$partial.axes$coord),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
 			if (is.integer(select)) selection <- select
 			}  
@@ -76,6 +75,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
             for (i in 1:length(group)) couleur.axes <- c(couleur.axes, rep("black", ncol(res.mfa$partial.axes$coord)))
         }
 		posi <- coll <- NULL
+        col.legend = unique(couleur.axes)
 		if (!is.null(select)){
  		  coord.axes <- coord.axes[selection,,drop=FALSE]
 		  couleur.axes <- couleur.axes[selection]
@@ -96,7 +96,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         if (autoLab==TRUE) autoLab(coord.axes[, 1], y = coord.axes[, 2], labels = labe, col=couleur.axes, shadotext=shadowtext,...)
 #        if (habillage == "group") legend("topleft", legend = rownames(res.mfa$group$Lg)[-length(rownames(res.mfa$group$Lg))], text.col = unique(couleur.axes), ...)
         if (habillage == "group") {
-          L <- list(x="topleft", legend = rownames(res.mfa$group$Lg)[-length(rownames(res.mfa$group$Lg))], text.col = unique(couleur.axes))
+          L <- list(x="topleft", legend = rownames(res.mfa$group$Lg)[-length(rownames(res.mfa$group$Lg))], text.col = col.legend)
           L <- modifyList(L, legend)
           do.call(graphics::legend, L)
         }

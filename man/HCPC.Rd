@@ -14,7 +14,7 @@
 HCPC(res, nb.clust=0, consol=TRUE, iter.max=10, min=3, 
   max=NULL, metric="euclidean", method="ward", order=TRUE,
   graph.scale="inertia", nb.par=5, graph=TRUE, proba=0.05, 
-  cluster.CA="rows",kk=Inf,\dots)}
+  cluster.CA="rows",kk=Inf,description=TRUE,\dots)}
 
 \arguments{
   \item{res}{Either the result of a factor analysis or a dataframe.}
@@ -43,6 +43,7 @@ HCPC(res, nb.clust=0, consol=TRUE, iter.max=10, min=3,
   of individuals is high. Note that consolidation cannot be performed if kk is different 
   from Inf and some graphics are not drawn. Inf is used by default and 
   no preprocessing is done, all the graphical outputs are then given.}
+  \item{description}{boolean; if TRUE the clusters are characterized by the variables and the dimensions}
   \item{\dots}{Other arguments from other methods.}
 }
 

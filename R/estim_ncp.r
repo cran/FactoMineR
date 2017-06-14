@@ -35,8 +35,11 @@ if (ncp.min==0)  crit = mean(X^2, na.rm = TRUE)*(n*p)/((p-pquali)*(n-1))
 rr = svd(X,nu=ncp.max,nv=ncp.max)
 
 for (q in max(ncp.min,1):ncp.max){
-    if (q>1) rec = tcrossprod(sweep(as.matrix(rr$u)[,1:q,drop=F],2,rr$d[1:q],FUN="*"),as.matrix(rr$v)[,1:q,drop=F])
-    if (q==1) rec = tcrossprod(as.matrix(rr$u)[,1,drop=FALSE]*rr$d[1],as.matrix(rr$v)[,1,drop=FALSE])
+    if (q==max(ncp.min,1)) {
+	  if (q==1) rec = tcrossprod(as.matrix(rr$u)[,1,drop=FALSE]*rr$d[1],as.matrix(rr$v)[,1,drop=FALSE])
+	  else rec = tcrossprod(sweep(as.matrix(rr$u)[,1:q,drop=F],2,rr$d[1:q],FUN="*"),as.matrix(rr$v)[,1:q,drop=F])
+	}
+    else rec = rec + tcrossprod(sweep(as.matrix(rr$u)[,q,drop=F],2,rr$d[q],FUN="*"),as.matrix(rr$v)[,q,drop=F])
 
 ##if (scale) rec = sweep(rec,2,et,FUN="*")
 

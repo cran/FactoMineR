@@ -34,8 +34,8 @@ plot.PCA(x, axes = axes, choix = choix, label=label,
   x$group$contrib <- x$var$contrib
   x$call$group <- rep(1,length(x$call$type))
   if (!is.null(x$quanti.sup)){
-    x$group$coord.sup <- x$quanti.sup$coord
-    x$group$cos2.sup <- x$quanti.sup$cos2
+    x$group$coord.sup <- x$var$quanti.sup
+    x$group$cos2.sup <- x$var$cos2
   }
   x$separate.analyses=vector(mode = "list", length = ncol(x$call$X))
   for (i in 1:ncol(x$call$X)) x$separate.analyses[[i]]$call$X <- x$call$X[,i,drop=FALSE]

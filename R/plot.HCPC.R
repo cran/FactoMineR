@@ -114,7 +114,7 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
   X=res$call$X
   max=res$call$max
   min=res$call$min
-  max.plot=max(res$call$max,15)
+  max.plot=max(res$call$max,max.plot)
   nb.clust=length(levels(X$clust))
   levs=levels(X$clust)
   if(choice=="tree"){
@@ -127,7 +127,7 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
       layout(lay,respect=TRUE)
 #      layout.show(n=4)
       vec=res$call$t$inert.gain[1:max.plot]
-      barplot(height=vec, col=c(rep("black", nb.clust-1), rep("grey", max(max, 15)-nb.clust+1)), space=0.9)
+      barplot(height=vec, col=c(rep("black", nb.clust-1), rep("grey", max(max, max.plot)-nb.clust+1)), space=0.9)
       plot(x=1,xlab="",ylab="",main="",col="white",axes=FALSE)
       text(1,1,title,cex=2)
       plot(x=1,xlab="",ylab="",main="",col="white",axes=FALSE)
