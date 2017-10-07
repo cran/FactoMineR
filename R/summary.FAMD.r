@@ -98,12 +98,12 @@ if (nbind>0){
   cat("\n",file=file,append=TRUE)
   print3(res["quanti.var"]$quanti.var,file=file,ncp=ncp,width.row=width.row,nbelements=nbelements)
 }
-  if (!is.null(res$quanti.var.sup)){
+  if (!is.null(res$quanti.sup)){
    cat("\nSupplementary continuous variable",file=file,append=TRUE)
-   if (nrow(res$quanti.var.sup$coord)>1) cat("s",file=file,append=TRUE)
-   if (nrow(res$quanti.var.sup$coord) > nbelements) cat(paste(" (the ",nbelements," first)",sep=""),file=file,append=TRUE)
+   if (nrow(res$quanti.sup$coord)>1) cat("s",file=file,append=TRUE)
+   if (nrow(res$quanti.sup$coord) > nbelements) cat(paste(" (the ",nbelements," first)",sep=""),file=file,append=TRUE)
    cat("\n",file=file,append=TRUE)
-  print3(res$quanti.var.sup,file=file,ncp=ncp,width.row=width.row,nbelements=nbelements)
+  print3(res$quanti.sup,file=file,ncp=ncp,width.row=width.row,nbelements=nbelements)
  }
 
   if (!is.null(res["quali.var"]$quali.var)) {
@@ -112,11 +112,11 @@ if (nbind>0){
    cat("\n",file=file,append=TRUE)
   print3(res["quali.var"]$quali.var,file=file,ncp=ncp,width.row=width.row,nbelements=nbelements)
 }
-  if (!is.null(res$quali.var.sup)){
+  if (!is.null(res$quali.sup)){
    cat("\nSupplementary categories",file=file,append=TRUE)
-   if (nrow(res$quali.var.sup$coord) > nbelements) cat(paste(" (the ",nbelements," first)",sep=""),file=file,append=TRUE)
+   if (nrow(res$quali.sup$coord) > nbelements) cat(paste(" (the ",nbelements," first)",sep=""),file=file,append=TRUE)
    cat("\n",file=file,append=TRUE)
-  print3(res$quali.var.sup,file=file,ncp=ncp,width.row=width.row,nbelements=nbelements)
+  print3(res$quali.sup,file=file,ncp=ncp,width.row=width.row,nbelements=nbelements)
  }
 
 }

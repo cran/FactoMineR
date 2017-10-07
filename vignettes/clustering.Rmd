@@ -17,5 +17,7 @@ output:
 
 # Introduction
 
-This preprint gives some ideas about the use of Principal Component methods 
-with clustering methods.
+You can see this that gives some ideas about the use of Principal Component methods 
+with clustering methods:
+
+http://factominer.free.fr/more/HCPC_husson_josse.pdf

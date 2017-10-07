@@ -22,8 +22,8 @@ PCA(X, scale.unit = TRUE, ncp = 5, ind.sup = NULL,
   \item{ind.sup}{a vector indicating the indexes of the supplementary individuals}
   \item{quanti.sup}{a vector indicating the indexes of the quantitative supplementary variables}
   \item{quali.sup}{a vector indicating the indexes of the categorical supplementary variables}
-  \item{row.w}{an optional row weights (by default, a vector of 1 for uniform row weights)}
-  \item{col.w}{an optional column weights (by default, uniform column weights)}
+  \item{row.w}{an optional row weights (by default, a vector of 1 for uniform row weights); the weights are given only for the active individuals}
+  \item{col.w}{an optional column weights (by default, uniform column weights); the weights are given only for the active variables}
   \item{graph}{boolean, if TRUE a graph is displayed}
   \item{axes}{a length 2 vector specifying the components to plot}
 }

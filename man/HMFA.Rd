@@ -31,7 +31,7 @@ HMFA(X,H,type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE,
   \item{quali.var}{a list of matrices with all the results for the supplementary categorical variables (coordinates of each categories of each variables, and v.test which is a criterion with a Normal distribution)}
   \item{partial}{a list of arrays with the coordinates of the partial points for each partition}
 }
-\references{Le Dien, S. & Pagès, J. (2003) Hierarchical Multiple factor analysis: application to the comparison of sensory profiles, \emph{Food Quality and Preferences}, \bold{18 (6)}, 453-464.
+\references{Le Dien, S. & Pages, J. (2003) Hierarchical Multiple factor analysis: application to the comparison of sensory profiles, \emph{Food Quality and Preferences}, \bold{18 (6)}, 453-464.
 }
 
 \author{Sebastien Le, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}

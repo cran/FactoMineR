@@ -34,7 +34,7 @@ MFA (base, group, type = rep("s",length(group)), excl = NULL,
   \item{num.group.sup}{the indexes of the illustrative groups (by default, NULL and no group are illustrative)}
   \item{graph}{boolean, if TRUE a graph is displayed}
   \item{weight.col.mfa}{vector of weights, useful for HMFA method (by default, NULL and an MFA is performed)}
-  \item{row.w}{an optional row weights (by default, a vector of 1 for uniform row weights)}
+  \item{row.w}{an optional row weights (by default, a vector of 1 for uniform row weights); the weights are given only for the active individuals}
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{tab.comp}{object obtained from the imputeMFA function of the missMDA package that allows to handle missing values}
 }

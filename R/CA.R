@@ -9,7 +9,7 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
   }
   tt <- tab.disjonctif(vec)
   ni <- colSums(tt*weights)
-  unlist(lapply(as.data.frame(x),VB))/colSums(x^2*weights)
+  unlist(lapply(as.data.frame(x),VB))/colSums(x*x*weights)
 }
 
     if (is.table(X)) X <- as.data.frame.matrix(X)
@@ -42,7 +42,7 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
     tmp <- svd.triplet(Tc, row.w = marge.row, col.w = marge.col,ncp=ncp)
   if(!is.null(excl)) marge.col[excl] <- 0
     eig <- tmp$vs^2
-    vp <- as.data.frame(matrix(NA, length(eig), 3))
+    vp <- matrix(NA, length(eig), 3)
     rownames(vp) <- paste("dim", 1:length(eig))
     colnames(vp) <- c("eigenvalue", "percentage of variance", "cumulative percentage of variance")
     vp[, "eigenvalue"] <- eig
@@ -53,7 +53,7 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
 	eig <- eig[1:ncol(U)]
 	coord.col <- t(t(V)*sqrt(eig))
     coord.row <- t(t(U)*sqrt(eig))
-dist2.col <- colSums(Tc^2*marge.row)
+	dist2.col <- colSums(Tc^2*marge.row)
     contrib.col <- t(t(coord.col^2*marge.col)/eig)
     cos2.col <- coord.col^2/dist2.col
     colnames(coord.col) <- colnames(contrib.col) <- colnames(cos2.col) <- paste("Dim", 1:length(eig))
@@ -99,11 +99,11 @@ dist2.row <- rowSums(t(t(Tc^2)*marge.col))
     colnames(X.col.sup) <- colnames(Xtot)[col.sup]
     somme.col <- colSums(X.col.sup)
     X.col.sup <- t(t(X.col.sup)/somme.col)
-    coord.col.sup <- as.data.frame(crossprod(as.matrix(X.col.sup),U))
+    coord.col.sup <- crossprod(as.matrix(X.col.sup),U)
 	
 dist2.col <- colSums((X.col.sup-marge.row)^2/marge.row)
-    cos2.col.sup <- coord.col.sup^2/dist2.col
     coord.col.sup <- as.matrix(coord.col.sup[,1:ncp,drop=FALSE])
+    cos2.col.sup <- coord.col.sup^2/dist2.col
     cos2.col.sup <- cos2.col.sup[,1:ncp,drop=FALSE]
     colnames(coord.col.sup) <- colnames(cos2.col.sup) <- paste("Dim", 1:ncp)
     rownames(coord.col.sup) <- rownames(cos2.col.sup) <- colnames(X.col.sup)

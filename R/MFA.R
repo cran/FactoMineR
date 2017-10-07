@@ -9,7 +9,10 @@ MFA <- function (base, group, type = rep("s",length(group)), excl = NULL, ind.su
 	funcLg <- function (x, y, ponderation.x, ponderation.y, wt = rep(1/nrow(x), nrow(x)), cor = FALSE) {
       if (is.data.frame(x)) x <- as.matrix(x)
       else if (!is.matrix(x)) stop("'x' must be a matrix or a data frame")
+      if (is.data.frame(y)) y <- as.matrix(y)
+      else if (!is.matrix(y)) stop("'y' must be a matrix or a data frame")
       if (!all(is.finite(x))) stop("'x' must contain finite values only")
+      if (!all(is.finite(y))) stop("'y' must contain finite values only")
       s <- sum(wt)
 	  wt <- wt/s
       center <- colSums(wt * x)
@@ -182,7 +185,6 @@ if (!is.null(tab.comp)){
           }
           res.separe[[g]] <- MCA(aux.base, excl = excl[[g]], ind.sup = ind.sup, ncp=ncp, graph = FALSE, row.w=row.w)
         }
-
 ###  Begin handle missing values
 if (!is.null(tab.comp)){
  if (type[g] == "s") res.separe[[g]] <- PCA(tab.comp[,ind.var.group[[g]]],scale.unit=TRUE,row.w=row.w,ind.sup=ind.sup,col.w=weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])],graph=FALSE)
@@ -385,11 +387,11 @@ if ((!is.null(tab.comp))&(any("n"%in%type))){
             if (gc>=gl){
 #			  Lg[gl, gc] <- Lg[gc, gl] <- sum(tab[(ind.gl + 1):(ind.gl + group.mod[gl]),  (ind.gc + 1):(ind.gc + group.mod[gc])])
 			  if (is.null(num.group.sup)) {
-			    if (is.null(ind.sup)) Lg[gl, gc] <- Lg[gc, gl] <- funcLg(x=data[,ind.gl + (1:group.mod[gl])],y=data[,ind.gc + (1:group.mod[gc])],ponderation.x=ponderation[ind.gl + (1:group.mod[gl])],ponderation.y=ponderation[ind.gc + (1:group.mod[gc])],wt=row.w/sum(row.w))
-				else Lg[gl, gc] <- Lg[gc, gl] <- funcLg(x=data[-ind.sup,ind.gl + (1:group.mod[gl])],y=data[-ind.sup,ind.gc + (1:group.mod[gc])],ponderation.x=ponderation[ind.gl + (1:group.mod[gl])],ponderation.y=ponderation[ind.gc + (1:group.mod[gc])],wt=row.w/sum(row.w))
+			    if (is.null(ind.sup)) Lg[gl, gc] <- Lg[gc, gl] <- funcLg(x=data[,ind.gl + (1:group.mod[gl]),drop=FALSE],y=data[,ind.gc + (1:group.mod[gc]),drop=FALSE],ponderation.x=ponderation[ind.gl + (1:group.mod[gl])],ponderation.y=ponderation[ind.gc + (1:group.mod[gc])],wt=row.w/sum(row.w))
+				else Lg[gl, gc] <- Lg[gc, gl] <- funcLg(x=data[-ind.sup,ind.gl + (1:group.mod[gl]),drop=FALSE],y=data[-ind.sup,ind.gc + (1:group.mod[gc]),drop=FALSE],ponderation.x=ponderation[ind.gl + (1:group.mod[gl])],ponderation.y=ponderation[ind.gc + (1:group.mod[gc])],wt=row.w/sum(row.w))
 			  } else {
-			    if (is.null(ind.sup)) Lg[gl, gc] <- Lg[gc, gl] <- funcLg(x=cbind.data.frame(data,data.group.sup)[,ind.gl + (1:group.mod[gl])],y=cbind.data.frame(data,data.group.sup)[,ind.gc + (1:group.mod[gc])],ponderation.x=c(ponderation,ponderation.group.sup)[ind.gl + (1:group.mod[gl])],ponderation.y=c(ponderation,ponderation.group.sup)[ind.gc + (1:group.mod[gc])],wt=row.w/sum(row.w))
-			    else Lg[gl, gc] <- Lg[gc, gl] <- funcLg(x=cbind.data.frame(data,data.group.sup)[-ind.sup,ind.gl +(1:group.mod[gl])],y=cbind.data.frame(data,data.group.sup)[-ind.sup,ind.gc + (1:group.mod[gc])],ponderation.x=c(ponderation,ponderation.group.sup)[ind.gl +(1:group.mod[gl])],ponderation.y=c(ponderation,ponderation.group.sup)[ind.gc + (1:group.mod[gc])],wt=row.w/sum(row.w))
+			    if (is.null(ind.sup)) Lg[gl, gc] <- Lg[gc, gl] <- funcLg(x=cbind.data.frame(data,data.group.sup)[,ind.gl + (1:group.mod[gl]),drop=FALSE],y=cbind.data.frame(data,data.group.sup)[,ind.gc + (1:group.mod[gc]),drop=FALSE],ponderation.x=c(ponderation,ponderation.group.sup)[ind.gl + (1:group.mod[gl])],ponderation.y=c(ponderation,ponderation.group.sup)[ind.gc + (1:group.mod[gc])],wt=row.w/sum(row.w))
+			    else Lg[gl, gc] <- Lg[gc, gl] <- funcLg(x=cbind.data.frame(data,data.group.sup)[-ind.sup,ind.gl +(1:group.mod[gl]),drop=FALSE],y=cbind.data.frame(data,data.group.sup)[-ind.sup,ind.gc + (1:group.mod[gc]),drop=FALSE],ponderation.x=c(ponderation,ponderation.group.sup)[ind.gl +(1:group.mod[gl])],ponderation.y=c(ponderation,ponderation.group.sup)[ind.gc + (1:group.mod[gc])],wt=row.w/sum(row.w))
 			  }
 			}
             ind.gc <- ind.gc + group.mod[gc]
@@ -428,7 +430,7 @@ if ((!is.null(tab.comp))&(any("n"%in%type))){
       coord.ind.sup <- crossprod(t(coord.ind.sup),res.globale$svd$V)
       res.ind.partiel[[g]]$coord.sup <- coord.ind.sup
     }
-    cor.grpe.fact <- as.data.frame(matrix(NA, length(group.actif), ncp))
+    cor.grpe.fact <- as.matrix(matrix(NA, length(group.actif), ncp))
     colnames(cor.grpe.fact) <- paste("Dim", c(1:ncp), sep = ".")
     rownames(cor.grpe.fact) <- name.group[group.actif]
     for (f in 1:ncp) {
@@ -446,7 +448,7 @@ if ((!is.null(tab.comp))&(any("n"%in%type))){
       res.groupes$cos2.sup <- coord.group.sup[,1:ncp,drop=FALSE]^2/dist2.group.sup
       res.groupes$dist2.sup <- dist2.group.sup
     }
-    inertie.intra.ind.partiel <- as.data.frame(matrix(NA, (nb.actif * length(group.actif) ), ncp))
+    inertie.intra.ind.partiel <- matrix(NA, (nb.actif * length(group.actif) ), ncp)
     nom.ligne <- NULL
     for (i in 1:nb.actif) nom.ligne <- c(nom.ligne, paste(rownames(base)[i], name.group[group.actif], sep = "."))
     tmp <- array(0,dim=c(nrow(res.globale$ind$coord),ncp,length(group.actif)))
@@ -460,7 +462,7 @@ tmp <- tmp*row.w
     rownames(inertie.intra.ind) <- rownames(res.globale$ind$coord)
     rownames(inertie.intra.ind.partiel) <- nom.ligne
     colnames(inertie.intra.ind) <- colnames(inertie.intra.ind.partiel) <- paste("Dim", c(1:ncp), sep = ".")
-    tab.partial.axes <- as.data.frame(matrix(NA, nb.actif, ncp * nbre.group))
+    tab.partial.axes <- matrix(NA, nb.actif, ncp * nbre.group)
     rownames(tab.partial.axes) <- rownames(data)[1:nb.actif]
     nom.axes <- paste("Dim", c(1:ncp), sep = "")
     nom.col <- NULL
@@ -552,7 +554,7 @@ tmp <- tmp*row.w
         ind.tmp <- rownames(base)[i]
         nom.ligne <- c(nom.ligne, paste(ind.tmp, name.group[group.actif], sep = "."))
     }
-    coord.ind.partiel <- as.data.frame(matrix(NA, (nbre.ind * length(group.actif)), ncp))
+    coord.ind.partiel <- matrix(NA, (nbre.ind * length(group.actif)), ncp)
     rownames(coord.ind.partiel) <- nom.ligne
     colnames(coord.ind.partiel) <- paste("Dim", c(1:ncp), sep = ".")
     coord.ind <- rbind(res.globale$ind$coord[, 1:ncp,drop=FALSE],res.globale$ind.sup$coord[, 1:ncp,drop=FALSE])
@@ -581,7 +583,7 @@ tmp <- tmp*row.w
 	  commun <- intersect(rownames(res.globale$var$contrib),rownames(contrib.quali))
       if (!is.null(commun)) contrib.quali[commun,] <- res.globale$var$contrib[commun,1:ncp,drop=FALSE]
       barycentre <- res.globale$call$quali.sup$barycentre
-      coord.quali.partiel <- as.data.frame(matrix(NA, (nrow(barycentre) * length(group.actif)), ncp))
+      coord.quali.partiel <- matrix(NA, (nrow(barycentre) * length(group.actif)), ncp)
       nom.ligne.bary <- NULL
       for (q in 1:nrow(barycentre)) {
         ind.tmp <- rownames(barycentre)[q]
@@ -589,7 +591,7 @@ tmp <- tmp*row.w
       }
       rownames(coord.quali.partiel) <- nom.ligne.bary
       liste.ligne <- seq(1, (nrow(barycentre) * length(group.actif) ), by = length(group.actif))
-      inertie.intra.cg.partiel <- as.data.frame(matrix(NA, (nrow(barycentre) * length(group.actif) ), ncp))
+      inertie.intra.cg.partiel <- matrix(NA, (nrow(barycentre) * length(group.actif) ), ncp)
       tmp <- array(0,dim=c(nrow(res.globale$quali.sup$coord),ncp,length(group.actif)))
       ind.col <- 0
       for (g in 1:length(group.actif)) {

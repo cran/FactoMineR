@@ -14,8 +14,7 @@ tab.disjonctif<-function (tab){
 	  res <- modalite.disjonctif(1)
 	  dimnames(res) <- list(attributes(tab)$row.names, levels(tab[,1]))
 	}
-    else
-    {
+    else {
 	  variable <- rep(attributes(tab)$names,lapply(tab,nlevels))
 	  listModa <- unlist(lapply(tab,levels))
 	  wlistModa <- which((listModa)%in%c("y","n","Y","N"))

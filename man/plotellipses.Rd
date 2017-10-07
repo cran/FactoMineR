@@ -63,14 +63,14 @@ If only one variable is chosen, the graph is different.
 
 \author{Pierre-Andre Cornillon, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 
-\seealso{ \code{\link{MCA}},\code{\link{PCA}}}
+\seealso{ \code{\link{MCA}}, \code{\link{PCA}}}
 
 \examples{
 \dontrun{
 data(poison)
 res.mca = MCA(poison, quali.sup = 3:4, quanti.sup = 1:2)
 plotellipses(res.mca)
-plotellipses(res.mca,keepvar=1:4)
+plotellipses(res.mca,keepvar=3:6)
 }
 
 data(decathlon)

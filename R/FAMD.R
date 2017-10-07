@@ -123,6 +123,7 @@
 	}
 	res.var$coord <- rbind(quanti.var$coord^2,eta2)
 	aux <- aggregate(quali.var$contrib,by=list(as.factor(rep.int(1:length(facAct),times=sapply(base[,facAct,drop=FALSE],nlevels)))),FUN=sum)[,-1,drop=FALSE]
+	aux <- as.matrix(aux)
 	colnames(aux) <- colnames(quanti.var$contrib)
     rownames(aux) <- attributes(base)$names[facAct]
 	res.var$contrib <- rbind(quanti.var$contrib,aux)
@@ -160,6 +161,7 @@
 	if (!is.null(numIllu)) res$call$nature.var[numIllu] <- "quanti.sup"
 	res$call$call <- match.call()
 	res$call$prop <- prop
+	res$call$sup.var <- sup.var
 #	res$call$call <- sys.calls()[[1]]
     class(res) <- c("FAMD", "list")
 	 if (graph & (ncp>1)){

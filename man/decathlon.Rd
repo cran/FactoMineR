@@ -21,7 +21,7 @@ corresponding to the sporting event (2004 Olympic Game or 2004 Decastar)
 }
 
 \source{
-Département de mathématiques appliquées, Agrocampus Rennes
+Department of statistics and computer science, Agrocampus Rennes
 }
 
 \examples{

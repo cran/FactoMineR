@@ -29,7 +29,7 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
   }
   tt <- tab.disjonctif(vec)
   ni <- colSums(tt*weights)
-  unlist(lapply(as.data.frame(x),VB))/colSums(x^2*weights)
+  unlist(lapply(as.data.frame(x),VB))/colSums(x*x*weights)
 }
 
 	X <- as.data.frame(X)
@@ -81,7 +81,7 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
         ecart.type = ecart.type, X = Xtot, row.w.init = row.w.init,call=match.call())
     tmp <- svd.triplet(X, row.w = row.w, col.w = col.w,ncp=ncp)
     eig <- tmp$vs^2
-    vp <- as.data.frame(matrix(NA, length(eig), 3))
+    vp <- matrix(NA, length(eig), 3)
     rownames(vp) <- paste("comp", 1:length(eig))
     colnames(vp) <- c("eigenvalue", "percentage of variance", 
         "cumulative percentage of variance")

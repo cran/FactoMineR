@@ -22,7 +22,7 @@ CA(X, ncp = 5, row.sup = NULL, col.sup = NULL,
   \item{quali.sup}{a vector indicating the indexes of the categorical supplementary variables}
   \item{graph}{boolean, if TRUE a graph is displayed}
   \item{axes}{a length 2 vector specifying the components to plot}
-  \item{row.w}{an optional row weights (by default, a vector of 1 and each row has a weight equals to its margin)}
+  \item{row.w}{an optional row weights (by default, a vector of 1 and each row has a weight equals to its margin); the weights are given only for the active rows}
   \item{excl}{numeric vector indicating the indexes of the "junk" columns (default is NULL). Useful for MCA with excl argument.}
 }
 
@@ -43,7 +43,7 @@ The plot may be improved using the argument autolab, modifying the size of the l
 
 \references{
 Benzecri, J.-P. (1992) \emph{Correspondence Analysis Handbook}, New-York : Dekker \cr
-Benzecri, J.-P. (1980) \emph{L'analyse des données tome 2 : l'analyse des correspondances}, Paris : Bordas \cr
+Benzecri, J.-P. (1980) \emph{L'analyse des donnees tome 2 : l'analyse des correspondances}, Paris : Bordas \cr
 Greenacre, M.J. (1993) \emph{Correspondence Analysis in Practice}, London : Academic Press\cr
 Husson, F., Le, S. and Pages, J. (2009). Analyse de donnees avec R, \emph{Presses Universitaires de Rennes}.\cr
 Husson, F., Le, S. and Pages, J. (2010). Exploratory Multivariate Analysis by Example Using R, \emph{Chapman and Hall}.

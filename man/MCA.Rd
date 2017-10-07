@@ -23,11 +23,11 @@ MCA(X, ncp = 5, ind.sup = NULL, quanti.sup = NULL,
   \item{ind.sup}{a vector indicating the indexes of the supplementary individuals}
   \item{quanti.sup}{a vector indicating the indexes of the quantitative supplementary variables}
   \item{quali.sup}{a vector indicating the indexes of the categorical supplementary variables}
-  \item{excl}{numeric vector indicating the indexes of the "junk" categories (default is NULL).}
+  \item{excl}{numeric vector indicating the indexes of the "junk" categories (default is NULL)}
   \item{graph}{boolean, if TRUE a graph is displayed}
   \item{level.ventil}{a proportion corresponding to the level under which the category is ventilated; by default, 0 and no ventilation is done}
   \item{axes}{a length 2 vector specifying the components to plot}
-  \item{row.w}{an optional row weights (by default, a vector of 1 for uniform row weights)}
+  \item{row.w}{an optional row weights (by default, a vector of 1 for uniform row weights); the weights are given only for the active individuals}
   \item{method}{a string corresponding to the name of the method used: "Indicator" (by default) is the CA on the Indicator matrix, "Burt" is the CA on the Burt table. For Burt and the Indicator, the graph of the individuals and the graph of the categories are given}
   \item{na.method}{a string corresponding to the name of the method used if there are missing values; available methods are "NA" or "Average" (by default, "NA")}
   \item{tab.disj}{optional data.frame corresponding to the disjunctive table used for the analysis; it corresponds to a disjunctive table obtained from imputation method (see package missMDA).}

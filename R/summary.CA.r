@@ -79,7 +79,7 @@ print3 <- function(obj,file="",ncp,width.row=0,nbelements=nbelements){
 
   width.row <- 0
   if (align.names==TRUE){
-    aux <- match.arg(names(res),c("ind","ind.sup","freq","freq.sup","var","quanti.var","quanti.var.sup","quali.var","quali.var.sup","quanti.sup","quali.sup","group","row","row.sup","col","col.sup"),several.ok = TRUE)
+    aux <- match.arg(names(res),c("ind","ind.sup","freq","freq.sup","var","quanti.var","quanti.sup","quali.var","quali.sup","quanti.sup","quali.sup","group","row","row.sup","col","col.sup"),several.ok = TRUE)
     width.row = max(nchar(rownames(res[aux[1]][[1]]$coord)))
 	for (k in 1:length(aux)) width.row = max(width.row,nchar(rownames(res[aux[k]][[1]]$coord)[1:min(nrow(res[aux[k]][[1]]$coord),nbelements)]))
   }
@@ -111,10 +111,16 @@ print3 <- function(obj,file="",ncp,width.row=0,nbelements=nbelements){
   print3(res$col.sup,file=file,ncp=ncp,width.row=width.row,nbelements=nbelements)
  }
 
-  if (!is.null(res$quanti.var)){
+  if (!is.null(res$quanti.sup)){
   cat("\nSupplementary continuous variable",file=file,append=TRUE)
-  if (nrow(res$col.sup$coord)>1) cat("s",file=file,append=TRUE)
+  if (nrow(res$quanti.sup$coord)>1) cat("s",file=file,append=TRUE)
   cat("\n",file=file,append=TRUE)
-  print3(res$quanti.var,file=file,ncp=ncp,width.row=width.row,nbelements=nbelements)
+  print3(res$quanti.sup,file=file,ncp=ncp,width.row=width.row,nbelements=nbelements)
+ }
+  if (!is.null(res$quali.sup)){
+  cat("\nSupplementary categorical variable",file=file,append=TRUE)
+  if (nrow(res$quali.sup$coord)>1) cat("s",file=file,append=TRUE)
+  cat("\n",file=file,append=TRUE)
+  print3(res$quali.sup,file=file,ncp=ncp,width.row=width.row,nbelements=nbelements)
  }
 }

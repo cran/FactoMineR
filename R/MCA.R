@@ -91,7 +91,7 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
   }
   tt <- tab.disjonctif(vec)
   ni <- colSums(tt*weights)
-  unlist(lapply(as.data.frame(x),VB))/colSums(x^2*weights)
+  unlist(lapply(as.data.frame(x),VB))/colSums(x*x*weights)
 }
 
   modif.rate <- function(resmca) {
@@ -113,7 +113,7 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
   if (is.null(colnames(X))) colnames(X) <- colnames(X, do.NULL = FALSE,prefix="V")
   X <- as.data.frame(X)
   X <- droplevels(X)
-  ind.act <- (1:nrow(X))[!(1:nrow(X))%in%ind.sup]
+  ind.act <- setdiff(1:nrow(X),ind.sup)
 
   if (!is.null(which(lapply(X,class)=="logical"))){
     for (k in which(lapply(X,class)=="logical")) X[,k] <- as.factor(X[,k])
@@ -121,10 +121,13 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
 
     if (level.ventil > 0) X <- ventil.tab(X,level.ventil=level.ventil,row.w=row.w,ind.sup=ind.sup,quali.sup=quali.sup,quanti.sup=quanti.sup)
 
-  niveau <- NULL
-  for (j in 1:ncol(X)) niveau = c(niveau, levels(X[, j]))
-  for (j in 1:ncol(X)) {
+  # niveau <- NULL
+  # for (j in 1:ncol(X)) niveau = c(niveau, levels(X[, j]))
+  niveau <- unlist(lapply(X,levels))
+  if (sum(duplicated(niveau))>0){
+    for (j in 1:ncol(X)) {
       if (sum(niveau %in% levels(X[, j])) != nlevels(X[, j])) levels(X[, j]) = paste(attributes(X)$names[j], levels(X[, j]), sep = "_")
+    }
   }
 
 nonact <- c(quanti.sup,quali.sup)
@@ -241,7 +244,12 @@ if (!is.null(quanti.sup)){
       CTR <- t(t(CTR[,-1,drop=FALSE])*res.mca$eig[1:ncp,1])*ncol(Xact)
       eta2 <- CTR[attributes(Xact)$names,,drop=FALSE]
       res.mca$var$eta2 <- eta2
-    }
+    } else {
+	  eta2 <- matrix(1,1,ncp)
+	  colnames(eta2) = paste("Dim",1:ncp)
+	  rownames(eta2) = colnames(X[,act,drop=FALSE])
+      res.mca$var$eta2 <- eta2
+	}
 	
     if (!is.null(quali.sup)) {
         if (!is.null(ind.sup)) Zqs = Zqs[ind.act, ]

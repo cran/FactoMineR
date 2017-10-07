@@ -25,7 +25,7 @@ Maintainer: \email{husson@agrocampus-ouest.fr}
 }
 
 \references{
-Lê, S., Josse, J. & Husson, F. (2008). FactoMineR: An R Package for Multivariate Analysis. Journal of Statistical Software. 25(1). pp. 1-18.
+Le, S., Josse, J. & Husson, F. (2008). FactoMineR: An R Package for Multivariate Analysis. Journal of Statistical Software. 25(1). pp. 1-18.
 \url{http://www.jstatsoft.org/v25/i01/}
 
 A website: \url{http://factominer.free.fr/}

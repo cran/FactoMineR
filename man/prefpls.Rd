@@ -39,7 +39,7 @@ A graph with additional variables and the quality of representation contour line
 }
 
 \references{
-Husson, F. & Pagès, J. (2005). Scatter plot and additional variables. \emph{Journal of applied statistics}}
+Husson, F. & Pages, J. (2005). Scatter plot and additional variables. \emph{Journal of applied statistics}}
 
 \author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 

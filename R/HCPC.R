@@ -28,7 +28,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
 		intra <- rev(cumsum(rev(inert.gain)))
         quot = intra[min:(max)]/intra[(min - 1):(max - 1)] 
 		nb.clust = which.min(quot) + min -1
-# changement dans calcul annulé. Mis dans la version 1.34  2016/04/12 (2 lignes changees)
+# changement dans calcul annule. Mis dans la version 1.34  2016/04/12 (2 lignes changees)
 #        quot = inert.gain[(min-1):(max-1)]/inert.gain[min:max] 
 #		nb.clust = which.max(quot) + min - 1
         return(list(res = res, tree = hc, nb.clust = nb.clust, 
@@ -286,7 +286,9 @@ if (kk<Inf){
   if (inherits(res.sauv, "data.frame")) data.clust <- data.clust[rownames(res.sauv),]
   if (vec) data.clust <- as.data.frame(data.clust[, -2])
 if (description){
-     if (!inherits(res.sauv, "CA")&!(vec)) desc.var <- catdes(data.clust, ncol(data.clust), proba = proba, row.w = res$call$row.w.init)
+     if (!inherits(res.sauv, "CA")&!(vec)){
+	   desc.var <- catdes(data.clust, ncol(data.clust), proba = proba, row.w = res.sauv$call$row.w.init)
+	 }
     else {
       if ((vec) | (is.null(res.sauv$call$quanti.sup)& is.null(res.sauv$call$quali.sup))) desc.var <- descfreq(data.clust[,-which(sapply(data.clust,is.factor))], data.clust[,ncol(data.clust)], proba = proba)
 	  else { 
