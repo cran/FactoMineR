@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 <!--
 %\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{FactoMineR}

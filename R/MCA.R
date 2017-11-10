@@ -195,8 +195,8 @@ if (!is.null(quanti.sup)){
   if (!is.null(excl)) res.mca$call$excl = excl
 	res.mca$call$call <- match.call()
 #	res.mca$call$call <- sys.calls()[[1]]
-    if (length(act)>1) res.mca$eig <- res.mca$eig[1:min(length(ind.act)-1,sum(sapply(Xact,nlevels))-length(act)),]
-    else res.mca$eig <- res.mca$eig[1:(nlevels(Xact)-1),]
+    if (length(act)>1) res.mca$eig <- res.mca$eig[1:min(length(ind.act)-1,sum(sapply(Xact,nlevels))-length(act)),,drop=FALSE]
+    else res.mca$eig <- res.mca$eig[1:(nlevels(Xact)-1),,drop=FALSE]
     names(res.mca)[3] <- "ind"
     res.mca$ind <- res.mca$ind[1:3]
     names(res.mca$ind) <- c("coord", "contrib", "cos2")

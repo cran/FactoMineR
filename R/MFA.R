@@ -173,7 +173,7 @@ if (!is.null(tab.comp)){
   tab.comp <- tab.comp$tab.disj
 }
 ### End  handle missing values
-    for (g in 1:nbre.group) {
+   for (g in 1:nbre.group) {
         aux.base <- as.data.frame(base[, (ind.grpe + 1):(ind.grpe + group[g])])
         dimnames(aux.base) <- list(rownames(base),colnames(base)[(ind.grpe + 1):(ind.grpe + group[g])])
         if (type[g] == "s") res.separe[[g]] <- PCA(aux.base, ind.sup =ind.sup, scale.unit = TRUE, ncp = ncp, row.w=row.w, graph = FALSE, col.w = weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])])

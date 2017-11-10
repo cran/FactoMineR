@@ -1,6 +1,6 @@
 Package: FactoMineR
-Version: 1.38
-Date: 2017-10-02
+Version: 1.39
+Date: 2017-11-09
 Title: Multivariate Exploratory Data Analysis and Data Mining
 Author: Francois Husson, Julie Josse, Sebastien Le, Jeremy Mazet
 Maintainer: Francois Husson <francois.husson@agrocampus-ouest.fr>
@@ -8,12 +8,12 @@ Depends: R (>= 3.0.0)
 Imports:
         car,cluster,ellipse,flashClust,graphics,grDevices,lattice,leaps,MASS,scatterplot3d,stats,utils
 Suggests: missMDA,knitr
-Description: Exploratory data analysis methods to summarize, visualize and describe datasets. The main principal component methods are available, those with the largest potential in terms of applications: principal component analysis (PCA) when variables are quantitative, correspondence analysis (CA) and multiple correspondence analysis (MCA) when variables are categorical, Multiple Factor Analysis when variables are structured in groups, etc. and hierarchical cluster analysis.
+Description: Exploratory data analysis methods to summarize, visualize and describe datasets. The main principal component methods are available, those with the largest potential in terms of applications: principal component analysis (PCA) when variables are quantitative, correspondence analysis (CA) and multiple correspondence analysis (MCA) when variables are categorical, Multiple Factor Analysis when variables are structured in groups, etc. and hierarchical cluster analysis. F. Husson, S. Le and J. Pages (2017) <DOI:10.1201/b10345-2>.
 License: GPL (>= 2)
 URL: http://factominer.free.fr
 Encoding: latin1
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2017-10-04 12:38:03 UTC; husson
+Packaged: 2017-11-10 07:53:11 UTC; husson
 Repository: CRAN
-Date/Publication: 2017-10-07 16:20:30 UTC
+Date/Publication: 2017-11-10 11:43:46 UTC

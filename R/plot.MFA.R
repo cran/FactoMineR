@@ -897,7 +897,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
             for (i in group.ind.actif) {
 			  if (col2rgb(coll[i],alpha=TRUE)[4]== 255){
                 for (j in 1:nbre.grpe) {
-                  points(coord.ind.partiel[(i - 1) * nbre.grpe + j, ], cex = 0.8 * par("cex"), col = col.ind[nb.ind.actif + (i - 1) * nbre.grpe + j], pch = 20)
+                  points(coord.ind.partiel[(i - 1) * nbre.grpe + j,1],coord.ind.partiel[(i - 1) * nbre.grpe + j, 2], cex = 0.8 * par("cex"), col = col.ind[nb.ind.actif + (i - 1) * nbre.grpe + j], pch = 20)
                   if (lab.par) text(coord.ind.partiel[(i - 1) * nbre.grpe + j, 1], y = coord.ind.partiel[(i - 1) * 
                       nbre.grpe + j, 2], labels = rownames(coord.ind.partiel)[(i - 
                       1) * nbre.grpe + j], pos = 3, col = col.ind[nb.ind.actif + 
@@ -928,8 +928,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 		    fonte <- c(fonte,rep(3,nrow(coord.ind.sup)))
             for (i in group.ind.sup) {
                 for (j in 1:nbre.grpe) {
-                  points(coord.ind.partiel.sup[(i - 1) * nbre.grpe + 
-                    j, ], cex = 0.8 * par("cex"), col = col.ind.sup[nb.ind - 
+                  points(coord.ind.partiel.sup[(i - 1) * nbre.grpe + j, 1],coord.ind.partiel.sup[(i - 1) * nbre.grpe + j, 2], cex = 0.8 * par("cex"), col = col.ind.sup[nb.ind - 
                     nb.ind.actif + (i - 1) * nbre.grpe + j], 
                     pch = 21)
                   if (lab.par) 
@@ -964,7 +963,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 		    fonte <- c(fonte,rep(2,nrow(coord.quali)))
             for (i in group.quali) {
                 for (j in 1:nbre.grpe) {
-                  points(coord.quali.partiel[(i - 1) * nbre.grpe +  j, ], pch = 15, col = col.quali[nrow.coord.quali + (i - 1) * nbre.grpe + j], cex = par("cex") * 0.8)
+                  points(coord.quali.partiel[(i - 1) * nbre.grpe +  j, 1],coord.quali.partiel[(i - 1) * nbre.grpe +  j, 2], pch = 15, col = col.quali[nrow.coord.quali + (i - 1) * nbre.grpe + j], cex = par("cex") * 0.8)
                   if (lab.var & lab.par) 
                     text(coord.quali.partiel[(i - 1) * nbre.grpe + j, 1], y = coord.quali.partiel[(i - 1) * 
                       nbre.grpe + j, 2], labels = rownames(coord.quali.partiel)[(i - 
@@ -994,8 +993,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 		    fonte <- c(fonte,rep(4,nrow(coord.quali.sup)))
             for (i in group.quali.sup) {
                 for (j in 1:nbre.grpe) {
-                  points(coord.quali.partiel.sup[(i - 1) * nbre.grpe + 
-                    j, ], pch = 22, col = col.quali.sup[nrow(coord.quali.sup) + 
+                  points(coord.quali.partiel.sup[(i - 1) * nbre.grpe +j, 1],coord.quali.partiel.sup[(i - 1) * nbre.grpe +j, 2], pch = 22, col = col.quali.sup[nrow(coord.quali.sup) + 
                     (i - 1) * nbre.grpe + j], cex = par("cex") * 0.8)
                   if (lab.var & lab.par) 
                     text(coord.quali.partiel.sup[(i - 1) * nbre.grpe + 

@@ -1,4 +1,4 @@
-a6dec3bb45bfa8d7b85f25a62cecf07e *DESCRIPTION
+488279d2b6801833f1d8984d5de8e792 *DESCRIPTION
 a0aece2551062a39a3df195666626c48 *NAMESPACE
 461f115b06364529345375eac894db04 *R/AovSum.r
 0e830fa4d90c95ae4dbe52dd901af938 *R/CA.R
@@ -8,8 +8,8 @@ f80e25ab0fbbb74556027502a356114d *R/CaGalt.R
 c49553bcae831af1dcd81070033a681b *R/GPA.R
 06e108458855236c4ad1f1e1c6704bef *R/HCPC.R
 451455662a46a9fc114162656fbc4518 *R/HMFA.R
-6b76a4387ae337f9b4bab950604df6c3 *R/MCA.R
-882d0f49e5580e13e281fe201ddad50e *R/MFA.R
+444c621a4ee1342763226f8c4d685c8a *R/MCA.R
+4c86fb9d7814c2670dbd649bcc4d1c15 *R/MFA.R
 5b16322a9185fa5c2e1d6b01fcfe53ac *R/PCA.R
 73af046de5f2e47db582329cf18b3f22 *R/RegBest.r
 e5ff9ce76c5d4305a5f6088604e89f8d *R/autoLab.R
@@ -30,7 +30,7 @@ b84486f8287d4ac81274f631b44deb3e *R/plot.GPA.R
 961cb2a4d89e3a78e2422baa4035d13b *R/plot.HCPC.R
 694f81aafe3ba8c369d7721f0adf366b *R/plot.HMFA.R
 7f501962e4145ea7aa27d7a26ea06843 *R/plot.MCA.R
-e87b3289b2ca1f073128ec5a56c36a23 *R/plot.MFA.R
+881ba57f1698b7823a6e4db94a84d51d *R/plot.MFA.R
 b82815b7884e17ca89850b02b2a7a8ac *R/plot.PCA.R
 b43323a3dd14cb5a1788ecdc4f747053 *R/plot.catdes.R
 25766833b34d83b3c5cfc817a7a39ecd *R/plotGPApartial.R
@@ -66,9 +66,9 @@ aebcd218b9847feec10a8aad26a4a65f *R/tab.disjonctif.R
 dc74652a45c563794fa59fb43172ddd8 *R/textual.r
 2d0e7375ed844401a01dd453b1c184cf *R/write.infile.R
 23161c7eb305fec411df18388de0d35c *README
-e4d619d5db3ae6ca99433ebf4745968d *build/vignette.rds
+97264bff7f860b9e0b825f3b1797013d *build/vignette.rds
 db7a6e9fcbbce08090234dd1bdd71724 *data/JO.rda
-0195e958991059707a144416045aeff6 *data/children.rda
+b50a7f058c1d42fd8df88621ab4d0960 *data/children.rda
 374fb707f71e5e045f3dc0d0c13d486b *data/datalist
 5e2c9a6d4f317a473df93c5bc46bec87 *data/decathlon.rda
 02d4cc834fa529f1f9770d0c55fe041e *data/footsize.rda
@@ -77,15 +77,15 @@ db7a6e9fcbbce08090234dd1bdd71724 *data/JO.rda
 a9c457335e49fde320b29b6d7a4edbd2 *data/hobbies.rda
 f4191eb43948fe737c2a795acb3037c1 *data/milk.rda
 4f1d69eb016b6d1243356431f9dcd38f *data/mortality.rda
-08d87fd015ec46ae5bb8a4ec00ebd4a3 *data/poison.rda
-028ba71cf6d5b10e44103eb8711025f4 *data/poison.text.rda
+139928dfaf5c865e86511c8941b07b05 *data/poison.rda
+048ac3cd44bb511dd6d11b92abba6005 *data/poison.text.rda
 92f819dbcc070dffebcc2c0bf97fe339 *data/poulet.rda
 79422b5fefd79991b04c7fd816642043 *data/senso.rda
 7d676dc02021d1ac76e65d65ca5c62dc *data/tea.rda
 10933f6d819bea03183a0eb23355eef5 *data/wine.rda
 1957266d4f96f12df462f86be07f615b *inst/CITATION
-df536e814b9bb82967448c731ba26b3a *inst/doc/FactoMineR.Rmd
-e18e9eba1c20c786f958958ce3658395 *inst/doc/FactoMineR.html
+92439dc2b4cd2b365af26c8ad6933d4f *inst/doc/FactoMineR.Rmd
+6569079f1fae3cd07c0d19db15fb45d3 *inst/doc/FactoMineR.pdf
 271d84ec165c6cadd85cfa6092a2f4a7 *inst/doc/clustering.Rmd
 58c7e5bd9c07666bd1803fedf4a8aaff *inst/doc/clustering.html
 a5b139e81b27cb4d68b48aea68b71d10 *man/AovSum.Rd
@@ -169,5 +169,6 @@ f1ba9c79d198c3f7d55853155fc34597 *man/tab.disjonctif.Rd
 0dcc7800489aa3a7e8469f8bec201e7f *man/textual.Rd
 1b2ee53f38d0d13b5991dab86b8368f5 *man/wine.Rd
 f00b059eb4bcdcf487733b250011635d *man/write.infile.Rd
-df536e814b9bb82967448c731ba26b3a *vignettes/FactoMineR.Rmd
+92439dc2b4cd2b365af26c8ad6933d4f *vignettes/FactoMineR.Rmd
+e18e9eba1c20c786f958958ce3658395 *vignettes/FactoMineR.html
 271d84ec165c6cadd85cfa6092a2f4a7 *vignettes/clustering.Rmd
