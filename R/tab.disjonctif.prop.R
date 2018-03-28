@@ -12,11 +12,11 @@ tab.disjonctif.prop<-function (tab,seed=NULL,row.w=NULL)
         nom <- names(tab)[i]
         n <- length(moda)
         moda <- as.factor(moda)
-        x <- matrix(0, n, length(levels(moda)))
-          ind<-(1:n) + n * (unclass(moda) - 1)
+        x <- matrix(0L, n, length(levels(moda)))
+          ind<-(1:n) + n * (unclass(moda) - 1L)
           indNA<-which(is.na(ind))
                 
-        x[(1:n) + n * (unclass(moda) - 1)] <- 1
+        x[(1:n) + n * (unclass(moda) - 1)] <- 1L
         if (length(indNA)!=0){
           if (is.null(seed)) {
            x[indNA,]<- NA

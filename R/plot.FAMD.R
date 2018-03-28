@@ -6,8 +6,6 @@ plot.FAMD <- function (x, choix = c("ind","var","quanti","quali"), axes = c(1, 2
 	legend = list(bty = "y", x = "topleft"),...) {
 
 autoLab <- match.arg(autoLab,c("auto","yes","no"))
-if (autoLab=="yes") autoLab=TRUE
-if (autoLab=="no") autoLab=FALSE
 choix <- match.arg(choix,c("ind","var","quanti","quali"))
 
 if (choix=="quanti") {

@@ -57,6 +57,9 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE, ax
 
     if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
     if (is.null(colnames(X))) colnames(X) = paste("V",1:ncol(X),sep="")
+	X <- as.data.frame(X)
+	is.quali <- which(!unlist(lapply(X,is.numeric)))
+    X[,is.quali] <- lapply(X[,is.quali,drop=FALSE],as.factor)
     for (j in 1:ncol(X)) if (colnames(X)[j]=="") colnames(X)[j] = paste("V",j,sep="")
     for (j in 1:nrow(X)) if (is.null(rownames(X)[j])) rownames(X)[j] = paste("row",j,sep="")
 	## avoid problem when a category has 0 individuals

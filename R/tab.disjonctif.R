@@ -4,8 +4,8 @@ tab.disjonctif<-function (tab){
     modalite.disjonctif <- function(i){
         moda <- as.factor(tab[, i])
         n <- length(moda)
-        x <- matrix(0, n, nlevels(moda))
-        x[(1:n) + n * (unclass(moda) - 1)] <- 1
+        x <- matrix(0L, n, nlevels(moda))
+        x[(1:n) + n * (unclass(moda) - 1L)] <- 1L
         return(x)
     }
     # fin fonction interne

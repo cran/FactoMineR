@@ -5,6 +5,8 @@ DMFA = function(don, num.fact = ncol(don), scale.unit=TRUE, ncp=5,quanti.sup=NUL
   for (j in 1:ncol(don)) if (colnames(don)[j]=="") colnames(don)[j] = paste("V",j,sep="")
   for (j in 1:nrow(don)) if (is.null(rownames(don)[j])) rownames(don)[j] = paste("row",j,sep="")
   don <- as.data.frame(don)
+  is.quali <- which(!unlist(lapply(don,is.numeric)))
+  don[,is.quali] <- lapply(don[,is.quali,drop=FALSE],as.factor)
   don <- droplevels(don)
   don <- don[,c(num.fact,quali.sup,(1:ncol(don))[-c(num.fact,quali.sup,quanti.sup)],quanti.sup)]
   num.fact <- 1

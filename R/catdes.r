@@ -28,7 +28,10 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL){
 		}}
 		return(sqrt(res))
     }
-
+  donnee <- as.data.frame(donnee)
+  if (is.numeric(donnee[,num.var])) stop(paste("The variable",num.var,"must be qualitative"))
+  is.quali <- which(!unlist(lapply(donnee,is.numeric)))
+  donnee[,is.quali] <- lapply(donnee[,is.quali,drop=FALSE],as.factor)
   donnee <- droplevels(donnee)
   if (is.null(row.w)) row.w=rep(1,nrow(donnee))
   lab.sauv <- lab <- colnames(donnee)
@@ -158,6 +161,7 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL){
 	  res$quanti = result
 	}
   }
+  res$call = list(num.var=num.var, proba=proba, row.w=row.w)
   options(old.warn)
 class(res) <- c("catdes", "list ")
   return(res)

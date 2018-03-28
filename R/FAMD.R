@@ -22,6 +22,8 @@
     if (is.null(rownames(base))) rownames(base) = 1:nrow(base)
     if (is.null(colnames(base))) colnames(base) = paste("V",1:ncol(base),sep="")
 	base <- as.data.frame(base)
+    is.quali <- which(!unlist(lapply(base,is.numeric)))
+    base[,is.quali] <- lapply(base[,is.quali,drop=FALSE],as.factor)
 	base <- droplevels(base)
 	row.w.init <- row.w
 	if (is.null(row.w)) { row.w.init <- row.w <- rep(1,nrow(base)-length(ind.sup)) }

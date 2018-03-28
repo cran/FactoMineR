@@ -1,6 +1,9 @@
 CaGalt<-function(Y,X,type="s",conf.ellip=FALSE,nb.ellip=100,level.ventil=0,sx=NULL,graph=TRUE,axes=c(1,2)){
     if (is.null(attributes(X)$row.names)) rownames(X) <- 1:nrow(X)
     if (is.null(attributes(X)$names)) colnames(X) <- colnames(X, do.NULL = FALSE,prefix="V")
+    X <- as.data.frame(X)
+    is.quali <- which(!unlist(lapply(X,is.numeric)))
+    X[,is.quali] <- lapply(X[,is.quali,drop=FALSE],as.factor)
 	X.initial<-X
 	P<-as.matrix(Y/sum(Y))
 	PI.<-apply(P,1,sum)

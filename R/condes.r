@@ -30,6 +30,9 @@ test.aov.w <- function(y,x,w=NULL){
   resT <- cbind(Estimate,p.value)
   return(list(tabF = tabF, resT = resT))  
 }
+    donnee <- as.data.frame(donnee)
+	is.quali <- which(!unlist(lapply(donnee,is.numeric)))
+    donnee[,is.quali] <- lapply(donnee[,is.quali,drop=FALSE],as.factor)
     donnee <- droplevels(donnee)
 	lab.sauv <- lab <- colnames(donnee)
     quali = NULL

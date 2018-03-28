@@ -321,7 +321,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
           test.invisible[3] <- match("quanti.sup", invisible)
       }
       else  test.invisible <- rep(NA, 3)
-
+	  
       if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
       if (is.null(palette)) palette(c("black","red","green3","blue","cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
 	  if (is.null(xlim)) xlim <- c(0,1)
@@ -358,6 +358,27 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
 		ipch <- c(ipch,rep(1,nrow(coord.illuq)))
 		fonte <- c(fonte,rep(3,nrow(coord.illuq)))
       }
+	  
+### 22 mars 2018
+	  selection <- NULL
+	if (!is.null(select)) {
+	  if (mode(select)=="numeric") selection <- (rev(order(apply(coo^2,1,sum))))[1:min(nrow(coo), as.integer(select))]
+	  else {
+	    if (sum(rownames(coo)%in%select)!=0) selection <- which(rownames(coo)%in%select)
+		else {
+ 	    if (grepl("coord",select)) selection <- (rev(order(apply(coo^2,1,sum))))[1:min(nrow(coo),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
+	    if (is.integer(select)) selection <- select
+		}  
+	  }
+	}
+		if (!is.null(select)) {
+		  if (is.numeric(unselect)) coll[!((1:length(coll))%in%selection)] <- rgb(t(col2rgb(coll[!((1:length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255) 
+		  else coll[!((1:length(coll))%in%selection)] <- unselect
+		  labe[!((1:length(labe))%in%selection)] <- ""
+		}
+### Fin 22 mars 2018	
+	  
+	  
       if (any(labe!="")){
 	    if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
         if (autoLab ==TRUE) autoLab(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],...)

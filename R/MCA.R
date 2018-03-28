@@ -85,7 +85,7 @@ ventilation.ordonnee <- function(Xqual,level.ventil=0.05,ind.sup=NULL,row.w=NULL
   # }
   
 
-fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
+fct.eta2 <- function(vec,x,weights) {   
   VB <- function(xx) {
 	return(sum((colSums((tt*xx)*weights)^2)/ni))
   }
@@ -112,6 +112,9 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
   if (is.null(rownames(X))) rownames(X) <- 1:nrow(X)
   if (is.null(colnames(X))) colnames(X) <- colnames(X, do.NULL = FALSE,prefix="V")
   X <- as.data.frame(X)
+  is.quali <- which(!unlist(lapply(X,is.numeric)))
+  X[,is.quali] <- lapply(X[,is.quali,drop=FALSE],as.factor)
+
   X <- droplevels(X)
   ind.act <- setdiff(1:nrow(X),ind.sup)
 
@@ -181,7 +184,6 @@ if (!is.null(quanti.sup)){
         auxil2 <- rowSums(res.mca$col.sup$coord^2)
 	  }
     }
-#    res.mca <- CA(Ztot, ncp = ncol(Z)-length(act), row.sup = ind.sup, col.sup = col.sup, graph = FALSE, row.w = row.w)
     res.mca <- CA(Ztot, ncp = min(ncp,ncol(Z)-length(act)), row.sup = ind.sup, excl=excl, col.sup = col.sup, graph = FALSE, row.w = row.w)
     if (is.null(ncol(res.mca$row$coord))) res.mca$row$coord = matrix(res.mca$row$coord,ncol=1) 
     ncp <- ncol(res.mca$row$coord)
@@ -192,9 +194,8 @@ if (!is.null(quanti.sup)){
     res.mca$call$quali.sup = quali.sup
     res.mca$call$quanti.sup = quanti.sup
     res.mca$call$row.w = row.w
-  if (!is.null(excl)) res.mca$call$excl = excl
+    if (!is.null(excl)) res.mca$call$excl = excl
 	res.mca$call$call <- match.call()
-#	res.mca$call$call <- sys.calls()[[1]]
     if (length(act)>1) res.mca$eig <- res.mca$eig[1:min(length(ind.act)-1,sum(sapply(Xact,nlevels))-length(act)),,drop=FALSE]
     else res.mca$eig <- res.mca$eig[1:(nlevels(Xact)-1),,drop=FALSE]
     names(res.mca)[3] <- "ind"
@@ -261,7 +262,6 @@ if (!is.null(quanti.sup)){
         eta2 = matrix(NA, length(quali.sup), ncp)
         colnames(eta2) = paste("Dim", 1:ncp)
         rownames(eta2) = attributes(X)$names[quali.sup]
-#        for (i in 1:ncp)  eta2[, i] <- unlist(lapply(as.data.frame(X[rownames(Xact), quali.sup]),fct.eta2,res.mca$ind$coord[,i],weights=row.w))
 		 if (ncp>1) eta2 <- t(sapply(as.data.frame(X[rownames(Xact), quali.sup,drop=FALSE]),fct.eta2,res.mca$ind$coord,weights=row.w))
 		 else {
 		   eta2 <- as.matrix(sapply(as.data.frame(X[rownames(Xact), quali.sup,drop=FALSE]),fct.eta2,res.mca$ind$coord,weights=row.w),ncol=ncp)

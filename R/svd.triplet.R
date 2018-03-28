@@ -17,8 +17,6 @@ tryCatch.W.E <- function(expr){  ## function proposed by Maechler
    if (is.null(col.w)) col.w <- rep(1, ncol(X))
    ncp <- min(ncp,nrow(X)-1,ncol(X))
    row.w <- row.w / sum(row.w)
-#    X <- sweep(X, 2, sqrt(col.w), FUN = "*")
-#    X <- sweep(X, 1, sqrt(row.w), FUN = "*")
     X <- t(t(X)*sqrt(col.w))*sqrt(row.w)
 if (ncol(X)<nrow(X)){
 ##    svd.usuelle <- svd(X,nu=ncp,nv=ncp)
@@ -44,20 +42,14 @@ if (ncol(X)<nrow(X)){
     V <- svd.usuelle$v
     if (ncp >1){
 	  mult <- sign(as.vector(crossprod(rep(1,nrow(V)),as.matrix(V))))
-#	  mult <- sign(apply(V,2,sum))
 	  mult[mult==0] <- 1
       U <- t(t(U)*mult)
       V <- t(t(V)*mult)
-#      U <- sweep(U,2,mult,FUN="*")
-#      V <- sweep(V,2,mult,FUN="*")
     }
     U <- U/sqrt(row.w)
     V <- V/sqrt(col.w)
-#    U <- sweep(as.matrix(U), 1, sqrt(row.w), FUN = "/")
-#    V <- sweep(as.matrix(V), 1, sqrt(col.w), FUN = "/")
 }
 else{
-##    svd.usuelle <- svd(t(X),nu=ncp,nv=ncp)
 	svd.usuelle <- tryCatch.W.E(svd(t(X),nu=ncp,nv=ncp))$val
     if (names(svd.usuelle)[[1]]=="message"){
 	  svd.usuelle <- tryCatch.W.E(svd(X,nu=ncp,nv=ncp))$val
@@ -72,7 +64,6 @@ else{
 	      svd.usuelle$d <- sqrt(svd.usuelle$d)
           svd.usuelle$v <- bb$vec[,1:ncp]
           svd.usuelle$u <- t(t(crossprod(X,svd.usuelle$v))/svd.usuelle$d[1:ncp])
-#          svd.usuelle$u <- sweep(t(X)%*%svd.usuelle$v,2,svd.usuelle$d[1:ncp],FUN="/")
 	  }
     }
     U <-  svd.usuelle$v
@@ -81,10 +72,6 @@ else{
 	mult[mult==0] <- 1
     V <- t(t(V)*mult)/sqrt(col.w)
     U <- t(t(U)*mult)/sqrt(row.w)
-#    V <- sweep(V,2,mult,FUN="*")
-#    U <- sweep(U,2,mult,FUN="*")
-#    U <- sweep(U, 1, sqrt(row.w), FUN = "/")
-#    V <- sweep(V, 1, sqrt(col.w), FUN = "/")
 }
     vs <- svd.usuelle$d[1:min(ncol(X),nrow(X)-1)]
 	num <- which(vs[1:ncp]<1e-15)

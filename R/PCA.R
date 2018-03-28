@@ -23,7 +23,7 @@ PCA <- function (X, scale.unit = TRUE, ncp = 5, ind.sup = NULL, quanti.sup = NUL
       # res <- summary(lm(x~vec,weights=weights))$r.squared
     # }
 
-fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
+fct.eta2 <- function(vec,x,weights) {  
   VB <- function(xx) {
 	return(sum((colSums((tt*xx)*weights)^2)/ni))
   }
@@ -33,6 +33,8 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
 }
 
 	X <- as.data.frame(X)
+    is.quali <- which(!unlist(lapply(X,is.numeric)))
+    X[,is.quali] <- lapply(X[,is.quali,drop=FALSE],as.factor)
 	X <- droplevels(X)
     if (any(is.na(X))) {
         warning("Missing values are imputed by the mean of the variable: you should use the imputePCA function of the missMDA package")
@@ -156,14 +158,6 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
         if (!is.null(ind.sup)) X.quali.sup <- as.data.frame(X.quali.sup[-ind.sup,,drop=FALSE])
         colnames(X.quali.sup) <- colnames(Xtot)[quali.sup]
         nombre <- modalite <- NULL
-
-       # eta2 <- matrix(NA, length(quali.sup), ncp)
-        # if (ncp>1){
- 		  # for (i in 1:ncp)  eta2[, i] <- unlist(lapply(X.quali.sup,fct.eta2,res$ind$coord[,i,drop=FALSE],weights=row.w))
-		# } else eta2 <- unlist(lapply(X.quali.sup,fct.eta2,res$ind$coord,weights=row.w))
-		# eta2 <- as.matrix(eta2,ncol=ncp)
-        # colnames(eta2) = paste("Dim", 1:ncp)
-        # rownames(eta2) = colnames(X.quali.sup)
 
 		if (ncp>1) eta2 <- t(sapply(X.quali.sup,fct.eta2,res$ind$coord,weights=row.w))
 		else {

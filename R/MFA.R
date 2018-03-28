@@ -16,14 +16,13 @@ MFA <- function (base, group, type = rep("s",length(group)), excl = NULL, ind.su
       s <- sum(wt)
 	  wt <- wt/s
       center <- colSums(wt * x)
-      x <- sqrt(wt) * sweep(t(t(x)*sqrt(ponderation.x)), 2, center, check.margin = FALSE)
+      x <- sqrt(wt) * t(t(sweep(x, 2, center, check.margin = FALSE))*sqrt(ponderation.x))
       center <- colSums(wt * y)
-      y <- sqrt(wt) * sweep(t(t(y)*sqrt(ponderation.y)), 2, center, check.margin = FALSE)
+      y <- sqrt(wt) * t(t(sweep(y, 2, center, check.margin = FALSE))*sqrt(ponderation.y))
 	  Lg <- 0
 	  for (i in 1:ncol(x)) Lg <- Lg+sum(crossprod(x[,i],y)^2)
 	  Lg
     }
-
 if (!is.null(tab.comp)){
   if (!is.null(weight.col.mfa)) stop("Weightings on the variables are not allowed with the tab.comp argument")
   if (!is.null(ind.sup)) stop("Supplementary individuals are not allowed with tab.comp")
@@ -57,6 +56,8 @@ for (i in 1:length(group)){
 #    for (j in 1:ncol(base)) if (colnames(base)[j]=="") colnames(base)[j] = paste("V",j,sep="")
 #    for (j in 1:nrow(base)) if (is.null(rownames(base)[j])) rownames(base)[j] = paste("row",j,sep="")
     base <- as.data.frame(base)
+    is.quali <- which(!unlist(lapply(base,is.numeric)))
+    base[,is.quali] <- lapply(base[,is.quali,drop=FALSE],as.factor)
 	base <- droplevels(base)
     if (!is.null(ind.sup)) {
       base <- rbind.data.frame(base[-ind.sup,],base[ind.sup,,drop=FALSE])
@@ -354,10 +355,6 @@ if ((!is.null(tab.comp))&(any("n"%in%type))){
     if (!is.null(num.group.sup)){
       coord.group.sup <- matrix(NA, length(num.group.sup), ncp)
       dimnames(coord.group.sup) <- list(name.group[num.group.sup], paste("Dim", c(1:ncp), sep = "."))
-      # if (is.null(ind.sup)) tab <- (cov.wt(cbind.data.frame(res.globale$ind$coord,data.group.sup),wt=row.w/sum(row.w),method="ML")$cov)^2
-        # else tab <- (cov.wt(cbind.data.frame(res.globale$ind$coord,data.group.sup[-ind.sup, ]),wt=row.w/sum(row.w),method="ML")$cov)^2
-      # tab <- t(t(tab)*c(1/res.globale$eig[1:ncol(res.globale$ind$coord),1],ponderation.group.sup))
-      # tab <- tab*c(1/res.globale$eig[1:ncol(res.globale$ind$coord),1],ponderation.group.sup)
       ind.gc <- 0
       for (gc in 1:length(num.group.sup)) {
         # if (group.mod[num.group.sup[gc]]!=1) coord.group.sup[gc,] <- apply(tab[1:ncp.tmp,  (ncp.tmp+ind.gc+1):(ncp.tmp+ind.gc+group.mod[num.group.sup[gc]])],1,sum)
@@ -369,16 +366,6 @@ if ((!is.null(tab.comp))&(any("n"%in%type))){
         ind.gc <- ind.gc + group.mod[num.group.sup[gc]]
       }
     }
-   # if (is.null(num.group.sup)){
-     # if (is.null(ind.sup)) tab <- (cov.wt(t(t(data)*sqrt(ponderation)),wt=row.w/sum(row.w),method="ML")$cov)^2
-       # else tab <- (cov.wt(t(t(data[-ind.sup, ])*sqrt(ponderation)),wt=row.w/sum(row.w),method="ML")$cov)^2
-   # }
-   # else{
-     # if (is.null(ind.sup)) tab <- (cov.wt(cbind.data.frame(data, data.group.sup),wt=row.w/sum(row.w),method="ML")$cov)^2
-       # else tab <- (cov.wt(cbind.data.frame(data[-ind.sup, ], data.group.sup[-ind.sup,]),wt=row.w/sum(row.w),method="ML")$cov)^2
-     # tab <- t(t(tab)*c(ponderation,ponderation.group.sup))
-     # tab <- tab*c(ponderation,ponderation.group.sup)
-   # }
     Lg <- matrix(0, nbre.group+1, nbre.group+1)
     ind.gl <- 0
     for (gl in c(group.actif,num.group.sup)) {
@@ -448,9 +435,20 @@ if ((!is.null(tab.comp))&(any("n"%in%type))){
       res.groupes$cos2.sup <- coord.group.sup[,1:ncp,drop=FALSE]^2/dist2.group.sup
       res.groupes$dist2.sup <- dist2.group.sup
     }
-    inertie.intra.ind.partiel <- matrix(NA, (nb.actif * length(group.actif) ), ncp)
-    nom.ligne <- NULL
-    for (i in 1:nb.actif) nom.ligne <- c(nom.ligne, paste(rownames(base)[i], name.group[group.actif], sep = "."))
+  ####CHANGED THIS!!!! ------------------
+  # OLD#
+  # nom.ligne <- NULL
+  # for (i in 1:nb.actif) nom.ligne <- c(nom.ligne, paste(rownames(base)[i], name.group[group.actif], sep = "."))
+  # NEW#
+  nom.ligne <- 
+    c(
+      sapply(
+        rownames(base)[1:nb.actif], 
+        paste, 
+        name.group[group.actif], 
+        sep = ".")
+    )
+
     tmp <- array(0,dim=c(nrow(res.globale$ind$coord),ncp,length(group.actif)))
     for (g in 1:length(group.actif)) tmp[,,g] <- (res.ind.partiel[[group.actif[g]]]$coord.sup[1:nb.actif,1:ncp,drop=FALSE]-res.globale$ind$coord[,1:ncp,drop=FALSE])^2/length(group.actif)
 ## Ajour Avril 2011
@@ -458,7 +456,23 @@ tmp <- tmp*row.w
     variab.auxil <- apply(tmp,2,sum)   ## attention, array
     tmp <- sweep(tmp,2,variab.auxil,FUN="/") * 100  ## attention, array
     inertie.intra.ind <- apply(tmp,c(1,2),sum)
-    for (i in 1:nb.actif) inertie.intra.ind.partiel[((i - 1) * length(group.actif)  + 1):(i * length(group.actif)), ] <- t(tmp[i,1:ncp,])
+  ####CHANGED THIS!!!! --------------------
+  #OLD#
+  #  inertie.intra.ind.partiel <- as.data.frame(matrix(NA, (nb.actif * length(group.actif)), ncp.tmp))
+#  for (i in 1:nb.actif) inertie.intra.ind.partiel[((i - 1) * length(group.actif)  + 1):(i * length(group.actif)), ] <- t(tmp[i,1:ncp,])
+  #NEW#
+  inertie.intra.ind.partiel <- 
+    data.frame(
+      do.call(
+        rbind, 
+        lapply(1:dim(tmp)[1], function(x) t(tmp[x, 1:ncp, ]))
+      )
+    )
+  inertie.intra.ind.partiel <- as.matrix(inertie.intra.ind.partiel)
+  # xxx <- as.data.frame(matrix(NA, (nb.actif * length(group.actif)), ncp))
+  # colnames(inertie.intra.ind.partiel) <- colnames(xxx)
+
+
     rownames(inertie.intra.ind) <- rownames(res.globale$ind$coord)
     rownames(inertie.intra.ind.partiel) <- nom.ligne
     colnames(inertie.intra.ind) <- colnames(inertie.intra.ind.partiel) <- paste("Dim", c(1:ncp), sep = ".")
@@ -549,11 +563,21 @@ tmp <- tmp*row.w
         }
     }
    eig <- res.globale$eig
-    nom.ligne <- NULL
-    for (i in 1:nbre.ind) {
-        ind.tmp <- rownames(base)[i]
-        nom.ligne <- c(nom.ligne, paste(ind.tmp, name.group[group.actif], sep = "."))
-    }
+  ## CHANGED THIS!!!! ---------------
+  # nom.ligne <- NULL
+  # for (i in 1:nbre.ind) {
+  #   ind.tmp <- rownames(base)[i]
+  #   nom.ligne <- c(nom.ligne, paste(ind.tmp, name.group[group.actif], sep = "."))
+  # }
+  
+  nom.ligne <- 
+    c(
+      sapply(
+        rownames(base), 
+        paste, 
+        name.group[group.actif], 
+        sep = ".")
+    )
     coord.ind.partiel <- matrix(NA, (nbre.ind * length(group.actif)), ncp)
     rownames(coord.ind.partiel) <- nom.ligne
     colnames(coord.ind.partiel) <- paste("Dim", c(1:ncp), sep = ".")
