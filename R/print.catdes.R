@@ -13,7 +13,7 @@ print.catdes<-function(x, ...){
   cat("\nLink between the cluster variable and the quantitative variables\n================================================================\n")
     print(x$quanti.var)
   }
-  if (!is.null(x$test.chi2)){
+  if (!is.null(x$quanti)){
   cat("\nDescription of each cluster by quantitative variables\n=====================================================\n")
     print(x$quanti)
   }

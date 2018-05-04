@@ -126,8 +126,9 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
       lay=matrix(ncol=5,nrow=5,c(2,4,4,4,4,2,4,4,4,4,2,4,4,4,4,2,4,4,4,4,1,3,3,3,3))
       layout(lay,respect=TRUE)
 #      layout.show(n=4)
-      vec=res$call$t$inert.gain[1:max.plot]
-      barplot(height=vec, col=c(rep("black", nb.clust-1), rep("grey", max(max, max.plot)-nb.clust+1)), space=0.9)
+      vec <- res$call$t$inert.gain[1:min(max.plot,length(res$call$t$inert.gain))]
+	  if (vec[length(vec)] > vec[length(vec)-1]) vec <- vec[-length(vec)] ## suppress the last value if kk is used 
+      barplot(height=vec, col=c(rep("black", nb.clust-1), rep("grey", max.plot-nb.clust+1)), space=0.9)
       plot(x=1,xlab="",ylab="",main="",col="white",axes=FALSE)
       text(1,1,title,cex=2)
       plot(x=1,xlab="",ylab="",main="",col="white",axes=FALSE)

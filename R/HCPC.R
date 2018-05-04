@@ -99,22 +99,34 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
     cla <- NULL
 
     if (inherits(res, "PCA") | inherits(res, "MCA") | inherits(res,"MFA") | inherits(res, "HMFA") | inherits(res, "FAMD")) {
-	  if (kk<nrow(res$ind$coord)) res <- as.data.frame(res$ind$coord)
+	  if (kk<nrow(res$ind$coord)){
+	    res <- as.data.frame(res$ind$coord)
+		kk <- min(kk, nrow(unique(res$ind$coord)))
+      }
     }
     if (inherits(res, "CA")) {
 	  if (cluster.CA=="rows"){
-	    if (kk<nrow(res$row$coord)) res <- as.data.frame(sweep(res$row$coord,2,sqrt(res$eig[1:ncol(res$row$coord),1]),FUN="*"))
+	    if (kk<nrow(res$row$coord)) {
+		  res <- as.data.frame(sweep(res$row$coord,2,sqrt(res$eig[1:ncol(res$row$coord),1]),FUN="*"))
+		  kk <- min(kk, nrow(unique(res$row$coord)))
+        }
 	  } else {
-	    if (kk<nrow(res$col$coord)) res <- as.data.frame(sweep(res$col$coord,2,sqrt(res$eig[1:ncol(res$col$coord),1]),FUN="*"))
+	    if (kk<nrow(res$col$coord)){
+		  res <- as.data.frame(sweep(res$col$coord,2,sqrt(res$eig[1:ncol(res$col$coord),1]),FUN="*"))
+  		  kk <- min(kk, nrow(unique(res$col$coord)))
+        }
 	  }
     }
     if (is.data.frame(res)){
 	  res <-  res[,unlist(lapply(res,is.numeric)),drop=FALSE]
 ### AJOUT K-means
-	  if (kk<nrow(res)){
-	    cla <- kmeans(res,centers=kk,iter.max = 100, nstart = 4)
+      if (kk<nrow(res)) kk <- min(kk,nrow(unique(res)))
+	  if (kk <= nrow(res)){
+	    cla <- kmeans(res, centers=kk, iter.max = 100, nstart = 4)
         res <- PCA(cla$centers, row.w=cla$size, scale.unit = FALSE, ncp = Inf, graph = FALSE)
-      } else res <- PCA(res, scale.unit = FALSE, ncp = Inf, graph = FALSE)
+      } else {
+	    res <- PCA(res, scale.unit = FALSE, ncp = Inf, graph = FALSE)
+	  }
 ### Fin AJOUT K-means
 ##      res <- PCA(res, scale.unit = FALSE, ncp = Inf, graph = FALSE)
     }
@@ -163,6 +175,8 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
             if (nb.clust == 0 | nb.clust == 1) nb.clust <- -1
         }
         if ((nb.clust == 0) | (nb.clust == 1)) {
+			  print("Click on the graph to cut the tree")
+			  flush.console()
 #            if (!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))){
               plot(t$tree, hang = -1, main = "Click to cut the tree",  xlab = "", sub = "")
               abline(h = auto.haut, col = "black", lwd = 3)
@@ -189,7 +203,6 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
     nb.clust <- max(clust)
 	X = as.data.frame(t$res$ind$coord)
 	ordColo = unique(clust[t$tree$order])
-
 
     if (graph) {
 #    if ((graph)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) {
@@ -243,9 +256,9 @@ centers = res.consol$centers
 		## Add 2014-07-08
 		if (kk<Inf){
 		  clust <- clust[order(as.integer(names(clust)))]
-		  rr=clust[cla$cluster]
-		  names(rr)=names(cla$cluster)
-		  cla$cluster=as.factor(rr)
+		  rr <- clust[cla$cluster]
+		  names(rr) <- names(cla$cluster)
+		  cla$cluster <- as.factor(rr)
 		}
 ## fin ajout		
     }
