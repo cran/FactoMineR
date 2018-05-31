@@ -21,7 +21,7 @@ FAMD (base, ncp = 5, graph = TRUE, sup.var = NULL,
   \item{sup.var}{a vector indicating the indexes of the supplementary variables}
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{row.w}{an optional row weights (by default, uniform row weights); the weights are given only for the active individuals}
-  \item{tab.comp}{object obtained from the imputeFAMD function of the missMDA package that allows to handle missing values}
+  \item{tab.comp}{imputed matrix stored in the $tab.disj element of the list object obtained from the imputeFAMD function of the missMDA package that allows to handle missing values}
 }
 
 \value{
