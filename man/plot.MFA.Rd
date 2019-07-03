@@ -12,7 +12,7 @@ Draw the Multiple Factor Analysis (MFA) graphs.
 \method{plot}{MFA}(x, axes = c(1, 2), choix = c("ind","var","group","axes","freq"), 
     ellipse=NULL, ellipse.par=NULL,
     lab.grpe=TRUE, lab.var=TRUE, lab.ind=TRUE, 
-    lab.par=FALSE, lab.col=TRUE, habillage="group", col.hab=NULL, 
+    lab.par=FALSE, lab.col=TRUE, ncp=2, habillage="group", col.hab=NULL, 
     invisible = c("none","ind","ind.sup","quanti","quanti.sup",
 	"quali","quali.sup","row","row.sup","col","col.sup"), 
 	partial = NULL, lim.cos2.var = 0., 
@@ -36,6 +36,7 @@ Draw the Multiple Factor Analysis (MFA) graphs.
   \item{lab.ind}{boolean, if TRUE, the labels of the mean points are drawn}
   \item{lab.par}{boolean, if TRUE, the labels of the partial points are drawn}
   \item{lab.col}{boolean, if TRUE, the labels of the columns for the contingency tables are drawn}
+  \item{ncp}{number of principal components drawn for the separate analyses for the graph of the partial axes}
   \item{habillage}{string corresponding to the color which are used. If "ind", one color is used for each individual;
   if "group" the individuals are colored according to the group; else if it is the name or the position of a categorical variable, it colors 
   according to the different categories of this variable}

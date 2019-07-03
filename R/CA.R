@@ -12,7 +12,7 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
   unlist(lapply(as.data.frame(x),VB))/colSums(x*x*weights)
 }
 
-    if (is.table(X)) X <- as.data.frame.matrix(X)
+    if (is.table(X)) X <- as.data.frame(X)
     if (is.null(rownames(X))) rownames(X) <- 1:nrow(X)
     if (is.null(colnames(X))) colnames(X) <- colnames(X, do.NULL = FALSE,prefix="V")
 	X <- as.data.frame(X)

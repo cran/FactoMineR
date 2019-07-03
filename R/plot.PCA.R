@@ -5,7 +5,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
     col.var = "black", label=c("all","none","ind", "ind.sup", "quali", "var", "quanti.sup"), 
 	invisible = c("none","ind", "ind.sup", "quali","var", "quanti.sup"), lim.cos2.var = 0.,
     title = NULL, palette=NULL, autoLab=c("auto","yes","no"),new.plot=FALSE, 
-	select=NULL, unselect = 0.7,shadowtext = FALSE, legend = list(bty = "y", x = "topleft"),...){
+	select=NULL, unselect = 0.7,shadowtext = FALSE, legend = list(bty = "y", x = "topleft"), ...){
     
     res.pca <- x
     if (!inherits(res.pca, "PCA")) stop("non convenient data")

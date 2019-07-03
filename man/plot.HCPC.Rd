@@ -30,7 +30,7 @@
   \item{draw.tree}{A boolean. If TRUE, the tree is projected on the
   factor map if choice ="map".}
   \item{ind.names}{A boolean. If TRUE, the individuals names are added
-    on the factor map when choice="3D.map"}
+    on the factor map when choice="3D.map" or choice="map"}
   \item{t.level}{Either a positive integer or a string. A positive
   integer indicates the starting level to plot the tree on the map when
   draw.tree=TRUE. If "all", the whole tree is ploted. If "centers", it

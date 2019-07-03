@@ -4,7 +4,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
     col.ind.sup = "darkblue", col.quanti.sup = "blue",
     label=c("all","none","ind", "var", "ind.sup", "quali.sup", "quanti.sup"), title = NULL, habillage = "none", palette=NULL, 
 	autoLab = c("auto","yes","no"),new.plot=FALSE,select=NULL,selectMod=NULL, unselect=0.7, shadowtext=FALSE,
-	legend = list(bty = "y", x = "topleft"),...){
+	legend = list(bty = "y", x = "topleft"), ...){
     
     label <- match.arg(label,c("all","none","ind", "var", "ind.sup", "quali.sup", "quanti.sup"),several.ok=TRUE)
     choix <- match.arg(choix,c("ind","var","quanti.sup"))

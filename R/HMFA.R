@@ -109,7 +109,7 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE, ax
         group.mod <- Xdes[[h]]
         aux.mat <- matrix(0, nbgroup, nb.v.p)
         for (g in 1:nbgroup) {
-            aux.mat[g, ] <- apply(res[ind.col:(ind.col + group.mod[g] - 1), ], 2, sum)
+            aux.mat[g, ] <- apply(res[ind.col:(ind.col + group.mod[g] - 1),, drop=FALSE], 2, sum)
             ind.col <- ind.col + group.mod[g]
         }
         colnames(aux.mat) <- colnames(res.afmh$var$cor)

@@ -1,9 +1,9 @@
 plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq"), ellipse = NULL, ellipse.par = NULL, 
-    lab.grpe = TRUE, lab.var = TRUE, lab.ind = TRUE, lab.par = FALSE, lab.col = TRUE,
+    lab.grpe = TRUE, lab.var = TRUE, lab.ind = TRUE, lab.par = FALSE, lab.col = TRUE, ncp=2,
     habillage = "group", col.hab = NULL, invisible = c("none","ind", "ind.sup", "quanti","quanti.sup","quali","quali.sup","row", "row.sup","col", "col.sup"), partial = NULL, 
     lim.cos2.var = 0., chrono = FALSE, xlim = NULL, ylim = NULL, 
     title = NULL, palette = NULL, autoLab = c("auto","yes","no"),new.plot = FALSE, select = NULL,
-	unselect = 0.7,shadowtext=FALSE, legend = list(bty = "y", x = "topleft"),...) 
+	unselect = 0.7,shadowtext=FALSE, legend = list(bty = "y", x = "topleft"), ...) 
 {
     res.mfa <- x
     if (!inherits(res.mfa, "MFA")) stop("non convenient data")
@@ -12,7 +12,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 	if (autoLab=="yes") autoLab=TRUE
 	if (autoLab=="no") autoLab=FALSE
     choix <- match.arg(choix,c("ind","var","group","axes","freq"))
-	invisible <- match.arg(invisible,c("none","ind", "ind.sup", "quanti","quanti.sup","quali","row", "row.sup","col", "col.sup"),several.ok=TRUE)
+	invisible <- match.arg(invisible,c("none","ind", "ind.sup", "quanti","quanti.sup","quali","quali.sup","row", "row.sup","col", "col.sup"),several.ok=TRUE)
     if ("none"%in%invisible) invisible = NULL
     lab.x <- paste("Dim ",axes[1]," (",format(res.mfa$eig[axes[1],2],nsmall=2,digits=2),"%)",sep="")
     lab.y <- paste("Dim ",axes[2]," (",format(res.mfa$eig[axes[2],2],nsmall=2,digits=2),"%)",sep="")
@@ -38,6 +38,14 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         lines(x.cercle, y = -y.cercle,...)
         abline(v = 0, lty = 2,...)
         abline(h = 0, lty = 2,...)
+## 3 lines added
+		selectByNCP <- grep("Dim1",rownames(res.mfa$partial.axes$coord))
+		for (k in 2:ncp) selectByNCP<- c(selectByNCP,grep(paste("Dim",k,sep=""),rownames(res.mfa$partial.axes$coord)))
+		selectByNCP <- sort(selectByNCP)
+		res.mfa$partial.axes$coord <- res.mfa$partial.axes$coord[selectByNCP,, drop = FALSE]
+		res.mfa$partial.axes$contrib <- res.mfa$partial.axes$contrib[selectByNCP,, drop = FALSE]
+		res.mfa$partial.axes$cos2 <- res.mfa$partial.axes$cos2[selectByNCP,, drop = FALSE]
+## end of 3 lines added
         coord.axes <- res.mfa$partial.axes$coord[, axes, drop = FALSE]
 		if (!is.null(select)) {
 		  if (mode(select)=="numeric") selection <- select
@@ -593,6 +601,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
             test.invisible[1] <- match("ind", invisible)
             test.invisible[2] <- match("ind.sup", invisible)
             test.invisible[3] <- match("quali", invisible)
+            test.invisible[4] <- match("quali.sup", invisible)
         }
         else test.invisible <- rep(NA, 3)
         nb.ind.actif <- nrow(res.mfa$ind$coord)
@@ -758,17 +767,17 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
                 ymax <- max(ymax, coord.quali.partiel[unlist(lapply(group.quali, 
                   function(k) seq(nbre.grpe * (k - 1) + 1, length = nbre.grpe))), 
                   2])
-            if (!is.null(res.mfa$quali.var.sup) & is.na(test.invisible[3])) 
+            if (!is.null(res.mfa$quali.var.sup) & is.na(test.invisible[4])) 
                 ymin <- min(ymin, coord.quali[, 1], coord.quali.sup[, 
                   2])
-            if (!is.null(res.mfa$quali.var.sup) & is.na(test.invisible[3])) 
+            if (!is.null(res.mfa$quali.var.sup) & is.na(test.invisible[4])) 
                 ymax <- max(ymax, coord.quali[, 1], coord.quali.sup[, 
                   2])
             if (!is.null(res.mfa$quali.var.sup) & is.na(test.invisible[3])) 
                 ymin <- min(ymin, coord.quali.partiel.sup[unlist(lapply(group.quali.sup, 
                   function(k) seq(nbre.grpe * (k - 1) + 1, length = nbre.grpe))), 
                   2])
-            if (!is.null(res.mfa$quali.var.sup) & is.na(test.invisible[3])) 
+            if (!is.null(res.mfa$quali.var.sup) & is.na(test.invisible[4])) 
                 ymax <- max(ymax, coord.quali.partiel.sup[unlist(lapply(group.quali.sup, 
                   function(k) seq(nbre.grpe * (k - 1) + 1, length = nbre.grpe))), 
                   2])
@@ -984,7 +993,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
                 }
             }
         }
-        if (!is.null(coord.quali.sup) & is.na(test.invisible[3])) {
+        if (!is.null(coord.quali.sup) & is.na(test.invisible[4])) {
 		    coo <- rbind(coo,coord.quali.sup)
 		    if (lab.var){ labe <- c(labe,rownames(coord.quali.sup))
 		    } else  labe <- c(labe,rep("",nrow(coord.quali.sup)))
