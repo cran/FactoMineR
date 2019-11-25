@@ -54,7 +54,7 @@ test.aov.w <- function(y,x,w=NULL){
     quanti = (1:ncol(donnee))[-c(quali, num.var)]
     if (length(quanti) == 0) quanti = NULL
     colnames(donnee) = lab
-    result = list()
+    result <- list()
     if (!is.null(quanti)) {
         if (length(quanti)>1){
 		  tab.quanti=apply(donnee[,quanti],2,cor.calc,donnee[,num.var],w=weights)
@@ -63,7 +63,7 @@ test.aov.w <- function(y,x,w=NULL){
         rownames(aux) = colnames(donnee)[quanti]
         resQ = NULL
         if (NROW(aux) > 1) aux <- aux[rev(order(aux[, 1])), ]
-        resQ <- aux[aux[, 2] < proba, , drop = FALSE]
+        resQ <- aux[aux[, 2] <= proba, , drop = FALSE]
         colnames(resQ) = c("correlation", "p.value")
 		if (nrow(resQ)==0) resQ=NULL
         result$quanti <- resQ
@@ -85,14 +85,17 @@ test.aov.w <- function(y,x,w=NULL){
         colnames(tabF) = c("R2","p.value")
         tabT = tabT[-1, ]
         resF = resT = NULL
-        if (sum(tabF[,2] < proba) > 0)  resF <- tabF[tabF[,2] < proba,,drop=FALSE]
+        if (sum(tabF[,2] <= proba) > 0)  resF <- tabF[tabF[,2] <= proba,,drop=FALSE]
         if (!is.null(resF)) resF <- resF[order(resF[,2]),,drop=FALSE]
         tabT <- tabT[rev(order(sign(tabT[, 1])/tabT[, 2])), ]
-        if (sum(tabT[, 2] < proba) >= 1) resT <- tabT[tabT[, 2] < proba, ,drop=FALSE]
+        if (sum(tabT[, 2] <= proba) >= 1) resT <- tabT[tabT[, 2] <= proba, ,drop=FALSE]
         result$quali = resF
         result$category = resT
         options(contrasts = old.contr)
     }
-    if (is.null(result$quanti) & is.null(result$quali) & is.null(result$category)) result = NULL
+	if (is.null(quali) & is.null(quanti)) print(paste("The value of proba is too small. Choose a proba greater than",proba))
+	result$call <- list(num.var=num.var, proba=proba, weights=weights, X=donnee)
+	class(result) <- c("condes", "list ")
+
     return(result)
 }
