@@ -1,6 +1,6 @@
 Package: FactoMineR
-Version: 2.0
-Date: 2019-11-15
+Version: 2.1
+Date: 2020-01-16
 Title: Multivariate Exploratory Data Analysis and Data Mining
 Author: Francois Husson, Julie Josse, Sebastien Le, Jeremy Mazet
 Maintainer: Francois Husson <francois.husson@agrocampus-ouest.fr>
@@ -14,6 +14,6 @@ URL: http://factominer.free.fr
 Encoding: latin1
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2019-11-21 16:51:38 UTC; husson
+Packaged: 2020-01-17 16:06:22 UTC; husson
 Repository: CRAN
-Date/Publication: 2019-11-25 15:50:02 UTC
+Date/Publication: 2020-01-17 18:20:02 UTC
