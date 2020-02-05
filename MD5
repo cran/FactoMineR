@@ -1,4 +1,4 @@
-c0ef3afa4d113dd627ffb32d26b67de0 *DESCRIPTION
+545eea436dba6457fe7f98eba4b61b4e *DESCRIPTION
 2b9f469c1a98c841dfcf94b32e5c83d0 *NAMESPACE
 85af2744dcf9d308cd21b43b6091b973 *NEWS
 461f115b06364529345375eac894db04 *R/AovSum.r
@@ -10,7 +10,7 @@ c49553bcae831af1dcd81070033a681b *R/GPA.R
 7c4f50f941f15bb44a68d9ec11df06f3 *R/HCPC.R
 969e51cce5f1e4453d9e85e0fbb6e982 *R/HMFA.R
 4b6340148a0e262b5a0bb34bafaac439 *R/MCA.R
-0487b49cb7ae7d5484da048f7ab3a6ab *R/MFA.R
+30dea617d06c0b23e3e8c84774fa6d60 *R/MFA.R
 de11f87a79d65939b2ba6bb49d332fc0 *R/PCA.R
 73af046de5f2e47db582329cf18b3f22 *R/RegBest.r
 e5ff9ce76c5d4305a5f6088604e89f8d *R/autoLab.R
@@ -23,16 +23,16 @@ b6a5bd264ab2a9824e50dec958e02ff4 *R/descfreq.R
 4799e92925ba24d640c0bfa343d5929c *R/ellipseCA.R
 4afb6c6d60393afc80968a6b4ded3d1e *R/estim_ncp.r
 93b60262307683ec21fe73bddcd2cf33 *R/graph.var.R
-9a5bc9885f4a29dae195635a03aeb4a5 *R/plot.CA.R
+92c953f46f00b7e76588dd03432a5263 *R/plot.CA.R
 c967bb66215b97008adbdb1f3921ef6c *R/plot.CaGalt.R
 c843d809a8eb6fed8a69f0c68ad1e317 *R/plot.DMFA.R
-69eb7f9f54611bb99ad58a92773fd542 *R/plot.FAMD.R
+c1f8dff9e8080d550dc05fb7870b675f *R/plot.FAMD.R
 b84486f8287d4ac81274f631b44deb3e *R/plot.GPA.R
 fdd9c7f8bb7abff119be0eece30ea21a *R/plot.HCPC.R
 694f81aafe3ba8c369d7721f0adf366b *R/plot.HMFA.R
-88be26dec92ffb46817b72b30f8ae439 *R/plot.MCA.R
-07ee4ea00470d32e299e6c653b4c6205 *R/plot.MFA.R
-8c899a3d050ce6070b1455d839a2bff2 *R/plot.PCA.R
+4a76ff9be7e4fda92d0835496b0e0dd2 *R/plot.MCA.R
+ec1b1b00dcbc01b3580ccc4130273d0d *R/plot.MFA.R
+ea7cfc1e7a2d896dae6fd2c9a0cc74ae *R/plot.PCA.R
 06ae4999efcf3e6bd5fe63cc75774af1 *R/plot.catdes.R
 25766833b34d83b3c5cfc817a7a39ecd *R/plotGPApartial.R
 dec13c825069f040667878be4ce2276c *R/plotMFApartial.R
@@ -131,7 +131,7 @@ f7217548588d238a10b06b5431bf5c94 *man/health.Rd
 d4a220918beb54dfbd2502497b7a3256 *man/plot.GPApartial.Rd
 254ab9a592b53df2686d9bf02143c901 *man/plot.HCPC.Rd
 9945be3e76039dde418ce6864feff9c2 *man/plot.HMFA.Rd
-bf3ec2f0c79e44885c9bd7c94de9c8c0 *man/plot.MCA.Rd
+9b15b2a91530cfcf5d59cc19f7dacd94 *man/plot.MCA.Rd
 ce5800732f735ebacafd940a3fe20993 *man/plot.MFA.Rd
 c0e78a9c1fa0c2dc2f310e72731531fe *man/plot.MFApartial.Rd
 5619e1edac529528ca51bc1afd50a825 *man/plot.PCA.Rd
