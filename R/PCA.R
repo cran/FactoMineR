@@ -28,16 +28,22 @@ fct.eta2 <- function(vec,x,weights) {
       niveau <- unlist(lapply(X[,is.quali,drop=FALSE],levels))
       if (sum(duplicated(niveau))>0 | any(niveau%in%(1:nrow(X)))){
         for (j in 1:ncol(X[,is.quali,drop=FALSE])) {
-          if ((sum(niveau %in% levels(X[,is.quali[j]])) != nlevels(X[,is.quali[j]])) | any(levels(X[,is.quali[j]])%in%(1:nrow(X)))) levels(X[,is.quali[j]]) = paste(attributes(X[,is.quali,drop=FALSE])$names[j], levels(X[,is.quali,drop=FALSE][, j]), sep = "_")
+          if ((sum(niveau %in% levels(X[,is.quali[j]])) != nlevels(X[,is.quali[j]])) | any(levels(X[,is.quali[j]])%in%(1:nrow(X)))) levels(X[,is.quali[j]]) <- paste(attributes(X[,is.quali,drop=FALSE])$names[j], levels(X[,is.quali,drop=FALSE][, j]), sep = "_")
         }
       }
 	}
 
-	X <- droplevels(X)
+  X <- droplevels(X)
+  # if (!is.null(quali.sup) & is.numeric(quali.sup)) quali.sup <- colnames(X)[quali.sup]
+  # if (!is.null(quanti.sup) & is.numeric(quanti.sup)) quanti.sup <- colnames(X)[quanti.sup]
+  # if (!is.null(unused.var) & !is.numeric(unused.var)) unused.var<- which(colnames(X)%in%unused.var)
+  # if (!is.null(unused.var)) X <- X[,-unused.var]
+  if (!is.null(quali.sup) & !is.numeric(quali.sup)) quali.sup<- which(colnames(X)%in%quali.sup)
+  if (!is.null(quanti.sup) & !is.numeric(quanti.sup)) quanti.sup<- which(colnames(X)%in%quanti.sup)
     if (any(is.na(X))) {
         warning("Missing values are imputed by the mean of the variable: you should use the imputePCA function of the missMDA package")
         if (is.null(quali.sup)) 
-          X[is.na(X)] = matrix(colMeans(X,na.rm=TRUE),ncol=ncol(X),nrow=nrow(X),byrow=TRUE)[is.na(X)]
+          X[is.na(X)] <- matrix(colMeans(X,na.rm=TRUE),ncol=ncol(X),nrow=nrow(X),byrow=TRUE)[is.na(X)]
         else for (j in (1:ncol(X))[-quali.sup]) X[, j] <- replace(X[, j], is.na(X[, j]), mean(X[, j], na.rm = TRUE))
     }
     Xtot <- X
@@ -91,9 +97,9 @@ fct.eta2 <- function(vec,x,weights) {
     rownames(coord.var) <- rownames(cos2.var) <- rownames(cor.var) <- rownames(contrib.var) <- colnames(X)
     colnames(coord.var) <- colnames(cos2.var) <- colnames(cor.var) <- colnames(contrib.var) <- paste("Dim", 
         c(1:ncol(V)), sep = ".")
-    res.var <- list(coord = coord.var[, 1:ncp], cor = cor.var[, 
-        1:ncp], cos2 = cos2.var[, 1:ncp], contrib = contrib.var[, 
-        1:ncp] * 100)
+    res.var <- list(coord = coord.var[, 1:ncp,drop=FALSE], cor = cor.var[, 
+        1:ncp,drop=FALSE], cos2 = cos2.var[, 1:ncp,drop=FALSE], contrib = contrib.var[, 
+        1:ncp,drop=FALSE] * 100)
     dist2 <- dist2.ind
     cos2.ind <- coord.ind^2/dist2
     contrib.ind <- t(t(coord.ind^2*row.w/sum(row.w))/eig)
@@ -116,14 +122,14 @@ fct.eta2 <- function(vec,x,weights) {
         colnames(coord.ind.sup) <- colnames(cos2.ind.sup) <- paste("Dim",  c(1:ncp), sep = ".")
         rownames(coord.ind.sup) <- rownames(cos2.ind.sup) <- names(dist2) <- rownames(X.ind.sup)
         res.ind.sup <- list(coord = coord.ind.sup, cos2 = cos2.ind.sup, dist = sqrt(dist2))
-        res$ind.sup = res.ind.sup
-        res.call$ind.sup = ind.sup
+        res$ind.sup <- res.ind.sup
+        res.call$ind.sup <- ind.sup
     }
     if (!is.null(quanti.sup)) {
         X.quanti.sup <- as.data.frame(Xtot[, quanti.sup,drop=FALSE])
         if (!is.null(ind.sup)) X.quanti.sup <- as.data.frame(X.quanti.sup[-ind.sup, ,drop=FALSE])
         colnames(X.quanti.sup) <- colnames(Xtot)[quanti.sup]        
-        res.call$quanti.sup = X.quanti.sup
+        res.call$quanti.sup <- X.quanti.sup
         centre.sup <- moy.ptab(X.quanti.sup,row.w)
         X.quanti.sup <- t(t(as.matrix(X.quanti.sup))-centre.sup)
         if (scale.unit) {
@@ -140,7 +146,7 @@ fct.eta2 <- function(vec,x,weights) {
         colnames(coord.vcs) <- colnames(cor.vcs) <- colnames(cos2.vcs) <- paste("Dim", c(1:ncol(cor.vcs)), sep = ".")
         rownames(coord.vcs) <- rownames(cor.vcs) <- rownames(cos2.vcs) <- colnames(Xtot)[quanti.sup]
         res.quanti.sup <- list(coord = coord.vcs[, 1:ncp, drop=FALSE], cor = cor.vcs[, 1:ncp, drop=FALSE], cos2 = cos2.vcs[, 1:ncp, drop=FALSE])
-        res$quanti.sup = res.quanti.sup
+        res$quanti.sup <- res.quanti.sup
     }
     if (!is.null(quali.sup)) {
         X.quali.sup <- as.data.frame(Xtot[, quali.sup,drop=FALSE])
@@ -151,8 +157,8 @@ fct.eta2 <- function(vec,x,weights) {
 		if (ncp>1) eta2 <- t(sapply(X.quali.sup,fct.eta2,res$ind$coord,weights=row.w))
 		else {
 		  eta2 <- as.matrix(sapply(X.quali.sup,fct.eta2,res$ind$coord,weights=row.w),ncol=ncp)
-          colnames(eta2) = paste("Dim", 1:ncp)
-          rownames(eta2) = colnames(X.quali.sup)
+          colnames(eta2) <- paste("Dim", 1:ncp)
+          rownames(eta2) <- colnames(X.quali.sup)
 		}
 		
         for (i in 1:ncol(X.quali.sup)) {
@@ -191,10 +197,10 @@ fct.eta2 <- function(vec,x,weights) {
         names(dist2) <- rownames(coord.barycentre)
         res.quali.sup <- list(coord = coord.barycentre, cos2 = cos2.bary.sup, v.test = vtest, dist = sqrt(dist2), eta2=eta2)
         call.quali.sup <- list(quali.sup = X.quali.sup, modalite = modalite, nombre = nombre, barycentre = as.data.frame(barycentre), numero = quali.sup)
-        res$quali.sup = res.quali.sup
-        res.call$quali.sup = call.quali.sup
+        res$quali.sup <- res.quali.sup
+        res.call$quali.sup <- call.quali.sup
     }
-    res$call = res.call
+    res$call <- res.call
     class(res) <- c("PCA", "list")
     if (graph & (ncp>1)) {
         print(plot.PCA(res, choix = "ind", axes = axes))

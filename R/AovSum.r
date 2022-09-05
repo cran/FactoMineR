@@ -1,5 +1,6 @@
 AovSum <- function (formula, data, na.action = na.omit, ...) 
 {
+  warnings("You should use the LinearModel function instead of the AovSum function that is obsolete")
   old.contr = options()$contrasts
   on.exit(options(contrasts = old.contr))
   if (missing(data)) {
