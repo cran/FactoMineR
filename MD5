@@ -1,4 +1,4 @@
-b8c10ac205362c6188f6a01b5d73d80c *DESCRIPTION
+0feee6280126be5448745ebcf3d21f47 *DESCRIPTION
 6044b75513607fecaddd0920df9a403c *NAMESPACE
 85af2744dcf9d308cd21b43b6091b973 *NEWS
 d1401760699d86a66f413ee1630bbd89 *R/AovSum.r
@@ -77,9 +77,9 @@ b7b758b1581579a85fbb3bef6ceb1b96 *R/tab.disjonctif.R
 525be59e25a116dc90fbb63b14b38257 *R/zz.R
 23161c7eb305fec411df18388de0d35c *README
 08afb344c8a6820ce4ca12e42c06e062 *README.md
-4e4cf243a9088de76473accb1fabea86 *build/vignette.rds
+66d76a494709a8e03e53684dfb212c84 *build/vignette.rds
 db7a6e9fcbbce08090234dd1bdd71724 *data/JO.rda
-e1718cd726eadd3e3cd29c9d5d7a754f *data/children.rda
+b4b839cd6ee4a6a08149d402e4ab7fa7 *data/children.rda
 374fb707f71e5e045f3dc0d0c13d486b *data/datalist
 5e2c9a6d4f317a473df93c5bc46bec87 *data/decathlon.rda
 02d4cc834fa529f1f9770d0c55fe041e *data/footsize.rda
@@ -88,8 +88,8 @@ e1718cd726eadd3e3cd29c9d5d7a754f *data/children.rda
 a9c457335e49fde320b29b6d7a4edbd2 *data/hobbies.rda
 f4191eb43948fe737c2a795acb3037c1 *data/milk.rda
 4f1d69eb016b6d1243356431f9dcd38f *data/mortality.rda
-cda749d63300936f5ddeed22e14f8bb1 *data/poison.rda
-3b7025f7dc791adc5854a676544e289b *data/poison.text.rda
+921d18fecbf694f6479fee862766b7cd *data/poison.rda
+3c3a03848b10452f0a374631e588b08a *data/poison.text.rda
 92f819dbcc070dffebcc2c0bf97fe339 *data/poulet.rda
 79422b5fefd79991b04c7fd816642043 *data/senso.rda
 7d676dc02021d1ac76e65d65ca5c62dc *data/tea.rda
@@ -188,7 +188,7 @@ f1ba9c79d198c3f7d55853155fc34597 *man/tab.disjonctif.Rd
 1b2ee53f38d0d13b5991dab86b8368f5 *man/wine.Rd
 f00b059eb4bcdcf487733b250011635d *man/write.infile.Rd
 df96213107f2f0bb75649481d79cc4bd *src/disjonctif.c
-9309075e6d7639070d4cbb5ea07bba36 *src/disjonctif.h
+f6ff77c7dca9275caa68a1b9fc5e0632 *src/disjonctif.h
 f8225fdecb1cec097873f57ee01fcab1 *src/init.c
 92439dc2b4cd2b365af26c8ad6933d4f *vignettes/FactoMineR.Rmd
 e18e9eba1c20c786f958958ce3658395 *vignettes/FactoMineR.html
