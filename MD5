@@ -1,5 +1,5 @@
-0feee6280126be5448745ebcf3d21f47 *DESCRIPTION
-6044b75513607fecaddd0920df9a403c *NAMESPACE
+d879389aa5cff1363ddb92139a71e76e *DESCRIPTION
+02f595ab1c242c214198c9ff3d07f964 *NAMESPACE
 85af2744dcf9d308cd21b43b6091b973 *NEWS
 d1401760699d86a66f413ee1630bbd89 *R/AovSum.r
 383cf4d71377fe2d6df3fbbe7baf390e *R/CA.R
@@ -9,7 +9,7 @@ a3fc0f33fbb30d4b3471e7cbd7876efd *R/FAMD.R
 091aab646ae4b7bc886e536f9276bf39 *R/GPA.R
 1cd93cc05674d5b08493e3d2a2e1c7b7 *R/HCPC.R
 5d2ce1205b45aba6f912a1e13d2397e2 *R/HMFA.R
-b9a435f86dada2c91536a73c6b46db91 *R/LinearModel.R
+afb79f8ba02076c2ddbbdb19f0d46588 *R/LinearModel.R
 f4cfa8e6265dd93f7b07b8277a61049b *R/MCA.R
 fecc33c025466854bea64b0bc98c810f *R/MFA.R
 2229c963712e62df0b5595633eac0d5e *R/PCA.R
@@ -33,7 +33,7 @@ e5006eba5369045f7fd423b5dba13cc3 *R/plot.GPA.R
 332aef6e3fe88b5c7861ae92b8bb6360 *R/plot.HCPC.R
 faf9c3d0c9fde376a39c7219c7b17949 *R/plot.HMFA.R
 b834d6da66dc2ab41059108f9b8f6d5b *R/plot.MCA.R
-02b30e1eb67b1d0166de98d7ff95e5ca *R/plot.MFA.R
+276e5eb4a1ae553eff647c6a4c400371 *R/plot.MFA.R
 5d35ff72cef447adec5d35f09c2b43e2 *R/plot.PCA.R
 e1b00c11001404e10be8e6de71941b22 *R/plot.catdes.R
 7ce38d173d91b4ab6cfe2f82f1a87bb9 *R/plot.meansComp.R
@@ -54,7 +54,7 @@ d88ccb454b97aa5bb82386150d3715ef *R/print.FAMD.R
 abb71487c2c6e4001bda7199b795a838 *R/print.GPA.R
 5a6cc05dc850779dd11c44b71acb48b7 *R/print.HCPC.R
 1d7fbb06eba4404be7ab7e0be316b653 *R/print.HMFA.R
-b6cb5c1c04b95c0346b3621c07843743 *R/print.LinearModel.R
+b474493d66fb24ab019350fe4dd70aa9 *R/print.LinearModel.R
 72281fa51afa1917d308dab744ae9f82 *R/print.MCA.R
 d69fcba8a585a924d67086d0d51cec67 *R/print.MFA.R
 c46b161f7be995588038972ca50924e5 *R/print.PCA.R
@@ -108,7 +108,7 @@ b0fb7bc01d6788b4e0e194cce1161af4 *man/FactoMineR-package.Rd
 6ac081f6925b724545c4e36d58cdfea4 *man/HCPC.Rd
 7d7e262f8721f54060aec2e34835cf8d *man/HMFA.Rd
 a2b4fb1f37bd0e99af6e6313814978af *man/JO.Rd
-45c106eeaa356273dfbad427eb12abec *man/LinearModel.Rd
+c71cf6fb6ef2c748751dc044d1477144 *man/LinearModel.Rd
 fc03eac9aa9bb256c0dd2e31c803b023 *man/MCA.Rd
 e3e80dd2709811f2b85e1aa9ae039dd8 *man/MFA.Rd
 aea4a9c82c402b9bc4b27f5d549a0c4c *man/PCA.Rd
@@ -184,9 +184,9 @@ eb2ccf875b6d7ae0fad51215b0177546 *man/summary.MFA.Rd
 f1ba9c79d198c3f7d55853155fc34597 *man/tab.disjonctif.Rd
 090e9dc1684b9cbc8b06dc130f4f3daf *man/tab.disjonctif.prop.Rd
 165c33cffad3ad977c89bf944394ab65 *man/tea.Rd
-0dcc7800489aa3a7e8469f8bec201e7f *man/textual.Rd
+a9a48a45357c6c57f12e8af6233e03fb *man/textual.Rd
 1b2ee53f38d0d13b5991dab86b8368f5 *man/wine.Rd
-f00b059eb4bcdcf487733b250011635d *man/write.infile.Rd
+c2feeb80e9a811d7ea117817da8ad20d *man/write.infile.Rd
 df96213107f2f0bb75649481d79cc4bd *src/disjonctif.c
 f6ff77c7dca9275caa68a1b9fc5e0632 *src/disjonctif.h
 f8225fdecb1cec097873f57ee01fcab1 *src/init.c
