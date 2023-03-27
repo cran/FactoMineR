@@ -1,5 +1,5 @@
-d879389aa5cff1363ddb92139a71e76e *DESCRIPTION
-02f595ab1c242c214198c9ff3d07f964 *NAMESPACE
+1412848534cada2b6d08c4ba74ac2358 *DESCRIPTION
+b18ea9f0b46a10ea13c3cb7490ca9764 *NAMESPACE
 85af2744dcf9d308cd21b43b6091b973 *NEWS
 d1401760699d86a66f413ee1630bbd89 *R/AovSum.r
 383cf4d71377fe2d6df3fbbe7baf390e *R/CA.R
@@ -11,7 +11,7 @@ a3fc0f33fbb30d4b3471e7cbd7876efd *R/FAMD.R
 5d2ce1205b45aba6f912a1e13d2397e2 *R/HMFA.R
 afb79f8ba02076c2ddbbdb19f0d46588 *R/LinearModel.R
 f4cfa8e6265dd93f7b07b8277a61049b *R/MCA.R
-fecc33c025466854bea64b0bc98c810f *R/MFA.R
+e96f5e5de13c0c22a9defeaaa2519af7 *R/MFA.R
 2229c963712e62df0b5595633eac0d5e *R/PCA.R
 f03a8b0ccbecf824c3e20718658a5d23 *R/RegBest.r
 2930776828183666ce71b43f23c01460 *R/autoLab.R
@@ -59,7 +59,7 @@ b474493d66fb24ab019350fe4dd70aa9 *R/print.LinearModel.R
 d69fcba8a585a924d67086d0d51cec67 *R/print.MFA.R
 c46b161f7be995588038972ca50924e5 *R/print.PCA.R
 5bee3491521f0d93f45c6b85a18b60ef *R/print.catdes.R
-80fe39d36fc44ed1fa2517b8bede895e *R/print.condes.R
+06ab2ce02025f4838d9c068ea878bf11 *R/print.condes.R
 4205773a9e41bfec15315fc28892efe6 *R/print.dimdesc.R
 bad14a63673b87d66e1b8d31e95866cf *R/reconst.R
 85036e6cbaa0353bf348459038872806 *R/simule.r
@@ -70,7 +70,7 @@ c4bf035b65937b3e6ca4f4becf87bdc2 *R/summary.FAMD.r
 810824d414f94b3836b3006af1bbf55e *R/summary.MFA.r
 0bdbff2a6bc8743151b182530c2f868c *R/summary.PCA.r
 88c39910b5951a550eb7cf9fa8156fe5 *R/svd.triplet.R
-b7b758b1581579a85fbb3bef6ceb1b96 *R/tab.disjonctif.R
+037fa85f63d3790b78a459d7b35ddd97 *R/tab.disjonctif.R
 2378db16d6c7f66a132e955f58dffa82 *R/tab.disjonctif.prop.R
 9cee29ee1bd371430cc670ea84776cde *R/textual.r
 38023172b1d47940bfd223c5719c4fae *R/write.infile.R
@@ -99,7 +99,7 @@ f4191eb43948fe737c2a795acb3037c1 *data/milk.rda
 6569079f1fae3cd07c0d19db15fb45d3 *inst/doc/FactoMineR.pdf
 271d84ec165c6cadd85cfa6092a2f4a7 *inst/doc/clustering.Rmd
 58c7e5bd9c07666bd1803fedf4a8aaff *inst/doc/clustering.html
-a5b139e81b27cb4d68b48aea68b71d10 *man/AovSum.Rd
+8ec607a6dfb633b3ef8b0df4c751aacb *man/AovSum.Rd
 b127ba0a1b69fd3d33a5a3db3608a906 *man/CA.Rd
 590efd5b2e1d0ea00af20c8d8f89ea4b *man/CaGalt.Rd
 7e1ac4544a07b912765c9e4ea5f08789 *man/DMFA.Rd
@@ -189,7 +189,7 @@ a9a48a45357c6c57f12e8af6233e03fb *man/textual.Rd
 c2feeb80e9a811d7ea117817da8ad20d *man/write.infile.Rd
 df96213107f2f0bb75649481d79cc4bd *src/disjonctif.c
 f6ff77c7dca9275caa68a1b9fc5e0632 *src/disjonctif.h
-f8225fdecb1cec097873f57ee01fcab1 *src/init.c
+d6dfeca8b762f9d890d3768bd2767964 *src/init.c
 92439dc2b4cd2b365af26c8ad6933d4f *vignettes/FactoMineR.Rmd
 e18e9eba1c20c786f958958ce3658395 *vignettes/FactoMineR.html
 271d84ec165c6cadd85cfa6092a2f4a7 *vignettes/clustering.Rmd
