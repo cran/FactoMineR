@@ -8,20 +8,13 @@
 The method proposed in this package are exploratory mutlivariate methods such as principal component analysis, correspondence analysis or clustering.
 }
 \details{
-\tabular{ll}{
-Package: \tab FactoMineR\cr
-Type: \tab Package\cr
-Version: \tab 1.34\cr
-Date: \tab 2014-09-26\cr
-License: \tab GPL \cr
-LazyLoad: \tab yes\cr
-}
+FactoMineR is a package for exploratory multivariate data analysis. The package Factoshiny gives an interface to use most of the functions of FactoMineR.
 }
 
 \author{
 Francois Husson, Julie Josse, Sebastien Le, Jeremy Mazet
 
-Maintainer: \email{husson@agrocampus-ouest.fr}
+Maintainer: \email{francois.husson@institut-agro.fr}
 }
 
 \references{

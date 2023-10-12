@@ -1,10 +1,5 @@
-catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL){
+catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL, na.method="NA"){
 
-#  if (!is.null(row.w)) {
-#    row.w=as.vector(row.w)
-#	if (!any(row.w>=1)) stop("Argument row.w must be a vector of integers")
-#    else donnee = donnee[rep(1:nrow(donnee),row.w),]
-#  }
     moy.p <- function(V, fac=NULL, poids, na.rm=TRUE) {
 		poids[is.na(V)] <- 0
         if (is.null(fac)) {
@@ -58,19 +53,21 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL){
   if (nb.quali>0){
     options(warn = -1)
     Test.chi <- matrix(NA,nrow=nb.quali,ncol=2)
-    ## marge.li = xtabs(~donnee[,num.var])
-	marge.li <- apply(sweep(tab.disjonctif(donnee[,num.var]),1,row.w,FUN="*"),2,sum)
+#	marge.li <- apply(sweep(tab.disjonctif(donnee[,num.var]),1,row.w,FUN="*"),2,sum) # row margin can be different if NA
     nom <- tri <- structure(vector(mode = "list", length = nb.modalite), names = levels(donnee[,num.var]))
     indicateur.quali <- 0
     for (i in 1:nb.quali){
-#      Table <- t(tab.disjonctif(donnee[,num.var]))%*%sweep(tab.disjonctif(donnee[,quali[i]]),1,row.w,FUN="*")
 	  Table <- t(sweep(tab.disjonctif(donnee[,num.var]),1,row.w,FUN="*"))%*%tab.disjonctif(donnee[,quali[i]])
+### Ajout 04/07/2023
+	  if (tolower(na.method)=="na.omit" & colnames(Table)[ncol(Table)]=="NA") Table <- Table[,-ncol(Table)]
+### Fin ajout 04/07/2023
+	marge.li <- apply(Table,1,sum) # row margin can be different if NA in the variable
     marge.col <- apply(Table,2,sum)
 	  Test <- chisq.test(Table,correct=FALSE)
       Test.chi[i,1] <- Test$p.value
       Test.chi[i,2] <- Test$parameter
-      for (j in 1:nlevels(donnee[,num.var])) {
-       for (k in 1:nlevels(donnee[,quali[i]])) {
+      for (j in 1:nrow(Table)) {
+       for (k in 1:ncol(Table)) {
         aux2 <- Table[j,k]/marge.li[j]
         aux3 <- marge.col[k]/sum(marge.col)
         aux4 <- min(phyper(round(Table[j,k],0)-1,round(marge.li[j],0),round(sum(marge.li),0)-round(marge.li[j],0),round(marge.col[k],0))*2+dhyper(round(Table[j,k],0),round(marge.li[j],0),round(sum(marge.li),0)-round(marge.li[j],0),round(marge.col[k],0)),phyper(round(Table[j,k],0),round(marge.li[j],0),round(sum(marge.li),0)-round(marge.li[j],0),round(marge.col[k],0),lower.tail=FALSE)*2+dhyper(round(Table[j,k],0),round(marge.li[j],0),round(sum(marge.li),0)-round(marge.li[j],0),round(marge.col[k],0)))
@@ -160,7 +157,7 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL){
 	  res$quanti <- result
 	}
   }
-  res$call <- list(num.var=num.var, proba=proba, row.w=row.w, X=donnee)
+  res$call <- list(num.var=num.var, proba=proba, row.w=row.w, X=donnee, na.method=na.method)
   options(old.warn)
 class(res) <- c("catdes", "list")
   return(res)
