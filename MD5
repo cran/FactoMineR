@@ -1,4 +1,4 @@
-c4840ab17fe587ba0864e4c0b85339d6 *DESCRIPTION
+aa957bbc572b50b483f87d2fad838a25 *DESCRIPTION
 b18ea9f0b46a10ea13c3cb7490ca9764 *NAMESPACE
 85af2744dcf9d308cd21b43b6091b973 *NEWS
 d90bad06ad9f8844ee172cd075adb758 *R/AovSum.r
@@ -18,10 +18,10 @@ f03a8b0ccbecf824c3e20718658a5d23 *R/RegBest.r
 f0d75a4acc8880482e780adf6e2cab20 *R/catdes.r
 9174ff910fbad291803048a1a7151531 *R/coeffRV.R
 8008536f04fe9015607354eef9ab52ef *R/condes.r
-91129e1457868d5404be61412638e4cb *R/coord.ellipse.R
+e55972e29d3d7a251131258bc6a092cd *R/coord.ellipse.R
 73b0267dfd82845cf390275b1513118a *R/descfreq.R
 db5ae6fb4c47abad78d1f732010438fc *R/dimdesc.r
-3a5c61ed25d659ec44c9a7fd2c2f4a96 *R/ellipseCA.R
+2f285a060535301063eacedf8923ed26 *R/ellipseCA.R
 1461ad15bde19a0a73eca8272df5b4e3 *R/estim_ncp.r
 7e200ce9fb82dc4206626d6498fc4e01 *R/graph.var.R
 d7a1297456514245162a3d185d37b8d9 *R/meansComp.R
@@ -33,8 +33,8 @@ e5006eba5369045f7fd423b5dba13cc3 *R/plot.GPA.R
 332aef6e3fe88b5c7861ae92b8bb6360 *R/plot.HCPC.R
 faf9c3d0c9fde376a39c7219c7b17949 *R/plot.HMFA.R
 b834d6da66dc2ab41059108f9b8f6d5b *R/plot.MCA.R
-46a7f07620b0d97b6610fc4c2768b237 *R/plot.MFA.R
-46a6539a6f7b48e5f579de5870130ee7 *R/plot.PCA.R
+0cc5a292848b5e41c60e014346fe7d7e *R/plot.MFA.R
+0be75418dc728bd739060958ccb6ab67 *R/plot.PCA.R
 e1b00c11001404e10be8e6de71941b22 *R/plot.catdes.R
 d8ad15f8f887d1de8304b753023e95ac *R/plot.meansComp.R
 c353031b0ab682dcece2830e70741b8b *R/plotGPApartial.R
@@ -95,8 +95,8 @@ f4191eb43948fe737c2a795acb3037c1 *data/milk.rda
 7d676dc02021d1ac76e65d65ca5c62dc *data/tea.rda
 10933f6d819bea03183a0eb23355eef5 *data/wine.rda
 1957266d4f96f12df462f86be07f615b *inst/CITATION
-8b1ee96a418ee8a151e76cc2af36559c *inst/doc/FactoMineR.Rmd
-6569079f1fae3cd07c0d19db15fb45d3 *inst/doc/FactoMineR.pdf
+1c1dd9f0c15965a0233f3a5211a172c3 *inst/doc/FactoMineR.Rmd
+c82d69dd2293bde86b1eaffb63ec7df5 *inst/doc/FactoMineR.pdf
 d7164bf49bf1c76e80c0230d44ff365c *inst/doc/clustering.Rmd
 315c640c785e90857828996ce30b53b9 *inst/doc/clustering.html
 ddacb99b217a04433af86034c2d04c94 *man/AovSum.Rd
@@ -190,6 +190,6 @@ ac829604f7593a0b5ae9f84bdf52dd6e *man/textual.Rd
 df96213107f2f0bb75649481d79cc4bd *src/disjonctif.c
 f6ff77c7dca9275caa68a1b9fc5e0632 *src/disjonctif.h
 d6dfeca8b762f9d890d3768bd2767964 *src/init.c
-8b1ee96a418ee8a151e76cc2af36559c *vignettes/FactoMineR.Rmd
-108fabcfd079c4f853e30e5f81787812 *vignettes/FactoMineR.html
+1c1dd9f0c15965a0233f3a5211a172c3 *vignettes/FactoMineR.Rmd
+defbb505188807d11fe9245fa8297466 *vignettes/FactoMineR.html
 d7164bf49bf1c76e80c0230d44ff365c *vignettes/clustering.Rmd

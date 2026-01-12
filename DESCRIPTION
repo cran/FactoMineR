@@ -1,5 +1,5 @@
 Package: FactoMineR
-Version: 2.12
+Version: 2.13
 Title: Multivariate Exploratory Data Analysis and Data Mining
 Authors@R: c(person(given = "Francois", family = "Husson", role = c("aut", "cre"), email = "francois.husson@institut-agro.fr",
              comment = c(ORCID = "0000-0002-7271-8877")),
@@ -19,11 +19,11 @@ BugReports: https://github.com/husson/FactoMineR/issues
 Encoding: UTF-8
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2025-07-23 13:17:36 UTC; husson
+Packaged: 2026-01-12 10:49:11 UTC; husson
 Author: Francois Husson [aut, cre] (ORCID:
     <https://orcid.org/0000-0002-7271-8877>),
   Julie Josse [aut],
   Sebastien Le [aut],
   Jeremy Mazet [aut]
 Repository: CRAN
-Date/Publication: 2025-07-23 14:40:10 UTC
+Date/Publication: 2026-01-12 11:50:02 UTC
