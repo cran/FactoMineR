@@ -80,19 +80,40 @@ ventilation.ordonnee <- function(Xqual,level.ventil=0.05,ind.sup=NULL,row.w=NULL
  return(Xqual)
 }
 
-  # fct.eta2 <- function(vec,x,weights) {
-     # res <- summary(lm(x~vec,weights=weights))$r.squared
-  # }
-  
-
-fct.eta2 <- function(vec,x,weights) {   
-  VB <- function(xx) {
-	return(sum((colSums((tt*xx)*weights)^2)/ni))
+fct.eta2 <- function(group, Y, weights = NULL) {
+  prep_anova_weights <- function(group, weights = NULL) {
+    n <- length(group)
+    if (is.null(weights)) weights <- rep(1, n)
+    idx_ok <- which(!is.na(group))   # longueur n_ok <= n
+    if (length(idx_ok) < n) {
+      weights  <- weights[idx_ok]
+      group <- group[idx_ok]
+    }
+    weights_norm     <- weights / sum(weights)
+    somme_p_group <- tapply(weights, group, sum)
+    list(idx_ok= idx_ok,n_total= n,weights= weights,weights_norm= weights_norm,group=group,somme_p_group = somme_p_group)
   }
-  tt <- tab.disjonctif(vec)
-  ni <- colSums(tt*weights)
-  unlist(lapply(as.data.frame(x),VB))/colSums(x*x*weights)
+  
+  r2_from_prep <- function(y, prep) {
+    if (length(prep$idx_ok) < prep$n_total) y <- y[prep$idx_ok]
+    moy_glob <- sum(prep$weights_norm * y)
+    d   <- y - moy_glob
+    sct <- sum(prep$weights * d * d)
+    moy_g <- tapply(prep$weights * y, prep$group, sum) / prep$somme_p_group
+    dg  <- moy_g[prep$group] - moy_glob
+    sce <- sum(prep$weights * dg * dg)
+    sce / sct
+  }
+  Y <- as.data.frame(Y)
+  prep <- prep_anova_weights(group, weights)
+  unlist(lapply(Y, r2_from_prep, prep))
 }
+#fct.eta2 <- function(vec,x,weights) {
+#  fct <- function(vari,vec,weights){
+#	 summary(lm(vari~vec,weights=weights))$r.squared
+#  }
+#  unlist(lapply(as.data.frame(x),fct,vec,weights))
+#}
 
   modif.rate <- function(resmca) {
     tab <- cbind.data.frame(resmca$eig,rep(0, nrow(resmca$eig)),rep(100, nrow(resmca$eig)))
@@ -114,7 +135,6 @@ fct.eta2 <- function(vec,x,weights) {
   X <- as.data.frame(X)
   is.quali <- which(!unlist(lapply(X,is.numeric)))
   X[,is.quali] <- lapply(X[,is.quali,drop=FALSE],as.factor)
-
   X <- droplevels(X)
   ind.act <- setdiff(1:nrow(X),ind.sup)
 
@@ -168,15 +188,27 @@ Ztot <- Z
 
 col.sup <- NULL
 if (!is.null(quali.sup)){
-     if (any(is.na(X[,quali.sup,drop=FALSE]))){
-       for (j in quali.sup) X[,j] <- as.factor(replace(as.character(X[,j]),is.na(X[,j]),paste(attributes(X)$names[j],".NA",sep="")))
-     }
-     X[,quali.sup] <- ventil.tab(X[,quali.sup,drop=FALSE],level.ventil=level.ventil,row.w=row.w,ind.sup=ind.sup)
-     if (is.null(tab.disj)) Zqs <- tab.disjonctif(X[, quali.sup])
-     else Zqs <- tab.disj[,which(TabDisjMod=="quali.sup")]
+     if (!is.null(tab.disj)) Zqs <- tab.disj[,which(TabDisjMod=="quali.sup")]
+	 else {
+       if (any(is.na(X[,quali.sup,drop=FALSE]))){
+         for (j in quali.sup) X[,j] <- as.factor(replace(as.character(X[,j]),is.na(X[,j]),paste(attributes(X)$names[j],".NA",sep="")))
+       }
+       X[,quali.sup] <- ventil.tab(X[,quali.sup,drop=FALSE],level.ventil=level.ventil,row.w=row.w,ind.sup=ind.sup)
+       Zqs <- tab.disjonctif(X[, quali.sup])
+	 }
      Ztot <- cbind.data.frame(Z, Zqs)
      col.sup <- (ncol(Z) + 1):ncol(Ztot)
 }
+#if (!is.null(quali.sup)){
+#     if (any(is.na(X[,quali.sup,drop=FALSE]))){
+#       for (j in quali.sup) X[,j] <- as.factor(replace(as.character(X[,j]),is.na(X[,j]),paste(attributes(X)$names[j],".NA",sep="")))
+#     }
+#     X[,quali.sup] <- ventil.tab(X[,quali.sup,drop=FALSE],level.ventil=level.ventil,row.w=row.w,ind.sup=ind.sup)
+#     if (is.null(tab.disj)) Zqs <- tab.disjonctif(X[, quali.sup])
+#     else Zqs <- tab.disj[,which(TabDisjMod=="quali.sup")]
+#     Ztot <- cbind.data.frame(Z, Zqs)
+#     col.sup <- (ncol(Z) + 1):ncol(Ztot)
+#}
 Xact <- X[,act]
 
 if (!is.null(quanti.sup)){
