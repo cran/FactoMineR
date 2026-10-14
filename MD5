@@ -1,4 +1,4 @@
-a01537558eaee246b62305001172ae39 *DESCRIPTION
+06d0bec2f0f4560f0739dbe934d73324 *DESCRIPTION
 944b12529760c1e75c77392186f6671b *NAMESPACE
 19c49ae273ad7b4132d50287cb9a9cfe *NEWS.md
 d90bad06ad9f8844ee172cd075adb758 *R/AovSum.r
@@ -7,10 +7,10 @@ ff1d34890ab41c41bab04accd89eec4d *R/CA.R
 37bfdf6b16e8d010d836712f416bae15 *R/DMFA.R
 c9ed8927ad2d9b84fc616a75f7dfd855 *R/FAMD.R
 c1aeeacb93a629ee9443cde0a10cc5e8 *R/GPA.R
-64cd5b4ed545d7c59e5ca7f6b0679d23 *R/HCPC.R
+aeacd0549278f30f278bd8c01df09ab9 *R/HCPC.R
 9088331899f74fabcea99edd01313fa1 *R/HMFA.R
 cc96e4b2cf90b04d4fede1354e24c161 *R/LinearModel.R
-14279e3a1e479deb3cb47525eff9b8f7 *R/MCA.R
+0583449ade15b0a0587b36d9650017e7 *R/MCA.R
 7dc253f0c5a74a71ca44a6fd5cfeedab *R/MFA.R
 6139afbe942e2d5728583cb42db91e61 *R/PCA.R
 f03a8b0ccbecf824c3e20718658a5d23 *R/RegBest.r
@@ -77,7 +77,7 @@ bf3a855caf54c6d8330ab9d15c492005 *R/textual.r
 38023172b1d47940bfd223c5719c4fae *R/write.infile.R
 a91f00c8c865d93e57ff66533a583282 *R/zz.R
 08afb344c8a6820ce4ca12e42c06e062 *README.md
-f44e4bf66f5215ef720fd6fa8f5914f1 *build/vignette.rds
+70b7e3beb3ffce92b3c3169e2b5a66ae *build/vignette.rds
 db7a6e9fcbbce08090234dd1bdd71724 *data/JO.rda
 14bf15fef0c46c19a2441508280d2dae *data/children.rda
 374fb707f71e5e045f3dc0d0c13d486b *data/datalist
@@ -98,7 +98,7 @@ c295080bf792e6483f2417ac35af41a6 *data/poison.text.rda
 1c1dd9f0c15965a0233f3a5211a172c3 *inst/doc/FactoMineR.Rmd
 c82d69dd2293bde86b1eaffb63ec7df5 *inst/doc/FactoMineR.pdf
 d7164bf49bf1c76e80c0230d44ff365c *inst/doc/clustering.Rmd
-43549da9b2cef2171eaddc8e3e7f439f *inst/doc/clustering.html
+485f679e2bafc1a19f2a7f8201fffdc6 *inst/doc/clustering.html
 ddacb99b217a04433af86034c2d04c94 *man/AovSum.Rd
 cd19d6e0fadcce0765501a57d4046cb7 *man/CA.Rd
 590efd5b2e1d0ea00af20c8d8f89ea4b *man/CaGalt.Rd
@@ -192,5 +192,5 @@ df96213107f2f0bb75649481d79cc4bd *src/disjonctif.c
 f6ff77c7dca9275caa68a1b9fc5e0632 *src/disjonctif.h
 d6dfeca8b762f9d890d3768bd2767964 *src/init.c
 1c1dd9f0c15965a0233f3a5211a172c3 *vignettes/FactoMineR.Rmd
-ba7755b5407b3f917de8171c20680061 *vignettes/FactoMineR.html
+87c2f688e879603e92ecf6dadf52ae28 *vignettes/FactoMineR.html
 d7164bf49bf1c76e80c0230d44ff365c *vignettes/clustering.Rmd
